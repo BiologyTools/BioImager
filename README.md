@@ -32,7 +32,7 @@ A .NET microscopy imaging application based on Bio. Supports various microscopes
 - [Cs-script](https://github.com/oleg-shilo/cs-script/blob/master/LICENSE)
 
 ## Licenses
-- BioImage [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+- Bio [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 - AForge [LGPL](http://www.aforgenet.com/framework/license.html)
 - BioFormats.Net [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 - [IKVM](https://github.com/gluck/ikvm/blob/master/LICENSE)
