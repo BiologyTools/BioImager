@@ -1,7 +1,6 @@
 # BioImager
 
-A .NET microscopy imaging application for various microscopes using supported libraries & GUI automation. Supports tile & depth stack imaging.
-Integrates with ImageJ through ImageJ Macros.
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Works with or without hardware through microscope simulation.
 
 ## Features
 
@@ -105,6 +104,5 @@ public class Loader
 		return "OK";
 	}
 }
-
 
 
