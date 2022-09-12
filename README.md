@@ -1,6 +1,6 @@
 # BioImager
 
-A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Works with or without hardware through microscope simulation.
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
 
 ## Features
 
