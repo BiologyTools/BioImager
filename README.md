@@ -36,6 +36,8 @@ A .NET microscopy imaging application based on Bio. Supports various microscopes
 - [IKVM](https://github.com/gluck/ikvm/blob/master/LICENSE)
 - LibTiff.Net [BSD](https://bitmiracle.com/libtiff/)
 - Cs-script [MIT](https://github.com/oleg-shilo/cs-script/blob/master/LICENSE)
+- Prior® Scientific EULA v1.0 [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594)
+- [MTB SDK© 2019 by Carl Zeiss Microscopy](https://www.zeiss.com/microscopy/en/service-support/downloads/micro-toolbox.html)
 
 ## Scripting
 -  Save scripts into "StartupPath/Scripts" with ".cs" ending.
