@@ -1,10 +1,8 @@
 # BioImager
 
-A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Check your manufacturer's SDK to see how to implement "Microscope.cs". Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. Check your manufacturer's SDK to see how to implement "Microscope.cs". Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
 
 ## Features
-
-- Open & Save ImageJ Tiff files and embed ROI's in image Description tag.
 
 - C# scripting with sample tool-script and other sample scripts in "/Scripts/" folder. [See samples](https://github.com/BioMicroscopy/BioImage-Scripts)
 
@@ -45,7 +43,7 @@ A .NET microscopy imaging application based on Bio. Supports various microscopes
 -  Double click on script name in Script runner to run script.
 -  Scripts saved in Scripts folder will be loaded into script runner.
 -  Program installer include sample script "Sample.cs" which gets & sets pixels and saves resulting image.
--  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
+-  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample) [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
 
 ## Sample Tool Script
 
