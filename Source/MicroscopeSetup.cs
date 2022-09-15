@@ -25,18 +25,31 @@ namespace Bio
             if (!System.IO.Directory.Exists(Application.StartupPath + "//" + "Config"))
                 System.IO.Directory.CreateDirectory(Application.StartupPath + "//" + "Config");
             Objectives_Load();
+
             simCameraBox.Checked = Properties.Settings.Default.SimulateCamera;
             if (simCameraBox.Checked)
             {
                 imageLabel.Text = Properties.Settings.Default.SimulatedImage;
-                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage);
+                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage,false);
             }
         }
         private void Objectives_Load()
         {
             if (!System.IO.File.Exists("Config/MicroscopeObjectives.json"))
+            {
+                obj1Name.Text = Microscope.Objectives.List[0].Name;
+                obj2Name.Text = Microscope.Objectives.List[1].Name;
+                obj3Name.Text = Microscope.Objectives.List[2].Name;
+                obj4Name.Text = Microscope.Objectives.List[3].Name;
+                obj5Name.Text = Microscope.Objectives.List[4].Name;
+                obj6Name.Text = Microscope.Objectives.List[5].Name;
+                if (Microscope.Objectives.List.Count == 7)
+                    obj7Name.Text = Microscope.Objectives.List[6].Name;
                 return;
+            }
             List<Objectives.Objective> list = JsonConvert.DeserializeObject<List<Objectives.Objective>>(File.ReadAllText("Config/MicroscopeObjectives.json"));
+            if (list.Count == 0)
+                return;
             obj1Name.Text = Microscope.Objectives.List[0].Name;
             obj2Name.Text = Microscope.Objectives.List[1].Name;
             obj3Name.Text = Microscope.Objectives.List[2].Name;
@@ -396,6 +409,16 @@ namespace Bio
             else
                 Properties.Settings.Default[name] = form.Func.File;
             form.Dispose();
+        }
+
+        private void useLibBox_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void setLibBut_Click(object sender, EventArgs e)
+        {
+            App.lib.Show();
         }
     }
 }

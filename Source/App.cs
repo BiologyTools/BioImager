@@ -30,7 +30,8 @@ namespace Bio
 
         public static BioImage Image
         {
-            get {
+            get 
+            {
                 if (ImageView.SelectedImage == null)
                     return tabsView.Image;
                 return ImageView.SelectedImage;
@@ -60,7 +61,9 @@ namespace Bio
             automation = new Automation();
             stage = new StageTool();
             lib = new Library();
+            lib.Show();
             imager = new Imager();
+            imager.Show();
             ImageJ.Initialize(Properties.Settings.Default.ImageJPath);
             //channelsTool = new ChannelsTool();
         }

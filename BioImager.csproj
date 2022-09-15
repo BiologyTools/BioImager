@@ -256,6 +256,7 @@
     <Compile Include="Source\ColorTool.Designer.cs">
       <DependentUpon>ColorTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\constants.cs" />
     <Compile Include="Source\Filter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,6 +313,7 @@
     <Compile Include="Source\Recordings.designer.cs">
       <DependentUpon>Recordings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\SDK.cs" />
     <Compile Include="Source\SelectRecording.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -544,6 +546,9 @@
     </Content>
     <Content Include="ikvm-native-win32-x86.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample.ome.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

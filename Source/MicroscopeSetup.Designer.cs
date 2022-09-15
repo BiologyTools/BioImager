@@ -203,6 +203,8 @@ namespace Bio
             this.button30 = new System.Windows.Forms.Button();
             this.button31 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
+            this.useLibBox = new System.Windows.Forms.CheckBox();
+            this.setLibBut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA1Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA2Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA4Box)).BeginInit();
@@ -1418,7 +1420,7 @@ namespace Bio
             // 
             this.label50.AutoSize = true;
             this.label50.ForeColor = System.Drawing.Color.White;
-            this.label50.Location = new System.Drawing.Point(606, 285);
+            this.label50.Location = new System.Drawing.Point(606, 235);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(64, 13);
             this.label50.TabIndex = 119;
@@ -1429,7 +1431,7 @@ namespace Bio
             // 
             this.folderSet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.folderSet.ForeColor = System.Drawing.Color.White;
-            this.folderSet.Location = new System.Drawing.Point(785, 280);
+            this.folderSet.Location = new System.Drawing.Point(785, 230);
             this.folderSet.Name = "folderSet";
             this.folderSet.Size = new System.Drawing.Size(63, 23);
             this.folderSet.TabIndex = 120;
@@ -1442,7 +1444,7 @@ namespace Bio
             // 
             this.folderGet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.folderGet.ForeColor = System.Drawing.Color.White;
-            this.folderGet.Location = new System.Drawing.Point(716, 280);
+            this.folderGet.Location = new System.Drawing.Point(716, 230);
             this.folderGet.Name = "folderGet";
             this.folderGet.Size = new System.Drawing.Size(63, 23);
             this.folderGet.TabIndex = 121;
@@ -2179,7 +2181,7 @@ namespace Bio
             this.simCameraBox.AutoSize = true;
             this.simCameraBox.Checked = true;
             this.simCameraBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.simCameraBox.Location = new System.Drawing.Point(606, 234);
+            this.simCameraBox.Location = new System.Drawing.Point(606, 283);
             this.simCameraBox.Name = "simCameraBox";
             this.simCameraBox.Size = new System.Drawing.Size(105, 17);
             this.simCameraBox.TabIndex = 192;
@@ -2191,7 +2193,7 @@ namespace Bio
             // 
             this.setImageBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.setImageBut.ForeColor = System.Drawing.Color.White;
-            this.setImageBut.Location = new System.Drawing.Point(716, 231);
+            this.setImageBut.Location = new System.Drawing.Point(716, 280);
             this.setImageBut.Name = "setImageBut";
             this.setImageBut.Size = new System.Drawing.Size(132, 23);
             this.setImageBut.TabIndex = 193;
@@ -2213,7 +2215,7 @@ namespace Bio
             // 
             this.imageLabel.AutoSize = true;
             this.imageLabel.ForeColor = System.Drawing.Color.White;
-            this.imageLabel.Location = new System.Drawing.Point(603, 263);
+            this.imageLabel.Location = new System.Drawing.Point(609, 310);
             this.imageLabel.Name = "imageLabel";
             this.imageLabel.Size = new System.Drawing.Size(0, 13);
             this.imageLabel.TabIndex = 195;
@@ -2232,7 +2234,7 @@ namespace Bio
             // 
             this.label79.AutoSize = true;
             this.label79.ForeColor = System.Drawing.Color.White;
-            this.label79.Location = new System.Drawing.Point(606, 310);
+            this.label79.Location = new System.Drawing.Point(606, 260);
             this.label79.Name = "label79";
             this.label79.Size = new System.Drawing.Size(64, 13);
             this.label79.TabIndex = 200;
@@ -2243,7 +2245,7 @@ namespace Bio
             // 
             this.button24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.button24.ForeColor = System.Drawing.Color.White;
-            this.button24.Location = new System.Drawing.Point(785, 304);
+            this.button24.Location = new System.Drawing.Point(785, 254);
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(63, 23);
             this.button24.TabIndex = 202;
@@ -2356,12 +2358,38 @@ namespace Bio
             this.button23.UseVisualStyleBackColor = false;
             this.button23.Click += new System.EventHandler(this.SetProperty);
             // 
+            // useLibBox
+            // 
+            this.useLibBox.AutoSize = true;
+            this.useLibBox.Location = new System.Drawing.Point(606, 333);
+            this.useLibBox.Name = "useLibBox";
+            this.useLibBox.Size = new System.Drawing.Size(79, 17);
+            this.useLibBox.TabIndex = 211;
+            this.useLibBox.Text = "Use Library";
+            this.useLibBox.UseVisualStyleBackColor = true;
+            this.useLibBox.CheckedChanged += new System.EventHandler(this.useLibBox_CheckedChanged);
+            // 
+            // setLibBut
+            // 
+            this.setLibBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.setLibBut.ForeColor = System.Drawing.Color.White;
+            this.setLibBut.Location = new System.Drawing.Point(716, 329);
+            this.setLibBut.Name = "setLibBut";
+            this.setLibBut.Size = new System.Drawing.Size(63, 23);
+            this.setLibBut.TabIndex = 212;
+            this.setLibBut.Tag = "LibPath";
+            this.setLibBut.Text = "Set";
+            this.setLibBut.UseVisualStyleBackColor = false;
+            this.setLibBut.Click += new System.EventHandler(this.setLibBut_Click);
+            // 
             // MicroscopeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
             this.ClientSize = new System.Drawing.Size(956, 413);
+            this.Controls.Add(this.setLibBut);
+            this.Controls.Add(this.useLibBox);
             this.Controls.Add(this.button23);
             this.Controls.Add(this.button31);
             this.Controls.Add(this.button25);
@@ -2773,5 +2801,7 @@ namespace Bio
         private System.Windows.Forms.Button button30;
         private System.Windows.Forms.Button button31;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.CheckBox useLibBox;
+        private System.Windows.Forms.Button setLibBut;
     }
 }

@@ -74,6 +74,8 @@ namespace Bio
         {
             App.Initialize();
             Filters.Init();
+            App.imager.Show();
+            App.lib.Show();
             App.runner = new Scripting();
             App.recorder = new Recorder();
         }

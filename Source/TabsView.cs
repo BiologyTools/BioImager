@@ -367,7 +367,9 @@ namespace Bio
                 return;
             foreach (string file in saveOMEFileDialog.FileNames)
             {
-                BioImage.SaveOME(file,Image.ID);
+                string[] st = new string[1];
+                st[0] = file;
+                BioImage.SaveOMESeries(st, Image.ID);
             }
         }
 

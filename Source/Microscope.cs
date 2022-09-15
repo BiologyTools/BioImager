@@ -1,8 +1,4 @@
-﻿#if DEBUG
-#define _LIB
-#endif
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,15 +26,18 @@ namespace Bio
         public static double maxY;
         public Stage(object st)
         {
-            stageType = Microscope.Types["IMTBStage"];
-            stage = st;
-            axisType = Microscope.Types["IMTBAxis"];
-            xAxis = Microscope.GetProperty("IMTBStage", "XAxis", Stage.stage);
-            yAxis = Microscope.GetProperty("IMTBStage", "YAxis", Stage.stage);
-            PointD d = GetPosition();
-            x = GetPositionX();
-            y = GetPositionY();
-            UpdateSWLimit();
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                stageType = Microscope.Types["IMTBStage"];
+                stage = st;
+                axisType = Microscope.Types["IMTBAxis"];
+                xAxis = Microscope.GetProperty("IMTBStage", "XAxis", Stage.stage);
+                yAxis = Microscope.GetProperty("IMTBStage", "YAxis", Stage.stage);
+                PointD d = GetPosition();
+                x = GetPositionX();
+                y = GetPositionY();
+                UpdateSWLimit();
+            }
         }
         public Stage()
         {
@@ -70,15 +69,20 @@ namespace Bio
         {
             x = px;
             y = py;
-#if _LIB
-            object[] setPosArgs = new object[5];
-            setPosArgs[0] = px;
-            setPosArgs[1] = py;
-            setPosArgs[2] = "µm";
-            setPosArgs[3] = Microscope.CmdSetMode;
-            setPosArgs[4] = 10000;
-            bool resStage = (bool)stageType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, stage, setPosArgs);
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            { 
+                object[] setPosArgs = new object[5];
+                setPosArgs[0] = px;
+                setPosArgs[1] = py;
+                setPosArgs[2] = "µm";
+                setPosArgs[3] = Microscope.CmdSetMode;
+                setPosArgs[4] = 10000;
+                bool resStage = (bool)stageType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, stage, setPosArgs);
+            }
+            else if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                Microscope.sdk.SetPosition(new PointD(px, py));
+            }
         }
         public void SetPositionX(double px)
         {
@@ -102,14 +106,19 @@ namespace Bio
         }
         public PointD GetPosition()
         {
-            #if _LIB
-            object[] args = new object[3];
-            args[2] = "µm";
-            Microscope.Types["IMTBStage"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, stage, args);
-            x = (double)args[0];
-            y = (double)args[1];
-            return new PointD((double)args[0], (double)args[1]);
-            #endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[3];
+                args[2] = "µm";
+                Microscope.Types["IMTBStage"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, stage, args);
+                x = (double)args[0];
+                y = (double)args[1];
+                return new PointD((double)args[0], (double)args[1]);
+            }
+            else if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                return Microscope.sdk.GetPosition();
+            }
             return new PointD(x, y);
         }
         public void MoveUp(double m)
@@ -134,39 +143,44 @@ namespace Bio
         }
         public void UpdateSWLimit()
         {
-#if _LIB
-            object[] args = new object[2];
-            args[0] = true;
-            args[1] = "µm";
-            maxX = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
-            args[0] = false;
-            minX = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
-            args[0] = true;
-            maxY = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
-            args[0] = false;
-            minY = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[2];
+                args[0] = true;
+                args[1] = "µm";
+                maxX = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
+                args[0] = false;
+                minX = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
+                args[0] = true;
+                maxY = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
+                args[0] = false;
+                minY = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
+                if (Recorder.recordMicroscope)
+                Recorder.AddLine("Microscope.Focus.SetSWLimit(" + minX + "," + maxX + "," + minY + "," + maxY + ");");
+            }
+           
         }
         public void SetSWLimit(double xmin, double xmax, double ymin, double ymax)
         {
-#if _LIB
-            object[] args = new object[3];
-            args[0] = true;
-            args[1] = xmax;
-            args[2] = "µm";
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
-            args[0] = false;
-            args[1] = xmin;
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[3];
+                args[0] = true;
+                args[1] = xmax;
+                args[2] = "µm";
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
+                args[0] = false;
+                args[1] = xmin;
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, xAxis, args);
 
-            args[0] = true;
-            args[1] = ymax;
-            args[2] = "µm";
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
-            args[0] = false;
-            args[1] = ymin;
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
-#endif
+                args[0] = true;
+                args[1] = ymax;
+                args[2] = "µm";
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
+                args[0] = false;
+                args[1] = ymin;
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, yAxis, args);
+            }
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.Focus.SetSWLimit(" + xmin + "," + xmax + "," + ymin + "," + ymax + ");");
         }
@@ -183,9 +197,10 @@ namespace Bio
         public Focus(object foc)
         {
             focus = foc;
-            #if _LIB
-            axisType = Microscope.Types["IMTBAxis"];
-            #endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                axisType = Microscope.Types["IMTBAxis"];
+            }
         }
         public Focus()
         {
@@ -193,55 +208,69 @@ namespace Bio
         }
         public void SetFocus(double f)
         {
-#if _LIB
-            object[] args = new object[3];
-            args[0] = f;
-            args[1] = "µm";
-            args[2] = Microscope.CmdSetMode;
-            bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, focus, args);
-            z = f;
-#endif
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.Focus.SetFocus(" + f + ");");
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[3];
+                args[0] = f;
+                args[1] = "µm";
+                args[2] = Microscope.CmdSetMode;
+                bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, focus, args);
+                z = f;
+            }
+            else if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                Microscope.sdk.SetZ(f);
+            }
         }
         public double GetFocus()
         {
-#if _LIB
-            object[] getPosFocArgs = new object[1];
-            getPosFocArgs[0] = "µm";
-            z = (double)Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, focus, getPosFocArgs);
-            
-#endif
-        return z;
+            if (Recorder.recordMicroscope)
+            Recorder.AddLine("Microscope.Focus.SetFocus(" + z + ");");
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] getPosFocArgs = new object[1];
+                getPosFocArgs[0] = "µm";
+                z = (double)Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, focus, getPosFocArgs);
+                return z;
+            }
+            if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                return Microscope.sdk.GetZ();
+            }
+            return z;
         }
         public PointD GetSWLimit()
         {
-#if _LIB
-            PointD d = new PointD();
-            object[] args = new object[2];
-            args[0] = true;
-            args[1] = "µm";
-            d.X = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
-            args[0] = false;
-            d.Y = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
-            upperLimit = d.X;
-            lowerLimit = d.Y;
-            return d;
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                PointD d = new PointD();
+                object[] args = new object[2];
+                args[0] = true;
+                args[1] = "µm";
+                d.X = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
+                args[0] = false;
+                d.Y = (double)axisType.InvokeMember("GetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
+                upperLimit = d.X;
+                lowerLimit = d.Y;
+                return d;
+            }
             return new PointD(lowerLimit, upperLimit);
         }
         public void SetSWLimit(double xd, double yd)
         {
-#if _LIB
-            object[] args = new object[3];
-            args[0] = true;
-            args[1] = xd;
-            args[2] = "µm";
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
-            args[0] = false;
-            args[1] = yd;
-            axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[3];
+                args[0] = true;
+                args[1] = xd;
+                args[2] = "µm";
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
+                args[0] = false;
+                args[1] = yd;
+                axisType.InvokeMember("SetSWLimit", BindingFlags.InvokeMethod, null, focus, args);
+            }
             upperLimit = xd;
             lowerLimit = yd;
             if (Recorder.recordMicroscope)
@@ -257,21 +286,22 @@ namespace Bio
 
         public Objectives(object objs)
         {
-#if _LIB
-            changerType = Microscope.Types["IMTBChanger"];
-            changer = objs;
-
-            int count = (int)changerType.InvokeMember("GetElementCount", BindingFlags.InvokeMethod, null, objs, null);
-            object[] args3 = new object[1];
-
-            for (int i = 0; i < count; i++)
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                args3[0] = i;
-                object o = changerType.InvokeMember("GetElement", BindingFlags.InvokeMethod, null, objs, args3);
-                if(o!=null)
-                List.Add(new Objective(o,i));
+                changerType = Microscope.Types["IMTBChanger"];
+                changer = objs;
+
+                int count = (int)changerType.InvokeMember("GetElementCount", BindingFlags.InvokeMethod, null, objs, null);
+                object[] args3 = new object[1];
+
+                for (int i = 0; i < count; i++)
+                {
+                    args3[0] = i;
+                    object o = changerType.InvokeMember("GetElement", BindingFlags.InvokeMethod, null, objs, args3);
+                    if (o != null)
+                        List.Add(new Objective(o, i));
+                }
             }
-#endif
         }
         public Objectives()
         {
@@ -300,52 +330,52 @@ namespace Bio
             public double ViewHeight;
             public Objective(object o,int index)
             {
-#if _LIB
-                Type t = Microscope.Types["IMTBChangerElement"];
-                Type id = Microscope.Types["IMTBIdent"];
-                Name = (string)id.InvokeMember("get_Name", BindingFlags.InvokeMethod, null, o, null);
-                UniqueName = (string)id.InvokeMember("get_UniqueName", BindingFlags.InvokeMethod, null, o, null);
-                Configuration = (string)id.InvokeMember("GetConfiguration", BindingFlags.InvokeMethod, null, o, null);
-                string[] sts = Configuration.Split('>');
-                for (int i = 0; i < sts.Length; i++)
+                if (Properties.Settings.Default.LibPath.Contains("MTB"))
                 {
-                    string item = sts[i];
-                    int ind = item.IndexOf("</");
-                    if (item.StartsWith("<") || item.Length == 0)
-                        continue;
-                    string s = item.Remove(ind, item.Length - ind);
-                    if (i == 2)
-                        Magnification = int.Parse(s);
-                    else
-                    if (i == 4)
-                        NumericAperture = float.Parse(s, CultureInfo.InvariantCulture);
-                    else
-                    if (i == 6)
+                    Type t = Microscope.Types["IMTBChangerElement"];
+                    Type id = Microscope.Types["IMTBIdent"];
+                    Name = (string)id.InvokeMember("get_Name", BindingFlags.InvokeMethod, null, o, null);
+                    UniqueName = (string)id.InvokeMember("get_UniqueName", BindingFlags.InvokeMethod, null, o, null);
+                    Configuration = (string)id.InvokeMember("GetConfiguration", BindingFlags.InvokeMethod, null, o, null);
+                    string[] sts = Configuration.Split('>');
+                    for (int i = 0; i < sts.Length; i++)
                     {
-                        if (s.Contains("Air"))
-                            Oil = false;
+                        string item = sts[i];
+                        int ind = item.IndexOf("</");
+                        if (item.StartsWith("<") || item.Length == 0)
+                            continue;
+                        string s = item.Remove(ind, item.Length - ind);
+                        if (i == 2)
+                            Magnification = int.Parse(s);
                         else
-                            Oil = true;
-                    }
-                    else
-                    if(i == 8)
-                    {
-                        Modes = s;
-                    }
-                    else
-                    if(i == 10)
-                    {
-                        Features = s;
-                    }
-                    else
-                    if(i == 12)
-                    {
-                        WorkingDistance = int.Parse(s);
+                        if (i == 4)
+                            NumericAperture = float.Parse(s, CultureInfo.InvariantCulture);
+                        else
+                        if (i == 6)
+                        {
+                            if (s.Contains("Air"))
+                                Oil = false;
+                            else
+                                Oil = true;
+                        }
+                        else
+                        if (i == 8)
+                        {
+                            Modes = s;
+                        }
+                        else
+                        if (i == 10)
+                        {
+                            Features = s;
+                        }
+                        else
+                        if (i == 12)
+                        {
+                            WorkingDistance = int.Parse(s);
+                        }
                     }
                 }
-
                 Index = index;
-#endif
             }
             public Objective()
             {
@@ -374,40 +404,42 @@ namespace Bio
         }
         public void SetPosition(int index)
         {
+            if (Recorder.recordMicroscope)
+                Recorder.AddLine("Microscope.Objectives.SetObjective(" + index + ");");
             this.index = index;
-            if (Properties.Settings.Default.UseLib)
+            if (!Properties.Settings.Default.LibPath.Contains("MTB") || !Properties.Settings.Default.LibPath.Contains("Prio"))
             {
                 Function f = Function.Functions["SetO" + index];
                 App.imager.PerformFunction(f);
                 return;
             }
-#if _LIB
-            object[] setObjPosArgs = new object[3];
-            setObjPosArgs[0] = (short)index;
-            setObjPosArgs[1] = Microscope.CmdSetMode;
-            setObjPosArgs[2] = 10000;
-            bool resObj = (bool)changerType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, changer, setObjPosArgs);
-            if (Recorder.recordMicroscope)
-                Recorder.AddLine("Microscope.Objectives.SetObjective(" + index + ");");
-#endif
+            else if(Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] setObjPosArgs = new object[3];
+                setObjPosArgs[0] = (short)index;
+                setObjPosArgs[1] = Microscope.CmdSetMode;
+                setObjPosArgs[2] = 10000;
+                bool resObj = (bool)changerType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, changer, setObjPosArgs);
+            }
             
         }
         public int GetPosition()
         {
-            if (Properties.Settings.Default.UseLib)
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                return index;
+                return List[(short)changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)].Index;
             }
-#if _LIB
-            return List[(short)changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)].Index;
-#endif
+            else
+            {
+                return Microscope.sdk.GetNosePiece();
+            }
         }
         public Objective GetObjective()
         {
-#if _LIB
-            return List[(short)changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)];
-#endif
-            return List[index];
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+                return List[(short)changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)];
+            else
+                return List[index];
         }
     }
 
@@ -418,29 +450,38 @@ namespace Bio
         public static int position;
         public TLShutter(object tlShut)
         {
-#if _LIB
-            tlShutter = tlShut;
-            tlType = Microscope.Types["IMTBChanger"];
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                tlShutter = tlShut;
+                tlType = Microscope.Types["IMTBChanger"];
+            }
         }
         public short GetPosition()
         {
-#if _LIB
-            return (short)tlType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, tlShutter, null);
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+                return (short)tlType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, tlShutter, null);
+            else
             return (short)position;
         }
         public void SetPosition(int p)
         {
-#if _LIB
-            object[] args = new object[2];
-            args[0] = (short)0;
-            args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
-            bool res = (bool)tlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlShutter, args);          
-#endif
-            position = p;
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.TLShutter.SetPosition(" + p + ");");
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[2];
+                args[0] = (short)0;
+                args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
+                bool res = (bool)tlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlShutter, args);
+                position = p;
+            }
+            if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                if (p == 0)
+                    Microscope.sdk.shutterClose();
+                else
+                    Microscope.sdk.shutterOpen();
+            }
         }
     }
 
@@ -451,27 +492,29 @@ namespace Bio
         public static int position;
         public RLShutter(object rlShut)
         {
-#if _LIB
-            rlShutter = rlShut;
-            rlType = Microscope.Types["IMTBChanger"];
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                rlShutter = rlShut;
+                rlType = Microscope.Types["IMTBChanger"];
+            }
+
         }
         public short GetPosition()
         {
-#if _LIB
-            return (short)rlType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, rlShutter, null);
-#endif
-            return (short)position;
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+                return (short)rlType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, rlShutter, null);
+            else
+                return (short)position;
         }
         public void SetPosition(int p)
         {
-#if _LIB
-            object[] args = new object[2];
-            args[0] = (short)0;
-            args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
-            bool res = (bool)rlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, rlShutter, args);
-           
-#endif
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[2];
+                args[0] = (short)0;
+                args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
+                bool res = (bool)rlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, rlShutter, args);
+            }
             position = p;
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.RLShutter.SetPosition(" + p + ");");
@@ -511,12 +554,16 @@ namespace Bio
         public static Assembly dll = null;
         public static Dictionary<string, Type> Types = new Dictionary<string, Type>();
         public static object root = null;
+        public static StringBuilder dllVersion = new StringBuilder();
+        public static SDK sdk;
+        public static int sessionID = -1;
+        public static string userRx = "";
         public static void Initialize()
         {
             if (initialized)
                 return;
-            //We dynamically load the dll installed on the system.
-            if(Properties.Settings.Default.AppPath == "")
+            int err;
+            if (Properties.Settings.Default.AppPath == "")
             {
                 OpenFileDialog fl = new OpenFileDialog();
                 MessageBox.Show("Imaging application path is not set. Please set executable location.");
@@ -526,55 +573,119 @@ namespace Bio
                 Properties.Settings.Default.AppPath = fl.FileName;
                 fl.Dispose();
             }
-            string app = Path.GetDirectoryName(Properties.Settings.Default.AppPath);
-#if _LIB
-            
-            dll = Assembly.LoadFile(app + "\\" + "MTBApi.dll");
-            Type[] tps = dll.GetExportedTypes();
-            foreach (Type type in tps)
+            if (Properties.Settings.Default.LibPath == "")
             {
-                string s = type.ToString();
-                s = s.Remove(0, s.LastIndexOf('.') + 1);
-                Types.Add(s, type);
+                OpenFileDialog fl = new OpenFileDialog();
+                MessageBox.Show("Imaging library path is not set. Please set imaging library.");
+                fl.Title = "Set imaging library location.";
+                if (fl.ShowDialog() != DialogResult.OK)
+                    Application.Exit();
+                Properties.Settings.Default.LibPath = fl.FileName;
+                fl.Dispose();
             }
-            CmdSetMode = GetEnum("MTBCmdSetModes", "Synchronous");
-            Type con = Types["MTBConnection"];
-            var c = Activator.CreateInstance(con);
-            object[] args = new object[2];
-            args[0] = "en";
-            args[1] = "";
-            con.InvokeMember("Login", BindingFlags.InvokeMethod, null, c, args);
-            object[] args2 = new object[1];
-            args2[0] = args[1];
-            con.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, args2);
-            root = con.InvokeMember("GetRoot", BindingFlags.InvokeMethod, null, c, args2);
-            Type r = Types["IMTBRoot"];
-            object[] st = new object[1];
-            st[0] = "MTBStage";
-            var sta = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
-            st[0] = "MTBFocus";
-            var foc = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
-            st[0] = "MTBTLShutter";
-            var tlShutter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
-            st[0] = "MTBRLShutter";
-            var rlShutter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
-            st[0] = "MTBObjectiveChanger";
-            var objs = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
 
-            Stage = new Stage(sta);
-            Focus = new Focus(foc);
-            Objectives = new Objectives(objs);
-            TLShutter = new TLShutter(tlShutter);
-            RLShutter = new RLShutter(rlShutter);
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                //We dynamically load the dll installed on the system.
+                string app = Path.GetDirectoryName(Properties.Settings.Default.AppPath);
+                dll = Assembly.LoadFile(app + "\\" + "MTBApi.dll");
+                Type[] tps = dll.GetExportedTypes();
+                foreach (Type type in tps)
+                {
+                    string s = type.ToString();
+                    s = s.Remove(0, s.LastIndexOf('.') + 1);
+                    Types.Add(s, type);
+                }
+                CmdSetMode = GetEnum("MTBCmdSetModes", "Synchronous");
+                Type con = Types["MTBConnection"];
+                var c = Activator.CreateInstance(con);
+                object[] args = new object[2];
+                args[0] = "en";
+                args[1] = "";
+                con.InvokeMember("Login", BindingFlags.InvokeMethod, null, c, args);
+                object[] args2 = new object[1];
+                args2[0] = args[1];
+                con.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, args2);
+                root = con.InvokeMember("GetRoot", BindingFlags.InvokeMethod, null, c, args2);
+                Type r = Types["IMTBRoot"];
+                object[] st = new object[1];
+                st[0] = "MTBStage";
+                var sta = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBFocus";
+                var foc = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBTLShutter";
+                var tlShutter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBRLShutter";
+                var rlShutter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBObjectiveChanger";
+                var objs = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
 
-            PointD d = Focus.GetSWLimit();
-            Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
-            PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);
+                Stage = new Stage(sta);
+                Focus = new Focus(foc);
+                Objectives = new Objectives(objs);
+                TLShutter = new TLShutter(tlShutter);
+                RLShutter = new RLShutter(rlShutter);
 
-            //We calibrate the stage and focus, so that images are taken always with same calibration
-            CalibrateXYZ("OnLowerLimit");
+                PointD d = Focus.GetSWLimit();
+                Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
+                PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);
+
+                //We calibrate the stage and focus, so that images are taken always with same calibration
+                CalibrateXYZ("OnLowerLimit");
+            }
+            else if (Properties.Settings.Default.LibPath.Contains("Prio"))
+            {
+                sdk = new SDK();
+                /* get the version number of the dll */
+                if ((err = sdk.GetVersion(dllVersion)) != Prior.PRIOR_OK)
+                {
+                    MessageBox.Show("Error getting Prior SDK version (" + err.ToString() + ")");
+                    return;
+                }
+
+                /* SDK must be initialised before any real use
+                 */
+                if ((err = sdk.Initialise()) != Prior.PRIOR_OK)
+                {
+                    MessageBox.Show("Error initialising Prior SDK (" + err.ToString() + ")");
+                    return;
+                }
+
+                /* create a session in the DLL, this gives us one controller and currently an ODS and SL160 robot loader. 
+                 * Multiple connections allow control of multiple stage/loaders but is outside the brief for this demo
+                 */
+                if ((sessionID = sdk.OpenSession()) < 0)
+                {
+                    MessageBox.Show("Error (" + sessionID.ToString() + ") Creating session in SDK " + dllVersion);
+                    return;
+                }
+                int open = 0;
+                try
+                {
+                    for (int port = 0; port < 10; port++)
+                    {
+                        //specify path name or PriorSDK.log is written to working directory
+                        //priorSDK.Cmd(sessionID, "dll.log.on",  ref userRx);
+                        /* my controller identifies on COM1, yours will probably be different.
+                         */
+                        /* try to connect to the ps3 */
+                        open = sdk.Cmd(sessionID, "controller.connect " + port.ToString(), ref userRx, false);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+                
+                if (open != Prior.PRIOR_OK)
+                {
+                    MessageBox.Show("Error (" + open.ToString() + ")  connecting to stage controller ", "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                err = sdk.Cmd(sessionID, "controller.stage.hostdirection.set 1 1", ref userRx);
+            }
             initialized = true;
-#endif
         }
         public static object Invoke(Type type, string name, object o, object[] args)
         {
@@ -604,39 +715,40 @@ namespace Bio
 
         public static void CalibrateXYZ(string calibMode)
         {
-#if _LIB
-            //We check to see if focus & stage are correctly calibrated on lower limit and perform calibration if necessary
-            PointD cur = Stage.GetPosition();
-            double z = Focus.GetFocus();
-            Type mt = Types["MTBCalibrationModes"];
-
-            object xaxis = GetProperty("IMTBStage", "XAxis", Stage.stage);
-            object xmode = GetProperty("IMTBAxis", "CalibrationMode", xaxis);
-
-            object yaxis = GetProperty("IMTBStage", "YAxis", Stage.stage);
-            object ymode = GetProperty("IMTBAxis", "CalibrationMode", yaxis);
-
-            object zmode = GetProperty("IMTBAxis", "CalibrationMode", Focus.focus);
-
-            object[] args = new object[3];
-            args[0] = GetEnum("MTBCalibrationModes", calibMode);
-            args[1] = CmdSetMode;
-            if (xmode.ToString() != "OnLowerLimit")
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Invoke("IMTBAxis", "Calibrate", xaxis, args);
+                //We check to see if focus & stage are correctly calibrated on lower limit and perform calibration if necessary
+                PointD cur = Stage.GetPosition();
+                double z = Focus.GetFocus();
+                Type mt = Types["MTBCalibrationModes"];
+
+                object xaxis = GetProperty("IMTBStage", "XAxis", Stage.stage);
+                object xmode = GetProperty("IMTBAxis", "CalibrationMode", xaxis);
+
+                object yaxis = GetProperty("IMTBStage", "YAxis", Stage.stage);
+                object ymode = GetProperty("IMTBAxis", "CalibrationMode", yaxis);
+
+                object zmode = GetProperty("IMTBAxis", "CalibrationMode", Focus.focus);
+
+                object[] args = new object[3];
+                args[0] = GetEnum("MTBCalibrationModes", calibMode);
+                args[1] = CmdSetMode;
+                if (xmode.ToString() != "OnLowerLimit")
+                {
+                    Invoke("IMTBAxis", "Calibrate", xaxis, args);
+                }
+                if (ymode.ToString() != "OnLowerLimit")
+                {
+                    Invoke("IMTBAxis", "Calibrate", yaxis, args);
+                }
+                if (zmode.ToString() != "OnLowerLimit")
+                {
+                    Invoke("IMTBAxis", "Calibrate", Focus.focus, args);
+                }
+                //After calibration we return to the position before calibration.
+                SetPosition(cur);
+                Focus.SetFocus(z);
             }
-            if (ymode.ToString() != "OnLowerLimit")
-            {
-                Invoke("IMTBAxis", "Calibrate", yaxis, args);
-            }
-            if (zmode.ToString() != "OnLowerLimit")
-            {
-                Invoke("IMTBAxis", "Calibrate", Focus.focus, args);
-            }
-            //After calibration we return to the position before calibration.
-            SetPosition(cur);
-            Focus.SetFocus(z);
-#endif
         }
 
         public static Point3D GetPosition()

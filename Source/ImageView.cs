@@ -1723,7 +1723,6 @@ namespace Bio
 
         public void GoToImage()
         {
-
             if (SelectedImage == null)
                 return;
             double dx = SelectedImage.Volume.Width / 2;
@@ -1737,13 +1736,16 @@ namespace Bio
         }
         public void GoToImage(int i)
         {
+            if (Images[i] == null)
+                return;
             double dx = Images[i].Volume.Width / 2;
             double dy = Images[i].Volume.Height / 2;
             Origin = new PointD(-(Images[i].Volume.Location.X + dx), -(Images[i].Volume.Location.Y + dy));
-            double wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
-            double wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
+            double wx = pictureBox.Width / ToScreenScaleW(Images[i].Volume.Width);
+            double wy = pictureBox.Height / ToScreenScaleH(Images[i].Volume.Height);
             scale.Width = (float)wy;
             scale.Height = (float)wy;
+            GoToImage();
             UpdateView();
         }
         public void GoToStage()

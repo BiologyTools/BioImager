@@ -385,7 +385,7 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sample.ome.tif")]
         public string SimulatedImage {
             get {
                 return ((string)(this["SimulatedImage"]));
@@ -433,13 +433,13 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseLib {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LibPath {
             get {
-                return ((bool)(this["UseLib"]));
+                return ((string)(this["LibPath"]));
             }
             set {
-                this["UseLib"] = value;
+                this["LibPath"] = value;
             }
         }
     }

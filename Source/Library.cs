@@ -25,11 +25,25 @@ namespace Bio
                 return;
             dll = new Lib(openFileDialog.FileName);
             typeBox.Items.AddRange(dll.Types.Values.ToArray());
-            foreach (var item in dll.Interfaces)
+
+        }
+
+        private void typeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Lib.TypeInfo item = (Lib.TypeInfo)typeBox.SelectedItem;
+            interBox.Items.Clear();
+            interBox.Items.AddRange(item.Interfaces.Values.ToArray());
+            methodsBox.Items.Clear();
+            foreach (List<MethodInfo> me in item.Methods.Values)
             {
-                interBox.Items.Add(item);
+                foreach (MethodInfo meitem in me)
+                {
+                methodsBox.Items.Add(meitem);
+                }
+                
             }
-            
+            enumsBox.Items.Clear();
+            enumsBox.Items.AddRange(item.Enums.Values.ToArray());
         }
     }
     public class Lib
@@ -93,7 +107,7 @@ namespace Bio
             }
             public void AddProperty(PropertyInfo inf)
             {
-                    Properties.Add(inf.ToString(),inf);
+                Properties.Add(inf.ToString(),inf);
             }
             public object Invoke(string name, object o, object[] args)
             {
@@ -108,6 +122,10 @@ namespace Bio
             {
                 return Activator.CreateInstance(type);
             }
+            public override string ToString()
+            {
+                return type.Name;
+            }
         }
         public class ObjectInfo
         {
@@ -117,6 +135,7 @@ namespace Bio
         public Lib(string file)
         {
             dll = Assembly.LoadFile(file);
+            //Assembly.ReflectionOnlyLoad
             Type[] tps = dll.GetExportedTypes();
             foreach (Type type in tps)
             {
@@ -134,7 +153,7 @@ namespace Bio
                 GetFields(t);
                 GetMethods(t);
                 GetMembers(t);
-                Types.Add(s, t);
+                Types.Add(s,t);
             }
             Module[] mds = dll.GetModules();
             foreach (Module m in mds)

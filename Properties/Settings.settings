@@ -93,7 +93,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SimulatedImage" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Sample.ome.tif</Value>
     </Setting>
     <Setting Name="SimulateCamera" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -104,8 +104,8 @@
     <Setting Name="DockMicro" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="UseLib" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="LibPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

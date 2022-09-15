@@ -21,17 +21,17 @@ namespace Bio
             textBox.Dock = DockStyle.Fill;
             textBox.MouseWheel += new MouseEventHandler(Code_MouseWheel);
             textBox.TextChanged += new EventHandler(textBox_TextChanged);
-            textBox.SelectionChanged += new EventHandler(richTextBox_SelectionChanged);
-            textBox.VScroll += new EventHandler(textBox_TextChanged);
+            textBox.VScroll += new EventHandler(textBox_Scroll);
+            textBox.FontChanged += new EventHandler(textBox_FontChanged);
             textBox.WordWrap = false;
             textBox.AcceptsTab = true;
             panel.Controls.Add(textBox);
             lineBox.Dock = DockStyle.Fill;
             lineBox.ScrollBars = RichTextBoxScrollBars.None;
             panel2.Controls.Add(lineBox);
-            MouseWheel += new MouseEventHandler(Code_MouseWheel);
+            //MouseWheel += new MouseEventHandler(Code_MouseWheel);
             textBox.SelectionTabs = new int[] { tabSize, tabSize * 2, tabSize * 3, tabSize * 4, tabSize * 5, tabSize * 6 };
-            UpdateLines();
+            UpdateScroll();
         }
         public RichTextBox TextBox
         {
@@ -52,37 +52,9 @@ namespace Bio
                 textBox.WordWrap = value;
             }
         }
-
-        int TabCount(string s)
+        public void UpdateScroll()
         {
-            return (int)s.Count(ch => ch == '\t');
-        }
-        public void UpdateLines()
-        {
-            lineBox.Text = "";
-            Graphics g = textBox.CreateGraphics();
-            for (int i = 0; i < textBox.Lines.Length; i++)
-            {
-                if (WordWrap)
-                {
-                    string s = textBox.Lines[i].Replace("\n", "");
-                    int t = TabCount(textBox.Lines[i]);
-                    float f = (g.MeasureString(s, textBox.Font).Width) - (t * tabSize);
-                    f += t * tabSize;
-                    if (f > textBox.Width)
-                    {
-                        //IF line wraps to next line we ensure that line numbers stay correct.
-                        lineBox.Text += (i + 1).ToString() + Environment.NewLine;
-                        lineBox.Text += Environment.NewLine;
-                    }
-                    else
-                        lineBox.Text += (i + 1).ToString() + Environment.NewLine;
-                }
-                else
-                    lineBox.Text += (i + 1).ToString() + Environment.NewLine;
-            }
             lineBox.VerticalScrollPosition = textBox.VerticalScrollPosition;
-            g.Dispose();
         }
 
         /// <summary>
@@ -374,16 +346,21 @@ namespace Bio
         }
         private void Code_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            UpdateLines();
+            UpdateScroll();
         }
-        private void richTextBox_SelectionChanged(object sender, EventArgs e)
+        private void textBox_Scroll(object sender, EventArgs e)
         {
-            UpdateLines();
+            UpdateScroll();
         }
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            UpdateLines();
+            lineBox.Text = "";
+            for (int i = 0; i < textBox.Lines.Length; i++)
+            {
+                lineBox.Text += (i + 1).ToString() + Environment.NewLine;
+            }
+            UpdateScroll();
         }
 
         private void textBox_FontChanged(object sender, EventArgs e)
@@ -393,7 +370,7 @@ namespace Bio
 
         private void CodeView_Resize(object sender, EventArgs e)
         {
-            UpdateLines();
+            UpdateScroll();
         }
     }
 }
