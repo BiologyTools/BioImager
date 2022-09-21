@@ -107,5 +107,8 @@
     <Setting Name="LibPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ImageName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sample</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

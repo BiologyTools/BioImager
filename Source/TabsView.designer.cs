@@ -48,12 +48,14 @@ namespace Bio
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openOMESeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addImagesToTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addImagesOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveTabTiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newTabViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -112,7 +114,7 @@ namespace Bio
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.Location = new System.Drawing.Point(0, 24);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(584, 1);
+            this.panel.Size = new System.Drawing.Size(584, 417);
             this.panel.TabIndex = 1;
             // 
             // tabControl
@@ -122,7 +124,7 @@ namespace Bio
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(584, 1);
+            this.tabControl.Size = new System.Drawing.Size(584, 417);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -190,12 +192,14 @@ namespace Bio
             this.openToolStripMenuItem,
             this.openRecentToolStripMenuItem,
             this.openOMEToolStripMenuItem,
+            this.openOMESeriesToolStripMenuItem,
             this.openSeriesToolStripMenuItem,
             this.addImagesToTabToolStripMenuItem,
             this.addImagesOMEToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveOMEToolStripMenuItem,
             this.saveTabToolStripMenuItem,
+            this.saveTabTiffToolStripMenuItem,
             this.saveSeriesToolStripMenuItem,
             this.newTabViewToolStripMenuItem,
             this.nodeViewToolStripMenuItem});
@@ -224,12 +228,19 @@ namespace Bio
             this.openOMEToolStripMenuItem.Text = "Open OME Images";
             this.openOMEToolStripMenuItem.Click += new System.EventHandler(this.openOMEToolStripMenuItem_Click_1);
             // 
+            // openOMESeriesToolStripMenuItem
+            // 
+            this.openOMESeriesToolStripMenuItem.Name = "openOMESeriesToolStripMenuItem";
+            this.openOMESeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.openOMESeriesToolStripMenuItem.Text = "Open OME Series";
+            this.openOMESeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click);
+            // 
             // openSeriesToolStripMenuItem
             // 
             this.openSeriesToolStripMenuItem.Name = "openSeriesToolStripMenuItem";
             this.openSeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.openSeriesToolStripMenuItem.Text = "Open Series";
-            this.openSeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click);
+            this.openSeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click_1);
             // 
             // addImagesToTabToolStripMenuItem
             // 
@@ -263,8 +274,15 @@ namespace Bio
             // 
             this.saveTabToolStripMenuItem.Name = "saveTabToolStripMenuItem";
             this.saveTabToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveTabToolStripMenuItem.Text = "Save Tab";
+            this.saveTabToolStripMenuItem.Text = "Save Tab OME";
             this.saveTabToolStripMenuItem.Click += new System.EventHandler(this.saveTabToolStripMenuItem_Click);
+            // 
+            // saveTabTiffToolStripMenuItem
+            // 
+            this.saveTabTiffToolStripMenuItem.Name = "saveTabTiffToolStripMenuItem";
+            this.saveTabTiffToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
+            this.saveTabTiffToolStripMenuItem.Click += new System.EventHandler(this.saveTabTiffToolStripMenuItem_Click);
             // 
             // saveSeriesToolStripMenuItem
             // 
@@ -538,7 +556,7 @@ namespace Bio
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(77)))), ((int)(((byte)(98)))));
-            this.ClientSize = new System.Drawing.Size(584, 25);
+            this.ClientSize = new System.Drawing.Size(584, 441);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -549,6 +567,7 @@ namespace Bio
             this.Text = "BioImager";
             this.Activated += new System.EventHandler(this.ImageViewer_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TabsView_FormClosing);
+            this.Load += new System.EventHandler(this.TabsView_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TabsView_KeyDown);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ImageViewer_PreviewKeyDown);
             this.panel.ResumeLayout(false);
@@ -616,7 +635,9 @@ namespace Bio
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.ToolStripMenuItem addImagesToTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addImagesOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openSeriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openOMESeriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveTabTiffToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSeriesToolStripMenuItem;
     }
 }

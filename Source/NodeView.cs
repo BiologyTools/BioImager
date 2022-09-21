@@ -75,7 +75,6 @@ namespace Bio
             App.Initialize();
             Filters.Init();
             App.imager.Show();
-            App.lib.Show();
             App.runner = new Scripting();
             App.recorder = new Recorder();
         }
@@ -168,37 +167,6 @@ namespace Bio
         private void MainForm_Activated(object sender, EventArgs e)
         {
             UpdateNodes();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (openFilesDialog.ShowDialog() != DialogResult.OK)
-                return;
-            foreach (string file in openFilesDialog.FileNames)
-            {
-                BioImage.Open(file);
-            }
-        }
-        private void refreshToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            InitNodes();
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TabsView iv = new TabsView("");
-            iv.Show();
-        }
-
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-
-        private void scriptRunnerToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            App.runner.WindowState = FormWindowState.Normal;
-            App.runner.Show();
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

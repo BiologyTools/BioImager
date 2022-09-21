@@ -407,7 +407,7 @@ namespace Bio
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.Objectives.SetObjective(" + index + ");");
             this.index = index;
-            if (!Properties.Settings.Default.LibPath.Contains("MTB") || !Properties.Settings.Default.LibPath.Contains("Prio"))
+            if (!Properties.Settings.Default.LibPath.Contains("MTB") && !Properties.Settings.Default.LibPath.Contains("Prio"))
             {
                 Function f = Function.Functions["SetO" + index];
                 App.imager.PerformFunction(f);
@@ -537,6 +537,8 @@ namespace Bio
             FocusDown,
             TL,
             RL,
+            TakeImage,
+            TakeImageStack,
             Acquisition,
             Locate,
         }
@@ -866,31 +868,49 @@ namespace Bio
         {
             return Focus.GetFocus();
         }
-
-        public static void TakeImage(string file)
+        private static string folder = "";
+        public static string GetFolder()
         {
+            folder = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder").ToString();
+            return folder;
+        }
+
+        public static void TakeImage()
+        {
+            if (folder == "")
+                folder = GetFolder();
             if(Properties.Settings.Default.SimulateCamera)
             {
+                /*
+                int c = 0;
+                foreach (string item in Directory.GetFiles(folder))
+                {
+                    if(item.Contains(Properties.Settings.Default.ImageName))
+                    {
+                        c++;
+                    }
+                }
+                */
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
-                b.ID = file + ".ome.tif";
+                b.ID = Properties.Settings.Default.ImageName + ".ome.tif";
                 Images.AddImage(b);
                 App.viewer.AddImage(b);
-                BioImage.SaveFile(b.ID, b.ID);
+                BioImage.SaveOME(b.ID, b.ID);
             }
             else
             {
                 App.imager.PerformFunction(Function.Functions["TakeImage"]);
             } 
         }
-        public static void TakeImageStack(string file)
+        public static void TakeImageStack()
         {
             Focus.SetFocus(UpperLimit);
             double d = UpperLimit - LowerLimit;
             double dd = d / fInterVal;
             for (int i = 0; i < dd; i++)
             {
-                TakeImage(file);
+                TakeImage();
                 Focus.SetFocus(Focus.GetFocus() + fInterVal);
             }
 

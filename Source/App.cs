@@ -61,7 +61,6 @@ namespace Bio
             automation = new Automation();
             stage = new StageTool();
             lib = new Library();
-            lib.Show();
             imager = new Imager();
             imager.Show();
             ImageJ.Initialize(Properties.Settings.Default.ImageJPath);

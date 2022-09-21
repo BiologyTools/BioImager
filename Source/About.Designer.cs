@@ -42,9 +42,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 148);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Version 2.2.0";
+            this.label1.Text = "Version 0.1";
             // 
             // label2
             // 
@@ -62,10 +62,10 @@
             this.linkLabel.AutoSize = true;
             this.linkLabel.Location = new System.Drawing.Point(49, 167);
             this.linkLabel.Name = "linkLabel";
-            this.linkLabel.Size = new System.Drawing.Size(22, 13);
+            this.linkLabel.Size = new System.Drawing.Size(54, 13);
             this.linkLabel.TabIndex = 2;
             this.linkLabel.TabStop = true;
-            this.linkLabel.Text = "Bio";
+            this.linkLabel.Text = "BioImager";
             this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
             // 
             // pictureBox1

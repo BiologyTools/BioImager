@@ -30,7 +30,7 @@ namespace Bio
             if (simCameraBox.Checked)
             {
                 imageLabel.Text = Properties.Settings.Default.SimulatedImage;
-                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage,false);
+                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage);
             }
         }
         private void Objectives_Load()

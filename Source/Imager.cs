@@ -770,8 +770,6 @@ namespace Bio
 
         public void CheckGamepadButtons(Gamepad state, Gamepad prevState)
         {
-            if (!ControllerFuncs.Initialized)
-                return;
             #region YBAX Keys
             if (ControllerFuncs.Y.State == Function.ButtonState.Released)
             {
@@ -1035,7 +1033,7 @@ namespace Bio
             {
                 if (prevState.Buttons == GamepadButtonFlags.DPadRight && state.Buttons != GamepadButtonFlags.DPadRight)
                 {
-                    PerformFunction(ControllerFuncs.DPadUp);
+                    PerformFunction(ControllerFuncs.DPadRight);
                     prevState.Buttons = GamepadButtonFlags.None;
                     DPadRightLabel.Text = "Right: released";
                 }
@@ -1254,7 +1252,7 @@ namespace Bio
                     Microscope.MoveRight(f.Value);
                 }
                 else
-                if (f.Name == "StageDown")
+                if (f.Microscope == "StageDown")
                 {
                     Microscope.MoveDown(f.Value);
                 }
@@ -1292,6 +1290,16 @@ namespace Bio
                 if (f.Microscope == "StageFieldLeft")
                 {
                     Microscope.MoveFieldLeft();
+                }
+                else
+                if (f.Microscope == "TakeImage")
+                {
+                    Microscope.TakeImage();
+                }
+                else
+                if (f.Microscope == "TakeImageStack")
+                {
+                    Microscope.TakeImageStack();
                 }
                 else
                 if (f.Name == "RL")

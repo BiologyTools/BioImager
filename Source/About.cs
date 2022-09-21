@@ -22,7 +22,7 @@ namespace Bio
 
         private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/BioMicroscopy/Bio");
+            System.Diagnostics.Process.Start("https://github.com/BiologyTools/BioImager");
         }
     }
 }

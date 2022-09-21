@@ -18,8 +18,8 @@ namespace Bio
     public class Automation
     {
         public static InputSimulator input;
-        public static Hashtable Recordings = new Hashtable();
-        public static Hashtable Properties = new Hashtable();
+        public static Dictionary<string, Recording> Recordings = new Dictionary<string, Recording>();
+        public static Dictionary<string, Recording> Properties = new Dictionary<string, Recording>();
         public class Action
         {
             private KeyEventArgs key;
@@ -415,7 +415,6 @@ namespace Bio
         }
         public static object GetProperty(string prop)
         {
-            Recording rec = (Recording)Properties[prop];
             Recorder.AddLine("Automation.GetProperty(" + '"' + prop + '"' + ");");
             return rec.Get();
         }

@@ -85,7 +85,7 @@
             this.view.ForeColor = System.Drawing.Color.White;
             this.view.Location = new System.Drawing.Point(3, 18);
             this.view.Name = "view";
-            this.view.Size = new System.Drawing.Size(366, 113);
+            this.view.Size = new System.Drawing.Size(366, 122);
             this.view.TabIndex = 3;
             this.view.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.view_BeforeExpand);
             this.view.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.view_AfterSelect);
@@ -133,7 +133,7 @@
             this.startBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.startBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.startBut.ForeColor = System.Drawing.Color.White;
-            this.startBut.Location = new System.Drawing.Point(81, 150);
+            this.startBut.Location = new System.Drawing.Point(81, 159);
             this.startBut.Name = "startBut";
             this.startBut.Size = new System.Drawing.Size(75, 23);
             this.startBut.TabIndex = 5;
@@ -146,7 +146,7 @@
             this.stopBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stopBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.stopBut.ForeColor = System.Drawing.Color.White;
-            this.stopBut.Location = new System.Drawing.Point(3, 150);
+            this.stopBut.Location = new System.Drawing.Point(3, 159);
             this.stopBut.Name = "stopBut";
             this.stopBut.Size = new System.Drawing.Size(75, 23);
             this.stopBut.TabIndex = 6;
@@ -159,7 +159,7 @@
             this.recordStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.recordStatusLabel.AutoSize = true;
             this.recordStatusLabel.ForeColor = System.Drawing.Color.White;
-            this.recordStatusLabel.Location = new System.Drawing.Point(3, 134);
+            this.recordStatusLabel.Location = new System.Drawing.Point(3, 143);
             this.recordStatusLabel.Name = "recordStatusLabel";
             this.recordStatusLabel.Size = new System.Drawing.Size(102, 13);
             this.recordStatusLabel.TabIndex = 7;
@@ -170,7 +170,7 @@
             this.playBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.playBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.playBut.ForeColor = System.Drawing.Color.White;
-            this.playBut.Location = new System.Drawing.Point(158, 150);
+            this.playBut.Location = new System.Drawing.Point(158, 159);
             this.playBut.Name = "playBut";
             this.playBut.Size = new System.Drawing.Size(105, 23);
             this.playBut.TabIndex = 8;

@@ -106,14 +106,6 @@ namespace Bio
         {
             set
             {
-                if (value < minX || value > maxX)
-                {
-                    if(value < minX)
-                        x = minX;
-                    if(value > maxX)
-                        x = maxX;
-                    return;
-                }
                 x = value;
             }
             get
@@ -125,14 +117,6 @@ namespace Bio
         {
             set
             {
-                if (value < minY || value > maxY)
-                {
-                    if (value < minY)
-                        y = minY;
-                    if (value > maxY)
-                        y = maxY;
-                    return;
-                }
                 y = value;
             }
             get
@@ -246,14 +230,6 @@ namespace Bio
         {
             set
             {
-                if(value < minX || value > maxX)
-                {
-                    if (value < minX)
-                        x = minX;
-                    if (value > maxX)
-                        x = maxX;
-                    return;
-                }
                 x = value;
             }
             get
@@ -265,14 +241,6 @@ namespace Bio
         {
             set
             {
-                if (value < minY || value > maxY)
-                {
-                    if (value < minY)
-                        y = minY;
-                    if (value > maxY)
-                        y = maxY;
-                    return;
-                }
                 y = value;
             }
             get
@@ -284,14 +252,6 @@ namespace Bio
         {
             set
             {
-                if (value < minZ || value > maxZ)
-                {
-                    if (value < minZ)
-                        x = minZ;
-                    if (value > maxZ)
-                        x = maxZ;
-                    return;
-                }
                 z = value;
             }
             get

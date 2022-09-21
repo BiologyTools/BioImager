@@ -174,7 +174,7 @@ namespace Bio
         }
         public static object GetProperty(Automation.Action.ValueType automation,string pro)
         {
-            Automation.Recording rec = (Automation.Recording)Automation.Recordings[pro];
+            Automation.Recording rec = (Automation.Recording)Automation.Properties[pro];
             Recorder.AddLine("Recordings.Get(" + rec.Name + ");");
             return rec.Get();
         }
@@ -318,6 +318,7 @@ namespace Bio
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            openRecDialog.InitialDirectory = Application.StartupPath + "\\Recordings";
             if (openRecDialog.ShowDialog() != DialogResult.OK)
                 return;
             OpenRecording(openRecDialog.FileName);
@@ -389,6 +390,7 @@ namespace Bio
         }
         private void saveSelectedValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            savePropDialog.InitialDirectory = Application.StartupPath + "\\Recordings";
             if (savePropDialog.ShowDialog() != DialogResult.OK)
                 return;
             SaveProperty(savePropDialog.FileName);
@@ -396,6 +398,7 @@ namespace Bio
 
         private void openPropertyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            openPropDialog.InitialDirectory = Application.StartupPath + "\\Recordings";
             if (openPropDialog.ShowDialog() != DialogResult.OK)
                 return;
             OpenProperty(openPropDialog.FileName);

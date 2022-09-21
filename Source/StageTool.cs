@@ -116,18 +116,12 @@ namespace Bio
 
         private void takeImageBut_Click(object sender, EventArgs e)
         {
-            int c = App.viewer.Images.Count;
-            string id = System.IO.Path.GetFileNameWithoutExtension(ImageView.SelectedImage.ID);
-            Microscope.TakeImage(id + "_" + c);
-
+            Microscope.TakeImage();
         }
 
         private void stackBut_Click(object sender, EventArgs e)
         {
-            int c = App.viewer.Images.Count;
-            string id = System.IO.Path.GetFileNameWithoutExtension(ImageView.SelectedImage.ID);
-            Microscope.TakeImageStack(id + "_" + c);
-
+            Microscope.TakeImageStack();
         }
         private Point p;
         private void timer_Tick(object sender, EventArgs e)
@@ -193,6 +187,11 @@ namespace Bio
         private void lowerLimBox_ValueChanged(object sender, EventArgs e)
         {
             Microscope.LowerLimit = (double)lowerLimBox.Value;
+        }
+
+        private void nameBox_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ImageName = nameBox.Text;
         }
     }
 }

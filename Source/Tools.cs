@@ -253,18 +253,21 @@ namespace Bio
             else
             if(currentTool.type == Tool.Type.delete)
             {
-                foreach (ROI an in ImageView.selectedAnnotations)
+                for (int i = 0; i < ImageView.SelectedImage.Annotations.Count; i++)
                 {
-                    if (an != null)
+                    ROI an = ImageView.SelectedImage.Annotations[i];
+                    if (an.BoundingBox.IntersectsWith(e.X,e.Y))
                     {
                         if (an.selectedPoints.Count == 0)
                         {
                             ImageView.SelectedImage.Annotations.Remove(an);
+                            break;
                         }
                         else
                         if (an.selectedPoints.Count == 1 && !(an.type == ROI.Type.Polygon || an.type == ROI.Type.Polyline || an.type == ROI.Type.Freeform))
                         {
                             ImageView.SelectedImage.Annotations.Remove(an);
+                            break;
                         }
                         else
                         {
@@ -274,10 +277,12 @@ namespace Bio
                             {
                                 an.closed = false;
                                 an.RemovePoints(an.selectedPoints.ToArray());
+                                break;
                             }
                         }
                     }
                 }
+                UpdateOverlay();
             }
             else
             if (currentTool.type == Tool.Type.text)
@@ -449,7 +454,6 @@ namespace Bio
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);
                 UpdateOverlay();
-                
             }
             else
             if (currentTool.type == Tool.Type.freeform && buts == MouseButtons.Left && ImageView.down)

@@ -442,5 +442,17 @@ namespace Bio.Properties {
                 this["LibPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sample")]
+        public string ImageName {
+            get {
+                return ((string)(this["ImageName"]));
+            }
+            set {
+                this["ImageName"] = value;
+            }
+        }
     }
 }

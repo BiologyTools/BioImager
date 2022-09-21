@@ -46,34 +46,36 @@ namespace Bio
             this.leftBut = new System.Windows.Forms.Button();
             this.upBut = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.fIntervalBox = new System.Windows.Forms.NumericUpDown();
+            this.setLowerBut = new System.Windows.Forms.Button();
+            this.setUpperBut = new System.Windows.Forms.Button();
+            this.dockBox = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.sliceBox = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.stackBut = new System.Windows.Forms.Button();
+            this.upperLimBox = new System.Windows.Forms.NumericUpDown();
+            this.lowerLimBox = new System.Windows.Forms.NumericUpDown();
             this.takeImageBut = new System.Windows.Forms.Button();
             this.topMostBox = new System.Windows.Forms.CheckBox();
             this.setObjBut = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.upperLimBox = new System.Windows.Forms.NumericUpDown();
-            this.lowerLimBox = new System.Windows.Forms.NumericUpDown();
-            this.stackBut = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.sliceBox = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.dockBox = new System.Windows.Forms.CheckBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.setUpperBut = new System.Windows.Forms.Button();
-            this.setLowerBut = new System.Windows.Forms.Button();
-            this.fIntervalBox = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
+            this.nameBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveYBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveXBox)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fIntervalBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliceBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upperLimBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerLimBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliceBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fIntervalBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -237,6 +239,8 @@ namespace Bio
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.panel2.ContextMenuStrip = this.contextMenuStrip;
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.nameBox);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.fIntervalBox);
             this.panel2.Controls.Add(this.setLowerBut);
@@ -264,8 +268,193 @@ namespace Bio
             this.panel2.Controls.Add(this.label1);
             this.panel2.Location = new System.Drawing.Point(0, 24);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(284, 236);
+            this.panel2.Size = new System.Drawing.Size(284, 262);
             this.panel2.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(94, 215);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(74, 13);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Frame Interval";
+            // 
+            // fIntervalBox
+            // 
+            this.fIntervalBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.fIntervalBox.DecimalPlaces = 6;
+            this.fIntervalBox.ForeColor = System.Drawing.Color.White;
+            this.fIntervalBox.Location = new System.Drawing.Point(12, 213);
+            this.fIntervalBox.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.fIntervalBox.Name = "fIntervalBox";
+            this.fIntervalBox.Size = new System.Drawing.Size(79, 20);
+            this.fIntervalBox.TabIndex = 27;
+            this.fIntervalBox.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            131072});
+            this.fIntervalBox.ValueChanged += new System.EventHandler(this.fIntervalBox_ValueChanged);
+            // 
+            // setLowerBut
+            // 
+            this.setLowerBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.setLowerBut.ForeColor = System.Drawing.Color.White;
+            this.setLowerBut.Location = new System.Drawing.Point(97, 164);
+            this.setLowerBut.Name = "setLowerBut";
+            this.setLowerBut.Size = new System.Drawing.Size(37, 20);
+            this.setLowerBut.TabIndex = 26;
+            this.setLowerBut.Text = "Set";
+            this.setLowerBut.UseVisualStyleBackColor = false;
+            this.setLowerBut.Click += new System.EventHandler(this.setLowerBut_Click);
+            // 
+            // setUpperBut
+            // 
+            this.setUpperBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.setUpperBut.ForeColor = System.Drawing.Color.White;
+            this.setUpperBut.Location = new System.Drawing.Point(97, 138);
+            this.setUpperBut.Name = "setUpperBut";
+            this.setUpperBut.Size = new System.Drawing.Size(37, 20);
+            this.setUpperBut.TabIndex = 25;
+            this.setUpperBut.Text = "Set";
+            this.setUpperBut.UseVisualStyleBackColor = false;
+            this.setUpperBut.Click += new System.EventHandler(this.setUpperBut_Click);
+            // 
+            // dockBox
+            // 
+            this.dockBox.AutoSize = true;
+            this.dockBox.Checked = true;
+            this.dockBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dockBox.Location = new System.Drawing.Point(229, 194);
+            this.dockBox.Name = "dockBox";
+            this.dockBox.Size = new System.Drawing.Size(52, 17);
+            this.dockBox.TabIndex = 24;
+            this.dockBox.Text = "Dock";
+            this.dockBox.UseVisualStyleBackColor = true;
+            this.dockBox.CheckedChanged += new System.EventHandler(this.dockBox_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(159, 11);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "Objectives";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(94, 192);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 22;
+            this.label4.Text = "Slices";
+            // 
+            // sliceBox
+            // 
+            this.sliceBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.sliceBox.ForeColor = System.Drawing.Color.White;
+            this.sliceBox.Location = new System.Drawing.Point(12, 189);
+            this.sliceBox.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.sliceBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.sliceBox.Name = "sliceBox";
+            this.sliceBox.Size = new System.Drawing.Size(79, 20);
+            this.sliceBox.TabIndex = 21;
+            this.sliceBox.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.sliceBox.ValueChanged += new System.EventHandler(this.sliceBox_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(135, 167);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(21, 13);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "μm";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(135, 141);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(21, 13);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "μm";
+            // 
+            // stackBut
+            // 
+            this.stackBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.stackBut.ForeColor = System.Drawing.Color.White;
+            this.stackBut.Location = new System.Drawing.Point(162, 165);
+            this.stackBut.Name = "stackBut";
+            this.stackBut.Size = new System.Drawing.Size(105, 25);
+            this.stackBut.TabIndex = 16;
+            this.stackBut.Text = "Take Image Stack";
+            this.stackBut.UseVisualStyleBackColor = false;
+            this.stackBut.Click += new System.EventHandler(this.stackBut_Click);
+            // 
+            // upperLimBox
+            // 
+            this.upperLimBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.upperLimBox.DecimalPlaces = 4;
+            this.upperLimBox.ForeColor = System.Drawing.Color.White;
+            this.upperLimBox.Location = new System.Drawing.Point(12, 138);
+            this.upperLimBox.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.upperLimBox.Name = "upperLimBox";
+            this.upperLimBox.Size = new System.Drawing.Size(79, 20);
+            this.upperLimBox.TabIndex = 12;
+            this.upperLimBox.Value = new decimal(new int[] {
+            1249000,
+            0,
+            0,
+            262144});
+            this.upperLimBox.ValueChanged += new System.EventHandler(this.upperLimBox_ValueChanged);
+            // 
+            // lowerLimBox
+            // 
+            this.lowerLimBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.lowerLimBox.DecimalPlaces = 4;
+            this.lowerLimBox.ForeColor = System.Drawing.Color.White;
+            this.lowerLimBox.Location = new System.Drawing.Point(12, 164);
+            this.lowerLimBox.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.lowerLimBox.Name = "lowerLimBox";
+            this.lowerLimBox.Size = new System.Drawing.Size(79, 20);
+            this.lowerLimBox.TabIndex = 14;
+            this.lowerLimBox.Value = new decimal(new int[] {
+            1002000,
+            0,
+            0,
+            262144});
+            this.lowerLimBox.ValueChanged += new System.EventHandler(this.lowerLimBox_ValueChanged);
             // 
             // takeImageBut
             // 
@@ -314,202 +503,38 @@ namespace Bio
             this.label2.TabIndex = 8;
             this.label2.Text = "SizeY";
             // 
-            // upperLimBox
-            // 
-            this.upperLimBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.upperLimBox.DecimalPlaces = 4;
-            this.upperLimBox.ForeColor = System.Drawing.Color.White;
-            this.upperLimBox.Location = new System.Drawing.Point(12, 138);
-            this.upperLimBox.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.upperLimBox.Name = "upperLimBox";
-            this.upperLimBox.Size = new System.Drawing.Size(79, 20);
-            this.upperLimBox.TabIndex = 12;
-            this.upperLimBox.Value = new decimal(new int[] {
-            1249000,
-            0,
-            0,
-            262144});
-            this.upperLimBox.ValueChanged += new System.EventHandler(this.upperLimBox_ValueChanged);
-            // 
-            // lowerLimBox
-            // 
-            this.lowerLimBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.lowerLimBox.DecimalPlaces = 4;
-            this.lowerLimBox.ForeColor = System.Drawing.Color.White;
-            this.lowerLimBox.Location = new System.Drawing.Point(12, 164);
-            this.lowerLimBox.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.lowerLimBox.Name = "lowerLimBox";
-            this.lowerLimBox.Size = new System.Drawing.Size(79, 20);
-            this.lowerLimBox.TabIndex = 14;
-            this.lowerLimBox.Value = new decimal(new int[] {
-            1002000,
-            0,
-            0,
-            262144});
-            this.lowerLimBox.ValueChanged += new System.EventHandler(this.lowerLimBox_ValueChanged);
-            // 
-            // stackBut
-            // 
-            this.stackBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.stackBut.ForeColor = System.Drawing.Color.White;
-            this.stackBut.Location = new System.Drawing.Point(162, 165);
-            this.stackBut.Name = "stackBut";
-            this.stackBut.Size = new System.Drawing.Size(105, 25);
-            this.stackBut.TabIndex = 16;
-            this.stackBut.Text = "Take Image Stack";
-            this.stackBut.UseVisualStyleBackColor = false;
-            this.stackBut.Click += new System.EventHandler(this.stackBut_Click);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(135, 141);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(21, 13);
-            this.label11.TabIndex = 19;
-            this.label11.Text = "μm";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(135, 167);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(21, 13);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "μm";
-            // 
-            // sliceBox
-            // 
-            this.sliceBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.sliceBox.ForeColor = System.Drawing.Color.White;
-            this.sliceBox.Location = new System.Drawing.Point(12, 189);
-            this.sliceBox.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.sliceBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.sliceBox.Name = "sliceBox";
-            this.sliceBox.Size = new System.Drawing.Size(79, 20);
-            this.sliceBox.TabIndex = 21;
-            this.sliceBox.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.sliceBox.ValueChanged += new System.EventHandler(this.sliceBox_ValueChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(94, 192);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 22;
-            this.label4.Text = "Slices";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(159, 11);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "Objectives";
-            // 
-            // dockBox
-            // 
-            this.dockBox.AutoSize = true;
-            this.dockBox.Checked = true;
-            this.dockBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dockBox.Location = new System.Drawing.Point(229, 194);
-            this.dockBox.Name = "dockBox";
-            this.dockBox.Size = new System.Drawing.Size(52, 17);
-            this.dockBox.TabIndex = 24;
-            this.dockBox.Text = "Dock";
-            this.dockBox.UseVisualStyleBackColor = true;
-            this.dockBox.CheckedChanged += new System.EventHandler(this.dockBox_CheckedChanged);
-            // 
             // timer
             // 
             this.timer.Interval = 500;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // setUpperBut
+            // nameBox
             // 
-            this.setUpperBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.setUpperBut.ForeColor = System.Drawing.Color.White;
-            this.setUpperBut.Location = new System.Drawing.Point(97, 138);
-            this.setUpperBut.Name = "setUpperBut";
-            this.setUpperBut.Size = new System.Drawing.Size(37, 20);
-            this.setUpperBut.TabIndex = 25;
-            this.setUpperBut.Text = "Set";
-            this.setUpperBut.UseVisualStyleBackColor = false;
-            this.setUpperBut.Click += new System.EventHandler(this.setUpperBut_Click);
+            this.nameBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.nameBox.ForeColor = System.Drawing.Color.White;
+            this.nameBox.Location = new System.Drawing.Point(89, 239);
+            this.nameBox.Name = "nameBox";
+            this.nameBox.Size = new System.Drawing.Size(178, 20);
+            this.nameBox.TabIndex = 165;
+            this.nameBox.Text = "Sample";
+            this.nameBox.TextChanged += new System.EventHandler(this.nameBox_TextChanged);
             // 
-            // setLowerBut
+            // label6
             // 
-            this.setLowerBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.setLowerBut.ForeColor = System.Drawing.Color.White;
-            this.setLowerBut.Location = new System.Drawing.Point(97, 164);
-            this.setLowerBut.Name = "setLowerBut";
-            this.setLowerBut.Size = new System.Drawing.Size(37, 20);
-            this.setLowerBut.TabIndex = 26;
-            this.setLowerBut.Text = "Set";
-            this.setLowerBut.UseVisualStyleBackColor = false;
-            this.setLowerBut.Click += new System.EventHandler(this.setLowerBut_Click);
-            // 
-            // fIntervalBox
-            // 
-            this.fIntervalBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.fIntervalBox.DecimalPlaces = 6;
-            this.fIntervalBox.ForeColor = System.Drawing.Color.White;
-            this.fIntervalBox.Location = new System.Drawing.Point(12, 213);
-            this.fIntervalBox.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.fIntervalBox.Name = "fIntervalBox";
-            this.fIntervalBox.Size = new System.Drawing.Size(79, 20);
-            this.fIntervalBox.TabIndex = 27;
-            this.fIntervalBox.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            131072});
-            this.fIntervalBox.ValueChanged += new System.EventHandler(this.fIntervalBox_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(94, 215);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(74, 13);
-            this.label7.TabIndex = 29;
-            this.label7.Text = "Frame Interval";
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(16, 242);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 13);
+            this.label6.TabIndex = 166;
+            this.label6.Text = "Image Name";
             // 
             // StageTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(284, 287);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.menuStrip);
             this.ForeColor = System.Drawing.Color.White;
@@ -528,10 +553,10 @@ namespace Bio
             ((System.ComponentModel.ISupportInitialize)(this.moveXBox)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fIntervalBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliceBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.upperLimBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerLimBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliceBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fIntervalBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -572,5 +597,7 @@ namespace Bio
         private System.Windows.Forms.Button setUpperBut;
         private System.Windows.Forms.NumericUpDown fIntervalBox;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox nameBox;
     }
 }

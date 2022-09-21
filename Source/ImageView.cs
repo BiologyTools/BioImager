@@ -46,7 +46,31 @@ namespace Bio
             // Change parent for overlay PictureBox.
             overlayPictureBox.Parent = pictureBox;
             overlayPictureBox.Location = new Point(0, 0);
-            
+            UpdateView();
+        }
+        public ImageView()
+        {
+            InitializeComponent();
+            tools = new Tools();
+            Dock = DockStyle.Fill;
+            App.viewer = this;
+            SetCoordinate(0, 0, 0);
+            InitGUI();
+            //Buf = image.GetBufByCoord(GetCoordinate());
+            MouseWheel += new System.Windows.Forms.MouseEventHandler(ImageView_MouseWheel);
+            zBar.MouseWheel += new System.Windows.Forms.MouseEventHandler(ZTrackBar_MouseWheel);
+            cBar.MouseWheel += new System.Windows.Forms.MouseEventHandler(CTrackBar_MouseWheel);
+            tBar.MouseWheel += new System.Windows.Forms.MouseEventHandler(TimeTrackBar_MouseWheel);
+            //We set the trackbar event to handled so that it only scrolls one tick not the default multiple.
+            zBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
+            tBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
+            cBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
+            TimeFps = 60;
+            ZFps = 60;
+            CFps = 1;
+            // Change parent for overlay PictureBox.
+            overlayPictureBox.Parent = pictureBox;
+            overlayPictureBox.Location = new Point(0, 0);
             UpdateView();
         }
         ~ImageView()
@@ -123,7 +147,6 @@ namespace Bio
             zBar.Value = z;
             cBar.Value = c;
             tBar.Value = t;
-            UpdateImage();
         }
         public ZCT GetCoordinate()
         {
@@ -132,6 +155,8 @@ namespace Bio
         public void AddImage(BioImage im)
         {
             Images.Add(im);
+            SelectedIndex = Images.Count - 1;
+            InitGUI();
             UpdateImages();
             GoToImage(Images.Count - 1);
         }
@@ -370,6 +395,8 @@ namespace Bio
         }
         public void InitGUI()
         {
+            if (SelectedImage == null)
+                return;
             //image = new BioImage(path, 0);
             zBar.Maximum = SelectedImage.SizeZ - 1;
             cBar.Maximum = SelectedImage.SizeC - 1;
@@ -478,7 +505,6 @@ namespace Bio
             {
                 ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
                 Bitmap bitmap;
-
                 int index = b.Coords[zBar.Value, cBar.Value, tBar.Value];
                 if (Mode == ViewMode.Filtered)
                 {
@@ -508,6 +534,8 @@ namespace Bio
         Bitmap bitmap;
         public void UpdateImage()
         {
+            if (Bitmaps.Count == 0)
+                return;
             ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
             bitmap = null;
             GC.Collect();
@@ -534,7 +562,10 @@ namespace Bio
             }
             if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
                 bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
-            Bitmaps[SelectedIndex] = bitmap;
+            if (SelectedIndex < Bitmaps.Count)
+                Bitmaps[SelectedIndex] = bitmap;
+            else
+                Bitmaps.Add(bitmap);
         }
         private void channelBoxR_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -849,18 +880,24 @@ namespace Bio
         }
         private void zBar_ValueChanged(object sender, EventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             SelectedImage.Coordinate = new ZCT(zBar.Value, SelectedImage.Coordinate.C, SelectedImage.Coordinate.T);
             UpdateImage();
             UpdateView();
         }
         private void timeBar_ValueChanged(object sender, EventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             SelectedImage.Coordinate = new ZCT(SelectedImage.Coordinate.Z, SelectedImage.Coordinate.C, tBar.Value);
             UpdateImage();
             UpdateView();
         }
         private void cBar_ValueChanged(object sender, EventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             SelectedImage.Coordinate = new ZCT(SelectedImage.Coordinate.Z, cBar.Value, SelectedImage.Coordinate.T);
             UpdateImage();
             UpdateView();
@@ -1097,7 +1134,6 @@ namespace Bio
             DrawOverlay(g);
             TabsView.graphics = g;
             Point3D p = Microscope.GetPosition();
-            
             if ((Tools.currentTool.type == Tools.Tool.Type.rectSel && down) || (Tools.currentTool.type == Tools.Tool.Type.magic && down))
             {
                 Pen mag = new Pen(Brushes.Magenta, (float)1/scale.Width);
@@ -1148,9 +1184,6 @@ namespace Bio
 
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
-            selectedImage = SelectedImage;
             PointD p = ToViewSpace(e.Location.X,e.Location.Y);
             mousePoint = "(" + p.X + ", " + p.Y + ")";
             if (Mode != ViewMode.RGBImage)
@@ -1302,15 +1335,12 @@ namespace Bio
                         }
                         UpdateView();
                     }
-
             UpdateStatus();
             tools.ToolMove(p, mouseDownButtons);
             pd = p;
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
             PointD p = ToViewSpace(e.Location.X,e.Location.Y);
             if (e.Button == MouseButtons.Middle)
@@ -1328,10 +1358,7 @@ namespace Bio
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
-            selectedImage = SelectedImage;
             mouseDownButtons = e.Button;
             mouseUpButtons = MouseButtons.None;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
@@ -1363,6 +1390,7 @@ namespace Bio
 
             if (Tools.currentTool.type == Tools.Tool.Type.move)
             {
+                if(AnnotationsRGB != null)
                 foreach (ROI an in AnnotationsRGB)
                 {
                     if (an.GetSelectBound().IntersectsWith(p.X, p.Y))
@@ -1387,7 +1415,7 @@ namespace Bio
                 UpdateOverlay();
             }
 
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && SelectedImage!=null)
             {
                 Point s = new Point(SelectedImage.SizeX, SelectedImage.SizeY);
                 if ((p.X < s.X && p.Y < s.Y) || (p.X >= 0 && p.Y >= 0))
@@ -1424,10 +1452,7 @@ namespace Bio
         }
         private void pictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
-            selectedImage = SelectedImage;
             PointD p = ToViewSpace(e.Location.X,e.Location.Y);
             tools.ToolDown(p, e.Button);
             Origin = new PointD(-p.X, -p.Y);
@@ -1751,13 +1776,7 @@ namespace Bio
         public void GoToStage()
         {
             RectangleD d = Microscope.GetViewRectangle();
-            double dx = d.W / 2;
-            double dy = d.H / 2;
-            Origin = new PointD(d.X, d.Y);
-            double wx = pictureBox.Width / ToScreenScaleW(d.W);
-            double wy = pictureBox.Height / ToScreenScaleH(d.H);
-            scale.Width = (float)wy;
-            scale.Height = (float)wy;
+            Origin = new PointD(-(d.X + (d.W / 2)), -(d.Y + (d.H / 2)));
             UpdateView();
         }
         public void MoveStageToImage()
