@@ -1,6 +1,6 @@
 # BioImager
 
-A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. Check your manufacturer's SDK to see how to implement "Microscope.cs". Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
 
 ## Features
 
