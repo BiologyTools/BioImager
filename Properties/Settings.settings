@@ -110,5 +110,8 @@
     <Setting Name="ImageName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Sample</Value>
     </Setting>
+    <Setting Name="Planes" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

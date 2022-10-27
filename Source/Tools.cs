@@ -14,6 +14,7 @@ using AForge.Imaging.Filters;
 using AForge.Imaging;
 using AForge.Math.Geometry;
 using AForge;
+using Bio.Graphics;
 
 namespace Bio
 {
@@ -24,8 +25,13 @@ namespace Bio
         public static bool rEnabled = true;
         public static bool gEnabled = true;
         public static bool bEnabled = true;
+        private static ColorS drawColor = new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue);
+        private static ColorS eraseColor = new ColorS(0, 0, 0);
+        private static int width = 1;
+        
         public static Rectangle selectionRectangle;
         public static Hashtable tools = new Hashtable();
+        private AbstractFloodFiller floodFiller = null;
         public class Tool
         {
             public enum ToolType
@@ -56,6 +62,7 @@ namespace Bio
                 pan,
                 magic,
                 script,
+                dropper
             }
 
             public static void Init()
@@ -64,12 +71,10 @@ namespace Bio
                 {
                     foreach (Tool.Type tool in (Tool.Type[])Enum.GetValues(typeof(Tool.Type)))
                     {
-                        tools.Add(tool.ToString(), new Tool(tool, new ColorS(0, 0, 0), 1));
+                        tools.Add(tool.ToString(), new Tool(tool, new ColorS(0, 0, 0)));
                     }
                 }
             }
-
-            public ColorS Color;
             public List<System.Drawing.Point> Points;
             public ToolType toolType;
             private RectangleD rect;
@@ -82,52 +87,34 @@ namespace Bio
             {
                 get { return new RectangleF((float)rect.X, (float)rect.Y, (float)rect.W, (float)rect.H); }
             }
-            public double width = 1;
             public string script;
             public Type type;
+            public ColorS tolerance;
             public Tool()
             {
+                tolerance = new ColorS(0, 0, 0);
             }
             public Tool(Type t)
             {
                 type = t;
+                tolerance = new ColorS(0, 0, 0);
             }
             public Tool(Type t, ColorS col)
             {
                 type = t;
-                Color = col;
-            }
-            public Tool(Type t, ColorS col, double w)
-            {
-                type = t;
-                Color = col;
-                width = w;
+                tolerance = new ColorS(0, 0, 0);
             }
             public Tool(Type t, RectangleD r)
             {
                 type = t;
                 rect = r;
+                tolerance = new ColorS(0, 0, 0);
             }
             public Tool(Type t, string sc)
             {
                 type = t;
                 script = sc;
-            }
-
-            public ushort R
-            {
-                get { return Color.R; }
-                set { Color.R = value; }
-            }
-            public ushort G
-            {
-                get { return Color.G; }
-                set { Color.G = value; }
-            }
-            public ushort B
-            {
-                get { return Color.B; }
-                set { Color.B = value; }
+                tolerance = new ColorS(0, 0, 0);
             }
             public override string ToString()
             {
@@ -135,7 +122,42 @@ namespace Bio
             }
         }
         public static Tool currentTool;
-        
+        public static ColorS DrawColor
+        {
+            get
+            {
+                return drawColor;
+            }
+            set
+            {
+                drawColor = value;
+            }
+        }
+        public static ColorS EraseColor
+        {
+            get
+            {
+                return eraseColor;
+            }
+            set
+            {
+                eraseColor = value;
+            }
+        }
+
+        public static int StrokeWidth
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;
+                App.tools.UpdateGUI();
+            }
+        }
+
         public static RectangleD selectionRect;
         public Font font;
         public Tools()
@@ -145,6 +167,9 @@ namespace Bio
             ColorS col = new ColorS(ushort.MaxValue);
             //We initialize the tools
             currentTool = GetTool(Tool.Type.move);
+
+            floodFiller = null;
+            floodFiller = new QueueLinearFloodFiller(floodFiller);
         }
 
         public static Tool GetTool(string name)
@@ -161,14 +186,22 @@ namespace Bio
         }
         public void UpdateView()
         {
-            App.viewer.UpdateStatus();
+            App.viewer.UpdateView();
         }
         public void UpdateSelected()
         {
             foreach (Control item in this.Controls)
             {
+                if(item.Tag != null)
+                if(item.Tag.ToString() == "tool")
                 item.BackColor = Color.White;
             }
+        }
+        private void UpdateGUI()
+        {
+            color1Box.BackColor = ColorS.ToColor(DrawColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+            color2Box.BackColor = ColorS.ToColor(EraseColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+            widthBox.Value = width;
         }
 
         ROI anno = new ROI();
@@ -179,7 +212,8 @@ namespace Bio
             if (currentTool == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
-            if (currentTool.type == Tool.Type.line)
+            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
+            if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
                 {
@@ -192,7 +226,7 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.polygon)
+            if (currentTool.type == Tool.Type.polygon && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
                 {
@@ -205,7 +239,7 @@ namespace Bio
                 else
                 {
                     //If we click on a point 1 we close this polygon
-                    RectangleD d = new RectangleD(e.X, e.Y, anno.selectBoxSize, anno.selectBoxSize);
+                    RectangleD d = new RectangleD(e.X, e.Y, ROI.selectBoxSize, ROI.selectBoxSize);
                     if (d.IntersectsWith(anno.Point))
                     {
                         anno.closed = true;
@@ -218,7 +252,7 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.freeform)
+            if (currentTool.type == Tool.Type.freeform && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
                 {
@@ -235,7 +269,7 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.rect)
+            if (currentTool.type == Tool.Type.rect && buts == MouseButtons.Left)
             {
                 anno.type = ROI.Type.Rectangle;
                 anno.Rect = new RectangleD(e.X, e.Y, 1, 1);
@@ -243,7 +277,7 @@ namespace Bio
                 ImageView.SelectedImage.Annotations.Add(anno);
             }
             else
-            if (currentTool.type == Tool.Type.ellipse)
+            if (currentTool.type == Tool.Type.ellipse && buts == MouseButtons.Left)
             {
                 anno.type = ROI.Type.Ellipse;
                 anno.Rect = new RectangleD(e.X, e.Y, 1, 1);
@@ -251,7 +285,7 @@ namespace Bio
                 ImageView.SelectedImage.Annotations.Add(anno);
             }
             else
-            if(currentTool.type == Tool.Type.delete)
+            if(currentTool.type == Tool.Type.delete && buts == MouseButtons.Left)
             {
                 for (int i = 0; i < ImageView.SelectedImage.Annotations.Count; i++)
                 {
@@ -285,7 +319,7 @@ namespace Bio
                 UpdateOverlay();
             }
             else
-            if (currentTool.type == Tool.Type.text)
+            if (currentTool.type == Tool.Type.text && buts == MouseButtons.Left)
             {
                 ROI an = new ROI();
                 an.type = ROI.Type.Label;
@@ -299,6 +333,7 @@ namespace Bio
                 an.Text = ti.textInput;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
+            else
             if (buts == MouseButtons.Middle || currentTool.type == Tool.Type.pan)
             {
                 currentTool = GetTool(Tool.Type.pan);
@@ -306,10 +341,12 @@ namespace Bio
                 panPanel.BackColor = Color.LightGray;
                 Cursor.Current = Cursors.Hand;
             }
+            
             UpdateOverlay();
         }        
         public void ToolUp(PointD e, MouseButtons buts)
         {
+            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
             if (App.viewer == null)
                 return;
             if (currentTool == null)
@@ -317,7 +354,7 @@ namespace Bio
             if (anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
-            if (currentTool.type == Tool.Type.point)    
+            if (currentTool.type == Tool.Type.point && buts == MouseButtons.Left)
             {
                 ROI an = new ROI();
                 an.AddPoint(new PointD(e.X, e.Y));
@@ -326,7 +363,7 @@ namespace Bio
                 ImageView.SelectedImage.Annotations.Add(an);
             }
             else
-            if (currentTool.type == Tool.Type.line && anno.type == ROI.Type.Line)
+            if (currentTool.type == Tool.Type.line && anno.type == ROI.Type.Line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() > 0)
                 {
@@ -335,7 +372,7 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle)
+            if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 4)
                 {
@@ -343,7 +380,7 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.ellipse && anno.type == ROI.Type.Ellipse)
+            if (currentTool.type == Tool.Type.ellipse && anno.type == ROI.Type.Ellipse && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 4)
                 {
@@ -351,23 +388,23 @@ namespace Bio
                 }
             }
             else
-            if (currentTool.type == Tool.Type.freeform && anno.type == ROI.Type.Freeform)
+            if (currentTool.type == Tool.Type.freeform && anno.type == ROI.Type.Freeform && buts == MouseButtons.Left)
             {
                 anno = new ROI();
             }
             else
-            if (currentTool.type == Tool.Type.rectSel)
+            if (currentTool.type == Tool.Type.rectSel && buts == MouseButtons.Left)
             {
                 ImageView.selectedAnnotations.Clear();
                 RectangleF r = GetTool(Tool.Type.rectSel).RectangleF;
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound().ToRectangleF().IntersectsWith(r))
+                    if (an.GetSelectBound(App.viewer.GetScale()).ToRectangleF().IntersectsWith(r))
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleF[] sels = an.GetSelectBoxes(ImageView.scale.Width);
+                        RectangleF[] sels = an.GetSelectBoxes(App.viewer.scale.Width);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))
@@ -381,27 +418,29 @@ namespace Bio
                 }
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(0, 0, 0, 0);
             }
-            if (Tools.currentTool.type == Tools.Tool.Type.magic)
+            else
+            if (Tools.currentTool.type == Tools.Tool.Type.magic && buts == MouseButtons.Left)
             {
                 PointD pf = new PointD(ImageView.mouseUp.X - ImageView.mouseDown.X, ImageView.mouseUp.Y - ImageView.mouseDown.Y);
                 ZCT coord = App.viewer.GetCoordinate();
-               
+
                 Rectangle r = new Rectangle((int)ImageView.mouseDown.X, (int)ImageView.mouseDown.Y, (int)(ImageView.mouseUp.X - ImageView.mouseDown.X), (int)(ImageView.mouseUp.Y - ImageView.mouseDown.Y));
                 if (r.Width <= 2 || r.Height <= 2)
                     return;
                 BufferInfo bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
-                Statistics st = Statistics.FromBytes(bf);
+                Statistics[] sts = Statistics.FromBytes(bf);
+                Statistics st = sts[0];
                 Bitmap crop = (Bitmap)bf.Image;
                 Threshold th;
-                if(magicSel.Numeric)
+                if (magicSel.Numeric)
                 {
                     th = new Threshold((int)magicSel.Threshold);
                 }
                 else
-                if(magicSel.Index == 2)
+                if (magicSel.Index == 2)
                     th = new Threshold((int)(st.Min + st.Mean));
                 else
-                if(magicSel.Index == 1)
+                if (magicSel.Index == 1)
                     th = new Threshold((int)st.Median);
                 else
                     th = new Threshold(st.Min);
@@ -421,7 +460,7 @@ namespace Bio
                 // process each blob
                 foreach (Blob blob in blobs)
                 {
-                    if(blob.Rectangle.Width < magicSel.Max  && blob.Rectangle.Height < magicSel.Max)
+                    if (blob.Rectangle.Width < magicSel.Max && blob.Rectangle.Height < magicSel.Max)
                         continue;
                     List<IntPoint> leftPoints = new List<IntPoint>();
                     List<IntPoint> rightPoints = new List<IntPoint>();
@@ -437,11 +476,27 @@ namespace Bio
                     PointD[] pfs = new PointD[hull.Count];
                     for (int i = 0; i < hull.Count; i++)
                     {
-                        pfs[i] = new PointD(r.X + hull[i].X,r.Y + hull[i].Y);
+                        pfs[i] = new PointD(r.X + hull[i].X, r.Y + hull[i].Y);
                     }
                     ROI an = ROI.CreateFreeform(coord, pfs);
-                    ImageView.SelectedImage.Annotations.Add(an); 
+                    ImageView.SelectedImage.Annotations.Add(an);
                 }
+            }
+            else
+            if (Tools.currentTool.type == Tools.Tool.Type.bucket && buts == MouseButtons.Left)
+            {
+                ZCT coord = App.viewer.GetCoordinate();
+                floodFiller.FillColor = DrawColor;
+                floodFiller.Tolerance = currentTool.tolerance;
+                floodFiller.Bitmap = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.C, coord.Z, coord.T]];
+                floodFiller.FloodFill(new System.Drawing.Point((int)p.X, (int)p.Y));
+                App.viewer.UpdateImages();
+            }
+            else
+            if (Tools.currentTool.type == Tools.Tool.Type.dropper && buts == MouseButtons.Left)
+            {
+                DrawColor = ImageView.SelectedBuffer.GetPixel((int)p.X,(int)p.Y);
+                UpdateGUI();
             }
             UpdateOverlay();
         }
@@ -450,6 +505,7 @@ namespace Bio
             if (App.viewer == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetMove(e, buts));
+            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);
@@ -498,12 +554,12 @@ namespace Bio
                 RectangleF r = Tools.GetTool(Tools.Tool.Type.rectSel).RectangleF;
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound().ToRectangleF().IntersectsWith(r))
+                    if (an.GetSelectBound(App.viewer.GetScale()).ToRectangleF().IntersectsWith(r))
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleF[] sels = an.GetSelectBoxes(ImageView.scale.Width);
+                        RectangleF[] sels = an.GetSelectBoxes(App.viewer.scale.Width);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))
@@ -559,12 +615,18 @@ namespace Bio
             if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts == MouseButtons.Middle || buts == MouseButtons.Left))
             {
                 PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
-                if (pf.X > 50 && pf.Y > 50)
-                    return;
-                //App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
+                App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
                 UpdateView();
             }
-
+            else
+            if (buts == MouseButtons.Left && currentTool.type == Tool.Type.eraser)
+            {
+                Graphics.Graphics g = Graphics.Graphics.FromImage(ImageView.SelectedBuffer);
+                Graphics.Pen pen = new Graphics.Pen(Tools.EraseColor, (int)Tools.StrokeWidth,ImageView.SelectedBuffer.BitsPerPixel);
+                g.FillEllipse(new Rectangle((int)p.X, (int)p.Y, (int)width, (int)Tools.StrokeWidth), pen.color);
+                pen.Dispose();
+                App.viewer.UpdateImage();
+            }
         }
 
         private void movePanel_Click(object sender, EventArgs e)
@@ -662,7 +724,20 @@ namespace Bio
             magicPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
-
+        private void bucketPanel_Click(object sender, EventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.bucket);
+            UpdateSelected();
+            bucketPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+        }
+        private void pencilPanel_Click(object sender, EventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.pencil);
+            UpdateSelected();
+            pencilPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+        }
         MagicSelect magicSel = new MagicSelect(2);
         private void magicPanel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -673,6 +748,85 @@ namespace Bio
         {
             e.Cancel = true;
             this.Hide();
+        }
+
+        private void pencilPanel_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.pencil);
+            UpdateSelected();
+            pencilPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+            PenTool pt = new PenTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel));
+            if (pt.ShowDialog() != DialogResult.OK)
+                return;
+            Tools.StrokeWidth = pt.Pen.width;
+            DrawColor = pt.Pen.color;
+        }
+
+        private void bucketPanel_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.bucket);
+            UpdateSelected();
+            bucketPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+            FloodTool pt = new FloodTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel),currentTool.tolerance, ImageView.SelectedBuffer.BitsPerPixel);
+            if (pt.ShowDialog() != DialogResult.OK)
+                return;
+            Tools.StrokeWidth = pt.Pen.width;
+            DrawColor = pt.Pen.color;
+            currentTool.tolerance = pt.Tolerance;
+        }
+
+        private void dropperPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.dropper);
+            UpdateSelected();
+            dropperPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+        }
+
+        private void color1Box_MouseClick(object sender, MouseEventArgs e)
+        {
+            ColorTool t = new ColorTool(DrawColor, ImageView.SelectedBuffer.BitsPerPixel);
+            if (t.ShowDialog() != DialogResult.OK)
+                return;
+            DrawColor = t.Color;
+            UpdateGUI();
+        }
+
+        private void color2Box_MouseClick(object sender, MouseEventArgs e)
+        {
+            ColorTool t = new ColorTool(EraseColor, ImageView.SelectedBuffer.BitsPerPixel);
+            if (t.ShowDialog() != DialogResult.OK)
+                return;
+            EraseColor = t.Color;
+            UpdateGUI();
+        }
+
+        private void widthBox_ValueChanged(object sender, EventArgs e)
+        {
+            width = (int)widthBox.Value;
+        }
+
+        private void eraserPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            currentTool = GetTool(Tool.Type.eraser);
+            UpdateSelected();
+            eraserPanel.BackColor = Color.LightGray;
+            Cursor.Current = Cursors.Arrow;
+        }
+
+        private void switchBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            ColorS s = DrawColor;
+            DrawColor = eraseColor;
+            EraseColor = s;
+            UpdateGUI();
+        }
+
+        private void Tools_Activated(object sender, EventArgs e)
+        {
+            UpdateGUI();
         }
     }
 }

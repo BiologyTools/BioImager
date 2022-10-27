@@ -881,16 +881,6 @@ namespace Bio
                 folder = GetFolder();
             if(Properties.Settings.Default.SimulateCamera)
             {
-                /*
-                int c = 0;
-                foreach (string item in Directory.GetFiles(folder))
-                {
-                    if(item.Contains(Properties.Settings.Default.ImageName))
-                    {
-                        c++;
-                    }
-                }
-                */
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
                 b.ID = Properties.Settings.Default.ImageName + ".ome.tif";

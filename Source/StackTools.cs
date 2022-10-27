@@ -20,6 +20,8 @@ namespace Bio
 
         public void UpdateStacks()
         {
+            if (stackABox.Items.Count == Images.images.Count)
+                return;
             stackABox.Items.Clear();
             stackBBox.Items.Clear();    
             foreach (BioImage b in Images.images)
@@ -27,8 +29,6 @@ namespace Bio
                 stackABox.Items.Add(b);
                 stackBBox.Items.Add(b);
             }
-            if (stackABox.Items.Count > 0)
-                stackABox.SelectedIndex = 0;
         }
         public BioImage ImageA
         {
@@ -42,7 +42,7 @@ namespace Bio
         {
             if (stackABox.SelectedIndex == -1)
                 return;
-            BioImage b = new BioImage(ImageA, 0, (int)zStartBox.Value, (int)zEndBox.Value, (int)cStartBox.Value, (int)cEndBox.Value, (int)tStartBox.Value, (int)tEndBox.Value);
+            BioImage b = BioImage.Substack(ImageA, ((BioImage)stackABox.SelectedItem).series, (int)zStartBox.Value, (int)zEndBox.Value, (int)cStartBox.Value, (int)cEndBox.Value, (int)tStartBox.Value, (int)tEndBox.Value);
             App.tabsView.AddTab(b);
             UpdateStacks();
         }
@@ -51,18 +51,18 @@ namespace Bio
         {
             if (stackABox.SelectedIndex == -1)
                 return;
-            zEndBox.Maximum = ImageA.SizeZ;
-            cEndBox.Maximum = ImageA.SizeC;
-            tEndBox.Maximum = ImageA.SizeT;
-            zEndBox.Value = ImageA.SizeZ;
-            cEndBox.Value = ImageA.SizeC;
-            tEndBox.Value = ImageA.SizeT;
             if (stackABox.SelectedItem == stackBBox.SelectedItem)
             {
                 //Same image selected for A & B
                 MessageBox.Show("Same image selected for A & B. Change either A stack or B stack.");
                 stackABox.SelectedIndex = -1;
             }
+            zEndBox.Maximum = ImageA.SizeZ;
+            cEndBox.Maximum = ImageA.SizeC;
+            tEndBox.Maximum = ImageA.SizeT;
+            zEndBox.Value = ImageA.SizeZ;
+            cEndBox.Value = ImageA.SizeC;
+            tEndBox.Value = ImageA.SizeT;
         }
 
         private void stackBBox_SelectedIndexChanged(object sender, EventArgs e)

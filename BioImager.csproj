@@ -218,6 +218,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\AbstractFloodFiller.cs" />
+    <Compile Include="Graphics\FloodFillRangeQueue.cs" />
+    <Compile Include="Graphics\FloodTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Graphics\FloodTool.Designer.cs">
+      <DependentUpon>FloodTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Graphics\Graphics.cs" />
+    <Compile Include="Graphics\PenTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Graphics\PenTool.Designer.cs">
+      <DependentUpon>PenTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Graphics\QueueLinearFloodFiller.cs" />
     <Compile Include="Source\Automation.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -231,6 +247,13 @@
       <DependentUpon>Action.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\App.cs" />
+    <Compile Include="Source\BioConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\BioConsole.Designer.cs">
+      <DependentUpon>BioConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\BioFormats.cs" />
     <Compile Include="Source\CodeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -263,11 +286,11 @@
     <Compile Include="Source\Filter.Designer.cs">
       <DependentUpon>Filter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Function.cs">
+    <Compile Include="Source\FunctionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Source\Function.Designer.cs">
-      <DependentUpon>Function.cs</DependentUpon>
+    <Compile Include="Source\FunctionForm.Designer.cs">
+      <DependentUpon>FunctionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\HistogramControl.cs">
       <SubType>UserControl</SubType>
@@ -430,10 +453,25 @@
     </Compile>
     <Compile Include="Source\Units.cs" />
     <Compile Include="Source\Win32.cs" />
+    <Compile Include="Source\XMLView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\XMLView.Designer.cs">
+      <DependentUpon>XMLView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Graphics\FloodTool.resx">
+      <DependentUpon>FloodTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\PenTool.resx">
+      <DependentUpon>PenTool.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Action.resx">
       <DependentUpon>Action.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\BioConsole.resx">
+      <DependentUpon>BioConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\CodeView.resx">
       <DependentUpon>CodeView.cs</DependentUpon>
@@ -452,8 +490,8 @@
     <EmbeddedResource Include="Source\Filter.resx">
       <DependentUpon>Filter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Function.resx">
-      <DependentUpon>Function.cs</DependentUpon>
+    <EmbeddedResource Include="Source\FunctionForm.resx">
+      <DependentUpon>FunctionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\HistogramControl.resx">
       <DependentUpon>HistogramControl.cs</DependentUpon>
@@ -537,6 +575,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Tools.resx">
       <DependentUpon>Tools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\XMLView.resx">
+      <DependentUpon>XMLView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

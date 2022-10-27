@@ -454,5 +454,17 @@ namespace Bio.Properties {
                 this["ImageName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Planes {
+            get {
+                return ((bool)(this["Planes"]));
+            }
+            set {
+                this["Planes"] = value;
+            }
+        }
     }
 }

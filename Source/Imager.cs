@@ -486,7 +486,7 @@ namespace Bio
 
         private void YPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.Y,"YButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.Y,"YButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.Y = form.Func;
@@ -496,7 +496,7 @@ namespace Bio
 
         private void BPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.B, "BButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.B, "BButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.B = form.Func;
@@ -506,7 +506,7 @@ namespace Bio
 
         private void APressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.A, "AButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.A, "AButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.A = form.Func;
@@ -516,7 +516,7 @@ namespace Bio
 
         private void XPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.X, "XButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.X, "XButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.X = form.Func;
@@ -526,7 +526,7 @@ namespace Bio
 
         private void BackPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.Back, "BackButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.Back, "BackButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.Back = form.Func;
@@ -536,7 +536,7 @@ namespace Bio
 
         private void StartPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.Start, "StartButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.Start, "StartButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             Settings.Default.Start = ControllerFuncs.Start.ToString();
@@ -545,7 +545,7 @@ namespace Bio
 
         private void DPadUpLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.DPadUp, "DPadUpButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.DPadUp, "DPadUpButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadUp = form.Func;
@@ -555,7 +555,7 @@ namespace Bio
 
         private void DPadRightLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.DPadRight, "DPadRightButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.DPadRight, "DPadRightButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadRight = form.Func;
@@ -565,7 +565,7 @@ namespace Bio
 
         private void DPadDownLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.DPadDown, "DPadDownButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.DPadDown, "DPadDownButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadDown = form.Func;
@@ -575,7 +575,7 @@ namespace Bio
 
         private void DPadLeftLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.DPadLeft, "DPadLeftButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.DPadLeft, "DPadLeftButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadLeft = form.Func;
@@ -585,7 +585,7 @@ namespace Bio
 
         private void shoulderLeftLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.LShoulder, "ShoulderLeftButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.LShoulder, "ShoulderLeftButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.LShoulder = form.Func;
@@ -595,7 +595,7 @@ namespace Bio
 
         private void shoulderRightLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.RShoulder, "ShoulderRightButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.RShoulder, "ShoulderRightButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.RShoulder = form.Func;
@@ -605,7 +605,7 @@ namespace Bio
 
         private void r3PressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.R3, "R3");
+            FunctionForm form = new FunctionForm(ControllerFuncs.R3, "R3");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.R3 = form.Func;
@@ -615,7 +615,7 @@ namespace Bio
 
         private void l3PressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ControllerFunc form = new ControllerFunc(ControllerFuncs.L3, "L3");
+            FunctionForm form = new FunctionForm(ControllerFuncs.L3, "L3");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             Settings.Default.Left3 = ControllerFuncs.L3.ToString();
@@ -1129,7 +1129,7 @@ namespace Bio
             }
             if (f.FuncType == Function.FunctionType.Objective)
             {
-                Objectives.Objective obj = f.GetObjective();
+                Objectives.Objective obj = Bio.Microscope.Objectives.GetObjective();
                 Microscope.Objectives.SetPosition(obj.Magnification);
                 //We set locate exposure as the locate tab is the only one that updates lightpath automatically after objective change. 
                 Automation.SetProperty("LocateExposure", obj.LocateExposure.ToString());

@@ -30,6 +30,7 @@ namespace Bio
             if (simCameraBox.Checked)
             {
                 imageLabel.Text = Properties.Settings.Default.SimulatedImage;
+                if(File.Exists(Properties.Settings.Default.SimulatedImage))
                 simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage);
             }
         }
@@ -378,7 +379,7 @@ namespace Bio
             string name = (string)((Button)sender).Tag;
             Function f = new Function();
             f.Name = "Get" + name;
-            ControllerFunc form = new ControllerFunc(f);
+            FunctionForm form = new FunctionForm(f);
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             if (!SettingExist(name))
@@ -397,7 +398,7 @@ namespace Bio
             string name = (string)((Button)sender).Tag;
             Function f = new Function();
             f.Name = "Set" + name;
-            ControllerFunc form = new ControllerFunc(f);
+            FunctionForm form = new FunctionForm(f);
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             if (!SettingExist(name))

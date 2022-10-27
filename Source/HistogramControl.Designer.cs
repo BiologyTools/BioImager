@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyViewToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setMaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMinAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMaxAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyViewToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,12 +49,12 @@
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(200, 136);
             // 
-            // copyViewToClipboardToolStripMenuItem
+            // setMinToolStripMenuItem
             // 
-            this.copyViewToClipboardToolStripMenuItem.Name = "copyViewToClipboardToolStripMenuItem";
-            this.copyViewToClipboardToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.copyViewToClipboardToolStripMenuItem.Text = "Copy View to Clipboard";
-            this.copyViewToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyViewToClipboardToolStripMenuItem_Click);
+            this.setMinToolStripMenuItem.Name = "setMinToolStripMenuItem";
+            this.setMinToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.setMinToolStripMenuItem.Text = "Set Min";
+            this.setMinToolStripMenuItem.Click += new System.EventHandler(this.setMinToolStripMenuItem_Click);
             // 
             // setMaxToolStripMenuItem
             // 
@@ -62,13 +62,6 @@
             this.setMaxToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.setMaxToolStripMenuItem.Text = "Set Max";
             this.setMaxToolStripMenuItem.Click += new System.EventHandler(this.setMaxToolStripMenuItem_Click);
-            // 
-            // setMinToolStripMenuItem
-            // 
-            this.setMinToolStripMenuItem.Name = "setMinToolStripMenuItem";
-            this.setMinToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.setMinToolStripMenuItem.Text = "Set Min";
-            this.setMinToolStripMenuItem.Click += new System.EventHandler(this.setMinToolStripMenuItem_Click);
             // 
             // setMinAllToolStripMenuItem
             // 
@@ -83,6 +76,13 @@
             this.setMaxAllToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.setMaxAllToolStripMenuItem.Text = "Set Max All";
             this.setMaxAllToolStripMenuItem.Click += new System.EventHandler(this.setMaxAllToolStripMenuItem_Click);
+            // 
+            // copyViewToClipboardToolStripMenuItem
+            // 
+            this.copyViewToClipboardToolStripMenuItem.Name = "copyViewToClipboardToolStripMenuItem";
+            this.copyViewToClipboardToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.copyViewToClipboardToolStripMenuItem.Text = "Copy View to Clipboard";
+            this.copyViewToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyViewToClipboardToolStripMenuItem_Click);
             // 
             // HistogramControl
             // 

@@ -64,7 +64,7 @@ namespace Bio
                 item.series = i;
                 i++;
             }
-            BioImage.SaveOMESeries(sts.ToArray() , saveFileDialog.FileName);
+            BioImage.SaveOMESeries(sts.ToArray() , saveFileDialog.FileName, Properties.Settings.Default.Planes);
         }
 
         private void addAllBut_Click(object sender, EventArgs e)

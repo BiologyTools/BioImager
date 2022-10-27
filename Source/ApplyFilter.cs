@@ -48,14 +48,14 @@ namespace Bio
         {
             get { return (BioImage)stackBBox.SelectedItem; }
         }
-        public Rectangle Rectangle
+        public RectangleD Rectangle
         {
             get
             {
                 if (roiBox.SelectedIndex != -1)
-                    return ((ROI)roiBox.SelectedItem).BoundingBox.ToRectangleInt();
+                    return ((ROI)roiBox.SelectedItem).BoundingBox;
                 else
-                    return new Rectangle((int)xBox.Value, (int)yBox.Value, (int)wBox.Value, (int)hBox.Value);
+                    return new RectangleD((double)xBox.Value, (double)yBox.Value, (double)wBox.Value, (double)hBox.Value);
             }
         }
         public int Angle

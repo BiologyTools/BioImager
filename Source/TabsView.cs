@@ -12,7 +12,7 @@ namespace Bio
     {
         public static bool init = false;
         public Filter filters = null;
-        public static Graphics graphics = null;
+        public static System.Drawing.Graphics graphics = null;
         public ImageView Viewer
         {
             get
@@ -689,7 +689,7 @@ namespace Bio
             {
                 sts[i] = App.viewer.Images[i].ID;
             }
-            BioImage.SaveOMESeries(sts, saveOMEFileDialog.FileName);
+            BioImage.SaveOMESeries(sts, saveOMEFileDialog.FileName, true);
         }
 
         private void saveTabTiffToolStripMenuItem_Click(object sender, EventArgs e)
@@ -729,6 +729,27 @@ namespace Bio
         {
             if(App.viewer != null)
             App.viewer.GoToImage();
+        }
+        private void rotateFlipToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (ImageView.SelectedImage == null)
+                return;
+            string st = e.ClickedItem.Text;
+            RotateFlipType rot = (RotateFlipType)Enum.Parse(typeof(RotateFlipType), st);
+            ImageView.SelectedImage.RotateFlip(rot);
+            ImageView.UpdateImage();
+            ImageView.UpdateView();
+        }
+
+        private void rotateFlipToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            if (rotateFlipToolStripMenuItem.DropDownItems.Count > 0)
+                return;
+            string[] sts = Enum.GetNames(typeof(RotateFlipType));
+            foreach (string item in sts)
+            {
+                rotateFlipToolStripMenuItem.DropDownItems.Add(item);
+            }
         }
     }
 }

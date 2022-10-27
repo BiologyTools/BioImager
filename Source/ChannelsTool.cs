@@ -26,7 +26,17 @@ namespace Bio
                     return Channels[0];
             }
         }
-
+        public int SelectedSample
+        {
+            get
+            {
+                return (int)sampleBox.Value;
+            }
+            set
+            {
+                sampleBox.Value = (decimal)value;
+            }
+        }
         public void UpdateItems()
         {
             channelsBox.Items.Clear();
@@ -43,10 +53,11 @@ namespace Bio
                 channelsBox.Items.Add(item);
             }
             channelsBox.SelectedIndex = 0;
-            minBox.Value = Channels[0].Min;
-            maxBox.Value = Channels[0].Max;
+            minBox.Value = (int)Channels[0].stats[0].StackMin;
+            maxBox.Value = (int)Channels[0].stats[0].StackMax;
             hist = new HistogramControl(Channels[channelsBox.SelectedIndex]);
             hist.GraphMax = (int)maxBox.Value;
+            maxGraphBox.Value = (int)maxBox.Value;
             MouseWheel += new System.Windows.Forms.MouseEventHandler(ChannelsTool_MouseWheel);
             statsPanel.Controls.Add(hist);
         }
@@ -61,8 +72,8 @@ namespace Bio
                 hist.Invalidate();
                 hist.Min = (int)minBox.Value;
             }
-            
-            App.Channels[channelsBox.SelectedIndex].Min = (int)minBox.Value;
+            App.Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Min = (int)minBox.Value;
+            App.viewer.UpdateImage();
             App.viewer.UpdateView();
         }
         private void maxBox_ValueChanged(object sender, EventArgs e)
@@ -75,16 +86,26 @@ namespace Bio
                 hist.Invalidate();
                 hist.Max = (int)maxBox.Value;
             }
-            
-            App.Channels[channelsBox.SelectedIndex].Max = (int)maxBox.Value;
+            App.Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Min = (int)minBox.Value;
+            App.viewer.UpdateImage();
             App.viewer.UpdateView();
         }
         private void channelsBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelsBox.SelectedIndex == -1)
                 return;
-            minBox.Value = Channels[channelsBox.SelectedIndex].Min;
-            maxBox.Value = Channels[channelsBox.SelectedIndex].Max;
+            sampleBox.Value = 0;
+            sampleBox.Maximum = ((Channel)channelsBox.SelectedItem).range.Length - 1;
+            if (minBox.Maximum < Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Min || maxBox.Maximum < Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Max)
+            {
+                minBox.Value = 0;
+                maxBox.Value = ushort.MaxValue;
+            }
+            else
+            {
+                minBox.Value = Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Min;
+                maxBox.Value = Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Max;
+            }
             if (hist != null)
             {
                 //hist.Statistics = Channels[channelsBox.SelectedIndex].statistics;
@@ -112,7 +133,10 @@ namespace Bio
         {
             foreach (Channel c in Channels)
             {
-                c.Max = (int)maxBox.Value;
+                for (int i = 0; i < c.range.Length; i++)
+                {
+                    c.range[i].Max = (int)maxBox.Value;
+                }
             }
             App.viewer.UpdateView();
         }
@@ -121,24 +145,31 @@ namespace Bio
         {
             foreach (Channel c in Channels)
             {
-                c.Min = (int)minBox.Value;
+                for (int i = 0; i < c.range.Length; i++)
+                {
+                    c.range[i].Min = (int)minBox.Value;
+                }
             }
             App.viewer.UpdateView();
         }
 
         private void ChannelsTool_Activated(object sender, EventArgs e)
         {
-            minBox.Value = SelectedChannel.Min;
-            maxBox.Value = SelectedChannel.Max;
-            if (App.Image.bitsPerPixel == 8)
-                maxGraphBox.Value = 255;
+            sampleBox.Maximum = SelectedChannel.SamplesPerPixel - 1;
+            for (int i = 0; i < SelectedChannel.range.Length; i++)
+            {
+                SelectedChannel.range[i].Min = (int)minBox.Value;
+            }
+            minBox.Value = SelectedChannel.range[(int)sampleBox.Value].Min;
+            maxBox.Value = SelectedChannel.range[(int)sampleBox.Value].Max;
             UpdateItems();
             hist.UpdateView();
+
         }
 
         private void ChannelsTool_ResizeEnd(object sender, EventArgs e)
         {
-            hist.Invalidate();
+            hist.UpdateView();
         }
 
         private void maxUintBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -146,6 +177,11 @@ namespace Bio
             int i = int.Parse((string)maxUintBox2.SelectedItem, System.Globalization.CultureInfo.InvariantCulture);
             if(i <= maxGraphBox.Maximum)
             maxGraphBox.Value = i;
+            if (i == 255)
+            {
+                maxGraphBox.Value = 255;
+                binBox.Value = 1;
+            }
         }
 
         private void minGraphBox_ValueChanged(object sender, EventArgs e)
@@ -182,8 +218,6 @@ namespace Bio
         private bool pressedX2 = false;
         private void ChannelsTool_MouseMove(object sender, MouseEventArgs e)
         {
-            minBox.Value = SelectedChannel.Min;
-            maxBox.Value = SelectedChannel.Max;
             if (e.Button == MouseButtons.XButton1)
             {
                 if (channelsBox.SelectedIndex < channelsBox.Items.Count-1)
@@ -216,15 +250,19 @@ namespace Bio
         {
             if (e.Delta == 0)
                 return;
-            int i = 10;
+            int i = 100;
+            if (maxGraphBox.Value < 255)
+                i = 10;
             if (e.Delta > 0)
-            if (maxGraphBox.Value + i < maxGraphBox.Maximum)
             {
-                maxGraphBox.Value += i;
-                hist.Invalidate();
-                return;
+                if (maxGraphBox.Value + i < maxGraphBox.Maximum)
+                {
+                    maxGraphBox.Value += i;
+                    hist.Invalidate();
+                    return;
+                }
             }
-            if (e.Delta < 0)
+            else
             if (maxGraphBox.Value - i > maxGraphBox.Minimum)
             {
                 maxGraphBox.Value -= i;
@@ -251,46 +289,83 @@ namespace Bio
 
         private void applyBut_Click(object sender, EventArgs e)
         {
-            //App.Image.Bake(App.Image.RChannel.range, App.Image.GChannel.range, App.Image.BChannel.range);
+            ImageView.SelectedImage.Bake(ImageView.SelectedImage.RChannel.RangeR, ImageView.SelectedImage.GChannel.RangeG, ImageView.SelectedImage.BChannel.RangeB);
         }
 
         private void minToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            minBox.Value = SelectedChannel.statistics.Min;
+            minBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMin;
         }
 
         private void maxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            minBox.Value = SelectedChannel.statistics.Max;
+            minBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMax;
         }
 
         private void medianToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            minBox.Value = (decimal)SelectedChannel.statistics.Median;
+            minBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMedian;
         }
 
         private void meanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            minBox.Value = (decimal)SelectedChannel.statistics.Mean;
+            minBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMean;
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            maxBox.Value = SelectedChannel.statistics.Min;
+            maxBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMin;
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            maxBox.Value = SelectedChannel.statistics.Max;
+            maxBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMax;
         }
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            maxBox.Value = (decimal)SelectedChannel.statistics.Median;
+            maxBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMedian;
         }
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            maxBox.Value = (decimal)SelectedChannel.statistics.Mean;
+            maxBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMean;
         }
 
+        private void updateBut_Click(object sender, EventArgs e)
+        {
+            if (ImageView.SelectedImage.bitsPerPixel > 8)
+            {
+                ImageView.SelectedImage.StackThreshold(true);
+                if (ImageView.SelectedImage.RGBChannelCount == 1)
+                {
+                    maxBox.Value = (decimal)ImageView.SelectedImage.Channels[channelsBox.SelectedIndex].stats[0].StackMax;
+                    minBox.Value = (decimal)ImageView.SelectedImage.Channels[channelsBox.SelectedIndex].stats[0].StackMin;
+                }
+                else
+                {
+                    maxBox.Value = (decimal)ImageView.SelectedImage.Channels[channelsBox.SelectedIndex].stats[channelsBox.SelectedIndex].StackMax;
+                    minBox.Value = (decimal)ImageView.SelectedImage.Channels[channelsBox.SelectedIndex].stats[channelsBox.SelectedIndex].StackMin;
+                }
+            }
+            else
+            {
+                ImageView.SelectedImage.StackThreshold(false);
+            }
+            App.viewer.UpdateImage();
+        }
+
+        private void sampleBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (channelsBox.SelectedIndex == -1)
+                channelsBox.SelectedIndex = 0;
+            minBox.Value = Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Min;
+            maxBox.Value = Channels[channelsBox.SelectedIndex].range[(int)sampleBox.Value].Max;
+            if (hist != null)
+            {
+                //hist.Statistics = Channels[channelsBox.SelectedIndex].statistics;
+                hist.UpdateChannel(SelectedChannel);
+                hist.Invalidate();
+            }
+            App.viewer.UpdateView();
+        }
     }
 }

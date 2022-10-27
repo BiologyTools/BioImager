@@ -516,7 +516,7 @@ namespace Bio
             this.nameBox.Name = "nameBox";
             this.nameBox.Size = new System.Drawing.Size(178, 20);
             this.nameBox.TabIndex = 165;
-            this.nameBox.Text = "Sample";
+            this.nameBox.Text = "Image";
             this.nameBox.TextChanged += new System.EventHandler(this.nameBox_TextChanged);
             // 
             // label6

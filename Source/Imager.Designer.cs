@@ -377,7 +377,6 @@ namespace Bio
             // 
             // controllerJoystickUpdate
             // 
-            this.controllerJoystickUpdate.Interval = 50;
             this.controllerJoystickUpdate.Tick += new System.EventHandler(this.controllerJoystickUpdate_Tick);
             // 
             // label6
@@ -882,7 +881,7 @@ namespace Bio
             // 
             // controllerButtonUpdate
             // 
-            this.controllerButtonUpdate.Interval = 50;
+            this.controllerButtonUpdate.Interval = 250;
             this.controllerButtonUpdate.Tick += new System.EventHandler(this.controllerButtonUpdate_Tick);
             // 
             // topMostCheckBox

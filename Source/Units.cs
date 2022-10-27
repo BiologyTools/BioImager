@@ -441,7 +441,13 @@ namespace Bio
             else
                 return false;
         }
-
+        public bool Intersects(RectangleD rec)
+        {
+            if (Intersects(new PointD(rec.X, rec.Y)) || Intersects(new PointD(rec.X + rec.W, rec.Y)) || Intersects(new PointD(rec.X, rec.Y + rec.H)) || Intersects(new PointD(rec.X + rec.W, rec.Y + rec.H)))
+                return true;
+            else
+                return false;
+        }
     }
 
 }

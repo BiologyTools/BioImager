@@ -88,6 +88,14 @@ namespace Bio
                 return selectedImage;
             }
         }
+        public static BufferInfo SelectedBuffer
+        {
+            get
+            {
+                int ind = SelectedImage.Coords[SelectedImage.Coordinate.C, SelectedImage.Coordinate.Z, SelectedImage.Coordinate.T];
+                return selectedImage.Buffers[ind];
+            }
+        }
         public static PointD mouseDown;
         public static bool down;
         public static PointD mouseUp;
@@ -133,7 +141,7 @@ namespace Bio
         public bool loopC = true;
         private double pxWmicron = 0.004;
         private double pxHmicron = 0.004;
-        public static SizeF scale = new SizeF(1, 1);
+        public SizeF scale = new SizeF(1, 1);
         public void SetCoordinate(int z, int c, int t)
         {
             if (SelectedImage == null)
@@ -267,9 +275,8 @@ namespace Bio
                 viewMode = value;
                 //If view mode is changed we update.
                 App.tabsView.UpdateViewMode(viewMode);
-                UpdateView();
-                UpdateOverlay();
                 UpdateImages();
+                UpdateView();
                 if (viewMode == ViewMode.RGBImage)
                 {
                     cBar.Value = 0;
@@ -328,7 +335,7 @@ namespace Bio
             set
             {
                 origin = value;
-                App.viewer.UpdateView();
+                //App.viewer.UpdateStat();
             }
         }
 
@@ -438,15 +445,6 @@ namespace Bio
             UpdateRGBChannels();
             init = true;
         }
-        public void UpdateSelectBoxSize(float size)
-        {
-            if (SelectedImage == null)
-                return;
-            foreach (ROI item in SelectedImage.Annotations)
-            {
-                item.selectBoxSize = size;
-            }
-        }
         public void UpdateOverlay()
         {
             overlayPictureBox.Invalidate();
@@ -501,35 +499,37 @@ namespace Bio
             }
             GC.Collect();
             Bitmaps.Clear();
+            if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
+            {
+                InitGUI();
+            }
             foreach (BioImage b in Images)
             {
                 ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
                 Bitmap bitmap;
+
                 int index = b.Coords[zBar.Value, cBar.Value, tBar.Value];
                 if (Mode == ViewMode.Filtered)
                 {
-                    bitmap = b.GetFiltered(coords, RChannel.range, GChannel.range, BChannel.range);
+                    bitmap = b.GetFiltered(coords, b.RChannel.RangeR, b.GChannel.RangeG, b.BChannel.RangeB);
                 }
                 else if (Mode == ViewMode.RGBImage)
                 {
-                    PixelFormat px = SelectedImage.Buffers[index].PixelFormat;
-                    if (px == PixelFormat.Format8bppIndexed || px == PixelFormat.Format16bppGrayScale)
-                    {
-                        bitmap = b.GetRGBBitmap(coords, RChannel.range, GChannel.range, BChannel.range);
-                    }
-                    else
-                    {
-                        bitmap = (Bitmap)b.Buffers[index].Image;
-                    }
+                    bitmap = b.GetRGBBitmap(coords, b.RChannel.RangeR, b.GChannel.RangeG, b.BChannel.RangeB);
+                }
+                else if (Mode == ViewMode.Raw)
+                {
+                    bitmap = (Bitmap)b.Buffers[index].ImageRGB;
                 }
                 else
                 {
-                    bitmap = (Bitmap)b.Buffers[index].Image;
+                    bitmap = b.GetEmission(coords, b.RChannel.RangeR, b.GChannel.RangeG, b.BChannel.RangeB);
                 }
                 if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
                     bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
                 Bitmaps.Add(bitmap);
             }
+            UpdateView();
         }
         Bitmap bitmap;
         public void UpdateImage()
@@ -539,26 +539,29 @@ namespace Bio
             ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
             bitmap = null;
             GC.Collect();
+            if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
+            {
+                zBar.Value = 0;
+                cBar.Value = 0;
+                tBar.Value = 0;
+                InitGUI();
+            }
             int index = SelectedImage.Coords[zBar.Value, cBar.Value, tBar.Value];
             if (Mode == ViewMode.Filtered)
             {
-                bitmap = SelectedImage.GetFiltered(coords, RChannel.range, GChannel.range, BChannel.range);
+                bitmap = SelectedImage.GetFiltered(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
             }
             else if (Mode == ViewMode.RGBImage)
             {
-                PixelFormat px = SelectedImage.Buffers[index].PixelFormat;
-                if (px == PixelFormat.Format8bppIndexed || px == PixelFormat.Format16bppGrayScale)
-                {
-                    bitmap = SelectedImage.GetRGBBitmap(coords, RChannel.range, GChannel.range, BChannel.range);
-                }
-                else
-                {
-                    bitmap = (Bitmap)SelectedImage.Buffers[index].Image;
-                }
+                bitmap = SelectedImage.GetRGBBitmap(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
+            }
+            else if (Mode == ViewMode.Raw)
+            {
+                bitmap = (Bitmap)SelectedImage.Buffers[index].ImageRGB;
             }
             else
             {
-                bitmap = (Bitmap)SelectedImage.Buffers[index].Image;
+                bitmap = SelectedImage.GetEmission(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
             }
             if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
                 bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
@@ -566,6 +569,7 @@ namespace Bio
                 Bitmaps[SelectedIndex] = bitmap;
             else
                 Bitmaps.Add(bitmap);
+            UpdateView();
         }
         private void channelBoxR_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -967,7 +971,7 @@ namespace Bio
                 return ans;
             }
         }
-        private void DrawOverlay(Graphics g)
+        private void DrawOverlay(System.Drawing.Graphics g)
         {
             if (SelectedImage == null)
                 return;
@@ -978,155 +982,154 @@ namespace Bio
             Pen mag = null;
             Pen blue = null;
             Brush b = null;
-            
             bool bounds = showBounds;
             bool labels = showText;
-
             ZCT cor = GetCoordinate();
-            List<ROI> ans = SelectedImage.GetAnnotations(cor);
-            foreach (ROI an in ans)
+            foreach (BioImage bi in Images)
             {
-                pen = new Pen(an.strokeColor, (float)an.strokeWidth / scale.Width);
-                red = new Pen(Brushes.Red, (float)an.strokeWidth / scale.Width);
-                mag = new Pen(Brushes.Magenta, (float)an.strokeWidth / scale.Width);
-                green = new Pen(Brushes.Green, (float)an.strokeWidth / scale.Width);
-                blue = new Pen(Brushes.Blue, (float)an.strokeWidth / scale.Width);
-                Font fo = new Font(an.font.FontFamily, (float)an.strokeWidth / scale.Width);
-                if (an.selected)
+                foreach (ROI an in bi.Annotations)
                 {
-                    b = new SolidBrush(Color.Magenta);
-                }
-                else
-                    b = new SolidBrush(an.strokeColor);
-                PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
-                if (an.type == ROI.Type.Point)
-                {
-                    g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Line)
-                {
-                    g.DrawLine(pen, ToScreenSpace(an.GetPoint(0).ToPointF()), ToScreenSpace(an.GetPoint(1).ToPointF()));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Rectangle && an.Rect.W > 0 && an.Rect.H > 0)
-                {
-                    RectangleF[] rects = new RectangleF[1];
-                    rects[0] = an.Rect.ToRectangleF();
-                    g.DrawRectangles(pen, ToScreenSpace(rects));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Ellipse)
-                {
-                    g.DrawEllipse(pen, ToScreenSpace(an.Rect.ToRectangleF()));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Polygon && an.closed)
-                {
-                    g.DrawPolygon(pen, ToScreenSpace(an.GetPointsF()));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Polygon && !an.closed)
-                {
-                    PointF[] points = an.GetPointsF();
-                    if (points.Length == 1)
+                    pen = new Pen(an.strokeColor, (float)an.strokeWidth / scale.Width);
+                    red = new Pen(Brushes.Red, (float)an.strokeWidth / scale.Width);
+                    mag = new Pen(Brushes.Magenta, (float)an.strokeWidth / scale.Width);
+                    green = new Pen(Brushes.Green, (float)an.strokeWidth / scale.Width);
+                    blue = new Pen(Brushes.Blue, (float)an.strokeWidth / scale.Width);
+                    Font fo = new Font(an.font.FontFamily, (float)an.strokeWidth / scale.Width);
+                    if (an.selected)
                     {
-                        g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
+                        b = new SolidBrush(Color.Magenta);
                     }
                     else
-                        g.DrawLines(pen, ToScreenSpace(points));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                else
-                if (an.type == ROI.Type.Polyline)
-                {
-                    g.DrawLines(pen, ToScreenSpace(an.GetPointsF()));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-
-                else
-                if (an.type == ROI.Type.Freeform && an.closed)
-                {
-                    PointF[] points = an.GetPointsF();
-                    if (points.Length > 1)
-                        if (points.Length == 1)
-                        {
-                            g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
-                        }
-                        else
-                            g.DrawPolygon(pen, ToScreenSpace(an.GetPointsF()));
-                }
-                else
-                if (an.type == ROI.Type.Freeform && !an.closed)
-                {
-                    PointF[] points = an.GetPointsF();
-                    if (points.Length > 1)
+                        b = new SolidBrush(an.strokeColor);
+                    PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
+                    if (an.type == ROI.Type.Point)
+                    {
+                        g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    else
+                    if (an.type == ROI.Type.Line)
+                    {
+                        g.DrawLine(pen, ToScreenSpace(an.GetPoint(0).ToPointF()), ToScreenSpace(an.GetPoint(1).ToPointF()));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    else
+                    if (an.type == ROI.Type.Rectangle && an.Rect.W > 0 && an.Rect.H > 0)
+                    {
+                        RectangleF[] rects = new RectangleF[1];
+                        rects[0] = an.Rect.ToRectangleF();
+                        g.DrawRectangles(pen, ToScreenSpace(rects));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    else
+                    if (an.type == ROI.Type.Ellipse)
+                    {
+                        g.DrawEllipse(pen, ToScreenSpace(an.Rect.ToRectangleF()));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    else
+                    if (an.type == ROI.Type.Polygon && an.closed)
+                    {
+                        g.DrawPolygon(pen, ToScreenSpace(an.GetPointsF()));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    else
+                    if (an.type == ROI.Type.Polygon && !an.closed)
+                    {
+                        PointF[] points = an.GetPointsF();
                         if (points.Length == 1)
                         {
                             g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
                         }
                         else
                             g.DrawLines(pen, ToScreenSpace(points));
-                }
-                if (an.type == ROI.Type.Label)
-                {
-                    g.DrawString(an.Text, fo, b, ToScreenSpace(an.Point.ToPointF()));
-                    g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
-                }
-                if (labels)
-                {
-                    //Lets draw the text of this ROI in the middle of the RO
-                    float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
-                    float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
-                    g.DrawString(an.Text, fo, b, ToScreenSpace(new PointF(fw, fh)));
-                }
-                if (bounds)
-                {
-                    RectangleF[] rects = new RectangleF[1];
-                    rects[0] = an.BoundingBox.ToRectangleF();
-                    g.DrawRectangles(green, ToScreenSpace(rects));
-                }
-                if (an.selected)
-                {
-                    //Lets draw the bounding box.
-                    RectangleF[] bo = new RectangleF[1];
-                    bo[0] = an.BoundingBox.ToRectangleF();
-                    g.DrawRectangles(mag, ToScreenSpace(bo));
-                    //Lets draw the selectBoxes.
-                    List<RectangleF> rects = new List<RectangleF>();
-                    RectangleF[] sels = an.GetSelectBoxes(scale.Width);
-                    for (int i = 0; i < an.selectedPoints.Count; i++)
-                    {
-                        if (an.selectedPoints[i] < an.GetPointCount())
-                        {
-                            rects.Add(sels[an.selectedPoints[i]]);
-                        }
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
                     }
-                    if (rects.Count > 0)
-                        g.DrawRectangles(blue, ToScreenSpace(rects.ToArray()));
-                    rects.Clear();
-                    //Lets draw the text of this ROI in the middle of the ROI
-                    float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
-                    float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
-                    g.DrawString(an.Text, fo, b, ToScreenSpace(new PointF(fw, fh)));
-                }
-                pen.Dispose();
-                red.Dispose();
-                mag.Dispose();
-                green.Dispose();
-                blue.Dispose();
-                b.Dispose();
-            }
+                    else
+                    if (an.type == ROI.Type.Polyline)
+                    {
+                        g.DrawLines(pen, ToScreenSpace(an.GetPointsF()));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
 
+                    else
+                    if (an.type == ROI.Type.Freeform && an.closed)
+                    {
+                        PointF[] points = an.GetPointsF();
+                        if (points.Length > 1)
+                            if (points.Length == 1)
+                            {
+                                g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
+                            }
+                            else
+                                g.DrawPolygon(pen, ToScreenSpace(an.GetPointsF()));
+                    }
+                    else
+                    if (an.type == ROI.Type.Freeform && !an.closed)
+                    {
+                        PointF[] points = an.GetPointsF();
+                        if (points.Length > 1)
+                            if (points.Length == 1)
+                            {
+                                g.DrawLine(pen, ToScreenSpace(an.Point.ToPointF()), ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1)));
+                            }
+                            else
+                                g.DrawLines(pen, ToScreenSpace(points));
+                    }
+                    if (an.type == ROI.Type.Label)
+                    {
+                        g.DrawString(an.Text, fo, b, ToScreenSpace(an.Point.ToPointF()));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                    }
+                    if (labels)
+                    {
+                        //Lets draw the text of this ROI in the middle of the RO
+                        float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
+                        float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
+                        g.DrawString(an.Text, fo, b, ToScreenSpace(new PointF(fw, fh)));
+                    }
+                    if (bounds)
+                    {
+                        RectangleF[] rects = new RectangleF[1];
+                        rects[0] = an.BoundingBox.ToRectangleF();
+                        g.DrawRectangles(green, ToScreenSpace(rects));
+                    }
+                    if (an.selected)
+                    {
+                        //Lets draw the bounding box.
+                        RectangleF[] bo = new RectangleF[1];
+                        bo[0] = an.BoundingBox.ToRectangleF();
+                        g.DrawRectangles(mag, ToScreenSpace(bo));
+                        //Lets draw the selectBoxes.
+                        List<RectangleF> rects = new List<RectangleF>();
+                        RectangleF[] sels = an.GetSelectBoxes(scale.Width);
+                        for (int i = 0; i < an.selectedPoints.Count; i++)
+                        {
+                            if (an.selectedPoints[i] < an.GetPointCount())
+                            {
+                                rects.Add(sels[an.selectedPoints[i]]);
+                            }
+                        }
+                        if (rects.Count > 0)
+                            g.DrawRectangles(blue, ToScreenSpace(rects.ToArray()));
+                        rects.Clear();
+                        //Lets draw the text of this ROI in the middle of the ROI
+                        float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
+                        float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
+                        g.DrawString(an.Text, fo, b, ToScreenSpace(new PointF(fw, fh)));
+                    }
+                    pen.Dispose();
+                    red.Dispose();
+                    mag.Dispose();
+                    green.Dispose();
+                    blue.Dispose();
+                    b.Dispose();
+                }
+            }
         }
         private void overlayPictureBox_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            System.Drawing.Graphics g = e.Graphics;
             g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
             if (scale.Width == 0)
                 scale = new SizeF(0.00001f, 0.00001f);
@@ -1146,7 +1149,7 @@ namespace Bio
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(0, 0, 0, 0);
         }
 
-        private void DrawView(Graphics g)
+        private void DrawView(System.Drawing.Graphics g)
         {
             g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
             if (scale.Width == 0)
@@ -1184,28 +1187,41 @@ namespace Bio
 
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            PointD p = ToViewSpace(e.Location.X,e.Location.Y);
+            if (SelectedImage == null)
+                return;
+            selectedImage = SelectedImage;
+            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
+            PointF ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + p.X + ", " + p.Y + ")";
-            if (Mode != ViewMode.RGBImage)
+            if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
-                if (e.Button == MouseButtons.XButton1 && !x1State)
-                {
-                    if (cBar.Value < cBar.Maximum)
-                        cBar.Value++;
-                    x1State = true;
-                }
-                if (e.Button != MouseButtons.XButton1)
-                    x1State = false;
-
-                if (e.Button == MouseButtons.XButton2 && !x2State)
-                {
-                    if (cBar.Value > cBar.Minimum)
-                        cBar.Value--;
-                    x2State = true;
-                }
-                if (e.Button != MouseButtons.XButton2)
-                    x2State = false;
+                if (cBar.Value < cBar.Maximum)
+                    cBar.Value++;
+                x1State = true;
             }
+            else if (e.Button == MouseButtons.XButton1 && !x1State && Ctrl)
+            {
+                if (tBar.Value < tBar.Maximum)
+                    tBar.Value++;
+                x1State = true;
+            }
+            if (e.Button != MouseButtons.XButton1)
+                x1State = false;
+
+            if (e.Button == MouseButtons.XButton2 && !x2State && !Ctrl && Mode != ViewMode.RGBImage)
+            {
+                if (cBar.Value > cBar.Minimum)
+                    cBar.Value--;
+                x2State = true;
+            }
+            else if (e.Button == MouseButtons.XButton2 && !x2State && Ctrl)
+            {
+                if (tBar.Value > tBar.Minimum)
+                    tBar.Value--;
+                x2State = true;
+            }
+            if (e.Button != MouseButtons.XButton2)
+                x2State = false;
 
             if (Tools.currentTool.type == Tools.Tool.Type.move && e.Button == MouseButtons.Left)
             {
@@ -1278,71 +1294,24 @@ namespace Bio
 
             if (Tools.currentTool != null)
                 if (Tools.currentTool.type == Tools.Tool.Type.pencil && e.Button == MouseButtons.Left)
-                    if (Mode == ViewMode.RGBImage)
-                    {
-                        BioImage b = ImageView.SelectedImage;
-                        ZCT co = SelectedImage.Coordinate;
-                        if (b.RGBChannelCount > 1)
-                        {
-                            ZCTXY cor = new ZCTXY(co.Z, co.C, co.T, (int)p.X, (int)p.Y);
-                            Tools.Tool tool = Tools.currentTool;
-                            if (Tools.rEnabled)
-                                b.SetValueRGB(cor, 0, tool.Color.R);
-                            if (Tools.gEnabled)
-                                b.SetValueRGB(cor, 0, tool.Color.G);
-                            if (Tools.bEnabled)
-                                b.SetValueRGB(cor, 0, tool.Color.B);
-                        }
-                        else
-                        if (Mode == ViewMode.RGBImage)
-                        {
-                            if (Tools.rEnabled)
-                                SelectedImage.SetValue((int)p.X, (int)p.Y, RChannel.Index, Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                            if (Tools.gEnabled)
-                                SelectedImage.SetValue((int)p.X, (int)p.Y, GChannel.Index, Tools.GetTool(Tools.Tool.Type.pencil).Color.G);
-                            if (Tools.bEnabled)
-                                SelectedImage.SetValue((int)p.X, (int)p.Y, BChannel.Index, Tools.GetTool(Tools.Tool.Type.pencil).Color.B);
-                        }
-                        else
-                        {
-                            SelectedImage.SetValue((int)p.X, (int)p.Y, GetCoordinate(), Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                        }
-                        UpdateView();
-                    }
-                    else
-                    if (Mode == ViewMode.Filtered)
-                    {
-                        if (SelectedImage.RGBChannelCount > 1)
-                        {
-                            SelectedImage.SetValue((int)p.X, (int)p.Y, GetCoordinate(), Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                        }
-                        else
-                        {
-                            SelectedImage.SetValue((int)p.X, (int)p.Y, GetCoordinate(), Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                        }
-                        UpdateView();
-                    }
-                    else
-                    if (Mode == ViewMode.Raw)
-                    {
-                        if (SelectedImage.RGBChannelCount > 1)
-                        {
-                            SelectedImage.SetValue((int)p.X, (int)p.Y, GetCoordinate(), Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                        }
-                        else
-                        {
-                            SelectedImage.SetValue((int)p.X, (int)p.Y, GetCoordinate(), Tools.GetTool(Tools.Tool.Type.pencil).Color.R);
-                        }
-                        UpdateView();
-                    }
+                {
+                    Tools.Tool tool = Tools.currentTool;
+                    Graphics.Graphics g = Graphics.Graphics.FromImage(SelectedBuffer);
+                    Graphics.Pen pen = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedImage.bitsPerPixel);
+                    g.FillEllipse(new Rectangle((int)ip.X, (int)ip.Y, (int)Tools.StrokeWidth, (int)Tools.StrokeWidth), pen.color);
+                    UpdateImage();
+                }
+
             UpdateStatus();
             tools.ToolMove(p, mouseDownButtons);
             pd = p;
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             App.viewer = this;
-            PointD p = ToViewSpace(e.Location.X,e.Location.Y);
+            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
             if (e.Button == MouseButtons.Middle)
             {
                 PointD pd = new PointD(p.X - mouseDown.X, p.Y - mouseDown.Y);
@@ -1358,11 +1327,15 @@ namespace Bio
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             App.viewer = this;
+            selectedImage = SelectedImage;
             mouseDownButtons = e.Button;
             mouseUpButtons = MouseButtons.None;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
-            pd = new PointD(p.X,p.Y);
+            PointF ip = SelectedImage.ToImageSpace(p);
+            pd = new PointD(p.X, p.Y);
             mouseDown = pd;
             down = true;
             up = false;
@@ -1378,7 +1351,7 @@ namespace Bio
                 }
                 ind++;
             }
-            if (!Ctrl)
+            if (!Ctrl && e.Button == MouseButtons.Left)
             {
                 foreach (ROI item in selectedAnnotations)
                 {
@@ -1388,60 +1361,62 @@ namespace Bio
                 selectedAnnotations.Clear();
             }
 
-            if (Tools.currentTool.type == Tools.Tool.Type.move)
+            if (Tools.currentTool.type == Tools.Tool.Type.move && e.Button == MouseButtons.Left)
             {
-                if(AnnotationsRGB != null)
-                foreach (ROI an in AnnotationsRGB)
+                float width = (float)ToViewSizeW(ROI.selectBoxSize / scale.Width);
+                foreach (BioImage bi in Images)
                 {
-                    if (an.GetSelectBound().IntersectsWith(p.X, p.Y))
+                    foreach (ROI an in bi.Annotations)
                     {
-                        selectedAnnotations.Add(an);
-                        an.selected = true;
-
-                        RectangleF r = new RectangleF((float)p.X, (float)p.Y, 1, 1);
-                        RectangleF[] sels = an.GetSelectBoxes(scale.Width);
-                        for (int i = 0; i < sels.Length; i++)
+                        if (an.GetSelectBound(width).IntersectsWith(p.X, p.Y))
                         {
-                            if (sels[i].IntersectsWith(r))
+                            selectedAnnotations.Add(an);
+                            an.selected = true;
+                            RectangleF[] sels = an.GetSelectBoxes(width);
+                            RectangleF r = new RectangleF((float)p.X, (float)p.Y, sels[0].Width, sels[0].Width);
+                            for (int i = 0; i < sels.Length; i++)
                             {
-                                an.selectedPoints.Add(i);
+                                if (sels[i].IntersectsWith(r))
+                                {
+                                    an.selectedPoints.Add(i);
+                                }
                             }
                         }
+                        else
+                            if (!Ctrl)
+                            an.selected = false;
                     }
-                    else
-                        if (!Ctrl)
-                        an.selected = false;
                 }
                 UpdateOverlay();
             }
 
-            if (e.Button == MouseButtons.Left && SelectedImage!=null)
+            if (e.Button == MouseButtons.Left)
             {
                 Point s = new Point(SelectedImage.SizeX, SelectedImage.SizeY);
-                if ((p.X < s.X && p.Y < s.Y) || (p.X >= 0 && p.Y >= 0))
+                if ((ip.X < s.X && ip.Y < s.Y) || (ip.X >= 0 && ip.Y >= 0))
                 {
                     int zc = SelectedImage.Coordinate.Z;
                     int cc = SelectedImage.Coordinate.C;
                     int tc = SelectedImage.Coordinate.T;
                     if (Mode == ViewMode.RGBImage)
                     {
-                        int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)p.X, (int)p.Y, 0);
-                        int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)p.X, (int)p.Y, 1);
-                        int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)p.X, (int)p.Y, 2);
+                        int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)ip.X, (int)ip.Y, 0);
+                        int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)ip.X, (int)ip.Y, 1);
+                        int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)ip.X, (int)ip.Y, 2);
                         mouseColor = ", " + r + "," + g + "," + b;
                     }
                     else
                     {
                         if (SelectedImage.isRGB)
                         {
-                            int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)p.X, (int)p.Y, 0);
-                            int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)p.X, (int)p.Y, 1);
-                            int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)p.X, (int)p.Y, 2);
+                            int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)ip.X, (int)ip.Y, 0);
+                            int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)ip.X, (int)ip.Y, 1);
+                            int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)ip.X, (int)ip.Y, 2);
                             mouseColor = ", " + r + "," + g + "," + b;
                         }
                         else
                         {
-                            int r = SelectedImage.GetValueRGB(zc, 0, tc, (int)p.X, (int)p.Y, 0);
+                            int r = SelectedImage.GetValueRGB(zc, 0, tc, (int)ip.X, (int)ip.Y, 0);
                             mouseColor = ", " + r;
                         }
                     }
@@ -1452,10 +1427,14 @@ namespace Bio
         }
         private void pictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             App.viewer = this;
-            PointD p = ToViewSpace(e.Location.X,e.Location.Y);
+            selectedImage = SelectedImage;
+            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
             tools.ToolDown(p, e.Button);
-            Origin = new PointD(-p.X, -p.Y);
+            if (e.Button != MouseButtons.XButton1 && e.Button != MouseButtons.XButton2)
+                Origin = new PointD(-p.X, -p.Y);
         }
         private void deleteROIToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1497,11 +1476,18 @@ namespace Bio
                 }
             }
         }
-
+        public void UpdateSelectBoxSize(float size)
+        {
+            ROI.selectBoxSize = size;
+        }
+        public double GetScale()
+        {
+            return ToViewSizeW(ROI.selectBoxSize / scale.Width);
+        }
         private void copyViewToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bitmap bmp = new Bitmap(pictureBox.Width, pictureBox.Height);
-            using (Graphics g = Graphics.FromImage(bmp))
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
             {
                 //g.CopyFromScreen(PointToScreen(new Point(pictureBox.Left, pictureBox.Top + 25)), Point.Empty, bm.Size);
                 g.DrawImage(Bitmaps[SelectedIndex], 0, 0);
@@ -1796,17 +1782,6 @@ namespace Bio
         private void goToStageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GoToStage();
-        }
-
-        private void goToToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Microscope.Stage.SetPosition(mouseDown.X, mouseDown.Y);
-            UpdateView();
-        }
-
-        private void goToToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Origin = new PointD(mouseDown.X,mouseDown.Y);
         }
 
         private void moveStageToImageToolStripMenuItem_Click(object sender, EventArgs e)

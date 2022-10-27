@@ -2,34 +2,32 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio
+namespace Bio.Graphics
 {
-    public partial class ColorTool : Form
+    public partial class PenTool : Form
     {
-        private ColorS color = new ColorS(65535, 65535, 65535);
-        private int bitsPerPixel = 16;
-        public ColorS Color
+        private Pen pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue), 1,16);
+        public Pen Pen
         {
             get
             {
-                return color;
+                return pen;
             }
             set
             {
-                color = value;
+                pen = value;
             }
         }
 
         public void UpdateGUI()
         {
-            color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
-            colorPanel.BackColor = ColorS.ToColor(color, bitsPerPixel);
+            pen.color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
+            colorPanel.BackColor = ColorS.ToColor(pen.color,pen.bitsPerPixel);
             if (rBar.Value != redBox.Value)
                 redBox.Value = rBar.Value;
             if (gBar.Value != greenBox.Value)
@@ -37,30 +35,23 @@ namespace Bio
             if (bBar.Value != blueBox.Value)
                 blueBox.Value = bBar.Value;
         }
-        public ColorTool()
+
+        public void SetColor()
+        {
+            rBar.Value = pen.color.R;
+            gBar.Value = pen.color.G;
+            bBar.Value = pen.color.B;
+        }
+        public PenTool()
         {
             InitializeComponent();
             UpdateGUI();
         }
-        public ColorTool(ColorS col, int bitPerPixel)
+        public PenTool(Pen p)
         {
             InitializeComponent();
-            this.bitsPerPixel = bitPerPixel;
-            if(bitsPerPixel == 8)
-            {
-                rBar.Maximum = 255;
-                gBar.Maximum = 255;
-                bBar.Maximum = 255;
-                redBox.Maximum = 255;
-                greenBox.Maximum = 255;
-                blueBox.Maximum = 255;
-            }
-            if (rBar.Maximum <= col.R)
-                rBar.Value = rBar.Maximum;
-            if (gBar.Maximum <= col.G)
-                gBar.Value = gBar.Maximum;
-            if (bBar.Maximum <= col.B)
-                bBar.Value = bBar.Maximum;
+            pen = p;
+            SetColor();
             UpdateGUI();
         }
 
@@ -97,15 +88,18 @@ namespace Bio
         private void applyButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            Close();
+            this.Close();
+        }
+
+        private void widthBox_ValueChanged(object sender, EventArgs e)
+        {
+            pen.width = (ushort)widthBox.Value;
         }
 
         private void cancelBut_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            Close();
         }
-
         private void rBar_Scroll(object sender, EventArgs e)
         {
             UpdateGUI();

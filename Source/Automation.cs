@@ -1034,10 +1034,10 @@ namespace Bio
             }
             public static Bitmap GetImage(AutomationElement el)
             {
-                Graphics g;
+                System.Drawing.Graphics g;
                 System.Windows.Rect r = el.Current.BoundingRectangle;
                 Bitmap b = new Bitmap((int)r.Width, (int)r.Height);
-                g = Graphics.FromImage(b);
+                g = System.Drawing.Graphics.FromImage(b);
                 g.CopyFromScreen(new Point((int)r.X,(int)r.Y), new Point(0, 0),new Size(b.Width,b.Height));
                 return b;
             }

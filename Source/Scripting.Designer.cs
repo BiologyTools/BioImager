@@ -53,6 +53,7 @@
             this.stopBut = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.topMostBox = new System.Windows.Forms.CheckBox();
+            this.headlessBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.outputTab.SuspendLayout();
@@ -74,7 +75,7 @@
             this.scriptView.Location = new System.Drawing.Point(0, 0);
             this.scriptView.MultiSelect = false;
             this.scriptView.Name = "scriptView";
-            this.scriptView.Size = new System.Drawing.Size(179, 429);
+            this.scriptView.Size = new System.Drawing.Size(179, 485);
             this.scriptView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.scriptView.TabIndex = 1;
             this.scriptView.TabStop = false;
@@ -129,7 +130,7 @@
             this.tabControl.Location = new System.Drawing.Point(3, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(355, 147);
+            this.tabControl.Size = new System.Drawing.Size(355, 164);
             this.tabControl.TabIndex = 8;
             this.tabControl.TabStop = false;
             // 
@@ -139,7 +140,7 @@
             this.outputTab.Location = new System.Drawing.Point(4, 22);
             this.outputTab.Name = "outputTab";
             this.outputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.outputTab.Size = new System.Drawing.Size(347, 121);
+            this.outputTab.Size = new System.Drawing.Size(347, 138);
             this.outputTab.TabIndex = 1;
             this.outputTab.Text = "Output";
             this.outputTab.UseVisualStyleBackColor = true;
@@ -150,7 +151,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
-            this.outputBox.Size = new System.Drawing.Size(341, 115);
+            this.outputBox.Size = new System.Drawing.Size(341, 132);
             this.outputBox.TabIndex = 2;
             this.outputBox.TabStop = false;
             // 
@@ -160,7 +161,7 @@
             this.error.Location = new System.Drawing.Point(4, 22);
             this.error.Name = "error";
             this.error.Padding = new System.Windows.Forms.Padding(3);
-            this.error.Size = new System.Drawing.Size(347, 121);
+            this.error.Size = new System.Drawing.Size(347, 117);
             this.error.TabIndex = 0;
             this.error.Text = "Error";
             this.error.UseVisualStyleBackColor = true;
@@ -171,7 +172,7 @@
             this.errorView.HideSelection = false;
             this.errorView.Location = new System.Drawing.Point(3, 3);
             this.errorView.Name = "errorView";
-            this.errorView.Size = new System.Drawing.Size(341, 115);
+            this.errorView.Size = new System.Drawing.Size(341, 111);
             this.errorView.TabIndex = 0;
             this.errorView.UseCompatibleStateImageBehavior = false;
             this.errorView.View = System.Windows.Forms.View.List;
@@ -182,7 +183,7 @@
             this.logTabPage.Controls.Add(this.logBox);
             this.logTabPage.Location = new System.Drawing.Point(4, 22);
             this.logTabPage.Name = "logTabPage";
-            this.logTabPage.Size = new System.Drawing.Size(347, 121);
+            this.logTabPage.Size = new System.Drawing.Size(347, 117);
             this.logTabPage.TabIndex = 2;
             this.logTabPage.Text = "Log";
             this.logTabPage.UseVisualStyleBackColor = true;
@@ -194,7 +195,7 @@
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(347, 121);
+            this.logBox.Size = new System.Drawing.Size(347, 117);
             this.logBox.TabIndex = 4;
             this.logBox.TabStop = false;
             // 
@@ -202,7 +203,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(189, 9);
+            this.label1.Location = new System.Drawing.Point(182, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 9;
@@ -220,7 +221,7 @@
             // runButton
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.runButton.Location = new System.Drawing.Point(426, 398);
+            this.runButton.Location = new System.Drawing.Point(426, 456);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(57, 23);
             this.runButton.TabIndex = 11;
@@ -232,7 +233,7 @@
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.Location = new System.Drawing.Point(345, 398);
+            this.saveButton.Location = new System.Drawing.Point(345, 456);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 13;
@@ -244,7 +245,7 @@
             // scriptLoadBut
             // 
             this.scriptLoadBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scriptLoadBut.Location = new System.Drawing.Point(263, 398);
+            this.scriptLoadBut.Location = new System.Drawing.Point(263, 456);
             this.scriptLoadBut.Name = "scriptLoadBut";
             this.scriptLoadBut.Size = new System.Drawing.Size(75, 23);
             this.scriptLoadBut.TabIndex = 12;
@@ -265,7 +266,7 @@
             // stopBut
             // 
             this.stopBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.stopBut.Location = new System.Drawing.Point(489, 398);
+            this.stopBut.Location = new System.Drawing.Point(489, 456);
             this.stopBut.Name = "stopBut";
             this.stopBut.Size = new System.Drawing.Size(57, 23);
             this.stopBut.TabIndex = 14;
@@ -286,18 +287,18 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.tabControl);
-            this.splitContainer.Size = new System.Drawing.Size(361, 367);
-            this.splitContainer.SplitterDistance = 212;
+            this.splitContainer.Size = new System.Drawing.Size(361, 425);
+            this.splitContainer.SplitterDistance = 244;
             this.splitContainer.TabIndex = 15;
             // 
             // topMostBox
             // 
-            this.topMostBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.topMostBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.topMostBox.AutoSize = true;
             this.topMostBox.Checked = true;
             this.topMostBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.topMostBox.ForeColor = System.Drawing.Color.White;
-            this.topMostBox.Location = new System.Drawing.Point(188, 402);
+            this.topMostBox.Location = new System.Drawing.Point(475, 8);
             this.topMostBox.Name = "topMostBox";
             this.topMostBox.Size = new System.Drawing.Size(71, 17);
             this.topMostBox.TabIndex = 3;
@@ -305,12 +306,25 @@
             this.topMostBox.UseVisualStyleBackColor = true;
             this.topMostBox.CheckedChanged += new System.EventHandler(this.topMostBox_CheckedChanged);
             // 
+            // headlessBox
+            // 
+            this.headlessBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.headlessBox.AutoSize = true;
+            this.headlessBox.ForeColor = System.Drawing.Color.White;
+            this.headlessBox.Location = new System.Drawing.Point(188, 459);
+            this.headlessBox.Name = "headlessBox";
+            this.headlessBox.Size = new System.Drawing.Size(70, 17);
+            this.headlessBox.TabIndex = 17;
+            this.headlessBox.Text = "Headless";
+            this.headlessBox.UseVisualStyleBackColor = true;
+            // 
             // Scripting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(552, 428);
+            this.ClientSize = new System.Drawing.Size(552, 484);
+            this.Controls.Add(this.headlessBox);
             this.Controls.Add(this.topMostBox);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.stopBut);
@@ -366,5 +380,6 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.CheckBox topMostBox;
         private System.Windows.Forms.ListView errorView;
+        private System.Windows.Forms.CheckBox headlessBox;
     }
 }

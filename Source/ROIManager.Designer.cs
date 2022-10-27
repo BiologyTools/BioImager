@@ -632,7 +632,7 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(253, 360);
+            this.label15.Location = new System.Drawing.Point(243, 365);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(126, 13);
             this.label15.TabIndex = 42;
