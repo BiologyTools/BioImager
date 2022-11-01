@@ -92,9 +92,11 @@ namespace Bio
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.overlayPictureBox = new System.Windows.Forms.PictureBox();
             this.panel = new System.Windows.Forms.Panel();
-            this.saveCSVFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.hScrollBar = new System.Windows.Forms.HScrollBar();
             this.vScrollBar = new System.Windows.Forms.VScrollBar();
+            this.saveCSVFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.drawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timePlayMenuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.zPlayMenuStrip.SuspendLayout();
@@ -176,7 +178,7 @@ namespace Bio
             this.controlsToolStripMenuItem,
             this.copyViewToClipboardToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(200, 180);
+            this.contextMenuStrip.Size = new System.Drawing.Size(200, 202);
             // 
             // rOIToolStripMenuItem
             // 
@@ -184,7 +186,9 @@ namespace Bio
             this.setROITextToolStripMenuItem,
             this.copyROIToolStripMenuItem1,
             this.pasteROIToolStripMenuItem1,
-            this.deleteROIToolStripMenuItem1});
+            this.deleteROIToolStripMenuItem1,
+            this.drawToolStripMenuItem,
+            this.fillToolStripMenuItem});
             this.rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
             this.rOIToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.rOIToolStripMenuItem.Text = "ROI";
@@ -192,28 +196,28 @@ namespace Bio
             // setROITextToolStripMenuItem
             // 
             this.setROITextToolStripMenuItem.Name = "setROITextToolStripMenuItem";
-            this.setROITextToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.setROITextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setROITextToolStripMenuItem.Text = "Set Text";
             this.setROITextToolStripMenuItem.Click += new System.EventHandler(this.setTextSelectionToolStripMenuItem_Click);
             // 
             // copyROIToolStripMenuItem1
             // 
             this.copyROIToolStripMenuItem1.Name = "copyROIToolStripMenuItem1";
-            this.copyROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+            this.copyROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.copyROIToolStripMenuItem1.Text = "Copy";
             this.copyROIToolStripMenuItem1.Click += new System.EventHandler(this.copyROIToolStripMenuItem_Click);
             // 
             // pasteROIToolStripMenuItem1
             // 
             this.pasteROIToolStripMenuItem1.Name = "pasteROIToolStripMenuItem1";
-            this.pasteROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+            this.pasteROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.pasteROIToolStripMenuItem1.Text = "Paste";
             this.pasteROIToolStripMenuItem1.Click += new System.EventHandler(this.pasteROIToolStripMenuItem_Click);
             // 
             // deleteROIToolStripMenuItem1
             // 
             this.deleteROIToolStripMenuItem1.Name = "deleteROIToolStripMenuItem1";
-            this.deleteROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+            this.deleteROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.deleteROIToolStripMenuItem1.Text = "Delete";
             this.deleteROIToolStripMenuItem1.Click += new System.EventHandler(this.deleteROIToolStripMenuItem_Click);
             // 
@@ -230,21 +234,21 @@ namespace Bio
             // rGBToolStripMenuItem
             // 
             this.rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
-            this.rGBToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.rGBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rGBToolStripMenuItem.Text = "RGB";
             this.rGBToolStripMenuItem.Click += new System.EventHandler(this.rGBToolStripMenuItem_Click);
             // 
             // filteredToolStripMenuItem
             // 
             this.filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
-            this.filteredToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.filteredToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.filteredToolStripMenuItem.Text = "Filtered";
             this.filteredToolStripMenuItem.Click += new System.EventHandler(this.filteredToolStripMenuItem_Click);
             // 
             // rawToolStripMenuItem
             // 
             this.rawToolStripMenuItem.Name = "rawToolStripMenuItem";
-            this.rawToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.rawToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rawToolStripMenuItem.Text = "Raw";
             this.rawToolStripMenuItem.Click += new System.EventHandler(this.rawToolStripMenuItem_Click);
             // 
@@ -292,14 +296,14 @@ namespace Bio
             // hideControlsToolStripMenuItem1
             // 
             this.hideControlsToolStripMenuItem1.Name = "hideControlsToolStripMenuItem1";
-            this.hideControlsToolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
+            this.hideControlsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.hideControlsToolStripMenuItem1.Text = "Hide Controls";
             this.hideControlsToolStripMenuItem1.Click += new System.EventHandler(this.hideControlsToolStripMenuItem_Click);
             // 
             // hideStatusToolStripMenuItem
             // 
             this.hideStatusToolStripMenuItem.Name = "hideStatusToolStripMenuItem";
-            this.hideStatusToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.hideStatusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hideStatusToolStripMenuItem.Text = "Hide Status";
             this.hideStatusToolStripMenuItem.Click += new System.EventHandler(this.HideStatusMenuItem_Click);
             // 
@@ -704,12 +708,6 @@ namespace Bio
             this.panel.Size = new System.Drawing.Size(425, 269);
             this.panel.TabIndex = 21;
             // 
-            // saveCSVFileDialog
-            // 
-            this.saveCSVFileDialog.DefaultExt = "csv";
-            this.saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
-            this.saveCSVFileDialog.Title = "Save ROIs to CSV";
-            // 
             // hScrollBar
             // 
             this.hScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -731,6 +729,26 @@ namespace Bio
             this.vScrollBar.SmallChange = 10;
             this.vScrollBar.TabIndex = 23;
             this.vScrollBar.Visible = false;
+            // 
+            // saveCSVFileDialog
+            // 
+            this.saveCSVFileDialog.DefaultExt = "csv";
+            this.saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
+            this.saveCSVFileDialog.Title = "Save ROIs to CSV";
+            // 
+            // drawToolStripMenuItem
+            // 
+            this.drawToolStripMenuItem.Name = "drawToolStripMenuItem";
+            this.drawToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.drawToolStripMenuItem.Text = "Draw";
+            this.drawToolStripMenuItem.Click += new System.EventHandler(this.drawToolStripMenuItem_Click);
+            // 
+            // fillToolStripMenuItem
+            // 
+            this.fillToolStripMenuItem.Name = "fillToolStripMenuItem";
+            this.fillToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fillToolStripMenuItem.Text = "Fill";
+            this.fillToolStripMenuItem.Click += new System.EventHandler(this.fillToolStripMenuItem_Click);
             // 
             // ImageView
             // 
@@ -833,5 +851,7 @@ namespace Bio
         private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem;
         private System.Windows.Forms.HScrollBar hScrollBar;
         private System.Windows.Forms.VScrollBar vScrollBar;
+        private System.Windows.Forms.ToolStripMenuItem drawToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fillToolStripMenuItem;
     }
 }
