@@ -70,6 +70,10 @@ Microscope.TakeTiles(4,4);
 -  Program installer include sample script "Sample.cs" which gets & sets pixels and saves resulting image.
 -  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample) [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
 
+## Setup
+- For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
+- For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
+
 ## Sample Tool Script
 
 //css_reference Bio.dll;
