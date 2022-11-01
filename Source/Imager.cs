@@ -416,8 +416,6 @@ namespace Bio
                 Point3D pp1 = Microscope.GetPosition();
                 lastSelectedSnapDistanceLabel.Text = Point3D.Distance(pp0, pp1).ToString();
             }
-            if(App.viewer!=null)
-            App.viewer.UpdateView();
         }
 
         private void controllerButtonUpdate_Tick(object sender, EventArgs e)

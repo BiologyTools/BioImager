@@ -83,6 +83,8 @@ namespace Bio
             {
                 Microscope.sdk.SetPosition(new PointD(px, py));
             }
+            if (App.viewer != null)
+                App.viewer.UpdateView(true);
         }
         public void SetPositionX(double px)
         {

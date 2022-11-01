@@ -6726,8 +6726,8 @@ namespace Bio
         }
         public static BioImage OpenOME(string file, int serie)
         {
-            return OpenOME(file, serie, true, false, 0, 0, 0, 0);
             Recorder.AddLine("Bio.BioImage.OpenOME(\"" + file + "\"," + serie + ");");
+            return OpenOME(file, serie, true, false, 0, 0, 0, 0);
         }
         public static BioImage OpenOME(string file, int serie, bool progress, bool tile, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {

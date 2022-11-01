@@ -138,6 +138,7 @@ namespace Bio
         public Image Buf = null;
         public bool init = false;
         private bool update = false;
+        private bool updateOverlay = false;
         public List<BioImage> Images = new List<BioImage>();
         private static int selIndex = 0;
         public int SelectedIndex
@@ -163,7 +164,7 @@ namespace Bio
         public bool loopC = true;
         private double pxWmicron = 0.004;
         private double pxHmicron = 0.004;
-        public SizeF scale = new SizeF(1, 1);
+        SizeF scale = new SizeF(1, 1);
         public void SetCoordinate(int z, int c, int t)
         {
             if (SelectedImage == null)
@@ -368,6 +369,7 @@ namespace Bio
             set
             {
                 origin = value;
+                update = true;
             }
         }
         public Point PyramidalOrigin
@@ -400,6 +402,19 @@ namespace Bio
                 PyramidalOrigin = new Point((int)x, (int)y);
                 resolution = value;
                 UpdateImage();
+                UpdateView();
+            }
+        }
+        public new SizeF Scale
+        {
+            get
+            {
+                return scale;
+            }
+            set
+            {
+                scale = value;
+                update = true;
                 UpdateView();
             }
         }
@@ -518,6 +533,7 @@ namespace Bio
         }
         public void UpdateOverlay()
         {
+            updateOverlay = true;
             overlayPictureBox.Invalidate();
         }
         public void UpdateStatus()
@@ -557,6 +573,16 @@ namespace Bio
             UpdateStatus();
             pictureBox.Invalidate();
             overlayPictureBox.Invalidate();
+        }
+        public void UpdateView(bool refresh)
+        {
+            UpdateStatus();
+            update = refresh;
+            if (update)
+            {
+                pictureBox.Invalidate();
+                overlayPictureBox.Invalidate();
+            }
         }
         public void UpdateImages()
         {
@@ -634,7 +660,7 @@ namespace Bio
                     bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
                 Bitmaps.Add(bitmap);
             }
-            update = false;
+            update = true;
             UpdateView();
         }
         Bitmap bitmap;
@@ -918,19 +944,17 @@ namespace Bio
         }
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            float dx = scale.Width / 50;
-            float dy = scale.Height / 50;
+            float dx = Scale.Width / 50;
+            float dy = Scale.Height / 50;
             if (Ctrl)
             {
                 if (e.Delta > 0)
                 {
-                    scale.Width += dx;
-                    scale.Height += dy;
+                    Scale = new SizeF(Scale.Width + dx, Scale.Height + dy);
                 }
                 else
                 {
-                    scale.Width -= dx;
-                    scale.Height -= dy;
+                    Scale = new SizeF(Scale.Width - dx, Scale.Height - dy);
                 }
                 UpdateView();
             }
@@ -1133,6 +1157,8 @@ namespace Bio
         {
             if (SelectedImage == null)
                 return;
+            if (!updateOverlay)
+                return;
             SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
             Pen pen = null;
             Pen red = null;
@@ -1158,7 +1184,7 @@ namespace Bio
                     }
                     else if (zBar.Value != an.coord.Z || cBar.Value != an.coord.C || tBar.Value != an.coord.T)
                         continue;
-                    float w = Math.Abs(scale.Width);
+                    float w = Math.Abs(Scale.Width);
                     pen = new Pen(an.strokeColor, (float)an.strokeWidth / w);
                     red = new Pen(Brushes.Red, (float)an.strokeWidth / w);
                     mag = new Pen(Brushes.Magenta, (float)an.strokeWidth / w);
@@ -1251,7 +1277,7 @@ namespace Bio
                     if (an.type == ROI.Type.Label)
                     {
                         g.DrawString(an.Text, fo, b, ToScreenSpace(an.Point.ToPointF()));
-                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(scale.Width)));
+                        g.DrawRectangles(red, ToScreenSpace(an.GetSelectBoxes(Scale.Width)));
                     }
                     if (labels)
                     {
@@ -1304,16 +1330,16 @@ namespace Bio
         {
             System.Drawing.Graphics g = e.Graphics;
             g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
-            if (scale.Width == 0)
-                scale = new SizeF(0.00001f, 0.00001f);
-            g.ScaleTransform(scale.Width, scale.Height);
+            if (Scale.Width == 0)
+                Scale = new SizeF(0.00001f, 0.00001f);
+            g.ScaleTransform(Scale.Width, Scale.Height);
             DrawOverlay(g);
             TabsView.graphics = g;
             Point3D p = Microscope.GetPosition();
 
             if ((Tools.currentTool.type == Tools.Tool.Type.rectSel && down) || (Tools.currentTool.type == Tools.Tool.Type.magic && down))
             {
-                Pen mag = new Pen(Brushes.Magenta, (float)1 / scale.Width);
+                Pen mag = new Pen(Brushes.Magenta, (float)1 / Scale.Width);
                 RectangleF[] fs = new RectangleF[1];
                 fs[0] = Tools.GetTool(Tools.Tool.Type.rectSel).RectangleF;
                 g.DrawRectangles(mag, ToScreenSpace(fs));
@@ -1324,23 +1350,23 @@ namespace Bio
         }
         private void DrawView(System.Drawing.Graphics g)
         {
-            if (update)
-                UpdateImage();
+            if (!update)
+                return;
             if (Bitmaps.Count == 0 || Bitmaps.Count != Images.Count)
                 UpdateImages();
             g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
-            if (scale.Width == 0 || float.IsInfinity(scale.Width))
-                scale = new SizeF(1, 1);
-            g.ScaleTransform(scale.Width, scale.Height);
+            if (Scale.Width == 0 || float.IsInfinity(Scale.Width))
+                Scale = new SizeF(1, 1);
+            g.ScaleTransform(Scale.Width, Scale.Height);
             g.FillRectangle(Brushes.LightGray, ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY));
             RectangleF[] rfs = new RectangleF[1] { Microscope.GetViewRectangle().ToRectangleF() };
             rfs[0] = ToScreenRectF(rfs[0].X, rfs[0].Y, rfs[0].Width, rfs[0].Height);
-            Pen red = new Pen(Brushes.Red, 1 / scale.Width);
+            Pen red = new Pen(Brushes.Red, 1 / Scale.Width);
             g.DrawRectangles(red, rfs);
             if (Bitmaps.Count == 0)
                 return;
             RectangleF[] rf = new RectangleF[1];
-            Pen blue = new Pen(Brushes.Blue, 1 / scale.Width);
+            Pen blue = new Pen(Brushes.Blue, 1 / Scale.Width);
             int i = 0;
             foreach (BioImage im in Images)
             {
@@ -1363,16 +1389,18 @@ namespace Bio
             }
             blue.Dispose();
             red.Dispose();
+            update = false;
         }
         private int resolution;
         private double scaleorig = 0;
         private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
+            update = true;
             DrawView(e.Graphics);
         }
         public double GetScale()
         {
-            return ToViewSizeW(ROI.selectBoxSize / scale.Width);
+            return ToViewSizeW(ROI.selectBoxSize / Scale.Width);
         }
 
         Point mouseD = new Point(0, 0);
@@ -1563,7 +1591,7 @@ namespace Bio
 
             if (Tools.currentTool.type == Tools.Tool.Type.move && e.Button == MouseButtons.Left)
             {
-                float width = (float)ToViewSizeW(ROI.selectBoxSize / scale.Width);
+                float width = (float)ToViewSizeW(ROI.selectBoxSize / Scale.Width);
                 foreach (BioImage bi in Images)
                 {
                     foreach (ROI an in bi.Annotations)
@@ -1788,8 +1816,8 @@ namespace Bio
         }
         public PointD ToViewSpace(double x, double y)
         {
-            double dx = (ToViewSizeW(x - (pictureBox.Width / 2)) / scale.Width) - Origin.X;
-            double dy = (ToViewSizeH(y - (pictureBox.Height / 2)) / scale.Height) - Origin.Y;
+            double dx = (ToViewSizeW(x - (pictureBox.Width / 2)) / Scale.Width) - Origin.X;
+            double dy = (ToViewSizeH(y - (pictureBox.Height / 2)) / Scale.Height) - Origin.Y;
             return new PointD(dx, dy);
         }
         public double ToViewSizeW(double d)
@@ -1892,7 +1920,7 @@ namespace Bio
 
         private void ImageView_KeyDown(object sender, KeyEventArgs e)
         {
-            double moveAmount = 5 * scale.Width;
+            double moveAmount = 5 * Scale.Width;
             if (e.KeyCode == Keys.C && e.Control)
             {
                 CopySelection();
@@ -1905,14 +1933,12 @@ namespace Bio
             }
             if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.NumPad7)
             {
-                scale.Width -= 0.1f;
-                scale.Height -= 0.1f;
+                Scale = new SizeF(Scale.Width - 0.1f, Scale.Height - 0.1f);
                 UpdateOverlay();
             }
             if (e.KeyCode == Keys.Add || e.KeyCode == Keys.NumPad9)
             {
-                scale.Width += 0.1f;
-                scale.Height += 0.1f;
+                Scale = new SizeF(Scale.Width + 0.1f, Scale.Height + 0.1f);
                 UpdateOverlay();
             }
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.NumPad8)
@@ -1946,8 +1972,7 @@ namespace Bio
             Origin = new PointD(-(SelectedImage.Volume.Location.X + dx), -(SelectedImage.Volume.Location.Y + dy));
             double wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
             double wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
-            scale.Width = (float)wy;
-            scale.Height = (float)wy;
+            Scale = new SizeF((float)wy,(float)wy);
             UpdateView();
         }
         public void GoToImage(int i)
@@ -1957,8 +1982,7 @@ namespace Bio
             Origin = new PointD(-(Images[i].Volume.Location.X + dx), -(Images[i].Volume.Location.Y + dy));
             double wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
             double wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
-            scale.Width = (float)wy;
-            scale.Height = (float)wy;
+            Scale = new SizeF((float)wy, (float)wy);
             UpdateView();
         }
         private void goToImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2005,21 +2029,24 @@ namespace Bio
             double wy = pictureBox.Height / ToScreenScaleH(d.H);
             scale.Width = (float)wy;
             scale.Height = (float)wy;
-
+            update = true;
             UpdateView();
         }
         public void MoveStageToImage()
         {
             Microscope.Stage.SetPosition(SelectedImage.Volume.Location.X, SelectedImage.Volume.Location.Y);
+            update = true;
             UpdateView();
         }
         public void MoveStageToImage(int i)
         {
+            update = true;
             Microscope.Stage.SetPosition(Images[i].Volume.Location.X, Images[i].Volume.Location.Y);
             UpdateView();
         }
         private void goToStageToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            update = true;
             GoToStage();
         }
         private void moveStageToImageToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
