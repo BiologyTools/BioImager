@@ -958,13 +958,13 @@ namespace Bio
         public static void TakeTiles(int width, int height)
         {
             bool leftright = true;
-            for (int y = 0; y < width; y++)
+            for (int y = 0; y < height; y++)
             {
                 if (y != 0)
                     Microscope.MoveFieldDown();
                 leftright = !leftright;
                 Microscope.TakeImage();
-                for (int x = 0; x < height - 1; x++)
+                for (int x = 0; x < width; x++)
                 {
                     if (leftright)
                         Microscope.MoveFieldRight();
@@ -977,14 +977,15 @@ namespace Bio
         public static void TakeTilesStack(int width, int height, double UpperLimit, double LowerLimit, double interval)
         {
             bool leftright = true;
-            for (int y = 0; y < width; y++)
+            for (int y = 0; y < height; y++)
             {
                 if (y != 0)
                     Microscope.MoveFieldDown();
                 leftright = !leftright;
                 Microscope.TakeImageStack(UpperLimit, LowerLimit, interval);
-                for (int x = 0; x < height - 1; x++)
+                for (int x = 0; x < width; x++)
                 {
+                    if(x != 0)
                     if (leftright)
                         Microscope.MoveFieldRight();
                     else
