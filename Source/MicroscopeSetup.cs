@@ -36,6 +36,7 @@ namespace Bio
         }
         private void Objectives_Load()
         {
+            /*
             if (!System.IO.File.Exists("Config/MicroscopeObjectives.json"))
             {
                 obj1Name.Text = Microscope.Objectives.List[0].Name;
@@ -48,9 +49,13 @@ namespace Bio
                     obj7Name.Text = Microscope.Objectives.List[6].Name;
                 return;
             }
+            */
             List<Objectives.Objective> list = JsonConvert.DeserializeObject<List<Objectives.Objective>>(File.ReadAllText("Config/MicroscopeObjectives.json"));
             if (list.Count == 0)
-                return;
+            {
+                //We initialize with default values.
+                UpdateObjectives();
+            }
             obj1Name.Text = Microscope.Objectives.List[0].Name;
             obj2Name.Text = Microscope.Objectives.List[1].Name;
             obj3Name.Text = Microscope.Objectives.List[2].Name;
@@ -123,6 +128,7 @@ namespace Bio
             Obj6Height.Value = (decimal)list[5].ViewHeight;
             if (Microscope.Objectives.List.Count == 7)
                 Obj7Height.Value = (decimal)list[6].ViewHeight;
+            UpdateObjectives();
         }
 
         private void objectiveA1Box_ValueChanged(object sender, EventArgs e)
@@ -349,13 +355,88 @@ namespace Bio
         {
             Microscope.Objectives.List[6].Name = obj7Name.Text;
         }
+
+        private void UpdateObjectives()
+        {
+
+            Microscope.Objectives.List[0].Name = obj1Name.Text;
+            Microscope.Objectives.List[1].Name = obj2Name.Text;
+            Microscope.Objectives.List[2].Name = obj3Name.Text;
+            Microscope.Objectives.List[3].Name = obj4Name.Text;
+            Microscope.Objectives.List[4].Name = obj5Name.Text;
+            Microscope.Objectives.List[5].Name = obj6Name.Text;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[6].Name = obj7Name.Text;
+
+            Microscope.Objectives.List[0].AcquisitionExposure = (double)objectiveA1Box.Value;
+            Microscope.Objectives.List[1].AcquisitionExposure = (double)objectiveA2Box.Value;
+            Microscope.Objectives.List[2].AcquisitionExposure = (double)objectiveA3Box.Value;
+            Microscope.Objectives.List[3].AcquisitionExposure = (double)objectiveA4Box.Value;
+            Microscope.Objectives.List[4].AcquisitionExposure = (double)objectiveA5Box.Value;
+            Microscope.Objectives.List[5].AcquisitionExposure = (double)objectiveA6Box.Value;
+
+            Microscope.Objectives.List[0].LocateExposure = (double)objectiveL1Box.Value;
+            Microscope.Objectives.List[1].LocateExposure = (double)objectiveL2Box.Value;
+            Microscope.Objectives.List[2].LocateExposure = (double)objectiveL3Box.Value;
+            Microscope.Objectives.List[3].LocateExposure = (double)objectiveL4Box.Value;
+            Microscope.Objectives.List[4].LocateExposure = (double)objectiveL5Box.Value;
+            Microscope.Objectives.List[5].LocateExposure = (double)objectiveL6Box.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[6].LocateExposure = (double)objectiveL7Box.Value;
+
+            Microscope.Objectives.List[0].ViewWidth = (double)Obj1Width.Value;
+            Microscope.Objectives.List[1].ViewWidth = (double)Obj2Width.Value;
+            Microscope.Objectives.List[2].ViewWidth = (double)Obj3Width.Value;
+            Microscope.Objectives.List[3].ViewWidth = (double)Obj4Width.Value;
+            Microscope.Objectives.List[4].ViewWidth = (double)Obj5Width.Value;
+            Microscope.Objectives.List[5].ViewWidth = (double)Obj6Width.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[6].ViewWidth = (double)Obj7Width.Value;
+
+            Microscope.Objectives.List[0].ViewHeight = (double)Obj1Height.Value;
+            Microscope.Objectives.List[1].ViewHeight = (double)Obj2Height.Value;
+            Microscope.Objectives.List[2].ViewHeight = (double)Obj3Height.Value;
+            Microscope.Objectives.List[3].ViewHeight = (double)Obj4Height.Value;
+            Microscope.Objectives.List[4].ViewHeight = (double)Obj5Height.Value;
+            Microscope.Objectives.List[5].ViewHeight = (double)Obj6Height.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[6].ViewWidth = (double)Obj7Width.Value;
+
+            Microscope.Objectives.List[0].MoveAmountL = (double)Obj1LMove.Value;
+            Microscope.Objectives.List[1].MoveAmountL = (double)Obj2LMove.Value;
+            Microscope.Objectives.List[2].MoveAmountL = (double)Obj3LMove.Value;
+            Microscope.Objectives.List[3].MoveAmountL = (double)Obj4LMove.Value;
+            Microscope.Objectives.List[4].MoveAmountL = (double)Obj5LMove.Value;
+            Microscope.Objectives.List[5].MoveAmountL = (double)Obj6LMove.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[5].MoveAmountL = (double)Obj6LMove.Value;
+
+            Microscope.Objectives.List[0].MoveAmountR = (double)Obj1RMove.Value;
+            Microscope.Objectives.List[1].MoveAmountR = (double)Obj2RMove.Value;
+            Microscope.Objectives.List[2].MoveAmountR = (double)Obj3RMove.Value;
+            Microscope.Objectives.List[3].MoveAmountR = (double)Obj4RMove.Value;
+            Microscope.Objectives.List[4].MoveAmountR = (double)Obj5RMove.Value;
+            Microscope.Objectives.List[5].MoveAmountR = (double)Obj6RMove.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[5].MoveAmountR = (double)Obj6RMove.Value;
+
+            Microscope.Objectives.List[0].FocusMoveAmount = (double)Obj1Focus.Value;
+            Microscope.Objectives.List[1].FocusMoveAmount = (double)Obj2Focus.Value;
+            Microscope.Objectives.List[2].FocusMoveAmount = (double)Obj3Focus.Value;
+            Microscope.Objectives.List[3].FocusMoveAmount = (double)Obj4Focus.Value;
+            Microscope.Objectives.List[4].FocusMoveAmount = (double)Obj5Focus.Value;
+            Microscope.Objectives.List[5].FocusMoveAmount = (double)Obj6Focus.Value;
+            if (Microscope.Objectives.List.Count == 7)
+                Microscope.Objectives.List[6].FocusMoveAmount = (double)Obj7Focus.Value;
+        }
         private void MicroscopeSetup_FormClosing(object sender, FormClosingEventArgs e)
         {
             string j = JsonConvert.SerializeObject(Microscope.Objectives.List, Formatting.None);
-            System.IO.File.WriteAllText("Config/MicroscopeObjectives.json", j);
+            System.IO.File.WriteAllText(Application.StartupPath + "/Config/MicroscopeObjectives.json", j);
             Properties.Settings.Default.Save();
             e.Cancel = true;
             this.Hide();
+            UpdateObjectives();
         }
 
         private void setImageBut_Click(object sender, EventArgs e)

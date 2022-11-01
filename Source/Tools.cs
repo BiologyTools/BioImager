@@ -199,8 +199,11 @@ namespace Bio
         }
         private void UpdateGUI()
         {
-            color1Box.BackColor = ColorS.ToColor(DrawColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
-            color2Box.BackColor = ColorS.ToColor(EraseColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+            if (ImageView.SelectedImage != null)
+            {
+                color1Box.BackColor = ColorS.ToColor(DrawColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+                color2Box.BackColor = ColorS.ToColor(EraseColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+            }
             widthBox.Value = width;
         }
 

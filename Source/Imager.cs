@@ -165,7 +165,14 @@ namespace Bio
             else
                 AppP = prs[0];
             apph = AppP.MainWindowHandle;
-            AppP.WaitForInputIdle();
+            //We use a try block incase of Win32 Access violation error.
+            try
+            {
+                AppP.WaitForInputIdle();
+            }
+            catch (Exception)
+            {
+            }
             statusTimer.Start();
            
             for (UserIndex i = UserIndex.One; i <= UserIndex.Four; i++)
@@ -259,14 +266,6 @@ namespace Bio
             Settings.Default.Save();
             if(CurrentProfile.FilePath!="Default")
             CurrentProfile.Save(CurrentProfile.FilePath);
-
-            if (AppP.HasExited)
-            {
-                //Old Zen process has exited meaning we need to restart to initialize GUI automation elements.
-                Application.Restart();
-            }
-            else
-            Application.Exit();
         }
         private void deadzoneBox_ValueChanged(object sender, EventArgs e)
         {

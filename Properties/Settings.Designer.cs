@@ -385,7 +385,7 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sample.ome.tif")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Image.ome.tif")]
         public string SimulatedImage {
             get {
                 return ((string)(this["SimulatedImage"]));
@@ -464,6 +464,18 @@ namespace Bio.Properties {
             }
             set {
                 this["Planes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImagingPath {
+            get {
+                return ((string)(this["ImagingPath"]));
+            }
+            set {
+                this["ImagingPath"] = value;
             }
         }
     }

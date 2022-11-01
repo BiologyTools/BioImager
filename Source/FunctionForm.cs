@@ -145,12 +145,14 @@ namespace Bio
             {
                 Function.Functions[func.Name] = func;
             }
-            if (func.MenuPath.EndsWith("/"))
-                func.MenuPath = func.MenuPath.TrimEnd('/');
-            if (func.MenuPath.EndsWith(func.Name))
-                func.MenuPath.Remove(func.MenuPath.IndexOf('/'), func.MenuPath.Length - func.MenuPath.IndexOf('/'));
-            if(func.MenuPath != "")
-                App.AddMenu(func.MenuPath,func);
+            if (func.MenuPath != null || func.MenuPath != "")
+            {
+                if (func.MenuPath.EndsWith("/"))
+                    func.MenuPath = func.MenuPath.TrimEnd('/');
+                if (func.MenuPath.EndsWith(func.Name))
+                    func.MenuPath.Remove(func.MenuPath.IndexOf('/'), func.MenuPath.Length - func.MenuPath.IndexOf('/'));
+                    App.AddMenu(func.MenuPath, func);
+            }
             func.Save();
         }
         private void propBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -21,6 +21,7 @@ namespace Bio
             this.Show();
             objectiveSetup = App.setup;
             objBox.Items.AddRange(Microscope.Objectives.List.ToArray());
+            folderBox.Text = Properties.Settings.Default.ImagingPath;
             timer.Start();
         }
 
@@ -192,6 +193,68 @@ namespace Bio
         private void nameBox_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ImageName = nameBox.Text;
+        }
+
+        private void tilesBut_Click(object sender, EventArgs e)
+        {
+            ImageTiles im = new ImageTiles();
+            if (im.ShowDialog() != DialogResult.OK)
+                return;
+            bool leftright = true;
+            for (int y = 0; y < im.SizeY; y++)
+            {
+                if(y!=0)
+                Microscope.MoveFieldDown();
+                leftright = !leftright;
+                Microscope.TakeImage();
+                for (int x = 0; x < im.SizeX-1; x++)
+                {
+                    if (leftright)
+                        Microscope.MoveFieldRight();
+                    else
+                        Microscope.MoveFieldLeft();
+                    Microscope.TakeImage();
+                }
+            }
+        }
+
+        private void stackTiles_Click(object sender, EventArgs e)
+        {
+            ImageTiles im = new ImageTiles();
+            if (im.ShowDialog() != DialogResult.OK)
+                return;
+            bool leftright = true;
+            for (int y = 0; y < im.SizeY; y++)
+            {
+                if (y != 0)
+                    Microscope.MoveFieldDown();
+                leftright = !leftright;
+                Microscope.TakeImageStack();
+                for (int x = 0; x < im.SizeX - 1; x++)
+                {
+                    if (leftright)
+                        Microscope.MoveFieldRight();
+                    else
+                        Microscope.MoveFieldLeft();
+                    Microscope.TakeImageStack();
+                }
+            }
+        }
+
+        private void setFolderBut_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fs = new FolderBrowserDialog();
+            fs.Description = "Select Imaging Folder";
+            if (fs.ShowDialog() != DialogResult.OK)
+            {
+                fs.Dispose();               
+            }
+            else
+            {
+                fs.Dispose();
+                folderBox.Text = fs.SelectedPath;
+                Microscope.SetFolder(fs.SelectedPath);
+            }
         }
     }
 }

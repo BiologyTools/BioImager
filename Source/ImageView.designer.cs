@@ -93,6 +93,8 @@ namespace Bio
             this.overlayPictureBox = new System.Windows.Forms.PictureBox();
             this.panel = new System.Windows.Forms.Panel();
             this.saveCSVFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.hScrollBar = new System.Windows.Forms.HScrollBar();
+            this.vScrollBar = new System.Windows.Forms.VScrollBar();
             this.timePlayMenuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.zPlayMenuStrip.SuspendLayout();
@@ -693,6 +695,8 @@ namespace Bio
             this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel.Controls.Add(this.hScrollBar);
+            this.panel.Controls.Add(this.vScrollBar);
             this.panel.Controls.Add(this.overlayPictureBox);
             this.panel.Controls.Add(this.pictureBox);
             this.panel.Location = new System.Drawing.Point(0, 25);
@@ -705,6 +709,28 @@ namespace Bio
             this.saveCSVFileDialog.DefaultExt = "csv";
             this.saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
             this.saveCSVFileDialog.Title = "Save ROIs to CSV";
+            // 
+            // hScrollBar
+            // 
+            this.hScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.hScrollBar.Location = new System.Drawing.Point(-1, 251);
+            this.hScrollBar.Name = "hScrollBar";
+            this.hScrollBar.Size = new System.Drawing.Size(425, 17);
+            this.hScrollBar.SmallChange = 10;
+            this.hScrollBar.TabIndex = 24;
+            this.hScrollBar.Visible = false;
+            // 
+            // vScrollBar
+            // 
+            this.vScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vScrollBar.Location = new System.Drawing.Point(408, 0);
+            this.vScrollBar.Name = "vScrollBar";
+            this.vScrollBar.Size = new System.Drawing.Size(17, 250);
+            this.vScrollBar.SmallChange = 10;
+            this.vScrollBar.TabIndex = 23;
+            this.vScrollBar.Visible = false;
             // 
             // ImageView
             // 
@@ -805,5 +831,7 @@ namespace Bio
         private System.Windows.Forms.ToolStripMenuItem goToStageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveStageToImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem;
+        private System.Windows.Forms.HScrollBar hScrollBar;
+        private System.Windows.Forms.VScrollBar vScrollBar;
     }
 }

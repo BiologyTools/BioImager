@@ -560,11 +560,20 @@ namespace Bio
         public static SDK sdk;
         public static int sessionID = -1;
         public static string userRx = "";
+
+        public static Objectives.Objective Objective
+        {
+            get
+            {
+                return Objectives.GetObjective();
+            }
+        }
         public static void Initialize()
         {
             if (initialized)
                 return;
             int err;
+            folder = Properties.Settings.Default.ImagingPath;
             if (Properties.Settings.Default.AppPath == "")
             {
                 OpenFileDialog fl = new OpenFileDialog();
@@ -871,10 +880,34 @@ namespace Bio
         private static string folder = "";
         public static string GetFolder()
         {
-            folder = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder").ToString();
-            return folder;
+            string s = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder").ToString();
+            if (s == null && folder == "")
+            {
+                FolderBrowserDialog fs = new FolderBrowserDialog();
+                fs.Description = "Select Imaging Folder";
+                if (fs.ShowDialog() != DialogResult.OK)
+                {
+                    fs.Dispose();
+                    return null;
+                }
+                else
+                {
+                    fs.Dispose();
+                    return fs.SelectedPath;
+                }
+            }
+            else
+            {
+                folder = s;
+                return s;
+            }
         }
-
+        public static void SetFolder(string fol)
+        {
+            folder = fol;
+            Properties.Settings.Default.ImagingPath = folder;
+            Properties.Settings.Default.Save();
+        }
         public static void TakeImage()
         {
             if (folder == "")
@@ -883,8 +916,8 @@ namespace Bio
             {
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
-                b.ID = Properties.Settings.Default.ImageName + ".ome.tif";
                 Images.AddImage(b);
+                b.ID = folder + "/" + Images.GetImageName(Properties.Settings.Default.ImageName) + ".ome.tif";
                 App.viewer.AddImage(b);
                 BioImage.SaveOME(b.ID, b.ID);
             }

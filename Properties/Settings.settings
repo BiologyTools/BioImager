@@ -93,7 +93,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SimulatedImage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Sample.ome.tif</Value>
+      <Value Profile="(Default)">Image.ome.tif</Value>
     </Setting>
     <Setting Name="SimulateCamera" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -112,6 +112,9 @@
     </Setting>
     <Setting Name="Planes" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ImagingPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

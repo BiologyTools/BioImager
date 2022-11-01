@@ -63,9 +63,9 @@ namespace Bio
             stage = new StageTool();
             lib = new Library();
             imager = new Imager();
+            console = new BioConsole();
             imager.Show();
-            ImageJ.Initialize(Properties.Settings.Default.ImageJPath);
-            //channelsTool = new ChannelsTool();
+            //ImageJ.Initialize(Properties.Settings.Default.ImageJPath);
         }
         public static void Hide()
         {

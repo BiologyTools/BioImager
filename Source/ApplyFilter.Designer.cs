@@ -37,7 +37,6 @@
             this.okBut = new System.Windows.Forms.Button();
             this.cancelBut = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.hBox = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.wBox = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -54,12 +53,13 @@
             this.setColorBut = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.fillPanel = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.hBox)).BeginInit();
+            this.hBox = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.wBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBox)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hBox)).BeginInit();
             this.SuspendLayout();
             // 
             // stackABox
@@ -130,35 +130,6 @@
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 25;
             this.label3.Text = "Resize";
-            // 
-            // hBox
-            // 
-            this.hBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.hBox.ForeColor = System.Drawing.Color.White;
-            this.hBox.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.hBox.Location = new System.Drawing.Point(136, 89);
-            this.hBox.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.hBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.hBox.Name = "hBox";
-            this.hBox.Size = new System.Drawing.Size(77, 20);
-            this.hBox.TabIndex = 29;
-            this.hBox.Value = new decimal(new int[] {
-            400,
-            0,
-            0,
-            0});
             // 
             // label4
             // 
@@ -353,6 +324,35 @@
             this.fillPanel.Size = new System.Drawing.Size(75, 23);
             this.fillPanel.TabIndex = 41;
             // 
+            // hBox
+            // 
+            this.hBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.hBox.ForeColor = System.Drawing.Color.White;
+            this.hBox.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.hBox.Location = new System.Drawing.Point(136, 89);
+            this.hBox.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.hBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.hBox.Name = "hBox";
+            this.hBox.Size = new System.Drawing.Size(77, 20);
+            this.hBox.TabIndex = 29;
+            this.hBox.Value = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            // 
             // ApplyFilter
             // 
             this.AcceptButton = this.okBut;
@@ -388,12 +388,12 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Apply Filter";
             this.Activated += new System.EventHandler(this.StackTools_Activated);
-            ((System.ComponentModel.ISupportInitialize)(this.hBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBox)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.hBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,7 +407,6 @@
         private System.Windows.Forms.Button okBut;
         private System.Windows.Forms.Button cancelBut;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown hBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown wBox;
         private System.Windows.Forms.Label label5;
@@ -424,5 +423,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.Panel fillPanel;
+        private System.Windows.Forms.NumericUpDown hBox;
     }
 }

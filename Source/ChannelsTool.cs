@@ -112,6 +112,9 @@ namespace Bio
                 hist.UpdateChannel(SelectedChannel);
                 hist.Invalidate();
             }
+            fluorBox.Text = SelectedChannel.Fluor;
+            emisBox.Value = (decimal)SelectedChannel.Emission;
+            excBox.Value = (decimal)SelectedChannel.Excitation;
             App.viewer.UpdateView();
         }
 
@@ -366,6 +369,21 @@ namespace Bio
                 hist.Invalidate();
             }
             App.viewer.UpdateView();
+        }
+
+        private void excBox_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedChannel.Excitation = (int)excBox.Value;
+        }
+
+        private void emisBox_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedChannel.Emission = (int)emisBox.Value;
+        }
+
+        private void fluorBox_TextChanged(object sender, EventArgs e)
+        {
+            SelectedChannel.Fluor = fluorBox.Text;
         }
     }
 }

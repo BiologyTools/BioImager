@@ -65,6 +65,12 @@ namespace Bio
             this.resetBut = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.sampleBox = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.emisBox = new System.Windows.Forms.NumericUpDown();
+            this.excBox = new System.Windows.Forms.NumericUpDown();
+            this.fluorBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.minBox)).BeginInit();
             this.minContextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxBox)).BeginInit();
@@ -73,6 +79,8 @@ namespace Bio
             ((System.ComponentModel.ISupportInitialize)(this.minGraphBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.binBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sampleBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emisBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.excBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -80,7 +88,7 @@ namespace Bio
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(13, 52);
+            this.label1.Location = new System.Drawing.Point(8, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 13);
             this.label1.TabIndex = 0;
@@ -90,7 +98,7 @@ namespace Bio
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(14, 76);
+            this.label2.Location = new System.Drawing.Point(8, 76);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(24, 13);
             this.label2.TabIndex = 1;
@@ -106,7 +114,7 @@ namespace Bio
             0,
             0,
             0});
-            this.minBox.Location = new System.Drawing.Point(42, 74);
+            this.minBox.Location = new System.Drawing.Point(54, 74);
             this.minBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -244,9 +252,9 @@ namespace Bio
             this.channelsBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.channelsBox.ForeColor = System.Drawing.Color.White;
             this.channelsBox.FormattingEnabled = true;
-            this.channelsBox.Location = new System.Drawing.Point(60, 4);
+            this.channelsBox.Location = new System.Drawing.Point(54, 4);
             this.channelsBox.Name = "channelsBox";
-            this.channelsBox.Size = new System.Drawing.Size(195, 21);
+            this.channelsBox.Size = new System.Drawing.Size(201, 21);
             this.channelsBox.TabIndex = 6;
             this.channelsBox.SelectedIndexChanged += new System.EventHandler(this.channelsBox_SelectedIndexChanged);
             // 
@@ -284,7 +292,7 @@ namespace Bio
             // 
             this.setMinAllBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.setMinAllBut.ForeColor = System.Drawing.Color.White;
-            this.setMinAllBut.Location = new System.Drawing.Point(42, 100);
+            this.setMinAllBut.Location = new System.Drawing.Point(54, 100);
             this.setMinAllBut.Name = "setMinAllBut";
             this.setMinAllBut.Size = new System.Drawing.Size(77, 23);
             this.setMinAllBut.TabIndex = 9;
@@ -304,7 +312,7 @@ namespace Bio
             "4096",
             "16383",
             "65535"});
-            this.maxUintBox2.Location = new System.Drawing.Point(175, 313);
+            this.maxUintBox2.Location = new System.Drawing.Point(175, 359);
             this.maxUintBox2.Name = "maxUintBox2";
             this.maxUintBox2.Size = new System.Drawing.Size(77, 21);
             this.maxUintBox2.TabIndex = 16;
@@ -321,7 +329,7 @@ namespace Bio
             0,
             0,
             0});
-            this.maxGraphBox.Location = new System.Drawing.Point(175, 338);
+            this.maxGraphBox.Location = new System.Drawing.Point(175, 384);
             this.maxGraphBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -347,7 +355,7 @@ namespace Bio
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(142, 340);
+            this.label5.Location = new System.Drawing.Point(142, 386);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(27, 13);
             this.label5.TabIndex = 14;
@@ -363,7 +371,7 @@ namespace Bio
             0,
             0,
             0});
-            this.minGraphBox.Location = new System.Drawing.Point(39, 338);
+            this.minGraphBox.Location = new System.Drawing.Point(39, 384);
             this.minGraphBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -379,7 +387,7 @@ namespace Bio
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(10, 340);
+            this.label6.Location = new System.Drawing.Point(10, 386);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(24, 13);
             this.label6.TabIndex = 12;
@@ -391,7 +399,7 @@ namespace Bio
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(8, 292);
+            this.label7.Location = new System.Drawing.Point(8, 338);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(118, 13);
             this.label7.TabIndex = 11;
@@ -402,7 +410,7 @@ namespace Bio
             this.binBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.binBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.binBox.ForeColor = System.Drawing.Color.White;
-            this.binBox.Location = new System.Drawing.Point(39, 314);
+            this.binBox.Location = new System.Drawing.Point(39, 360);
             this.binBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -428,7 +436,7 @@ namespace Bio
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(10, 316);
+            this.label8.Location = new System.Drawing.Point(10, 362);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(22, 13);
             this.label8.TabIndex = 17;
@@ -440,7 +448,7 @@ namespace Bio
             this.stackHistoBox.AutoSize = true;
             this.stackHistoBox.Checked = true;
             this.stackHistoBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.stackHistoBox.Location = new System.Drawing.Point(132, 291);
+            this.stackHistoBox.Location = new System.Drawing.Point(132, 337);
             this.stackHistoBox.Name = "stackHistoBox";
             this.stackHistoBox.Size = new System.Drawing.Size(134, 17);
             this.stackHistoBox.TabIndex = 19;
@@ -454,9 +462,9 @@ namespace Bio
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.statsPanel.Location = new System.Drawing.Point(12, 132);
+            this.statsPanel.Location = new System.Drawing.Point(13, 181);
             this.statsPanel.Name = "statsPanel";
-            this.statsPanel.Size = new System.Drawing.Size(243, 152);
+            this.statsPanel.Size = new System.Drawing.Size(243, 150);
             this.statsPanel.TabIndex = 10;
             // 
             // applyBut
@@ -464,7 +472,7 @@ namespace Bio
             this.applyBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.applyBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.applyBut.ForeColor = System.Drawing.Color.White;
-            this.applyBut.Location = new System.Drawing.Point(92, 364);
+            this.applyBut.Location = new System.Drawing.Point(92, 410);
             this.applyBut.Name = "applyBut";
             this.applyBut.Size = new System.Drawing.Size(77, 23);
             this.applyBut.TabIndex = 20;
@@ -477,7 +485,7 @@ namespace Bio
             this.resetBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.resetBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.resetBut.ForeColor = System.Drawing.Color.White;
-            this.resetBut.Location = new System.Drawing.Point(175, 364);
+            this.resetBut.Location = new System.Drawing.Point(175, 410);
             this.resetBut.Name = "resetBut";
             this.resetBut.Size = new System.Drawing.Size(77, 23);
             this.resetBut.TabIndex = 21;
@@ -500,23 +508,111 @@ namespace Bio
             this.sampleBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.sampleBox.ContextMenuStrip = this.maxContextMenuStrip;
             this.sampleBox.ForeColor = System.Drawing.Color.White;
-            this.sampleBox.Location = new System.Drawing.Point(60, 28);
+            this.sampleBox.Location = new System.Drawing.Point(54, 28);
             this.sampleBox.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
             this.sampleBox.Name = "sampleBox";
-            this.sampleBox.Size = new System.Drawing.Size(195, 20);
+            this.sampleBox.Size = new System.Drawing.Size(201, 20);
             this.sampleBox.TabIndex = 23;
             this.sampleBox.ValueChanged += new System.EventHandler(this.sampleBox_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(6, 131);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Fluor";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(5, 157);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(48, 13);
+            this.label11.TabIndex = 25;
+            this.label11.Text = "Emission";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(130, 157);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(53, 13);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Excitation";
+            // 
+            // emisBox
+            // 
+            this.emisBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.emisBox.ContextMenuStrip = this.minContextMenuStrip;
+            this.emisBox.ForeColor = System.Drawing.Color.White;
+            this.emisBox.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.emisBox.Location = new System.Drawing.Point(54, 155);
+            this.emisBox.Maximum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.emisBox.Name = "emisBox";
+            this.emisBox.Size = new System.Drawing.Size(66, 20);
+            this.emisBox.TabIndex = 27;
+            this.emisBox.ValueChanged += new System.EventHandler(this.emisBox_ValueChanged);
+            // 
+            // excBox
+            // 
+            this.excBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.excBox.ContextMenuStrip = this.minContextMenuStrip;
+            this.excBox.ForeColor = System.Drawing.Color.White;
+            this.excBox.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.excBox.Location = new System.Drawing.Point(189, 155);
+            this.excBox.Maximum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.excBox.Name = "excBox";
+            this.excBox.Size = new System.Drawing.Size(66, 20);
+            this.excBox.TabIndex = 28;
+            this.excBox.ValueChanged += new System.EventHandler(this.excBox_ValueChanged);
+            // 
+            // fluorBox
+            // 
+            this.fluorBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.fluorBox.ForeColor = System.Drawing.Color.White;
+            this.fluorBox.Location = new System.Drawing.Point(54, 129);
+            this.fluorBox.Name = "fluorBox";
+            this.fluorBox.Size = new System.Drawing.Size(201, 20);
+            this.fluorBox.TabIndex = 29;
+            this.fluorBox.TextChanged += new System.EventHandler(this.fluorBox_TextChanged);
             // 
             // ChannelsTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(263, 396);
+            this.ClientSize = new System.Drawing.Size(263, 442);
+            this.Controls.Add(this.fluorBox);
+            this.Controls.Add(this.excBox);
+            this.Controls.Add(this.emisBox);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.sampleBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.resetBut);
@@ -561,6 +657,8 @@ namespace Bio
             ((System.ComponentModel.ISupportInitialize)(this.minGraphBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.binBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sampleBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emisBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.excBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -602,5 +700,11 @@ namespace Bio
         private System.Windows.Forms.Button resetBut;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown sampleBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.NumericUpDown emisBox;
+        private System.Windows.Forms.NumericUpDown excBox;
+        private System.Windows.Forms.TextBox fluorBox;
     }
 }

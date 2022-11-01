@@ -1098,6 +1098,11 @@ namespace Bio
             this.Obj6Height.Name = "Obj6Height";
             this.Obj6Height.Size = new System.Drawing.Size(87, 20);
             this.Obj6Height.TabIndex = 116;
+            this.Obj6Height.Value = new decimal(new int[] {
+            1002,
+            0,
+            0,
+            65536});
             this.Obj6Height.ValueChanged += new System.EventHandler(this.Obj6Height_ValueChanged);
             // 
             // label36
@@ -1124,6 +1129,11 @@ namespace Bio
             this.Obj5Height.Name = "Obj5Height";
             this.Obj5Height.Size = new System.Drawing.Size(87, 20);
             this.Obj5Height.TabIndex = 114;
+            this.Obj5Height.Value = new decimal(new int[] {
+            2505,
+            0,
+            0,
+            65536});
             this.Obj5Height.ValueChanged += new System.EventHandler(this.Obj5Height_ValueChanged);
             // 
             // label37
@@ -1150,6 +1160,11 @@ namespace Bio
             this.Obj4Height.Name = "Obj4Height";
             this.Obj4Height.Size = new System.Drawing.Size(87, 20);
             this.Obj4Height.TabIndex = 112;
+            this.Obj4Height.Value = new decimal(new int[] {
+            2505,
+            0,
+            0,
+            65536});
             this.Obj4Height.ValueChanged += new System.EventHandler(this.Obj4Height_ValueChanged);
             // 
             // label38
@@ -1176,6 +1191,11 @@ namespace Bio
             this.Obj3Height.Name = "Obj3Height";
             this.Obj3Height.Size = new System.Drawing.Size(87, 20);
             this.Obj3Height.TabIndex = 110;
+            this.Obj3Height.Value = new decimal(new int[] {
+            501,
+            0,
+            0,
+            0});
             this.Obj3Height.ValueChanged += new System.EventHandler(this.Obj3Height_ValueChanged);
             // 
             // label39
@@ -1202,6 +1222,11 @@ namespace Bio
             this.Obj2Height.Name = "Obj2Height";
             this.Obj2Height.Size = new System.Drawing.Size(87, 20);
             this.Obj2Height.TabIndex = 108;
+            this.Obj2Height.Value = new decimal(new int[] {
+            1002,
+            0,
+            0,
+            0});
             this.Obj2Height.ValueChanged += new System.EventHandler(this.Obj2Height_ValueChanged);
             // 
             // label40
@@ -1228,6 +1253,11 @@ namespace Bio
             this.Obj1Height.Name = "Obj1Height";
             this.Obj1Height.Size = new System.Drawing.Size(87, 20);
             this.Obj1Height.TabIndex = 106;
+            this.Obj1Height.Value = new decimal(new int[] {
+            2004,
+            0,
+            0,
+            0});
             this.Obj1Height.ValueChanged += new System.EventHandler(this.Obj1Height_ValueChanged);
             // 
             // label41
@@ -1254,6 +1284,11 @@ namespace Bio
             this.Obj6Width.Name = "Obj6Width";
             this.Obj6Width.Size = new System.Drawing.Size(87, 20);
             this.Obj6Width.TabIndex = 104;
+            this.Obj6Width.Value = new decimal(new int[] {
+            1249,
+            0,
+            0,
+            65536});
             this.Obj6Width.ValueChanged += new System.EventHandler(this.Obj6Width_ValueChanged);
             // 
             // label42
@@ -1280,6 +1315,11 @@ namespace Bio
             this.Obj5Width.Name = "Obj5Width";
             this.Obj5Width.Size = new System.Drawing.Size(87, 20);
             this.Obj5Width.TabIndex = 102;
+            this.Obj5Width.Value = new decimal(new int[] {
+            1982539683,
+            0,
+            0,
+            458752});
             this.Obj5Width.ValueChanged += new System.EventHandler(this.Obj5Width_ValueChanged);
             // 
             // label43
@@ -1306,6 +1346,11 @@ namespace Bio
             this.Obj4Width.Name = "Obj4Width";
             this.Obj4Width.Size = new System.Drawing.Size(87, 20);
             this.Obj4Width.TabIndex = 100;
+            this.Obj4Width.Value = new decimal(new int[] {
+            31225,
+            0,
+            0,
+            131072});
             this.Obj4Width.ValueChanged += new System.EventHandler(this.Obj4Width_ValueChanged);
             // 
             // label44
@@ -1332,6 +1377,11 @@ namespace Bio
             this.Obj3Width.Name = "Obj3Width";
             this.Obj3Width.Size = new System.Drawing.Size(87, 20);
             this.Obj3Width.TabIndex = 98;
+            this.Obj3Width.Value = new decimal(new int[] {
+            6245,
+            0,
+            0,
+            65536});
             this.Obj3Width.ValueChanged += new System.EventHandler(this.Obj3Width_ValueChanged);
             // 
             // label45
@@ -1358,6 +1408,11 @@ namespace Bio
             this.Obj2Width.Name = "Obj2Width";
             this.Obj2Width.Size = new System.Drawing.Size(87, 20);
             this.Obj2Width.TabIndex = 96;
+            this.Obj2Width.Value = new decimal(new int[] {
+            1249,
+            0,
+            0,
+            0});
             this.Obj2Width.ValueChanged += new System.EventHandler(this.Obj2Width_ValueChanged);
             // 
             // label46
@@ -1384,6 +1439,11 @@ namespace Bio
             this.Obj1Width.Name = "Obj1Width";
             this.Obj1Width.Size = new System.Drawing.Size(87, 20);
             this.Obj1Width.TabIndex = 94;
+            this.Obj1Width.Value = new decimal(new int[] {
+            2498,
+            0,
+            0,
+            0});
             this.Obj1Width.ValueChanged += new System.EventHandler(this.Obj1Width_ValueChanged);
             // 
             // label47
@@ -1928,6 +1988,11 @@ namespace Bio
             this.Obj7Height.Name = "Obj7Height";
             this.Obj7Height.Size = new System.Drawing.Size(87, 20);
             this.Obj7Height.TabIndex = 183;
+            this.Obj7Height.Value = new decimal(new int[] {
+            1002,
+            0,
+            0,
+            65536});
             this.Obj7Height.ValueChanged += new System.EventHandler(this.Obj7Height_ValueChanged);
             // 
             // label64
@@ -1954,6 +2019,11 @@ namespace Bio
             this.Obj7Width.Name = "Obj7Width";
             this.Obj7Width.Size = new System.Drawing.Size(87, 20);
             this.Obj7Width.TabIndex = 181;
+            this.Obj7Width.Value = new decimal(new int[] {
+            1249,
+            0,
+            0,
+            65536});
             this.Obj7Width.ValueChanged += new System.EventHandler(this.Obj7Width_ValueChanged);
             // 
             // label68

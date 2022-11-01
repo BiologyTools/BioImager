@@ -311,6 +311,12 @@
     <Compile Include="Source\ImagesView.Designer.cs">
       <DependentUpon>ImagesView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\ImageTiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\ImageTiles.Designer.cs">
+      <DependentUpon>ImageTiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\ImageView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -330,11 +336,23 @@
     <Compile Include="Source\MicroscopeSetup.Designer.cs">
       <DependentUpon>MicroscopeSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\OpenInTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\OpenInTab.Designer.cs">
+      <DependentUpon>OpenInTab.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Recordings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Source\Recordings.designer.cs">
       <DependentUpon>Recordings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Resolutions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Resolutions.Designer.cs">
+      <DependentUpon>Resolutions.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\SDK.cs" />
     <Compile Include="Source\SelectRecording.cs">
@@ -502,6 +520,9 @@
     <EmbeddedResource Include="Source\ImagesView.resx">
       <DependentUpon>ImagesView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\ImageTiles.resx">
+      <DependentUpon>ImageTiles.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\ImageView.resx">
       <DependentUpon>ImageView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -512,8 +533,14 @@
     <EmbeddedResource Include="Source\MicroscopeSetup.resx">
       <DependentUpon>MicroscopeSetup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\OpenInTab.resx">
+      <DependentUpon>OpenInTab.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Recordings.resx">
       <DependentUpon>Recordings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Resolutions.resx">
+      <DependentUpon>Resolutions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\SelectRecording.resx">
       <DependentUpon>SelectRecording.cs</DependentUpon>
