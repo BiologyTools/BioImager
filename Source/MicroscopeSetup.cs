@@ -36,9 +36,15 @@ namespace Bio
         }
         private void Objectives_Load()
         {
-            /*
-            if (!System.IO.File.Exists("Config/MicroscopeObjectives.json"))
+            string st = Application.StartupPath + "/Config/MicroscopeObjectives.json";
+            if (File.Exists(st))
             {
+                List<Objectives.Objective> list = JsonConvert.DeserializeObject<List<Objectives.Objective>>(File.ReadAllText(st));
+                if (list.Count == 0)
+                {
+                    //We initialize with default values.
+                    UpdateObjectives();
+                }
                 obj1Name.Text = Microscope.Objectives.List[0].Name;
                 obj2Name.Text = Microscope.Objectives.List[1].Name;
                 obj3Name.Text = Microscope.Objectives.List[2].Name;
@@ -47,87 +53,147 @@ namespace Bio
                 obj6Name.Text = Microscope.Objectives.List[5].Name;
                 if (Microscope.Objectives.List.Count == 7)
                     obj7Name.Text = Microscope.Objectives.List[6].Name;
-                return;
+
+                objectiveA1Box.Value = (decimal)list[0].AcquisitionExposure;
+                objectiveA2Box.Value = (decimal)list[1].AcquisitionExposure;
+                objectiveA3Box.Value = (decimal)list[2].AcquisitionExposure;
+                objectiveA4Box.Value = (decimal)list[3].AcquisitionExposure;
+                objectiveA5Box.Value = (decimal)list[4].AcquisitionExposure;
+                objectiveA6Box.Value = (decimal)list[5].AcquisitionExposure;
+                if (Microscope.Objectives.List.Count == 7)
+                    objectiveA7Box.Value = (decimal)list[6].AcquisitionExposure;
+
+                objectiveL1Box.Value = (decimal)list[0].LocateExposure;
+                objectiveL2Box.Value = (decimal)list[1].LocateExposure;
+                objectiveL3Box.Value = (decimal)list[2].LocateExposure;
+                objectiveL4Box.Value = (decimal)list[3].LocateExposure;
+                objectiveL5Box.Value = (decimal)list[4].LocateExposure;
+                objectiveL6Box.Value = (decimal)list[5].LocateExposure;
+                if (Microscope.Objectives.List.Count == 7)
+                    objectiveL7Box.Value = (decimal)list[6].LocateExposure;
+
+                Obj1LMove.Value = (decimal)list[0].MoveAmountL;
+                Obj2LMove.Value = (decimal)list[1].MoveAmountL;
+                Obj3LMove.Value = (decimal)list[2].MoveAmountL;
+                Obj4LMove.Value = (decimal)list[3].MoveAmountL;
+                Obj5LMove.Value = (decimal)list[4].MoveAmountL;
+                Obj6LMove.Value = (decimal)list[5].MoveAmountL;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7LMove.Value = (decimal)list[6].MoveAmountL;
+
+                Obj1RMove.Value = (decimal)list[0].MoveAmountR;
+                Obj2RMove.Value = (decimal)list[1].MoveAmountR;
+                Obj3RMove.Value = (decimal)list[2].MoveAmountR;
+                Obj4RMove.Value = (decimal)list[3].MoveAmountR;
+                Obj5RMove.Value = (decimal)list[4].MoveAmountR;
+                Obj6RMove.Value = (decimal)list[5].MoveAmountR;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7RMove.Value = (decimal)list[6].MoveAmountR;
+
+                Obj1Focus.Value = (decimal)list[0].FocusMoveAmount;
+                Obj2Focus.Value = (decimal)list[1].FocusMoveAmount;
+                Obj3Focus.Value = (decimal)list[2].FocusMoveAmount;
+                Obj4Focus.Value = (decimal)list[3].FocusMoveAmount;
+                Obj5Focus.Value = (decimal)list[4].FocusMoveAmount;
+                Obj6Focus.Value = (decimal)list[5].FocusMoveAmount;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Focus.Value = (decimal)list[6].FocusMoveAmount;
+
+
+                Obj1Width.Value = (decimal)list[0].ViewWidth;
+                Obj2Width.Value = (decimal)list[1].ViewWidth;
+                Obj3Width.Value = (decimal)list[2].ViewWidth;
+                Obj4Width.Value = (decimal)list[3].ViewWidth;
+                Obj5Width.Value = (decimal)list[4].ViewWidth;
+                Obj6Width.Value = (decimal)list[5].ViewWidth;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Width.Value = (decimal)list[6].ViewWidth;
+
+                Obj1Height.Value = (decimal)list[0].ViewHeight;
+                Obj2Height.Value = (decimal)list[1].ViewHeight;
+                Obj3Height.Value = (decimal)list[2].ViewHeight;
+                Obj4Height.Value = (decimal)list[3].ViewHeight;
+                Obj5Height.Value = (decimal)list[4].ViewHeight;
+                Obj6Height.Value = (decimal)list[5].ViewHeight;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Height.Value = (decimal)list[6].ViewHeight;
             }
-            */
-            List<Objectives.Objective> list = JsonConvert.DeserializeObject<List<Objectives.Objective>>(File.ReadAllText("Config/MicroscopeObjectives.json"));
-            if (list.Count == 0)
+            else
             {
-                //We initialize with default values.
-                UpdateObjectives();
+                List<Objectives.Objective> list = Microscope.Objectives.List;
+                obj1Name.Text = Microscope.Objectives.List[0].Name;
+                obj2Name.Text = Microscope.Objectives.List[1].Name;
+                obj3Name.Text = Microscope.Objectives.List[2].Name;
+                obj4Name.Text = Microscope.Objectives.List[3].Name;
+                obj5Name.Text = Microscope.Objectives.List[4].Name;
+                obj6Name.Text = Microscope.Objectives.List[5].Name;
+                if (Microscope.Objectives.List.Count == 7)
+                    obj7Name.Text = Microscope.Objectives.List[6].Name;
+
+                objectiveA1Box.Value = (decimal)list[0].AcquisitionExposure;
+                objectiveA2Box.Value = (decimal)list[1].AcquisitionExposure;
+                objectiveA3Box.Value = (decimal)list[2].AcquisitionExposure;
+                objectiveA4Box.Value = (decimal)list[3].AcquisitionExposure;
+                objectiveA5Box.Value = (decimal)list[4].AcquisitionExposure;
+                objectiveA6Box.Value = (decimal)list[5].AcquisitionExposure;
+                if (Microscope.Objectives.List.Count == 7)
+                    objectiveA7Box.Value = (decimal)list[6].AcquisitionExposure;
+
+                objectiveL1Box.Value = (decimal)list[0].LocateExposure;
+                objectiveL2Box.Value = (decimal)list[1].LocateExposure;
+                objectiveL3Box.Value = (decimal)list[2].LocateExposure;
+                objectiveL4Box.Value = (decimal)list[3].LocateExposure;
+                objectiveL5Box.Value = (decimal)list[4].LocateExposure;
+                objectiveL6Box.Value = (decimal)list[5].LocateExposure;
+                if (Microscope.Objectives.List.Count == 7)
+                    objectiveL7Box.Value = (decimal)list[6].LocateExposure;
+
+                Obj1LMove.Value = (decimal)list[0].MoveAmountL;
+                Obj2LMove.Value = (decimal)list[1].MoveAmountL;
+                Obj3LMove.Value = (decimal)list[2].MoveAmountL;
+                Obj4LMove.Value = (decimal)list[3].MoveAmountL;
+                Obj5LMove.Value = (decimal)list[4].MoveAmountL;
+                Obj6LMove.Value = (decimal)list[5].MoveAmountL;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7LMove.Value = (decimal)list[6].MoveAmountL;
+
+                Obj1RMove.Value = (decimal)list[0].MoveAmountR;
+                Obj2RMove.Value = (decimal)list[1].MoveAmountR;
+                Obj3RMove.Value = (decimal)list[2].MoveAmountR;
+                Obj4RMove.Value = (decimal)list[3].MoveAmountR;
+                Obj5RMove.Value = (decimal)list[4].MoveAmountR;
+                Obj6RMove.Value = (decimal)list[5].MoveAmountR;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7RMove.Value = (decimal)list[6].MoveAmountR;
+
+                Obj1Focus.Value = (decimal)list[0].FocusMoveAmount;
+                Obj2Focus.Value = (decimal)list[1].FocusMoveAmount;
+                Obj3Focus.Value = (decimal)list[2].FocusMoveAmount;
+                Obj4Focus.Value = (decimal)list[3].FocusMoveAmount;
+                Obj5Focus.Value = (decimal)list[4].FocusMoveAmount;
+                Obj6Focus.Value = (decimal)list[5].FocusMoveAmount;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Focus.Value = (decimal)list[6].FocusMoveAmount;
+
+
+                Obj1Width.Value = (decimal)list[0].ViewWidth;
+                Obj2Width.Value = (decimal)list[1].ViewWidth;
+                Obj3Width.Value = (decimal)list[2].ViewWidth;
+                Obj4Width.Value = (decimal)list[3].ViewWidth;
+                Obj5Width.Value = (decimal)list[4].ViewWidth;
+                Obj6Width.Value = (decimal)list[5].ViewWidth;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Width.Value = (decimal)list[6].ViewWidth;
+
+                Obj1Height.Value = (decimal)list[0].ViewHeight;
+                Obj2Height.Value = (decimal)list[1].ViewHeight;
+                Obj3Height.Value = (decimal)list[2].ViewHeight;
+                Obj4Height.Value = (decimal)list[3].ViewHeight;
+                Obj5Height.Value = (decimal)list[4].ViewHeight;
+                Obj6Height.Value = (decimal)list[5].ViewHeight;
+                if (Microscope.Objectives.List.Count == 7)
+                    Obj7Height.Value = (decimal)list[6].ViewHeight;
             }
-            obj1Name.Text = Microscope.Objectives.List[0].Name;
-            obj2Name.Text = Microscope.Objectives.List[1].Name;
-            obj3Name.Text = Microscope.Objectives.List[2].Name;
-            obj4Name.Text = Microscope.Objectives.List[3].Name;
-            obj5Name.Text = Microscope.Objectives.List[4].Name;
-            obj6Name.Text = Microscope.Objectives.List[5].Name;
-            if(Microscope.Objectives.List.Count == 7)
-            obj7Name.Text = Microscope.Objectives.List[6].Name;
-
-            objectiveA1Box.Value = (decimal)list[0].AcquisitionExposure;
-            objectiveA2Box.Value = (decimal)list[1].AcquisitionExposure;
-            objectiveA3Box.Value = (decimal)list[2].AcquisitionExposure;
-            objectiveA4Box.Value = (decimal)list[3].AcquisitionExposure;
-            objectiveA5Box.Value = (decimal)list[4].AcquisitionExposure;
-            objectiveA6Box.Value = (decimal)list[5].AcquisitionExposure;
-            if (Microscope.Objectives.List.Count == 7)
-                objectiveA7Box.Value = (decimal)list[6].AcquisitionExposure;
-
-            objectiveL1Box.Value = (decimal)list[0].LocateExposure;
-            objectiveL2Box.Value = (decimal)list[1].LocateExposure;
-            objectiveL3Box.Value = (decimal)list[2].LocateExposure;
-            objectiveL4Box.Value = (decimal)list[3].LocateExposure;
-            objectiveL5Box.Value = (decimal)list[4].LocateExposure;
-            objectiveL6Box.Value = (decimal)list[5].LocateExposure;
-            if (Microscope.Objectives.List.Count == 7)
-                objectiveL7Box.Value = (decimal)list[6].LocateExposure;
-
-            Obj1LMove.Value = (decimal)list[0].MoveAmountL;
-            Obj2LMove.Value = (decimal)list[1].MoveAmountL;
-            Obj3LMove.Value = (decimal)list[2].MoveAmountL;
-            Obj4LMove.Value = (decimal)list[3].MoveAmountL;
-            Obj5LMove.Value = (decimal)list[4].MoveAmountL;
-            Obj6LMove.Value = (decimal)list[5].MoveAmountL;
-            if (Microscope.Objectives.List.Count == 7)
-                Obj7LMove.Value = (decimal)list[6].MoveAmountL;
-
-            Obj1RMove.Value = (decimal)list[0].MoveAmountR;
-            Obj2RMove.Value = (decimal)list[1].MoveAmountR;
-            Obj3RMove.Value = (decimal)list[2].MoveAmountR;
-            Obj4RMove.Value = (decimal)list[3].MoveAmountR;
-            Obj5RMove.Value = (decimal)list[4].MoveAmountR;
-            Obj6RMove.Value = (decimal)list[5].MoveAmountR;
-            if (Microscope.Objectives.List.Count == 7)
-                Obj7RMove.Value = (decimal)list[6].MoveAmountR;
-
-            Obj1Focus.Value = (decimal)list[0].FocusMoveAmount;
-            Obj2Focus.Value = (decimal)list[1].FocusMoveAmount;
-            Obj3Focus.Value = (decimal)list[2].FocusMoveAmount;
-            Obj4Focus.Value = (decimal)list[3].FocusMoveAmount;
-            Obj5Focus.Value = (decimal)list[4].FocusMoveAmount;
-            Obj6Focus.Value = (decimal)list[5].FocusMoveAmount;
-            if (Microscope.Objectives.List.Count == 7)
-                Obj7Focus.Value = (decimal)list[6].FocusMoveAmount;
-            
-
-            Obj1Width.Value = (decimal)list[0].ViewWidth;
-            Obj2Width.Value = (decimal)list[1].ViewWidth;
-            Obj3Width.Value = (decimal)list[2].ViewWidth;
-            Obj4Width.Value = (decimal)list[3].ViewWidth;
-            Obj5Width.Value = (decimal)list[4].ViewWidth;
-            Obj6Width.Value = (decimal)list[5].ViewWidth;
-            if (Microscope.Objectives.List.Count == 7)
-                Obj7Width.Value = (decimal)list[6].ViewWidth;
-
-            Obj1Height.Value = (decimal)list[0].ViewHeight;
-            Obj2Height.Value = (decimal)list[1].ViewHeight;
-            Obj3Height.Value = (decimal)list[2].ViewHeight;
-            Obj4Height.Value = (decimal)list[3].ViewHeight;
-            Obj5Height.Value = (decimal)list[4].ViewHeight;
-            Obj6Height.Value = (decimal)list[5].ViewHeight;
-            if (Microscope.Objectives.List.Count == 7)
-                Obj7Height.Value = (decimal)list[6].ViewHeight;
             UpdateObjectives();
         }
 

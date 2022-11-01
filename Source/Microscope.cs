@@ -904,6 +904,10 @@ namespace Bio
         }
         public static void SetFolder(string fol)
         {
+            if (!Directory.Exists(fol))
+                Directory.CreateDirectory(fol);
+            if(Automation.Properties.ContainsKey("SetFolder"))
+                Automation.SetProperty("SetFolder",fol);
             folder = fol;
             Properties.Settings.Default.ImagingPath = folder;
             Properties.Settings.Default.Save();
@@ -937,6 +941,55 @@ namespace Bio
                 Focus.SetFocus(Focus.GetFocus() + fInterVal);
             }
 
+        }
+        public static void TakeImageStack(double UpperLimit, double LowerLimit, double interval)
+        {
+            Focus.SetFocus(UpperLimit);
+            double d = UpperLimit - LowerLimit;
+            double dd = d / fInterVal;
+            for (int i = 0; i < dd; i++)
+            {
+                TakeImage();
+                Focus.SetFocus(Focus.GetFocus() + fInterVal);
+            }
+        }
+        public static void TakeTiles(int width, int height)
+        {
+            bool leftright = true;
+            for (int y = 0; y < width; y++)
+            {
+                if (y != 0)
+                    Microscope.MoveFieldDown();
+                leftright = !leftright;
+                Microscope.TakeImage();
+                for (int x = 0; x < height - 1; x++)
+                {
+                    if (leftright)
+                        Microscope.MoveFieldRight();
+                    else
+                        Microscope.MoveFieldLeft();
+                    Microscope.TakeImage();
+                }
+            }
+        }
+        public static void TakeTilesStack(int width, int height, double UpperLimit, double LowerLimit, double interval)
+        {
+            bool leftright = true;
+            for (int y = 0; y < width; y++)
+            {
+                if (y != 0)
+                    Microscope.MoveFieldDown();
+                leftright = !leftright;
+                Microscope.TakeImageStack(UpperLimit, LowerLimit, interval);
+                for (int x = 0; x < height - 1; x++)
+                {
+                    if (leftright)
+                        Microscope.MoveFieldRight();
+                    else
+                        Microscope.MoveFieldLeft();
+                    Microscope.TakeImageStack(UpperLimit, LowerLimit, interval);
+                }
+            }
         }
         public static RectangleD GetViewRectangle()
         {
