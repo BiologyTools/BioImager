@@ -2,6 +2,25 @@
 
 A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging & supports XInput game controllers to move stage, take images, run ImageJ macros on images or Bio C# scripts.
 
+## Sample Microscope Script
+```
+//If the GUI Recording for setting folder is set, we can set the microscope storage folder.
+Microscope.SetFolder("F:/Images/5x/");
+Microscope.Objectives.SetPosition(0);
+Microscope.TakeImage();
+Microscope.MoveFieldLeft();
+//We can take an image stack based on properties set in the GUI
+Microscope.TakeImageStack();
+// or by specifying them in script.
+Microscope.TakeImageStack(25000,25050,10)
+Microscope.MoveFieldDown();
+Microscope.TakeTiles(4,4);
+Microscope.Objectives.SetPosition(1);
+Microscope.SetFolder("F:/Images/10x/");
+Microscope.TakeTiles(4,4);
+```
+
+
 ## Features
 
 - C# scripting with sample tool-script and other sample scripts in "/Scripts/" folder. [See samples](https://github.com/BioMicroscopy/BioImage-Scripts)
