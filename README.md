@@ -45,6 +45,11 @@ Microscope.TakeTiles(4,4);
 
 - Use AForge filters by opening filters tool window and right click to apply. Currently supports only some AForge filters as many of them do not support 16bit and 48bit images. Convert to 8bit image to make use of more filters. Applyed filters can be easily recorded and used in scripts. Bio impliments some filters like crop for 16 & 48 bit images.
 
+## Setup
+- For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
+- For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
+- `Star this project on Github to help spread the word about Bio!`
+
 ## Dependencies
 - [BioFormats.Net](https://github.com/GDanovski/BioFormats.Net)
 - [IKVM](http://www.ikvm.net/)
@@ -69,10 +74,6 @@ Microscope.TakeTiles(4,4);
 -  Scripts saved in Scripts folder will be loaded into script runner.
 -  Program installer include sample script "Sample.cs" which gets & sets pixels and saves resulting image.
 -  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample) [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
-
-## Setup
-- For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
-- For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
 
 ## Sample Tool Script
 
