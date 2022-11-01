@@ -48,6 +48,7 @@ Microscope.TakeTiles(4,4);
 ## Setup
 - For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
 - For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
+- Suited best for systems with multiple monitors.
 - `Star this project on Github to help spread the word about Bio!`
 
 ## Dependencies
