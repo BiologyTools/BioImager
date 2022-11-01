@@ -1,14 +1,18 @@
 # BioImager
 
-A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging.
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss®. If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging & supports XInput game controllers to move stage, take images, run ImageJ macros on images or Bio C# scripts.
 
 ## Features
 
 - C# scripting with sample tool-script and other sample scripts in "/Scripts/" folder. [See samples](https://github.com/BioMicroscopy/BioImage-Scripts)
 
-- RGB image viewing mode which automatically combines 3 channels into RGB image & shows ROI from each channel which can be configured in ROI Manager.
+- Supports running ImageJ macro commands on images open in Bio. New Console to run ImageJ macro commands and Bio C# functions.
 
-- Viewing image stacks with scroll wheel moving Z-plane and mouse side buttons scrolling C-planes.
+- Multiple view modes like Emission, and Filtered. ROI's shown for each channel can be configured in ROI Manager.
+
+- Supports drawing shapes & colors onto 16 bit & 48 bit images, unlike System.Drawing.Graphics.
+
+- Convenient viewing of image stacks with scroll wheel moving Z-plane and mouse side buttons scrolling C-planes.
 
 - Editing & saving ROI's in images to OME format image stacks.
 
@@ -20,7 +24,7 @@ A .NET microscopy imaging application based on Bio. Supports various microscopes
 
 - Easy freeform annotation with magic select tool which selects based on blob detection.
 
-- Use AForge filters by opening filters tool window and right click to apply. Currently supports only some AForge filters as many of them do not support 16bit and 48bit images. Convert to 8bit image to make use of more filters. Applyed filters can be easily recorded and used in scripts.
+- Use AForge filters by opening filters tool window and right click to apply. Currently supports only some AForge filters as many of them do not support 16bit and 48bit images. Convert to 8bit image to make use of more filters. Applyed filters can be easily recorded and used in scripts. Bio impliments some filters like crop for 16 & 48 bit images.
 
 ## Dependencies
 - [BioFormats.Net](https://github.com/GDanovski/BioFormats.Net)
