@@ -46,6 +46,11 @@ namespace Bio
             this.leftBut = new System.Windows.Forms.Button();
             this.upBut = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.setFolderBut = new System.Windows.Forms.Button();
+            this.folderBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.stackTiles = new System.Windows.Forms.Button();
+            this.tilesBut = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.nameBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -66,11 +71,6 @@ namespace Bio
             this.setObjBut = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tilesBut = new System.Windows.Forms.Button();
-            this.stackTiles = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.folderBox = new System.Windows.Forms.TextBox();
-            this.setFolderBut = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -281,6 +281,62 @@ namespace Bio
             this.panel2.Size = new System.Drawing.Size(284, 286);
             this.panel2.TabIndex = 8;
             // 
+            // setFolderBut
+            // 
+            this.setFolderBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.setFolderBut.ForeColor = System.Drawing.Color.White;
+            this.setFolderBut.Location = new System.Drawing.Point(222, 260);
+            this.setFolderBut.Name = "setFolderBut";
+            this.setFolderBut.Size = new System.Drawing.Size(45, 25);
+            this.setFolderBut.TabIndex = 171;
+            this.setFolderBut.Text = "Set";
+            this.setFolderBut.UseVisualStyleBackColor = false;
+            this.setFolderBut.Click += new System.EventHandler(this.setFolderBut_Click);
+            // 
+            // folderBox
+            // 
+            this.folderBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.folderBox.Enabled = false;
+            this.folderBox.ForeColor = System.Drawing.Color.White;
+            this.folderBox.Location = new System.Drawing.Point(89, 263);
+            this.folderBox.Name = "folderBox";
+            this.folderBox.Size = new System.Drawing.Size(127, 20);
+            this.folderBox.TabIndex = 170;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(9, 265);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(76, 13);
+            this.label8.TabIndex = 169;
+            this.label8.Text = "Imaging Folder";
+            // 
+            // stackTiles
+            // 
+            this.stackTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.stackTiles.ForeColor = System.Drawing.Color.White;
+            this.stackTiles.Location = new System.Drawing.Point(162, 192);
+            this.stackTiles.Name = "stackTiles";
+            this.stackTiles.Size = new System.Drawing.Size(105, 25);
+            this.stackTiles.TabIndex = 168;
+            this.stackTiles.Text = "Take Stack Tiles";
+            this.stackTiles.UseVisualStyleBackColor = false;
+            this.stackTiles.Click += new System.EventHandler(this.stackTiles_Click);
+            // 
+            // tilesBut
+            // 
+            this.tilesBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.tilesBut.ForeColor = System.Drawing.Color.White;
+            this.tilesBut.Location = new System.Drawing.Point(162, 167);
+            this.tilesBut.Name = "tilesBut";
+            this.tilesBut.Size = new System.Drawing.Size(105, 25);
+            this.tilesBut.TabIndex = 167;
+            this.tilesBut.Text = "Take Image Tiles";
+            this.tilesBut.UseVisualStyleBackColor = false;
+            this.tilesBut.Click += new System.EventHandler(this.tilesBut_Click);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -418,7 +474,7 @@ namespace Bio
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(135, 143);
+            this.label3.Location = new System.Drawing.Point(135, 167);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(21, 13);
             this.label3.TabIndex = 20;
@@ -427,7 +483,7 @@ namespace Bio
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(135, 117);
+            this.label11.Location = new System.Drawing.Point(135, 141);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(21, 13);
             this.label11.TabIndex = 19;
@@ -538,62 +594,6 @@ namespace Bio
             // 
             this.timer.Interval = 500;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
-            // 
-            // tilesBut
-            // 
-            this.tilesBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.tilesBut.ForeColor = System.Drawing.Color.White;
-            this.tilesBut.Location = new System.Drawing.Point(162, 167);
-            this.tilesBut.Name = "tilesBut";
-            this.tilesBut.Size = new System.Drawing.Size(105, 25);
-            this.tilesBut.TabIndex = 167;
-            this.tilesBut.Text = "Take Image Tiles";
-            this.tilesBut.UseVisualStyleBackColor = false;
-            this.tilesBut.Click += new System.EventHandler(this.tilesBut_Click);
-            // 
-            // stackTiles
-            // 
-            this.stackTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.stackTiles.ForeColor = System.Drawing.Color.White;
-            this.stackTiles.Location = new System.Drawing.Point(162, 192);
-            this.stackTiles.Name = "stackTiles";
-            this.stackTiles.Size = new System.Drawing.Size(105, 25);
-            this.stackTiles.TabIndex = 168;
-            this.stackTiles.Text = "Take Stack Tiles";
-            this.stackTiles.UseVisualStyleBackColor = false;
-            this.stackTiles.Click += new System.EventHandler(this.stackTiles_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(9, 265);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(76, 13);
-            this.label8.TabIndex = 169;
-            this.label8.Text = "Imaging Folder";
-            // 
-            // folderBox
-            // 
-            this.folderBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.folderBox.Enabled = false;
-            this.folderBox.ForeColor = System.Drawing.Color.White;
-            this.folderBox.Location = new System.Drawing.Point(89, 263);
-            this.folderBox.Name = "folderBox";
-            this.folderBox.Size = new System.Drawing.Size(127, 20);
-            this.folderBox.TabIndex = 170;
-            // 
-            // setFolderBut
-            // 
-            this.setFolderBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.setFolderBut.ForeColor = System.Drawing.Color.White;
-            this.setFolderBut.Location = new System.Drawing.Point(222, 260);
-            this.setFolderBut.Name = "setFolderBut";
-            this.setFolderBut.Size = new System.Drawing.Size(45, 25);
-            this.setFolderBut.TabIndex = 171;
-            this.setFolderBut.Text = "Set";
-            this.setFolderBut.UseVisualStyleBackColor = false;
-            this.setFolderBut.Click += new System.EventHandler(this.setFolderBut_Click);
             // 
             // StageTool
             // 

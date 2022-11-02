@@ -448,9 +448,6 @@ namespace Bio
             }
             return count;
         }
-
-        bool init = false;
-        Process[] prs;
         private void statusTimer_Tick(object sender, EventArgs e)
         {            
             if (dockToApp.Checked)
