@@ -750,6 +750,8 @@ namespace Bio
 
         private void saveTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
+                return;
             bool convert = false;
             foreach (BioImage b in ImageView.Images)
             {
@@ -779,8 +781,7 @@ namespace Bio
                 else
                     return;
             }
-            if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
-                return;
+            
             string[] sts = new string[App.viewer.Images.Count];
             for (int i = 0; i < sts.Length; i++)
             {

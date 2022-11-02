@@ -922,6 +922,9 @@ namespace Bio
             {
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
+                b.stageSizeX = b.Volume.Location.X;
+                b.stageSizeY = b.Volume.Location.Y;
+                b.stageSizeZ = b.Volume.Location.Z;
                 Images.AddImage(b);
                 b.ID = folder + "/" + Images.GetImageName(Properties.Settings.Default.ImageName) + ".ome.tif";
                 App.viewer.AddImage(b);

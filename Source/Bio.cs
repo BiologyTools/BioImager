@@ -6443,11 +6443,11 @@ namespace Bio
                 omexml.setPixelsPhysicalSizeY(p2, serie);
                 ome.units.quantity.Length p3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.physicalSizeZ), ome.units.UNITS.MICROMETER);
                 omexml.setPixelsPhysicalSizeZ(p3, serie);
-                ome.units.quantity.Length s1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.stageSizeX), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length s1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.X), ome.units.UNITS.MICROMETER);
                 omexml.setStageLabelX(s1, serie);
-                ome.units.quantity.Length s2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.stageSizeY), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length s2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.Y), ome.units.UNITS.MICROMETER);
                 omexml.setStageLabelY(s2, serie);
-                ome.units.quantity.Length s3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.stageSizeZ), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length s3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.Z), ome.units.UNITS.MICROMETER);
                 omexml.setStageLabelZ(s3, serie);
                 omexml.setStageLabelName("StageLabel:" + serie, serie);
 
@@ -7248,7 +7248,8 @@ namespace Bio
                         b.Buffers.Add(inf);
                         Statistics.CalcStatistics(inf);
                     }
-                    pr.UpdateProgressF((float)((double)p / (double)(serie + 1) * pages));
+                    float prog = (float)p / ((float)(serie + 1) * pages);
+                    pr.UpdateProgressF(prog);
                     Application.DoEvents();
                 }
                 image.Close();
@@ -8900,7 +8901,7 @@ namespace Bio
         }
         public override string ToString()
         {
-            return Filename.ToString() + ", (" + stageSizeX + ", " + stageSizeY + ", " + stageSizeZ + ")";
+            return Filename.ToString() + ", (" + Volume.Location.X + ", " + Volume.Location.Y + ", " + Volume.Location.Z + ")";
         }
 
         public static BioImage operator /(BioImage a, float b)
