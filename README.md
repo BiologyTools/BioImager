@@ -57,6 +57,7 @@ Microscope.TakeTiles(4,4);
 - [AForge](http://www.aforgenet.com/)
 - [LibTiff.Net](https://bitmiracle.com/libtiff/)
 - [Cs-script](https://github.com/oleg-shilo/cs-script/blob/master/LICENSE)
+- [SharpDX](https://github.com/sharpdx/SharpDX)
 
 ## Licenses
 - Bio [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
