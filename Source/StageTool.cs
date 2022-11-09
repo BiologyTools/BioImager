@@ -22,6 +22,10 @@ namespace Bio
             objectiveSetup = App.setup;
             objBox.Items.AddRange(Microscope.Objectives.List.ToArray());
             folderBox.Text = Properties.Settings.Default.ImagingPath;
+            dockBox.Checked = Properties.Settings.Default.DockMicro;
+            moveXBox.Value = (decimal)Microscope.GetObjectiveViewRectangle().W;
+            moveYBox.Value = (decimal)Microscope.GetObjectiveViewRectangle().H;
+            Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
             timer.Start();
         }
 
@@ -175,7 +179,9 @@ namespace Bio
 
         private void sliceBox_ValueChanged(object sender, EventArgs e)
         {
-            double d = Microscope.UpperLimit - Microscope.LowerLimit;
+            double d = Math.Abs(Microscope.UpperLimit - Microscope.LowerLimit);
+            if (d == 0)
+                d = Microscope.UpperLimit - d / (double)sliceBox.Value;
             double dd = d / Microscope.fInterVal;
             fIntervalBox.Value = (decimal)dd;
         }
@@ -255,6 +261,26 @@ namespace Bio
                 folderBox.Text = fs.SelectedPath;
                 Microscope.SetFolder(fs.SelectedPath);
             }
+        }
+
+        private void moveXBox_ValueChanged(object sender, EventArgs e)
+        {
+            Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void moveYBox_ValueChanged(object sender, EventArgs e)
+        {
+            Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

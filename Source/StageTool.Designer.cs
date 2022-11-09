@@ -147,6 +147,7 @@ namespace Bio
             0,
             0,
             262144});
+            this.moveYBox.ValueChanged += new System.EventHandler(this.moveYBox_ValueChanged);
             // 
             // label1
             // 
@@ -157,6 +158,7 @@ namespace Bio
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "SizeX";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // moveXBox
             // 
@@ -177,6 +179,7 @@ namespace Bio
             0,
             0,
             262144});
+            this.moveXBox.ValueChanged += new System.EventHandler(this.moveXBox_ValueChanged);
             // 
             // objBox
             // 
@@ -416,8 +419,6 @@ namespace Bio
             // dockBox
             // 
             this.dockBox.AutoSize = true;
-            this.dockBox.Checked = true;
-            this.dockBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dockBox.Location = new System.Drawing.Point(230, 218);
             this.dockBox.Name = "dockBox";
             this.dockBox.Size = new System.Drawing.Size(52, 17);
@@ -589,6 +590,7 @@ namespace Bio
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 8;
             this.label2.Text = "SizeY";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // timer
             // 
@@ -604,9 +606,10 @@ namespace Bio
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.menuStrip);
             this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
+            this.MaximumSize = new System.Drawing.Size(300, 350);
             this.Name = "StageTool";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Stage Tool";

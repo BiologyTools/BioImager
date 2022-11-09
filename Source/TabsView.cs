@@ -655,13 +655,13 @@ namespace Bio
                 Viewer.Origin = new PointD(Viewer.Origin.X + moveAmount, Viewer.Origin.Y);
             }
             if (e.KeyCode == Keys.Up)
-                Microscope.MoveUp(Microscope.Objective.ViewHeight / 2);
+                Microscope.MoveUp(Microscope.viewSize.Y / 2);
             if (e.KeyCode == Keys.Down)
-                Microscope.MoveDown(Microscope.Objective.ViewHeight / 2);
+                Microscope.MoveDown(Microscope.viewSize.Y / 2);
             if (e.KeyCode == Keys.Left)
-                Microscope.MoveRight(-(Microscope.Objective.ViewWidth / 2));
+                Microscope.MoveRight(-(Microscope.viewSize.X / 2));
             if (e.KeyCode == Keys.Right)
-                Microscope.MoveRight(Microscope.Objective.ViewWidth / 2);
+                Microscope.MoveRight((Microscope.viewSize.X / 2) / 2);
             Viewer.UpdateStatus();
             Viewer.UpdateView();
         }
@@ -913,6 +913,23 @@ namespace Bio
         {
             XMLView v = new XMLView(BioImage.OpenXML(ImageView.SelectedImage.file));
             v.Show();
+        }
+        private void dToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Viewer.HardwareAcceleration = dToolStripMenuItem.Checked;
+            Properties.Settings.Default.HardwareAcceleration = dToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void imagesToStackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Title = "Images to Stack";
+            fd.Multiselect = true;
+            if (fd.ShowDialog() != DialogResult.OK)
+                return;
+            BioImage b = BioImage.ImagesToStack(fd.FileNames);
+            AddTab(b);
         }
     }
 }

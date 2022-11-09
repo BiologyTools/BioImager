@@ -562,6 +562,7 @@ namespace Bio
         public static SDK sdk;
         public static int sessionID = -1;
         public static string userRx = "";
+        public static PointD viewSize;
 
         public static Objectives.Objective Objective
         {
@@ -638,11 +639,8 @@ namespace Bio
                 Objectives = new Objectives(objs);
                 TLShutter = new TLShutter(tlShutter);
                 RLShutter = new RLShutter(rlShutter);
-
-                PointD d = Focus.GetSWLimit();
                 Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
                 PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);
-
                 //We calibrate the stage and focus, so that images are taken always with same calibration
                 CalibrateXYZ("OnLowerLimit");
             }
@@ -698,6 +696,8 @@ namespace Bio
                 }
                 err = sdk.Cmd(sessionID, "controller.stage.hostdirection.set 1 1", ref userRx);
             }
+            RectangleD rec = GetObjectiveViewRectangle();
+            viewSize = new PointD(rec.W, rec.H);
             initialized = true;
         }
         public static object Invoke(Type type, string name, object o, object[] args)
@@ -852,22 +852,22 @@ namespace Bio
         }
         public static void MoveFieldUp()
         {
-            Stage.MoveUp(Objectives.GetObjective().ViewHeight);
+            Stage.MoveUp(viewSize.Y);
         }
 
         public static void MoveFieldRight()
         {
-            Stage.MoveRight(Objectives.GetObjective().ViewWidth);
+            Stage.MoveRight(viewSize.X);
         }
 
         public static void MoveFieldDown()
         {
-            Stage.MoveDown(Objectives.GetObjective().ViewHeight);
+            Stage.MoveDown(viewSize.Y);
         }
 
         public static void MoveFieldLeft()
         {
-            Stage.MoveLeft(Objectives.GetObjective().ViewWidth);
+            Stage.MoveLeft(viewSize.X);
         }
 
         public static void SetFocus(double d)
@@ -933,6 +933,7 @@ namespace Bio
             else
             {
                 App.imager.PerformFunction(Function.Functions["TakeImage"]);
+
             } 
         }
         public static void TakeImageStack()
@@ -997,13 +998,18 @@ namespace Bio
                 }
             }
         }
+        public static RectangleD GetObjectiveViewRectangle()
+        {
+            Objectives.Objective o = Objectives.GetObjective();
+            PointD d = Stage.GetPosition();
+            return new RectangleD(d.X, d.Y, o.ViewWidth, o.ViewHeight);
+        }
         public static RectangleD GetViewRectangle()
         {
             Objectives.Objective o = Objectives.GetObjective();
             PointD d = Stage.GetPosition();
-            return new RectangleD(d.X,d.Y,o.ViewWidth, o.ViewHeight);
+            return new RectangleD(d.X, d.Y, viewSize.X, viewSize.Y);
         }
-
     }
 
 }

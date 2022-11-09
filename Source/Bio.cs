@@ -1639,6 +1639,13 @@ namespace Bio
                 GC.Collect();
             }
         }
+        public IntPtr RGBData
+        {
+            get
+            {
+                return GetRGBData(SizeX, SizeY, PixelFormat, bytes);
+            }
+        }
         public Plane Plane
         {
             get { return plane; }
@@ -1667,11 +1674,11 @@ namespace Bio
             get { return stats; }
             set { stats = value; }
         }
-        private Statistics[] stats;
-        private byte[] bytes;
-        private string file;
-        private bool littleEndian = BitConverter.IsLittleEndian;
-        private Plane plane = null;
+        Statistics[] stats;
+        byte[] bytes;
+        string file;
+        bool littleEndian = BitConverter.IsLittleEndian;
+        Plane plane = null;
         public void SetImage(Bitmap bitmap, bool switchRGB)
         {
             if (switchRGB)
@@ -1703,7 +1710,7 @@ namespace Bio
             if (newstride == stride)
                 return bts;
             byte[] newbts = new byte[newstride * h];
-            if (px == PixelFormat.Format24bppRgb || px == PixelFormat.Format32bppArgb || px == PixelFormat.Format32bppRgb || px == PixelFormat.Format8bppIndexed)
+            if (px == PixelFormat.Format24bppRgb || px == PixelFormat.Format32bppArgb || px == PixelFormat.Format32bppRgb)
             {
                 for (int y = 0; y < h; ++y)
                 {
@@ -2267,7 +2274,35 @@ namespace Bio
         */
         public static unsafe Bitmap GetBitmapRGB(int w, int h, PixelFormat px, byte[] bts)
         {
-            if (px == PixelFormat.Format24bppRgb)
+            if (px == PixelFormat.Format32bppArgb)
+            {
+                //opening a 8 bit per pixel jpg image
+                Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //iterating through all the pixels in y direction
+                for (int y = 0; y < h; y++)
+                {
+                    //getting the pixels of current row
+                    byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                    int rowRGB = y * w * 4;
+                    //iterating through all the pixels in x direction
+                    for (int x = 0; x < w; x++)
+                    {
+                        int indexRGB = x * 4;
+                        int indexRGBA = x * 4;
+                        row[indexRGBA + 3] = bts[rowRGB + indexRGB + 3];//byte A
+                        row[indexRGBA + 2] = bts[rowRGB + indexRGB + 2];//byte R
+                        row[indexRGBA + 1] = bts[rowRGB + indexRGB + 1];//byte G
+                        row[indexRGBA] = bts[rowRGB + indexRGB];//byte B
+                    }
+                }
+                //unlocking bits and disposing image
+                bmp.UnlockBits(bmd);
+                return bmp;
+            }
+            else if (px == PixelFormat.Format24bppRgb)
             {
                 //opening a 8 bit per pixel jpg image
                 Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
@@ -2392,6 +2427,137 @@ namespace Bio
                 }
                 bmp.UnlockBits(bmd);
                 return bmp;
+            }
+            
+            throw new NotSupportedException("Pixelformat " + px + " is not supported.");
+        }
+        public static unsafe IntPtr GetRGBData(int w, int h, PixelFormat px, byte[] bts)
+        {
+            if (px == PixelFormat.Format24bppRgb)
+            {
+                //opening a 8 bit per pixel jpg image
+                Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //iterating through all the pixels in y direction
+                for (int y = 0; y < h; y++)
+                {
+                    //getting the pixels of current row
+                    byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                    int rowRGB = y * w * 3;
+                    //iterating through all the pixels in x direction
+                    for (int x = 0; x < w; x++)
+                    {
+                        int indexRGB = x * 3;
+                        int indexRGBA = x * 4;
+                        row[indexRGBA + 3] = byte.MaxValue;//byte A
+                        row[indexRGBA + 2] = bts[rowRGB + indexRGB + 2];//byte R
+                        row[indexRGBA + 1] = bts[rowRGB + indexRGB + 1];//byte G
+                        row[indexRGBA] = bts[rowRGB + indexRGB];//byte B
+                    }
+                }
+                //unlocking bits and disposing image
+                bmp.UnlockBits(bmd);
+                return bmd.Scan0;
+            }
+            else
+            if (px == PixelFormat.Format48bppRgb)
+            {
+                //opening a 8 bit per pixel jpg image
+                Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
+                unsafe
+                {
+                    //iterating through all the pixels in y direction
+                    for (int y = 0; y < h; y++)
+                    {
+                        //getting the pixels of current row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        int rowRGB = y * w * 6;
+                        //iterating through all the pixels in x direction
+                        for (int x = 0; x < w; x++)
+                        {
+                            int indexRGB = x * 6;
+                            int indexRGBA = x * 4;
+                            int b = (int)((float)BitConverter.ToUInt16(bts, rowRGB + indexRGB) / 255);
+                            int g = (int)((float)BitConverter.ToUInt16(bts, rowRGB + indexRGB + 2) / 255);
+                            int r = (int)((float)BitConverter.ToUInt16(bts, rowRGB + indexRGB + 4) / 255);
+                            row[indexRGBA + 3] = 255;//byte A
+                            row[indexRGBA + 2] = (byte)(b);//byte R
+                            row[indexRGBA + 1] = (byte)(g);//byte G
+                            row[indexRGBA] = (byte)(r);//byte B
+                        }
+                    }
+                }
+                bmp.UnlockBits(bmd);
+                return bmd.Scan0;
+            }
+            else
+            if (px == PixelFormat.Format8bppIndexed)
+            {
+                //opening a 8 bit per pixel jpg image
+                Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
+                unsafe
+                {
+                    //iterating through all the pixels in y direction
+                    for (int y = 0; y < h; y++)
+                    {
+                        //getting the pixels of current row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        int rowRGB = y * w;
+                        //iterating through all the pixels in x direction
+                        for (int x = 0; x < w; x++)
+                        {
+                            int indexRGB = x;
+                            int indexRGBA = x * 4;
+                            byte b = bts[rowRGB + indexRGB];
+                            row[indexRGBA + 3] = 255;//byte A
+                            row[indexRGBA + 2] = (byte)(b);//byte R
+                            row[indexRGBA + 1] = (byte)(b);//byte G
+                            row[indexRGBA] = (byte)(b);//byte B
+                        }
+                    }
+                }
+                bmp.UnlockBits(bmd);
+                return bmd.Scan0;
+            }
+            else
+            if (px == PixelFormat.Format16bppGrayScale)
+            {
+                //opening a 8 bit per pixel jpg image
+                Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
+                unsafe
+                {
+                    //iterating through all the pixels in y direction
+                    for (int y = 0; y < h; y++)
+                    {
+                        //getting the pixels of current row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        int rowRGB = y * w * 2;
+                        //iterating through all the pixels in x direction
+                        for (int x = 0; x < w; x++)
+                        {
+                            int indexRGB = x * 2;
+                            int indexRGBA = x * 4;
+                            ushort b = (ushort)((float)BitConverter.ToUInt16(bts, rowRGB + indexRGB) / 255);
+                            row[indexRGBA + 3] = 255;//byte A
+                            row[indexRGBA + 2] = (byte)(b);//byte R
+                            row[indexRGBA + 1] = (byte)(b);//byte G
+                            row[indexRGBA] = (byte)(b);//byte B
+                        }
+                    }
+                }
+                bmp.UnlockBits(bmd);
+                return bmd.Scan0;
             }
             throw new NotSupportedException("Pixelformat " + px + " is not supported.");
         }
@@ -4302,6 +4468,18 @@ namespace Bio
         public long loadTimeTicks = 0;
         public bool selected = false;
         private bool ispyramidal = false;
+        static SharpDX.Direct3D11.Device device;
+        public static SharpDX.Direct3D11.Device Device
+        {
+            get
+            {
+                return device;
+            }
+            set
+            {
+                device = value;
+            }
+        }
         public Statistics Statistics
         {
             get
@@ -4390,6 +4568,11 @@ namespace Bio
             bi.imageInfo = b.imageInfo;
             bi.bitsPerPixel = b.bitsPerPixel;
             bi.Resolutions = b.Resolutions;
+            bi.Coordinate = b.Coordinate;
+            bi.file = b.file;
+            bi.Filename = 
+            bi.ID = Images.GetImageName(b.file);
+            bi.statistics = b.statistics;
             return bi;
         }
         public string ID
@@ -4617,6 +4800,14 @@ namespace Bio
         public int SizeT
         {
             get { return sizeT; }
+        }
+
+        public BufferInfo SelectedBuffer
+        {
+            get
+            {
+                return Buffers[Coords[Coordinate.Z, Coordinate.C, Coordinate.T]];
+            }
         }
         public Stopwatch watch = new Stopwatch();
         public bool isRGB
@@ -5408,6 +5599,7 @@ namespace Bio
         {
             id = file;
             filename = Images.GetImageName(id);
+            Coordinate = new ZCT();
             rgbChannels[0] = 0;
             rgbChannels[1] = 0;
             rgbChannels[2] = 0;
@@ -6718,7 +6910,20 @@ namespace Bio
                 pr.Close();
                 pr.Dispose();
             }
-            writer.close();
+            bool stop = false;
+            do
+            {
+                try
+                {
+                    writer.close();
+                    stop = true;
+                }
+                catch (Exception e)
+                {
+                    Scripting.LogLine(e.Message);
+                }
+                
+            } while (!stop);
         }
         public static BioImage OpenOME(string file)
         {
@@ -6728,6 +6933,53 @@ namespace Bio
         {
             Recorder.AddLine("Bio.BioImage.OpenOME(\"" + file + "\"," + serie + ");");
             return OpenOME(file, serie, true, false, 0, 0, 0, 0);
+        }
+
+
+        public static BioImage FilesToStack(string[] files, int sizeZ, int sizeC, int sizeT)
+        {
+            BioImage b = new BioImage(files[0]);
+            for (int i = 0; i < files.Length; i++)
+            {
+                BioImage bb = OpenFile(files[i]);
+                b.Buffers.AddRange(bb.Buffers);
+            }
+            b.UpdateCoords(sizeZ, sizeC, sizeT);
+            Images.AddImage(b);
+            return b;
+        }
+        public static BioImage FolderToStack(string path)
+        {
+            string[] files = Directory.GetFiles(path);
+            BioImage b = new BioImage(files[0]);
+            int z = 0;
+            int c = 0;
+            int t = 0;
+            BioImage bb = null;
+            for (int i = 0; i < files.Length; i++)
+            {
+                string[] st = files[i].Split('_');
+                if (st.Length > 3)
+                {
+                    z = int.Parse(st[1].Replace("Z", ""));
+                    c = int.Parse(st[2].Replace("C", ""));
+                    t = int.Parse(st[3].Replace("T", ""));
+                }
+                bb = OpenFile(files[i]);
+                b.Buffers.AddRange(bb.Buffers);
+            }
+            if (z == 0)
+            {
+                ImagesToStack im = new ImagesToStack();
+                if (im.ShowDialog() != DialogResult.OK)
+                    return null;
+                b.UpdateCoords(im.SizeZ, im.SizeC, im.SizeT);
+            }
+            else
+            b.UpdateCoords(z+1, c+1, t+1);
+            Images.AddImage(b);
+            Recorder.AddLine("BioImage.FolderToStack(\"" + path + "\");");
+            return b;
         }
         public static BioImage OpenOME(string file, int serie, bool progress, bool tile, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {
@@ -6878,10 +7130,14 @@ namespace Bio
                     b.physicalSizeX = b.meta.getPixelsPhysicalSizeX(b.series).value().doubleValue();
                     hasPhysical = true;
                 }
+                else
+                    b.physicalSizeX = (96 / 2.54) / 1000;
                 if (b.meta.getPixelsPhysicalSizeY(b.series) != null)
                 {
                     b.physicalSizeY = b.meta.getPixelsPhysicalSizeY(b.series).value().doubleValue();
                 }
+                else
+                    b.physicalSizeY = (96 / 2.54) / 1000;
                 if (b.meta.getPixelsPhysicalSizeZ(b.series) != null)
                 {
                     b.physicalSizeZ = b.meta.getPixelsPhysicalSizeZ(b.series).value().doubleValue();
@@ -7877,6 +8133,7 @@ namespace Bio
             int p = b.Coords[coord.Z, coord.C, coord.T];
             bool littleEndian = b.imRead.isLittleEndian();
             int RGBChannelCount = b.imRead.getRGBChannelCount();
+            b.bitsPerPixel = b.imRead.getBitsPerPixel();
             PixelFormat PixelFormat = GetPixelFormat(RGBChannelCount, b.bitsPerPixel);
             BufferInfo bf;
             if (tilex < 0)
@@ -8133,7 +8390,42 @@ namespace Bio
                 Open(file);
             }
         }
-
+        public static BioImage ImagesToStack(string[] files)
+        {
+            BioImage[] bs = new BioImage[files.Length];
+            int z = 0;
+            int c = 0;
+            int t = 0;
+            for (int i = 0; i < files.Length; i++)
+            {
+                string str = Path.GetFileNameWithoutExtension(files[i]);
+                str = str.Replace(".ome", "");
+                string[] st = str.Split('_');
+                if (st.Length > 3)
+                {
+                    z = int.Parse(st[1].Replace("Z", ""));
+                    c = int.Parse(st[2].Replace("C", ""));
+                    t = int.Parse(st[3].Replace("T", ""));
+                }
+                if(i==0)
+                    bs[0] = OpenOME(files[i]);
+                else
+                {
+                    bs[i] = OpenFile(files[i], 0);
+                }
+            }
+            BioImage b = BioImage.CopyInfo(bs[0], true, true);
+            for (int i = 0; i < files.Length; i++)
+            {
+                for (int bc = 0; bc < bs[i].Buffers.Count; bc++)
+                {
+                    b.Buffers.Add(bs[i].Buffers[bc]);
+                }
+            }
+            b.UpdateCoords(z+1, c+1, t+1);
+            b.Volume = new VolumeD(bs[0].Volume.Location, new Point3D(bs[0].SizeX * bs[0].physicalSizeX, bs[0].SizeY * bs[0].physicalSizeY, (z + 1) * bs[0].physicalSizeZ));
+            return b;
+        }
         public static void Update(BioImage b)
         {
             b = OpenFile(b.file);
@@ -8225,6 +8517,7 @@ namespace Bio
             FieldValue[] f = image.GetField(TiffTag.IMAGEDESCRIPTION);
             return f[0].ToString();
         }
+        
         public static List<ROI> OpenOMEROIs(string file, int series)
         {
             List<ROI> Annotations = new List<ROI>();

@@ -167,7 +167,7 @@ namespace Bio
             // 
             // statusTimer
             // 
-            this.statusTimer.Interval = 250;
+            this.statusTimer.Interval = 1000;
             this.statusTimer.Tick += new System.EventHandler(this.statusTimer_Tick);
             // 
             // statusLabel2
@@ -1024,7 +1024,6 @@ namespace Bio
             this.label34.Size = new System.Drawing.Size(14, 13);
             this.label34.TabIndex = 67;
             this.label34.Text = "Y";
-            this.label34.Click += new System.EventHandler(this.label34_Click);
             // 
             // yCoordBox
             // 

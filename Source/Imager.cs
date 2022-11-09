@@ -473,7 +473,6 @@ namespace Bio
                     }
                 }
             }
-
         }
         
         #region Labels Double Clicked
@@ -1097,12 +1096,6 @@ namespace Bio
         }
 
         public static InputSimulator input = new InputSimulator();
-
-        private void label34_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public object PerformFunction(Function f)
         {
             if (f.FuncType == Function.FunctionType.Key)

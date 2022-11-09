@@ -52,15 +52,17 @@ namespace Bio
             BioImage.Initialize();
             Microscope.Initialize();
             setup = new MicroscopeSetup();
-            tools = new Tools();
+            stage = new StageTool();
+            
             stackTools = new StackTools();
+            tools = new Tools();            
             manager = new ROIManager();
             runner = new Scripting();
             recorder = new Recorder();
             seriesTool = new Series();
             recordings = new Recordings();
             automation = new Automation();
-            stage = new StageTool();
+            
             lib = new Library();
             imager = new Imager();
             console = new BioConsole();

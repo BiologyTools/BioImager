@@ -42,6 +42,8 @@ namespace Bio
             this.copyROIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteROIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteROIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rGBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filteredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,12 +93,10 @@ namespace Bio
             this.HideStatusMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.overlayPictureBox = new System.Windows.Forms.PictureBox();
-            this.panel = new System.Windows.Forms.Panel();
             this.hScrollBar = new System.Windows.Forms.HScrollBar();
             this.vScrollBar = new System.Windows.Forms.VScrollBar();
             this.saveCSVFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.drawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dxPanel = new System.Windows.Forms.Panel();
             this.timePlayMenuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.zPlayMenuStrip.SuspendLayout();
@@ -111,7 +111,6 @@ namespace Bio
             this.statusMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.overlayPictureBox)).BeginInit();
-            this.panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // timePlayMenuStrip
@@ -178,7 +177,7 @@ namespace Bio
             this.controlsToolStripMenuItem,
             this.copyViewToClipboardToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(200, 202);
+            this.contextMenuStrip.Size = new System.Drawing.Size(200, 180);
             // 
             // rOIToolStripMenuItem
             // 
@@ -196,30 +195,44 @@ namespace Bio
             // setROITextToolStripMenuItem
             // 
             this.setROITextToolStripMenuItem.Name = "setROITextToolStripMenuItem";
-            this.setROITextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.setROITextToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.setROITextToolStripMenuItem.Text = "Set Text";
             this.setROITextToolStripMenuItem.Click += new System.EventHandler(this.setTextSelectionToolStripMenuItem_Click);
             // 
             // copyROIToolStripMenuItem1
             // 
             this.copyROIToolStripMenuItem1.Name = "copyROIToolStripMenuItem1";
-            this.copyROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.copyROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.copyROIToolStripMenuItem1.Text = "Copy";
             this.copyROIToolStripMenuItem1.Click += new System.EventHandler(this.copyROIToolStripMenuItem_Click);
             // 
             // pasteROIToolStripMenuItem1
             // 
             this.pasteROIToolStripMenuItem1.Name = "pasteROIToolStripMenuItem1";
-            this.pasteROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.pasteROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.pasteROIToolStripMenuItem1.Text = "Paste";
             this.pasteROIToolStripMenuItem1.Click += new System.EventHandler(this.pasteROIToolStripMenuItem_Click);
             // 
             // deleteROIToolStripMenuItem1
             // 
             this.deleteROIToolStripMenuItem1.Name = "deleteROIToolStripMenuItem1";
-            this.deleteROIToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.deleteROIToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.deleteROIToolStripMenuItem1.Text = "Delete";
             this.deleteROIToolStripMenuItem1.Click += new System.EventHandler(this.deleteROIToolStripMenuItem_Click);
+            // 
+            // drawToolStripMenuItem
+            // 
+            this.drawToolStripMenuItem.Name = "drawToolStripMenuItem";
+            this.drawToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.drawToolStripMenuItem.Text = "Draw";
+            this.drawToolStripMenuItem.Click += new System.EventHandler(this.drawToolStripMenuItem_Click);
+            // 
+            // fillToolStripMenuItem
+            // 
+            this.fillToolStripMenuItem.Name = "fillToolStripMenuItem";
+            this.fillToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.fillToolStripMenuItem.Text = "Fill";
+            this.fillToolStripMenuItem.Click += new System.EventHandler(this.fillToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -234,21 +247,21 @@ namespace Bio
             // rGBToolStripMenuItem
             // 
             this.rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
-            this.rGBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rGBToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.rGBToolStripMenuItem.Text = "RGB";
             this.rGBToolStripMenuItem.Click += new System.EventHandler(this.rGBToolStripMenuItem_Click);
             // 
             // filteredToolStripMenuItem
             // 
             this.filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
-            this.filteredToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.filteredToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.filteredToolStripMenuItem.Text = "Filtered";
             this.filteredToolStripMenuItem.Click += new System.EventHandler(this.filteredToolStripMenuItem_Click);
             // 
             // rawToolStripMenuItem
             // 
             this.rawToolStripMenuItem.Name = "rawToolStripMenuItem";
-            this.rawToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rawToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.rawToolStripMenuItem.Text = "Raw";
             this.rawToolStripMenuItem.Click += new System.EventHandler(this.rawToolStripMenuItem_Click);
             // 
@@ -296,14 +309,14 @@ namespace Bio
             // hideControlsToolStripMenuItem1
             // 
             this.hideControlsToolStripMenuItem1.Name = "hideControlsToolStripMenuItem1";
-            this.hideControlsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.hideControlsToolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
             this.hideControlsToolStripMenuItem1.Text = "Hide Controls";
             this.hideControlsToolStripMenuItem1.Click += new System.EventHandler(this.hideControlsToolStripMenuItem_Click);
             // 
             // hideStatusToolStripMenuItem
             // 
             this.hideStatusToolStripMenuItem.Name = "hideStatusToolStripMenuItem";
-            this.hideStatusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hideStatusToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.hideStatusToolStripMenuItem.Text = "Hide Status";
             this.hideStatusToolStripMenuItem.Click += new System.EventHandler(this.HideStatusMenuItem_Click);
             // 
@@ -539,7 +552,7 @@ namespace Bio
             this.zBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.zBar.ContextMenuStrip = this.zPlayMenuStrip;
             this.zBar.LargeChange = 1;
-            this.zBar.Location = new System.Drawing.Point(15, 0);
+            this.zBar.Location = new System.Drawing.Point(15, 1);
             this.zBar.Margin = new System.Windows.Forms.Padding(0);
             this.zBar.Name = "zBar";
             this.zBar.Size = new System.Drawing.Size(413, 25);
@@ -666,26 +679,33 @@ namespace Bio
             // 
             // pictureBox
             // 
+            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
-            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Location = new System.Drawing.Point(0, 25);
             this.pictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(425, 269);
+            this.pictureBox.Size = new System.Drawing.Size(428, 269);
             this.pictureBox.TabIndex = 20;
             this.pictureBox.TabStop = false;
             this.pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.rgbPictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // overlayPictureBox
             // 
+            this.overlayPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.overlayPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.overlayPictureBox.ContextMenuStrip = this.contextMenuStrip;
-            this.overlayPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.overlayPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.overlayPictureBox.Location = new System.Drawing.Point(0, 25);
             this.overlayPictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.overlayPictureBox.Name = "overlayPictureBox";
-            this.overlayPictureBox.Size = new System.Drawing.Size(425, 269);
+            this.overlayPictureBox.Size = new System.Drawing.Size(428, 269);
             this.overlayPictureBox.TabIndex = 19;
             this.overlayPictureBox.TabStop = false;
             this.overlayPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.overlayPictureBox_Paint);
@@ -694,41 +714,29 @@ namespace Bio
             this.overlayPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.rgbPictureBox_MouseMove);
             this.overlayPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
-            // panel
-            // 
-            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel.Controls.Add(this.hScrollBar);
-            this.panel.Controls.Add(this.vScrollBar);
-            this.panel.Controls.Add(this.overlayPictureBox);
-            this.panel.Controls.Add(this.pictureBox);
-            this.panel.Location = new System.Drawing.Point(0, 25);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(425, 269);
-            this.panel.TabIndex = 21;
-            // 
             // hScrollBar
             // 
             this.hScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar.Location = new System.Drawing.Point(-1, 251);
+            this.hScrollBar.Location = new System.Drawing.Point(0, 276);
             this.hScrollBar.Name = "hScrollBar";
-            this.hScrollBar.Size = new System.Drawing.Size(425, 17);
+            this.hScrollBar.Size = new System.Drawing.Size(429, 18);
             this.hScrollBar.SmallChange = 10;
             this.hScrollBar.TabIndex = 24;
             this.hScrollBar.Visible = false;
+            this.hScrollBar.ValueChanged += new System.EventHandler(this.vScrollBar_ValueChanged);
             // 
             // vScrollBar
             // 
             this.vScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar.Location = new System.Drawing.Point(408, 0);
+            this.vScrollBar.Location = new System.Drawing.Point(412, 25);
             this.vScrollBar.Name = "vScrollBar";
-            this.vScrollBar.Size = new System.Drawing.Size(17, 250);
+            this.vScrollBar.Size = new System.Drawing.Size(17, 251);
             this.vScrollBar.SmallChange = 10;
             this.vScrollBar.TabIndex = 23;
             this.vScrollBar.Visible = false;
+            this.vScrollBar.ValueChanged += new System.EventHandler(this.vScrollBar_ValueChanged);
             // 
             // saveCSVFileDialog
             // 
@@ -736,28 +744,36 @@ namespace Bio
             this.saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
             this.saveCSVFileDialog.Title = "Save ROIs to CSV";
             // 
-            // drawToolStripMenuItem
+            // dxPanel
             // 
-            this.drawToolStripMenuItem.Name = "drawToolStripMenuItem";
-            this.drawToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.drawToolStripMenuItem.Text = "Draw";
-            this.drawToolStripMenuItem.Click += new System.EventHandler(this.drawToolStripMenuItem_Click);
-            // 
-            // fillToolStripMenuItem
-            // 
-            this.fillToolStripMenuItem.Name = "fillToolStripMenuItem";
-            this.fillToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fillToolStripMenuItem.Text = "Fill";
-            this.fillToolStripMenuItem.Click += new System.EventHandler(this.fillToolStripMenuItem_Click);
+            this.dxPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dxPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.dxPanel.ContextMenuStrip = this.contextMenuStrip;
+            this.dxPanel.Location = new System.Drawing.Point(0, 25);
+            this.dxPanel.Name = "dxPanel";
+            this.dxPanel.Size = new System.Drawing.Size(428, 269);
+            this.dxPanel.TabIndex = 25;
+            this.dxPanel.SizeChanged += new System.EventHandler(this.dxPanel_SizeChanged);
+            this.dxPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
+            this.dxPanel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDoubleClick);
+            this.dxPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.dxPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.rgbPictureBox_MouseMove);
+            this.dxPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // ImageView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
+            this.Controls.Add(this.vScrollBar);
+            this.Controls.Add(this.hScrollBar);
             this.Controls.Add(this.trackBarPanel);
             this.Controls.Add(this.statusPanel);
-            this.Controls.Add(this.panel);
+            this.Controls.Add(this.dxPanel);
+            this.Controls.Add(this.overlayPictureBox);
+            this.Controls.Add(this.pictureBox);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(100, 100);
             this.Name = "ImageView";
@@ -780,7 +796,6 @@ namespace Bio
             this.statusMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.overlayPictureBox)).EndInit();
-            this.panel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -831,7 +846,6 @@ namespace Bio
         private System.Windows.Forms.ToolStripMenuItem HideStatusMenuItem;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.PictureBox overlayPictureBox;
-        private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.SaveFileDialog saveCSVFileDialog;
         private System.Windows.Forms.ToolStripMenuItem rOIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setROITextToolStripMenuItem;
@@ -853,5 +867,6 @@ namespace Bio
         private System.Windows.Forms.VScrollBar vScrollBar;
         private System.Windows.Forms.ToolStripMenuItem drawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fillToolStripMenuItem;
+        private System.Windows.Forms.Panel dxPanel;
     }
 }

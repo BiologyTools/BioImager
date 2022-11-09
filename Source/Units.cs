@@ -15,7 +15,7 @@ namespace Bio
         private static double minY = -58000;
         private static double maxX = 80000;
         private static double maxY = 58000;
-        
+
         public static double MinX
         {
             get
@@ -141,6 +141,11 @@ namespace Bio
         public PointF ToPointF()
         {
             return new PointF((float)X, (float)Y);
+        }
+
+        public SharpDX.Mathematics.Interop.RawVector2 ToRaw()
+        {
+            return new SharpDX.Mathematics.Interop.RawVector2((float)X, (float)Y);
         }
         public System.Drawing.Point ToPointInt()
         {

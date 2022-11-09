@@ -478,5 +478,17 @@ namespace Bio.Properties {
                 this["ImagingPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HardwareAcceleration {
+            get {
+                return ((bool)(this["HardwareAcceleration"]));
+            }
+            set {
+                this["HardwareAcceleration"] = value;
+            }
+        }
     }
 }
