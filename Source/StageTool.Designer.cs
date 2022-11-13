@@ -382,6 +382,11 @@ namespace Bio
             0,
             0,
             0});
+            this.fIntervalBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.fIntervalBox.Name = "fIntervalBox";
             this.fIntervalBox.Size = new System.Drawing.Size(79, 20);
             this.fIntervalBox.TabIndex = 27;

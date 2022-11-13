@@ -28,6 +28,8 @@ namespace Bio
         }
         public void UpdateProgressF(float p)
         {
+            if (p * 100 > progressBar.Maximum)
+                return;
             progressBar.Value = (int)(p * 100);
         }
 

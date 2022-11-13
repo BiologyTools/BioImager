@@ -30,7 +30,7 @@ namespace Bio
         {
             for (int i = 0; i < images.Count; i++)
             {
-                if (images[i].ID.Contains(ids))
+                if (ids.Contains(images[i].Filename) || images[i].ID.Contains(ids))
                     return images[i];
             }
             return null;
@@ -57,29 +57,33 @@ namespace Bio
         public static string GetImageName(string s)
         {
             //Here we create a unique ID for an image.
+            bool ome = false;
+            string ext = Path.GetExtension(s);
+            string name = Path.GetFileNameWithoutExtension(s);
             int i = Images.GetImageCountByName(s);
+            if (s.EndsWith(".ome.tif"))
+            {
+                ome = true;
+                ext = ".ome.tif";
+                name = s.Replace(".ome.tif","");
+                if (i > 0)
+                    return name + "-" + i + ext;
+                else
+                    return name + ext;
+            }
             if (i == 0)
                 return s;
-            string test = Path.GetFileName(s);
-            string name = Path.GetFileNameWithoutExtension(s);
-            string ext = Path.GetExtension(s);
             int sti = name.LastIndexOf("-");
             if (sti == -1)
             {
-                return name + "-" + i + ext;
-
+                return s;
             }
             else
             {
-                string stb = name.Substring(0, sti);
-                string sta = name.Substring(sti + 1, name.Length - sti - 1);
-                int ind;
-                if (int.TryParse(sta, out ind))
-                {
-                    return stb + "-" + (ind + 1).ToString() + ext;
-                }
-                else
+                if (i > 0)
                     return name + "-" + i + ext;
+                else
+                    return name + ext;
             }
             //
         }
@@ -3180,13 +3184,14 @@ namespace Bio
 
         public BufferInfo Copy()
         {
-            byte[] bt = new byte[Bytes.Length];
+            byte[] bt = new byte[bytes.Length];
             for (int i = 0; i < bt.Length; i++)
             {
                 bt[i] = bytes[i];
             }
             BufferInfo bf = new BufferInfo(SizeX, SizeY, PixelFormat, bt, Coordinate, ID);
             bf.plane = Plane;
+            bf.stats = stats;
             return bf;
         }
         public BufferInfo CopyInfo()
@@ -4468,18 +4473,6 @@ namespace Bio
         public long loadTimeTicks = 0;
         public bool selected = false;
         private bool ispyramidal = false;
-        static SharpDX.Direct3D11.Device device;
-        public static SharpDX.Direct3D11.Device Device
-        {
-            get
-            {
-                return device;
-            }
-            set
-            {
-                device = value;
-            }
-        }
         public Statistics Statistics
         {
             get
@@ -4527,6 +4520,7 @@ namespace Bio
             bi.filename = b.filename;
             bi.Resolutions = b.Resolutions;
             bi.statistics = b.statistics;
+            
             return bi;
         }
         public static BioImage Copy(BioImage b)
@@ -4570,7 +4564,7 @@ namespace Bio
             bi.Resolutions = b.Resolutions;
             bi.Coordinate = b.Coordinate;
             bi.file = b.file;
-            bi.Filename = 
+            bi.Filename = b.Filename;
             bi.ID = Images.GetImageName(b.file);
             bi.statistics = b.statistics;
             return bi;
@@ -4692,19 +4686,6 @@ namespace Bio
                 finterval = b.frameInterval;
                 spacing = b.physicalSizeZ;
                 loop = false;
-                /*
-                double dmax = double.MinValue;
-                double dmin = double.MaxValue;
-                foreach (Channel c in b.Channels)
-                {
-                    if(dmax < c.Max)
-                        dmax = c.Max;
-                    if(dmin > c.Min)
-                        dmin = c.Min;
-                }
-                min = dmin;
-                max = dmax;
-                */
                 min = b.Channels[0].RangeR.Min;
                 max = b.Channels[0].RangeR.Max;
                 return this;
@@ -6161,7 +6142,7 @@ namespace Bio
                                 offset += stride;
                             }
                             image.WriteDirectory();
-                            pr.UpdateProgressF((float)im / (float)b.ImageCount);
+                            pr.UpdateProgressF(im / (b.Buffers.Count * (fi+1)));
                             Application.DoEvents();
                             im++;
                         }
@@ -6558,6 +6539,8 @@ namespace Bio
         }
         public static bool isOME(string file)
         {
+            if (file.EndsWith(".ome.tif"))
+                return true;
             if (file.EndsWith(".tif") || file.EndsWith(".TIF") || file.EndsWith("tiff") || file.EndsWith("TIFF"))
             {
                 Tiff image = Tiff.Open(file, "r");
@@ -6893,19 +6876,44 @@ namespace Bio
                 
             }
             writer.setMetadataRetrieve(omexml);
-            writer.setId(f);
+            bool wait = true;
+            do
+            {
+                try
+                {
+                    if (FileUtil.Locking(f).Count == 0)
+                    {
+                        writer.setId(f);
+                        wait = false;
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                
+            } while (wait);
+            
             for (int i = 0; i < files.Length; i++)
             {
                 string file = files[i];
                 Progress pr = new Progress(file, "Saving");
                 pr.Show();
+                Application.DoEvents();
                 BioImage b = Images.GetImage(files[i]);
                 writer.setSeries(i);
                 for (int bu = 0; bu < b.Buffers.Count; bu++)
                 {
-                    writer.saveBytes(bu, b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian));
-                    pr.UpdateProgressF((float)bu / b.Buffers.Count);
-                    Application.DoEvents();
+                    try
+                    {
+                        writer.saveBytes(bu, b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian));
+                        pr.UpdateProgressF((float)bu / b.Buffers.Count);
+                        Application.DoEvents();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
                 pr.Close();
                 pr.Dispose();
@@ -6934,6 +6942,7 @@ namespace Bio
             Recorder.AddLine("Bio.BioImage.OpenOME(\"" + file + "\"," + serie + ");");
             return OpenOME(file, serie, true, false, 0, 0, 0, 0);
         }
+
 
 
         public static BioImage FilesToStack(string[] files, int sizeZ, int sizeC, int sizeT)
@@ -7505,6 +7514,7 @@ namespace Bio
                         Statistics.CalcStatistics(inf);
                     }
                     float prog = (float)p / ((float)(serie + 1) * pages);
+                    if(progress)
                     pr.UpdateProgressF(prog);
                     Application.DoEvents();
                 }
@@ -8353,6 +8363,7 @@ namespace Bio
                 bs[0] = OpenOME(file, res, true, true, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
                 bs[0].Resolutions = ress;
                 bs[0].isPyramidal = true;
+                reader.close();
                 return bs;
             }
             else

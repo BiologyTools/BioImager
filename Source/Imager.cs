@@ -1096,6 +1096,7 @@ namespace Bio
         }
 
         public static InputSimulator input = new InputSimulator();
+
         public object PerformFunction(Function f)
         {
             if (f.FuncType == Function.FunctionType.Key)

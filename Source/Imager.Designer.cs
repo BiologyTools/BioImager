@@ -1019,7 +1019,7 @@ namespace Bio
             this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label34.AutoSize = true;
             this.label34.ForeColor = System.Drawing.Color.White;
-            this.label34.Location = new System.Drawing.Point(84, 427);
+            this.label34.Location = new System.Drawing.Point(83, 427);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(14, 13);
             this.label34.TabIndex = 67;
@@ -1052,7 +1052,7 @@ namespace Bio
             this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label32.AutoSize = true;
             this.label32.ForeColor = System.Drawing.Color.White;
-            this.label32.Location = new System.Drawing.Point(3, 427);
+            this.label32.Location = new System.Drawing.Point(2, 427);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(14, 13);
             this.label32.TabIndex = 65;

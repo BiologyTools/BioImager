@@ -389,9 +389,7 @@ namespace Bio
             // 
             // dToolStripMenuItem
             // 
-            this.dToolStripMenuItem.Checked = true;
             this.dToolStripMenuItem.CheckOnClick = true;
-            this.dToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dToolStripMenuItem.Name = "dToolStripMenuItem";
             this.dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.dToolStripMenuItem.Text = "Hardware Acceleration";

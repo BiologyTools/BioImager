@@ -439,7 +439,9 @@ namespace Bio
         public Objective GetObjective()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
                 return List[(short)changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)];
+            }
             else
                 return List[index];
         }
@@ -698,6 +700,7 @@ namespace Bio
             }
             RectangleD rec = GetObjectiveViewRectangle();
             viewSize = new PointD(rec.W, rec.H);
+            Watcher();
             initialized = true;
         }
         public static object Invoke(Type type, string name, object o, object[] args)
@@ -882,7 +885,10 @@ namespace Bio
         private static string folder = "";
         public static string GetFolder()
         {
-            string s = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder").ToString();
+            object o = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder");
+            string s = null;
+            if (o != null)
+                s = o.ToString();
             if (s == null && folder == "")
             {
                 FolderBrowserDialog fs = new FolderBrowserDialog();
@@ -916,37 +922,96 @@ namespace Bio
         }
         public static void TakeImage()
         {
-            if (folder == "")
-                folder = GetFolder();
-            if(Properties.Settings.Default.SimulateCamera)
+            TakeImage(0);
+        }
+        public static void TakeImage(int i)
+        {
+            if (Properties.Settings.Default.SimulateCamera)
             {
+                
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
                 b.stageSizeX = b.Volume.Location.X;
                 b.stageSizeY = b.Volume.Location.Y;
                 b.stageSizeZ = b.Volume.Location.Z;
-                Images.AddImage(b);
-                b.ID = folder + "/" + Images.GetImageName(Properties.Settings.Default.ImageName) + ".ome.tif";
-                App.viewer.AddImage(b);
-                BioImage.SaveOME(b.ID, b.ID);
+                b.Filename = Images.GetImageName(App.stage.ImageName);
+                if(i==0)
+                {
+                    bi.Volume.Location = b.Volume.Location;
+                    bi.Channels = MicroscopeSetup.simImage.Channels;
+                    bi.stageSizeX = b.Volume.Location.X;
+                    bi.stageSizeY = b.Volume.Location.Y;
+                    bi.stageSizeZ = b.Volume.Location.Z;
+                    bi.physicalSizeX = b.physicalSizeX;
+                    bi.physicalSizeY = b.physicalSizeY;
+                    bi.physicalSizeZ = b.physicalSizeZ;
+                }
+                watcher.Path = Properties.Settings.Default.ImagingPath;
+                watcher.EnableRaisingEvents = true;
+                string p = GetFolder() + "/" + b.Filename + "-" + i + ".ome.tif";
+                BioImage.SaveOME(p,b.ID);
+                Application.DoEvents();
             }
             else
             {
                 App.imager.PerformFunction(Function.Functions["TakeImage"]);
-
             } 
         }
-        public static void TakeImageStack()
+        public static BioImage TakeImageStack()
         {
+            bi = new BioImage(Properties.Settings.Default.ImageName);
+            watcher.Path = GetFolder();
             Focus.SetFocus(UpperLimit);
-            double d = UpperLimit - LowerLimit;
+            double d = Math.Abs(UpperLimit - LowerLimit);
             double dd = d / fInterVal;
+            //bi = BioImage.CopyInfo(bi, true, true);
             for (int i = 0; i < dd; i++)
             {
-                TakeImage();
-                Focus.SetFocus(Focus.GetFocus() + fInterVal);
+                imagingStack = true;
+                TakeImage(i);
+                Focus.SetFocus(Focus.GetFocus() - fInterVal);
+                Application.DoEvents();
             }
+            bi.UpdateCoords(bi.Buffers.Count, 1, 1);
+            bi.Volume = new VolumeD(new Point3D(bi.stageSizeX, bi.stageSizeY, bi.stageSizeZ), new Point3D(bi.physicalSizeX * bi.SizeX, bi.physicalSizeY * bi.SizeY, bi.physicalSizeZ * bi.SizeZ));
 
+            bi.UpdateCoords(bi.Buffers.Count, 1, 1);
+            if (bi.bitsPerPixel > 8)
+                bi.StackThreshold(true);
+            else
+                bi.StackThreshold(false);
+            Images.AddImage(bi);
+            return bi;
+        }
+        static FileSystemWatcher watcher = new FileSystemWatcher();
+        static string fold = "";
+        public static void Watcher()
+        {
+            string s = GetFolder();
+            watcher.Created += fileSystemWatcher1_Created;
+            watcher.Path = s;
+            watcher.BeginInit();
+            watcher.EnableRaisingEvents = true;
+            watcher.EndInit();
+        }
+
+        static bool imagingStack = false;
+        static BioImage bi;
+        private static void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
+        {
+            imagingStack = true;
+            //We wait till the new file is no longer written into.
+            do
+            {
+                List<Process> pr = FileUtil.Locking(e.FullPath);
+                FileInfo fi = new FileInfo(e.FullPath);
+                if (pr.Count == 0 && fi.Length > 0)
+                    break;
+                fi = null;
+            } while (true);
+            BioImage b = BioImage.OpenOME(e.FullPath,0,false,false,0,0,0,0);
+            bi.Buffers.AddRange(b.Buffers);
+            imagingStack = true;
         }
         public static void TakeImageStack(double UpperLimit, double LowerLimit, double interval)
         {

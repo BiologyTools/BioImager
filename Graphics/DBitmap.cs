@@ -107,159 +107,156 @@ namespace Bio.Graphics
             Bitmap b = null;
             // Loads from file using System.Drawing.Image
             BitmapData d = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
-            using (var bitmap = (System.Drawing.Bitmap)image)
+            var bitmap = image;
+            var bitmapProperties = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
+            var size = new Size2(bitmap.Width, bitmap.Height);
+
+
+            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
             {
-                var bitmapProperties = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
-                var size = new Size2(bitmap.Width, bitmap.Height);
-                if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+                b = new Bitmap(renderTarget, size, new DataPointer(d.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProperties);
+            }
+            else if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+            {
+                //opening a 8 bit per pixel jpg image
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //iterating through all the pixels in y direction
+                for (int y = 0; y < h; y++)
                 {
-                    b = new Bitmap(renderTarget, size, new DataPointer(d.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProperties);
+                    //getting the pixels of current row
+                    byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                    byte* rowOrig = (byte*)d.Scan0 + (y * d.Stride);
+                    int rowRGB = y * w * 3;
+                    //iterating through all the pixels in x direction
+                    for (int x = 0; x < w; x++)
+                    {
+                        int indexRGB = x * 3;
+                        int indexRGBA = x * 4;
+                        row[indexRGBA + 3] = byte.MaxValue;//byte A
+                        row[indexRGBA + 2] = rowOrig[indexRGB + 2];//byte R
+                        row[indexRGBA + 1] = rowOrig[indexRGB + 1];//byte G
+                        row[indexRGBA] = rowOrig[indexRGB];//byte B
+                    }
                 }
-                else if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                //unlocking bits and disposing image
+                bmp.UnlockBits(bmd);
+                var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
+                return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
+            }
+            else
+            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format48bppRgb)
+            {
+                //opening a 8 bit per pixel jpg image
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                byte[] bts = new byte[6];
+                unsafe
                 {
-                    //opening a 8 bit per pixel jpg image
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //creating the bitmapdata and lock bits
-                    System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
-                    BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
                     //iterating through all the pixels in y direction
                     for (int y = 0; y < h; y++)
                     {
                         //getting the pixels of current row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowOrig = (byte*)d.Scan0 + (y * bmd.Stride);
-                        int rowRGB = y * w * 3;
+                        byte* rowOrig = (byte*)d.Scan0 + (y * d.Stride);
+                        int rowRGB = y * w * 6;
                         //iterating through all the pixels in x direction
                         for (int x = 0; x < w; x++)
                         {
-                            int indexRGB = x * 3;
+                            int indexRGB = x * 6;
                             int indexRGBA = x * 4;
-                            row[indexRGBA + 3] = byte.MaxValue;//byte A
-                            row[indexRGBA + 2] = rowOrig[indexRGB + 2];//byte R
-                            row[indexRGBA + 1] = rowOrig[indexRGB + 1];//byte G
-                            row[indexRGBA] = rowOrig[indexRGB];//byte B
+                            bts[0] = rowOrig[indexRGB + 1];
+                            bts[1] = rowOrig[indexRGB + 0];
+                            bts[2] = rowOrig[indexRGB + 3];
+                            bts[3] = rowOrig[indexRGB + 2];
+                            bts[2] = rowOrig[indexRGB + 5];
+                            bts[3] = rowOrig[indexRGB + 4];
+                            int bb = (int)((float)BitConverter.ToUInt16(bts, 0) / 255);
+                            int bg = (int)((float)BitConverter.ToUInt16(bts, 2) / 255);
+                            int br = (int)((float)BitConverter.ToUInt16(bts, 4) / 255);
+                            row[indexRGBA + 3] = 255;//byte A
+                            row[indexRGBA + 2] = (byte)(bb);//byte R
+                            row[indexRGBA + 1] = (byte)(bg);//byte G
+                            row[indexRGBA] = (byte)(br);//byte B
                         }
                     }
-                    //unlocking bits and disposing image
-                    bmp.UnlockBits(bmd);
-                    var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
-                    return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
                 }
-                else
-                if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format48bppRgb)
+                bmp.UnlockBits(bmd);
+                var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
+                return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
+            }
+            else
+            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+            {
+                
+                //opening a 8 bit per pixel jpg image
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //iterating through all the pixels in y direction
+                for (int y = 0; y < h; y++)
                 {
-                    //opening a 8 bit per pixel jpg image
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //creating the bitmapdata and lock bits
-                    System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
-                    BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    byte[] bts = new byte[6];
-                    unsafe
+                    //getting the pixels of current row
+                    byte* row = (byte*)bmd.Scan0 + (y * w * 4);
+                    byte* rowOrig = (byte*)d.Scan0 + (y * w);
+                    //iterating through all the pixels in x direction
+                    for (int x = 0; x < w; x++)
                     {
-                        //iterating through all the pixels in y direction
-                        for (int y = 0; y < h; y++)
-                        {
-                            //getting the pixels of current row
-                            byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                            byte* rowOrig = (byte*)bmd.Scan0 + (y * d.Stride);
-                            int rowRGB = y * w * 6;
-                            //iterating through all the pixels in x direction
-                            for (int x = 0; x < w; x++)
-                            {
-                                int indexRGB = x * 6;
-                                int indexRGBA = x * 4;
-                                bts[0] = rowOrig[indexRGB + 1];
-                                bts[1] = rowOrig[indexRGB + 0];
-                                bts[2] = rowOrig[indexRGB + 3];
-                                bts[3] = rowOrig[indexRGB + 2];
-                                bts[2] = rowOrig[indexRGB + 5];
-                                bts[3] = rowOrig[indexRGB + 4];
-                                int bb = (int)((float)BitConverter.ToUInt16(bts, 0) / 255);
-                                int bg = (int)((float)BitConverter.ToUInt16(bts, 2) / 255);
-                                int br = (int)((float)BitConverter.ToUInt16(bts, 4) / 255);
-                                row[indexRGBA + 3] = 255;//byte A
-                                row[indexRGBA + 2] = (byte)(bb);//byte R
-                                row[indexRGBA + 1] = (byte)(bg);//byte G
-                                row[indexRGBA] = (byte)(br);//byte B
-                            }
-                        }
+                        int indexRGB = x;
+                        int indexRGBA = x * 4;
+                        row[indexRGBA + 3] = byte.MaxValue;//byte A
+                        row[indexRGBA + 2] = rowOrig[indexRGB];//byte R
+                        row[indexRGBA + 1] = rowOrig[indexRGB];//byte G
+                        row[indexRGBA] = rowOrig[indexRGB];//byte B
                     }
-                    bmp.UnlockBits(bmd);
-                    var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
-                    return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
                 }
-                else
-                if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
-                {
-                    //opening a 8 bit per pixel jpg image
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //creating the bitmapdata and lock bits
-                    System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
-                    BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    unsafe
-                    {
-                        //iterating through all the pixels in y direction
-                        for (int y = 0; y < h; y++)
-                        {
-                            //getting the pixels of current row
-                            byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                            byte* rowOrig = (byte*)d.Scan0 + (y * d.Stride);
-                            int rowRGB = y * w;
-                            //iterating through all the pixels in x direction
-                            for (int x = 0; x < w; x++)
-                            {
-                                int indexRGB = x;
-                                int indexRGBA = x * 4;
-                                byte bb = rowOrig[indexRGB];
-                                row[indexRGBA + 3] = 255;//byte A
-                                row[indexRGBA + 2] = (byte)(bb);//byte R
-                                row[indexRGBA + 1] = (byte)(bb);//byte G
-                                row[indexRGBA] = (byte)(bb);//byte B
-                            }
-                        }
-                    }
-                    bmp.UnlockBits(bmd);
-                    var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
-                    return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
-                }
-                else
-                if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
-                {
-                    //opening a 8 bit per pixel jpg image
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //creating the bitmapdata and lock bits
-                    System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
-                    BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    byte[] bts = new byte[2];
-                    unsafe
-                    {
-                        //iterating through all the pixels in y direction
-                        for (int y = 0; y < h; y++)
-                        {
-                            //getting the pixels of current row
-                            byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                            byte* rowOrig = (byte*)d.Scan0 + (y * bmd.Stride);
-                            int rowRGB = y * w * 2;
-                            //iterating through all the pixels in x direction
-                            for (int x = 0; x < w; x++)
-                            {
-                                int indexRGB = x * 2;
-                                int indexRGBA = x * 4;
-                                bts[0] = rowOrig[indexRGB + 1];
-                                bts[1] = rowOrig[indexRGB];
-                                ushort bs = (ushort)((float)BitConverter.ToUInt16(bts, 0) / ushort.MaxValue);
-                                row[indexRGBA + 3] = 255;//byte A
-                                row[indexRGBA + 2] = (byte)(bs);//byte R
-                                row[indexRGBA + 1] = (byte)(bs);//byte G
-                                row[indexRGBA] = (byte)(bs);//byte B
-                            }
-                        }
-                    }
-                    bmp.UnlockBits(bmd);
-                    var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
-                    return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
-                }
+                //unlocking bits and disposing image
+                bmp.UnlockBits(bmd);
+                var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
+                return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
 
+            }
+            else
+            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
+            {
+                //opening a 8 bit per pixel jpg image
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //creating the bitmapdata and lock bits
+                System.Drawing.Rectangle rec = new System.Drawing.Rectangle(0, 0, w, h);
+                BitmapData bmd = bmp.LockBits(rec, ImageLockMode.ReadWrite, image.PixelFormat);
+                byte[] bts = new byte[2];
+                unsafe
+                {
+                    //iterating through all the pixels in y direction
+                    for (int y = 0; y < h; y++)
+                    {
+                        //getting the pixels of current row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* rowOrig = (byte*)d.Scan0 + (y * d.Stride);
+                        int rowRGB = y * w * 2;
+                        //iterating through all the pixels in x direction
+                        for (int x = 0; x < w; x++)
+                        {
+                            int indexRGB = x * 2;
+                            int indexRGBA = x * 4;
+                            bts[0] = rowOrig[indexRGB + 1];
+                            bts[1] = rowOrig[indexRGB];
+                            ushort bs = (ushort)((float)BitConverter.ToUInt16(bts, 0) / ushort.MaxValue);
+                            row[indexRGBA + 3] = 255;//byte A
+                            row[indexRGBA + 2] = (byte)(bs);//byte R
+                            row[indexRGBA + 1] = (byte)(bs);//byte G
+                            row[indexRGBA] = (byte)(bs);//byte B
+                        }
+                    }
+                }
+                bmp.UnlockBits(bmd);
+                var bitmapProp = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
+                return new Bitmap(renderTarget, size, new DataPointer(bmd.Scan0, bitmap.Width * 4 * bitmap.Height), bitmap.Width * 4, bitmapProp);
             }
             image.UnlockBits(d);
             return b;

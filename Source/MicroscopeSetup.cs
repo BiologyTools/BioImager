@@ -434,6 +434,7 @@ namespace Bio
             if (openFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             Properties.Settings.Default.SimulatedImage = openFileDialog.FileName;
+            Properties.Settings.Default.Save();
         }
 
         private void simCameraBox_CheckedChanged(object sender, EventArgs e)

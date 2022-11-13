@@ -26,9 +26,34 @@ namespace Bio
             moveXBox.Value = (decimal)Microscope.GetObjectiveViewRectangle().W;
             moveYBox.Value = (decimal)Microscope.GetObjectiveViewRectangle().H;
             Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
+
             timer.Start();
         }
-
+        public string ImagingFolder
+        {
+            get
+            {
+                return folderBox.Text; 
+            }
+            set
+            {
+                Properties.Settings.Default.ImagingPath = folderBox.Text;
+                Properties.Settings.Default.Save();
+            }
+        }
+        public string ImageName
+        {
+            get
+            {
+                return nameBox.Text;
+            }
+            set
+            {
+                nameBox.Text = value;
+                Properties.Settings.Default.ImageName = nameBox.Text;
+                Properties.Settings.Default.Save();
+            }
+        }
         private void hideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             panel2.Hide();
@@ -126,7 +151,12 @@ namespace Bio
 
         private void stackBut_Click(object sender, EventArgs e)
         {
-            Microscope.TakeImageStack();
+            Microscope.UpperLimit = (double)upperLimBox.Value;
+            Microscope.LowerLimit = (double)lowerLimBox.Value;
+            Microscope.fInterVal = (double)fIntervalBox.Value;
+            Microscope.SetFolder(folderBox.Text);
+            BioImage bm = Microscope.TakeImageStack();
+            App.viewer.AddImage(bm);
         }
         private Point p;
         private void timer_Tick(object sender, EventArgs e)
@@ -179,11 +209,16 @@ namespace Bio
 
         private void sliceBox_ValueChanged(object sender, EventArgs e)
         {
-            double d = Math.Abs(Microscope.UpperLimit - Microscope.LowerLimit);
-            if (d == 0)
-                d = Microscope.UpperLimit - d / (double)sliceBox.Value;
-            double dd = d / Microscope.fInterVal;
-            fIntervalBox.Value = (decimal)dd;
+            double d = Math.Abs((double)upperLimBox.Value - (double)lowerLimBox.Value);
+            d = d / (double)sliceBox.Value;
+            double dd = d / (double)fIntervalBox.Value;
+            if (dd == 0)
+            {
+                lowerLimBox.Value = upperLimBox.Value - (sliceBox.Value * fIntervalBox.Value);
+                d = Math.Abs((double)upperLimBox.Value - (double)lowerLimBox.Value);
+                d = d / (double)sliceBox.Value;
+            }
+            fIntervalBox.Value = (decimal)d;
         }
 
         private void upperLimBox_ValueChanged(object sender, EventArgs e)
@@ -199,6 +234,7 @@ namespace Bio
         private void nameBox_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ImageName = nameBox.Text;
+            Properties.Settings.Default.Save();
         }
 
         private void tilesBut_Click(object sender, EventArgs e)

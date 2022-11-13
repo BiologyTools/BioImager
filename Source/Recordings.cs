@@ -174,8 +174,10 @@ namespace Bio
         }
         public static object GetProperty(Automation.Action.ValueType automation,string pro)
         {
-            Automation.Recording rec = (Automation.Recording)Automation.Properties[pro];
-            if (rec == null)
+            Automation.Recording rec = null;
+            if (Automation.Properties.ContainsKey(pro))
+                rec = (Automation.Recording)Automation.Properties[pro];
+            else
                 return null;
             Recorder.AddLine("Recordings.Get(" + rec.Name + ");");
             return rec.Get();

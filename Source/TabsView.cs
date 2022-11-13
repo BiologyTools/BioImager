@@ -919,6 +919,7 @@ namespace Bio
             Viewer.HardwareAcceleration = dToolStripMenuItem.Checked;
             Properties.Settings.Default.HardwareAcceleration = dToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
+            Viewer.UpdateView();
         }
 
         private void imagesToStackToolStripMenuItem_Click(object sender, EventArgs e)

@@ -675,6 +675,8 @@ namespace Bio
                 dx.RenderTarget2D.FillRectangle(ToRawRectF(rg.X, rg.Y, rg.Width, rg.Height), new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.5f, 0.5f, 0.5f, 1.0f)));
                 for (int x = 0; x < Images.Count; x++)
                 {
+                    if(dBitmaps==null)
+                        UpdateImages();
                     if (dBitmaps[x] == null)
                         UpdateImages();
                     RectangleF r = ToScreenRectF(Images[x].Volume.Location.X, Images[x].Volume.Location.Y, Images[x].Volume.Width, Images[x].Volume.Height);
@@ -708,6 +710,7 @@ namespace Bio
                         Font fo = new Font(an.font.FontFamily, (float)(an.strokeWidth / w) * an.font.Size);
                         PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
                         float width = (float)ToViewSizeW(ROI.selectBoxSize / w);
+                        dx.RenderTarget2D.StrokeWidth = width;
                         if (an.type == ROI.Type.Point)
                         {
                             PointF pf = ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1));
@@ -880,10 +883,6 @@ namespace Bio
         {
             UpdateStatus();
             update = refresh;
-            if (HardwareAcceleration)
-            {
-                //dxPanel.Invalidate();
-            }
             if (update)
             {
                 pictureBox.Invalidate();
@@ -892,7 +891,7 @@ namespace Bio
         }
         public void UpdateImages()
         {
-            if (SelectedImage == null)
+            if (Images.Count == 0)
                 return;
             for (int i = 0; i < Bitmaps.Count; i++)
             {
@@ -900,6 +899,9 @@ namespace Bio
             }
             GC.Collect();
             Bitmaps.Clear();
+
+            if (SelectedImage == null)
+                SelectedIndex = 0;
             if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
             {
                 InitGUI();
