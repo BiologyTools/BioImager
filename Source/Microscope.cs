@@ -964,18 +964,17 @@ namespace Bio
             Focus.SetFocus(UpperLimit);
             double d = Math.Abs(UpperLimit - LowerLimit);
             double dd = d / fInterVal;
-            //bi = BioImage.CopyInfo(bi, true, true);
-            for (int i = 0; i < dd; i++)
+            for (int i = 0; i < dd+1; i++)
             {
                 imagingStack = true;
                 TakeImage(i);
+                //If this is the last image we don't need to move the focus. 
+                if(i < dd)
                 Focus.SetFocus(Focus.GetFocus() - fInterVal);
                 Application.DoEvents();
             }
             bi.UpdateCoords(bi.Buffers.Count, 1, 1);
             bi.Volume = new VolumeD(new Point3D(bi.stageSizeX, bi.stageSizeY, bi.stageSizeZ), new Point3D(bi.physicalSizeX * bi.SizeX, bi.physicalSizeY * bi.SizeY, bi.physicalSizeZ * bi.SizeZ));
-
-            bi.UpdateCoords(bi.Buffers.Count, 1, 1);
             if (bi.bitsPerPixel > 8)
                 bi.StackThreshold(true);
             else
