@@ -966,7 +966,6 @@ namespace Bio
             double dd = d / fInterVal;
             for (int i = 0; i < dd+1; i++)
             {
-                imagingStack = true;
                 TakeImage(i);
                 //If this is the last image we don't need to move the focus. 
                 if(i < dd)
@@ -983,7 +982,6 @@ namespace Bio
             return bi;
         }
         static FileSystemWatcher watcher = new FileSystemWatcher();
-        static string fold = "";
         public static void Watcher()
         {
             string s = GetFolder();
@@ -993,12 +991,9 @@ namespace Bio
             watcher.EnableRaisingEvents = true;
             watcher.EndInit();
         }
-
-        static bool imagingStack = false;
         static BioImage bi;
         private static void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
         {
-            imagingStack = true;
             //We wait till the new file is no longer written into.
             do
             {
@@ -1010,18 +1005,30 @@ namespace Bio
             } while (true);
             BioImage b = BioImage.OpenOME(e.FullPath,0,false,false,0,0,0,0);
             bi.Buffers.AddRange(b.Buffers);
-            imagingStack = true;
         }
-        public static void TakeImageStack(double UpperLimit, double LowerLimit, double interval)
+        public static BioImage TakeImageStack(double UpperLimit, double LowerLimit, double interval)
         {
+            bi = new BioImage(Properties.Settings.Default.ImageName);
+            watcher.Path = GetFolder();
             Focus.SetFocus(UpperLimit);
-            double d = UpperLimit - LowerLimit;
+            double d = Math.Abs(UpperLimit - LowerLimit);
             double dd = d / fInterVal;
-            for (int i = 0; i < dd; i++)
+            for (int i = 0; i < dd + 1; i++)
             {
-                TakeImage();
-                Focus.SetFocus(Focus.GetFocus() + fInterVal);
+                TakeImage(i);
+                //If this is the last image we don't need to move the focus. 
+                if (i < dd)
+                    Focus.SetFocus(Focus.GetFocus() - fInterVal);
+                Application.DoEvents();
             }
+            bi.UpdateCoords(bi.Buffers.Count, 1, 1);
+            bi.Volume = new VolumeD(new Point3D(bi.stageSizeX, bi.stageSizeY, bi.stageSizeZ), new Point3D(bi.physicalSizeX * bi.SizeX, bi.physicalSizeY * bi.SizeY, bi.physicalSizeZ * bi.SizeZ));
+            if (bi.bitsPerPixel > 8)
+                bi.StackThreshold(true);
+            else
+                bi.StackThreshold(false);
+            Images.AddImage(bi);
+            return bi;
         }
         public static void TakeTiles(int width, int height)
         {
