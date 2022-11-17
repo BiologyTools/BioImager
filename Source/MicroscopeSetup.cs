@@ -119,6 +119,12 @@ namespace Bio
                     Obj7Height.Value = (decimal)list[6].ViewHeight;
             }
             UpdateObjectives();
+            //If setup not run we run it.
+            if(Properties.Settings.Default.Setup)
+            {
+                this.Show();
+                Properties.Settings.Default.Setup = false;
+            }
         }
 
         private void objectiveA1Box_ValueChanged(object sender, EventArgs e)
@@ -449,38 +455,58 @@ namespace Bio
         private void SetGetProperty(object sender, EventArgs e)
         {
             string name = (string)((Button)sender).Tag;
-            Function f = new Function();
-            f.Name = "Get" + name;
+            Function f;
+            if (Function.Functions.ContainsKey(name))
+            {
+                f = Function.Functions[name];
+            }
+            else
+            {
+                f = new Function();
+                f.Name = name;
+            }
             FunctionForm form = new FunctionForm(f);
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             if (!SettingExist(name))
             {
                 SettingsProperty sp = new SettingsProperty(name);
-                sp.DefaultValue = "Set" + form.Func.File;
+                sp.DefaultValue = form.Func.Serialize();
+                sp.Name = name;
                 Properties.Settings.Default.Properties.Add(sp);
             }
             else
-                Properties.Settings.Default[name] = form.Func.File;
+            {
+                Properties.Settings.Default[name] = form.Func.Serialize();
+            }
             form.Dispose();
         }
 
         private void SetProperty(object sender, EventArgs e)
         {
             string name = (string)((Button)sender).Tag;
-            Function f = new Function();
-            f.Name = "Set" + name;
+            Function f;
+            if (Function.Functions.ContainsKey(name))
+            {
+                f = Function.Functions[name];
+            }
+            else
+            {
+                f = new Function();
+                f.Name = name;
+            }
             FunctionForm form = new FunctionForm(f);
             if (form.ShowDialog() != DialogResult.OK)
                 return;
-            if (!SettingExist(name))
+            if (!SettingExist(f.Name))
             {
                 SettingsProperty sp = new SettingsProperty(name);
-                sp.DefaultValue = "Get" + form.Func.File;
+                sp.DefaultValue = form.Func.Serialize();
+                sp.Name = name;
                 Properties.Settings.Default.Properties.Add(sp);
             }
             else
-                Properties.Settings.Default[name] = form.Func.File;
+                Properties.Settings.Default[name] = form.Func.Serialize();
             form.Dispose();
         }
 

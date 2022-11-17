@@ -12,9 +12,16 @@ namespace Bio
 {
     public partial class TextInput : Form
     {
-        public string textInput = "";
+        string textValue = "";
         public Font font = DefaultFont;
         public Color color = Color.Yellow;
+        public string TextValue
+        {
+            get
+            {
+                return textValue;
+            }
+        }
         public TextInput(string text)
         {
             InitializeComponent();
@@ -23,7 +30,7 @@ namespace Bio
 
         private void okBut_Click(object sender, EventArgs e)
         {
-            textInput = textBox.Text;
+            textValue = textBox.Text;
             DialogResult = DialogResult.OK;
         }
 

@@ -920,6 +920,7 @@ namespace Bio
             Properties.Settings.Default.ImagingPath = folder;
             Properties.Settings.Default.Save();
         }
+
         public static void TakeImage()
         {
             TakeImage(0);
@@ -946,6 +947,9 @@ namespace Bio
                     bi.physicalSizeY = b.physicalSizeY;
                     bi.physicalSizeZ = b.physicalSizeZ;
                 }
+                bi.Buffers[i].Plane.Coordinate = new ZCT(i, 0, 0);
+                bi.Buffers[i].Plane.Location = GetPosition();
+
                 watcher.Path = Properties.Settings.Default.ImagingPath;
                 watcher.EnableRaisingEvents = true;
                 string p = GetFolder() + "/" + b.Filename + "-" + i + ".ome.tif";
@@ -992,6 +996,8 @@ namespace Bio
             watcher.EndInit();
         }
         static BioImage bi;
+        static BioImage currentImage;
+        static bool imaging = false;
         private static void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
         {
             //We wait till the new file is no longer written into.
@@ -1003,8 +1009,8 @@ namespace Bio
                     break;
                 fi = null;
             } while (true);
-            BioImage b = BioImage.OpenOME(e.FullPath,0,false,false,0,0,0,0);
-            bi.Buffers.AddRange(b.Buffers);
+            currentImage = BioImage.OpenOME(e.FullPath,0,false,false,0,0,0,0);
+            bi.Buffers.AddRange(currentImage.Buffers);
         }
         public static BioImage TakeImageStack(double UpperLimit, double LowerLimit, double interval)
         {

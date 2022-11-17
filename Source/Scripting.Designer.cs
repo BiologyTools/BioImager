@@ -127,10 +127,11 @@
             this.tabControl.Controls.Add(this.outputTab);
             this.tabControl.Controls.Add(this.error);
             this.tabControl.Controls.Add(this.logTabPage);
+            this.tabControl.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.Location = new System.Drawing.Point(3, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(355, 164);
+            this.tabControl.Size = new System.Drawing.Size(355, 165);
             this.tabControl.TabIndex = 8;
             this.tabControl.TabStop = false;
             // 
@@ -140,7 +141,7 @@
             this.outputTab.Location = new System.Drawing.Point(4, 22);
             this.outputTab.Name = "outputTab";
             this.outputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.outputTab.Size = new System.Drawing.Size(347, 138);
+            this.outputTab.Size = new System.Drawing.Size(347, 139);
             this.outputTab.TabIndex = 1;
             this.outputTab.Text = "Output";
             this.outputTab.UseVisualStyleBackColor = true;
@@ -151,7 +152,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
-            this.outputBox.Size = new System.Drawing.Size(341, 132);
+            this.outputBox.Size = new System.Drawing.Size(341, 133);
             this.outputBox.TabIndex = 2;
             this.outputBox.TabStop = false;
             // 
@@ -161,7 +162,7 @@
             this.error.Location = new System.Drawing.Point(4, 22);
             this.error.Name = "error";
             this.error.Padding = new System.Windows.Forms.Padding(3);
-            this.error.Size = new System.Drawing.Size(347, 117);
+            this.error.Size = new System.Drawing.Size(347, 139);
             this.error.TabIndex = 0;
             this.error.Text = "Error";
             this.error.UseVisualStyleBackColor = true;
@@ -172,7 +173,7 @@
             this.errorView.HideSelection = false;
             this.errorView.Location = new System.Drawing.Point(3, 3);
             this.errorView.Name = "errorView";
-            this.errorView.Size = new System.Drawing.Size(341, 111);
+            this.errorView.Size = new System.Drawing.Size(341, 133);
             this.errorView.TabIndex = 0;
             this.errorView.UseCompatibleStateImageBehavior = false;
             this.errorView.View = System.Windows.Forms.View.List;
@@ -183,7 +184,7 @@
             this.logTabPage.Controls.Add(this.logBox);
             this.logTabPage.Location = new System.Drawing.Point(4, 22);
             this.logTabPage.Name = "logTabPage";
-            this.logTabPage.Size = new System.Drawing.Size(347, 117);
+            this.logTabPage.Size = new System.Drawing.Size(347, 139);
             this.logTabPage.TabIndex = 2;
             this.logTabPage.Text = "Log";
             this.logTabPage.UseVisualStyleBackColor = true;
@@ -195,7 +196,7 @@
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(347, 117);
+            this.logBox.Size = new System.Drawing.Size(347, 139);
             this.logBox.TabIndex = 4;
             this.logBox.TabStop = false;
             // 
@@ -284,11 +285,15 @@
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.tabControl);
             this.splitContainer.Size = new System.Drawing.Size(361, 425);
-            this.splitContainer.SplitterDistance = 244;
+            this.splitContainer.SplitterDistance = 243;
             this.splitContainer.TabIndex = 15;
             // 
             // topMostBox

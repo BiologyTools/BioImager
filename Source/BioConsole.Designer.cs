@@ -50,6 +50,7 @@ namespace Bio
             // 
             this.textBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox.ForeColor = System.Drawing.Color.White;
             this.textBox.Location = new System.Drawing.Point(0, 0);
             this.textBox.Multiline = true;
@@ -74,6 +75,7 @@ namespace Bio
             // 
             this.consoleBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.consoleBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.consoleBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.consoleBox.ForeColor = System.Drawing.Color.White;
             this.consoleBox.Location = new System.Drawing.Point(0, 0);
             this.consoleBox.Multiline = true;
@@ -164,6 +166,8 @@ namespace Bio
             // 
             this.biofBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.biofBox.AutoSize = true;
+            this.biofBox.Checked = true;
+            this.biofBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.biofBox.Location = new System.Drawing.Point(88, 241);
             this.biofBox.Name = "biofBox";
             this.biofBox.Size = new System.Drawing.Size(97, 17);

@@ -1495,7 +1495,7 @@ namespace Bio
             this.folderSet.Name = "folderSet";
             this.folderSet.Size = new System.Drawing.Size(63, 23);
             this.folderSet.TabIndex = 120;
-            this.folderSet.Tag = "Folder";
+            this.folderSet.Tag = "SetFolder";
             this.folderSet.Text = "Set";
             this.folderSet.UseVisualStyleBackColor = false;
             this.folderSet.Click += new System.EventHandler(this.SetProperty);
@@ -1508,7 +1508,7 @@ namespace Bio
             this.folderGet.Name = "folderGet";
             this.folderGet.Size = new System.Drawing.Size(63, 23);
             this.folderGet.TabIndex = 121;
-            this.folderGet.Tag = "Folder";
+            this.folderGet.Tag = "GetFolder";
             this.folderGet.Text = "Get";
             this.folderGet.UseVisualStyleBackColor = false;
             this.folderGet.Click += new System.EventHandler(this.SetGetProperty);
@@ -1751,7 +1751,7 @@ namespace Bio
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(63, 23);
             this.button11.TabIndex = 153;
-            this.button11.Tag = "LowerLim";
+            this.button11.Tag = "GetLowerLim";
             this.button11.Text = "Get";
             this.button11.UseVisualStyleBackColor = false;
             this.button11.Click += new System.EventHandler(this.SetGetProperty);
@@ -1764,7 +1764,7 @@ namespace Bio
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(63, 23);
             this.button12.TabIndex = 152;
-            this.button12.Tag = "LowerLim";
+            this.button12.Tag = "SetLowerLim";
             this.button12.Text = "Set";
             this.button12.UseVisualStyleBackColor = false;
             this.button12.Click += new System.EventHandler(this.SetProperty);
@@ -1777,7 +1777,7 @@ namespace Bio
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(63, 23);
             this.button13.TabIndex = 150;
-            this.button13.Tag = "UpperLim";
+            this.button13.Tag = "GetUpperLim";
             this.button13.Text = "Get";
             this.button13.UseVisualStyleBackColor = false;
             this.button13.Click += new System.EventHandler(this.SetGetProperty);
@@ -1790,7 +1790,7 @@ namespace Bio
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(63, 23);
             this.button14.TabIndex = 149;
-            this.button14.Tag = "UpperLim";
+            this.button14.Tag = "SetUpperLim";
             this.button14.Text = "Set";
             this.button14.UseVisualStyleBackColor = false;
             this.button14.Click += new System.EventHandler(this.SetProperty);
@@ -1823,7 +1823,7 @@ namespace Bio
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(63, 23);
             this.button15.TabIndex = 159;
-            this.button15.Tag = "LocExp";
+            this.button15.Tag = "GetLocExp";
             this.button15.Text = "Get";
             this.button15.UseVisualStyleBackColor = false;
             this.button15.Click += new System.EventHandler(this.SetGetProperty);
@@ -1836,7 +1836,7 @@ namespace Bio
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(63, 23);
             this.button16.TabIndex = 158;
-            this.button16.Tag = "LocExp";
+            this.button16.Tag = "SetLocExp";
             this.button16.Text = "Set";
             this.button16.UseVisualStyleBackColor = false;
             this.button16.Click += new System.EventHandler(this.SetProperty);
@@ -1849,7 +1849,7 @@ namespace Bio
             this.button17.Name = "button17";
             this.button17.Size = new System.Drawing.Size(63, 23);
             this.button17.TabIndex = 157;
-            this.button17.Tag = "AcqExp";
+            this.button17.Tag = "GetAcqExp";
             this.button17.Text = "Get";
             this.button17.UseVisualStyleBackColor = false;
             this.button17.Click += new System.EventHandler(this.SetGetProperty);
@@ -1862,7 +1862,7 @@ namespace Bio
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(63, 23);
             this.button18.TabIndex = 156;
-            this.button18.Tag = "AcqExp";
+            this.button18.Tag = "SetAcqExp";
             this.button18.Text = "Set";
             this.button18.UseVisualStyleBackColor = false;
             this.button18.Click += new System.EventHandler(this.SetProperty);
@@ -2215,7 +2215,7 @@ namespace Bio
             this.button20.Name = "button20";
             this.button20.Size = new System.Drawing.Size(63, 23);
             this.button20.TabIndex = 190;
-            this.button20.Tag = "Focus";
+            this.button20.Tag = "GetFocus";
             this.button20.Text = "Get";
             this.button20.UseVisualStyleBackColor = false;
             this.button20.Click += new System.EventHandler(this.SetGetProperty);
@@ -2228,7 +2228,7 @@ namespace Bio
             this.button21.Name = "button21";
             this.button21.Size = new System.Drawing.Size(63, 23);
             this.button21.TabIndex = 189;
-            this.button21.Tag = "Focus";
+            this.button21.Tag = "SetFocus";
             this.button21.Text = "Set";
             this.button21.UseVisualStyleBackColor = false;
             this.button21.Click += new System.EventHandler(this.SetProperty);
@@ -2241,7 +2241,7 @@ namespace Bio
             this.liveBut.Name = "liveBut";
             this.liveBut.Size = new System.Drawing.Size(63, 23);
             this.liveBut.TabIndex = 163;
-            this.liveBut.Tag = "LiveImage";
+            this.liveBut.Tag = "SetLiveImage";
             this.liveBut.Text = "Set";
             this.liveBut.UseVisualStyleBackColor = false;
             this.liveBut.Click += new System.EventHandler(this.SetProperty);
@@ -2423,7 +2423,7 @@ namespace Bio
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(63, 23);
             this.button23.TabIndex = 210;
-            this.button23.Tag = "LocExp";
+            this.button23.Tag = "SetLocExp";
             this.button23.Text = "Set";
             this.button23.UseVisualStyleBackColor = false;
             this.button23.Click += new System.EventHandler(this.SetProperty);

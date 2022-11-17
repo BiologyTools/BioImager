@@ -115,22 +115,6 @@ namespace Bio
             moveXBox.Value = (decimal)Microscope.Objectives.List[objBox.SelectedIndex].ViewWidth;
             moveYBox.Value = (decimal)Microscope.Objectives.List[objBox.SelectedIndex].ViewHeight;
         }
-
-        private void overlayBox_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
-
-        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.viewer.UpdateOverlay();
-        }
-
         private void setObjBut_Click(object sender, EventArgs e)
         {
             if (objBox.SelectedItem == null)
@@ -302,6 +286,8 @@ namespace Bio
         private void moveXBox_ValueChanged(object sender, EventArgs e)
         {
             Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
+            if(App.viewer!=null)
+            App.viewer.UpdateView();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -312,6 +298,8 @@ namespace Bio
         private void moveYBox_ValueChanged(object sender, EventArgs e)
         {
             Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
+            if (App.viewer != null)
+                App.viewer.UpdateView();
         }
 
         private void label1_Click(object sender, EventArgs e)

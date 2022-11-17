@@ -179,7 +179,6 @@ namespace Bio
             }
         }
     }
-
     static public class FileUtil
     {
         [StructLayout(LayoutKind.Sequential)]

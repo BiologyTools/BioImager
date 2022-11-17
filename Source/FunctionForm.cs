@@ -89,7 +89,15 @@ namespace Bio
             modifierBox.Items.Add(VirtualKeyCode.LWIN);
             modifierBox.SelectedItem = func.Modifier;
 
-
+            microBox.Items.Clear();
+            microBox.Items.Add(Function.FunctionType.NextCoordinate);
+            microBox.Items.Add(Function.FunctionType.NextSnapCoordinate);
+            microBox.Items.Add(Function.FunctionType.PreviousCoordinate);
+            microBox.Items.Add(Function.FunctionType.PreviousSnapCoordinate);
+            microBox.Items.Add(Function.FunctionType.Objective);
+            microBox.Items.Add(Function.FunctionType.NextCoordinate);
+            microBox.Items.Add(Function.FunctionType.StoreCoordinate);
+            microBox.SelectedItem = func.Microscope;
 
             ind = 0;
             recBox.Items.Clear();
@@ -103,6 +111,7 @@ namespace Bio
                 }
                 ind++;
             }
+            
             ind = 0;
             propBox.Items.Clear();
             foreach (Automation.Recording rec in Automation.Properties.Values)
@@ -117,6 +126,41 @@ namespace Bio
             }
             valBox.Value = (decimal)func.Value;
             menuPath.Text = func.MenuPath;
+            contextMenuPath.Text = func.ContextPath;
+        }
+        private void UpdateItems()
+        {
+            int ind = 0;
+            textBox.Text = func.Script;
+            nameBox.Text = func.Name;
+            stateBox.SelectedItem = func.State;
+            keysBox.SelectedItem = func.Key;
+            modifierBox.SelectedItem = func.Modifier;
+            microBox.SelectedItem = func.Microscope;
+            foreach (Automation.Recording rec in Automation.Recordings.Values)
+            {
+                string s = System.IO.Path.GetFileNameWithoutExtension(rec.File);
+                if (s == func.File)
+                {
+                    recBox.SelectedIndex = ind;
+                }
+                ind++;
+            }
+            ind = 0;
+            foreach (Automation.Recording rec in Automation.Properties.Values)
+            {
+                string s = System.IO.Path.GetFileNameWithoutExtension(rec.File);
+                if (s == func.File)
+                {
+                    propBox.SelectedIndex = ind;
+                }
+                ind++;
+            }
+            valBox.Value = (decimal)func.Value;
+            if (func.FuncType == Function.FunctionType.ImageJ)
+                imageJRadioBut.Checked = true;
+            menuPath.Text = func.MenuPath;
+            contextMenuPath.Text = func.ContextPath;
         }
         private void keysBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -145,15 +189,24 @@ namespace Bio
             {
                 Function.Functions[func.Name] = func;
             }
-            if (func.MenuPath != null || func.MenuPath != "")
+            if (func.MenuPath != null && func.MenuPath != "")
             {
                 if (func.MenuPath.EndsWith("/"))
                     func.MenuPath = func.MenuPath.TrimEnd('/');
-                if (func.MenuPath.EndsWith(func.Name))
+                if (func.MenuPath.EndsWith(func.Name) && func.MenuPath.Contains("/"))
                     func.MenuPath.Remove(func.MenuPath.IndexOf('/'), func.MenuPath.Length - func.MenuPath.IndexOf('/'));
-                    App.AddMenu(func.MenuPath, func);
+                App.AddMenu(func.MenuPath, func);
+            }
+            if (func.ContextPath != null && func.ContextPath != "")
+            {
+                if (func.ContextPath.EndsWith("/"))
+                    func.ContextPath = func.ContextPath.TrimEnd('/');
+                if (func.ContextPath.EndsWith(func.Name) && func.ContextPath.Contains("/"))
+                    func.ContextPath.Remove(func.ContextPath.IndexOf('/'), func.ContextPath.Length - func.ContextPath.IndexOf('/'));
+                App.AddContextMenu(func.ContextPath, func);
             }
             func.Save();
+            Init();
         }
         private void propBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -181,7 +234,7 @@ namespace Bio
         }
         private void performBut_Click(object sender, EventArgs e)
         {
-            func.PerformFunction(imageJRadioBut.Checked);
+            MessageBox.Show(func.PerformFunction(imageJRadioBut.Checked).ToString());
         }
 
         private void cancelBut_Click(object sender, EventArgs e)
@@ -224,12 +277,22 @@ namespace Bio
             if (funcsBox.SelectedIndex == -1)
                 return;
             func = (Function)funcsBox.SelectedItem;
-            Init();
+            UpdateItems();
         }
 
         private void FunctionForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 
+        }
+
+        private void contextMenuPath_TextChanged(object sender, EventArgs e)
+        {
+            func.ContextPath = contextMenuPath.Text;
+        }
+
+        private void microBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            func.FuncType = (Function.FunctionType)microBox.SelectedItem;
         }
     }
 
@@ -343,6 +406,18 @@ namespace Bio
         }
         private string menuPath;
         public string MenuPath
+        {
+            get
+            {
+                return menuPath;
+            }
+            set
+            {
+                menuPath = value;
+            }
+        }
+        private string contextPath;
+        public string ContextPath
         {
             get
             {
@@ -485,6 +560,7 @@ namespace Bio
                 Function f = Function.Parse(fs);
                 Functions.Add(f.Name, f);
                 App.AddMenu(f.MenuPath, f);
+                App.AddContextMenu(f.ContextPath, f);
             }
         }
         public void Save()

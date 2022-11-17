@@ -190,6 +190,10 @@ namespace Bio
 
         private void startBut_Click(object sender, EventArgs e)
         {
+            TextInput ti = new TextInput("Property" + propBox.Items.Count);
+            ti.Text = "Set Property Name";
+            if (ti.ShowDialog() != DialogResult.OK)
+                return;
             recordStatusLabel.Text = "Recording: Started";
             if (Automation.IsRecording)
                 return;
@@ -270,6 +274,7 @@ namespace Bio
             }
             string s = Path.GetFileNameWithoutExtension(savePropDialog.FileName);
             n.Name = s;
+            
             string j = JsonConvert.SerializeObject(n.List, Formatting.None);
             File.WriteAllText(file, j);
             InitElements();
@@ -351,6 +356,10 @@ namespace Bio
 
         private void startPropBut_Click(object sender, EventArgs e)
         {
+            TextInput ti = new TextInput("Property" + propBox.Items.Count);
+            ti.Text = "Set Property Name";
+            if (ti.ShowDialog() != DialogResult.OK)
+                return;
             propRecStatusLabel.Text = "Property Recording: Started";
             Automation.StartPropertyRecording();
         }
@@ -385,12 +394,14 @@ namespace Bio
         }
         private void setPropBut_Click(object sender, EventArgs e)
         {
+            TextInput ti = new TextInput("Property" + propBox.Items.Count);
+            ti.Text = "Set Text To Set";
             if (propView.SelectedNode == null)
                 return;
             Node n = (Node)propView.SelectedNode.Tag;
             if (n.type == Node.Type.action)
                 return;
-            Automation.SetProperty(n.recording.Name, "123");
+            Automation.SetProperty(n.recording.Name, ti.TextValue);
         }
         private void saveSelectedValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -419,6 +430,7 @@ namespace Bio
             if (n.type == Node.Type.recording)
             {
                 Automation.Properties.Remove(n.recording.Name);
+                if(n.recording.File!=null)
                 File.Delete(n.recording.File);
                 InitElements();
             }
@@ -509,6 +521,16 @@ namespace Bio
             // the actual index could have shifted due to the removal
             n.recording.List.Insert(newindex, n.action);
             UpdateElements();
+        }
+
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (propView.SelectedNode == null)
+                return;
+            Node n = (Node)propView.SelectedNode.Tag;
+            if (n.type == Node.Type.recording)
+                return;
+            n.action.Value = (Automation.Action.ValueType)propBox.SelectedItem;
         }
     }
 }

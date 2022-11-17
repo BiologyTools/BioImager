@@ -717,9 +717,18 @@ namespace Bio
                 }
                 if (window == null)
                     return 0;
-                AutomationElementCollection items = window.FindAll(TreeScope.Subtree, Condition.TrueCondition);
+                AutomationElementCollection items = null;
+                try
+                {
+                    items = window.FindAll(TreeScope.Subtree, Condition.TrueCondition);
+                }
+                catch (Exception)
+                {
+
+                }
                 List<AutomationElement> result = new List<AutomationElement>();
                 int index = 0;
+                if(items != null)
                 foreach (AutomationElement item in items)
                 {
                     try

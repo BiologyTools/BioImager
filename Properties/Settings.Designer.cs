@@ -481,13 +481,25 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool HardwareAcceleration {
             get {
                 return ((bool)(this["HardwareAcceleration"]));
             }
             set {
                 this["HardwareAcceleration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Setup {
+            get {
+                return ((bool)(this["Setup"]));
+            }
+            set {
+                this["Setup"] = value;
             }
         }
     }

@@ -101,7 +101,7 @@ namespace Bio
                 try
                 {
                     string loader =
-                  @"//css_reference Bio.dll;
+                  @"//css_reference " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + @".dll
                     using System;
                     using System.Windows.Forms;
                     using System.Drawing;
@@ -117,6 +117,7 @@ namespace Bio
                         public object Load()
                         {" +
                             st + @";
+                            return true;
                         }
                     }";
                     dynamic script = CSScript.Evaluator.LoadCode(loader);

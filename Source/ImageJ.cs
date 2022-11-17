@@ -24,6 +24,7 @@ namespace Bio
             Process pr = new Process();
             pr.StartInfo.FileName = ImageJPath;
             pr.StartInfo.Arguments = "-macro " + file + " " + param;
+
             pr.Start();
             processes.Add(pr);
             Recorder.AddLine("ImageJ.RunMacro(" + file + "," + '"' + param + '"' + ");");
@@ -38,6 +39,7 @@ namespace Bio
             }
             Process pr = new Process();
             pr.StartInfo.FileName = ImageJPath;
+            pr.StartInfo.CreateNoWindow = true;
             string te = rng.Next(0, 9999999).ToString();
             string p = Environment.CurrentDirectory + "\\" + te + ".txt";
             p.Replace("/", "\\");
@@ -72,7 +74,7 @@ namespace Bio
         }
         public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats)
         {
-            if (ImageJPath == "")
+            if (ImageJPath == "" || ImageJPath == null)
             {
                 if (!App.SetImageJPath())
                     return;

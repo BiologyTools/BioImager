@@ -69,7 +69,6 @@ namespace Bio
             UpdateView();
             dx = new Direct2D();
             dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
-            
         }
         public ImageView()
         {
@@ -416,6 +415,7 @@ namespace Bio
         }
         PointD origin = new PointD(0, 0);
         Point pyramidalOrigin = new Point(0, 0);
+        bool hardwareAcceleration = true;
         public PointD Origin
         {
             get { return origin; }
@@ -475,10 +475,11 @@ namespace Bio
         {
             get
             {
-                return dxPanel.Visible;
+                return hardwareAcceleration;
             }
             set
             {
+                hardwareAcceleration = value;
                 if (value)
                 {
                     cBar.Value = 0;
@@ -498,6 +499,13 @@ namespace Bio
                     pictureBox.BringToFront();
                     overlayPictureBox.BringToFront();
                 }
+            }
+        }
+        public ContextMenuStrip ViewContextMenu
+        {
+            get
+            {
+                return contextMenuStrip;
             }
         }
         public void UpdateRGBChannels()
@@ -656,7 +664,7 @@ namespace Bio
         public void UpdateView()
         {
             UpdateStatus();
-            if(HardwareAcceleration)
+            if (HardwareAcceleration)
             {
                 RenderFrame();
                 return;
@@ -666,39 +674,49 @@ namespace Bio
         }
         public void RenderFrame()
         {
-            if (HardwareAcceleration && dx!=null)
+            if (HardwareAcceleration && dx != null)
             {
                 dx.BeginDraw();
                 dx.RenderTarget2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(1.0f, 1.0f, 1.0f, 1.0f));
                 RectangleF rg = ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY);
                 //dx.RenderTarget2D.Transform = SharpDX.Matrix3x2.Rotation((float)Math.PI);
-                dx.RenderTarget2D.FillRectangle(ToRawRectF(rg.X, rg.Y, rg.Width, rg.Height), new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.5f, 0.5f, 0.5f, 1.0f)));
-                for (int x = 0; x < Images.Count; x++)
-                {
-                    if(dBitmaps==null)
-                        UpdateImages();
-                    if (dBitmaps[x] == null)
-                        UpdateImages();
-                    RectangleF r = ToScreenRectF(Images[x].Volume.Location.X, Images[x].Volume.Location.Y, Images[x].Volume.Width, Images[x].Volume.Height);
-                    
-                    dx.RenderTarget2D.DrawBitmap(dBitmaps[x], ToRawRectF(r.X, r.Y, r.Width, r.Height), 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-                    if(Images[x].selected)
-                    {
-                        dx.RenderTarget2D.DrawRectangle(ToRawRectF(r.X, r.Y, r.Width, r.Height), new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.0f, 0.0f, 1.0f, 1.0f)));
-                    }
-                }
-                RectangleD re = Microscope.GetViewRectangle();
-                RectangleF vr = ToScreenRectF(re.X, re.Y, re.W, re.H);
-                RawRectangleF rr = ToRawRectF(vr.X, vr.Y, vr.Width, vr.Height);
-                dx.RenderTarget2D.DrawRectangle(rr, new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 0.0f, 1.0f)));
 
-                SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
                 SharpDX.Direct2D1.SolidColorBrush pen = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 0.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush red = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 0.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush green = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.0f, 1.0f, 0.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush mag = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 1.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush blue = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.0f, 0.0f, 1.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush b = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 1.0f, 0.0f, 1.0f));
+                SharpDX.Direct2D1.SolidColorBrush gray = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.5f, 0.5f, 0.5f, 1.0f));
+
+                dx.RenderTarget2D.FillRectangle(ToRawRectF(rg.X, rg.Y, rg.Width, rg.Height), gray);
+                for (int x = 0; x < Images.Count; x++)
+                {
+                    if (dBitmaps == null)
+                        UpdateImages();
+                    if (dBitmaps.Length != Images.Count)
+                        UpdateImages();
+                    if (dBitmaps[x] == null)
+                        UpdateImages();
+                    RectangleF r = ToScreenRectF(Images[x].Volume.Location.X, Images[x].Volume.Location.Y, Images[x].Volume.Width, Images[x].Volume.Height);
+                    double w = ToViewW(pictureBox.Width);
+                    double h = ToViewH(pictureBox.Height);
+                    RectangleF rge = new RectangleF((float)((-Origin.X) - (w / 2)), (float)((-Origin.Y) - (h / 2)), (float)(Math.Abs(w)), (float)(Math.Abs(h)));
+                    RectangleF rec = new RectangleF((float)Images[x].Volume.Location.X, (float)Images[x].Volume.Location.Y, (float)Images[x].Volume.Width, (float)Images[x].Volume.Height);
+                    //if (rge.IntersectsWith(rec))
+                        dx.RenderTarget2D.DrawBitmap(dBitmaps[x], ToRawRectF(r.X, r.Y, r.Width, r.Height), 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                    if (Images[x].selected)
+                    {
+                        dx.RenderTarget2D.DrawRectangle(ToRawRectF(r.X, r.Y, r.Width, r.Height), blue);
+                    }
+                }
+                RectangleD re = Microscope.GetViewRectangle();
+                RectangleF vr = ToScreenRectF(re.X, re.Y, re.W, re.H);
+                RawRectangleF rr = ToRawRectF(vr.X, vr.Y, vr.Width, vr.Height);
+                dx.RenderTarget2D.DrawRectangle(rr, red);
+
+                SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
+
                 bool bounds = showBounds;
                 bool labels = showText;
                 foreach (BioImage bi in Images)
@@ -714,11 +732,11 @@ namespace Bio
                         if (an.type == ROI.Type.Point)
                         {
                             PointF pf = ToScreenSpace(new PointF((float)an.Point.X + 1, (float)an.Point.Y + 1));
-                            dx.RenderTarget2D.DrawLine(an.Point.ToRaw(), new RawVector2(pf.X,pf.Y), b);
+                            dx.RenderTarget2D.DrawLine(an.Point.ToRaw(), new RawVector2(pf.X, pf.Y), b);
                             RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(width));
                             for (int i = 0; i < rfs.Length; i++)
                             {
-                                dx.RenderTarget2D.DrawRectangle(ToRawRectF(rfs[i].X, rfs[i].Y, rfs[i].Width, rfs[i].Height),red);
+                                dx.RenderTarget2D.DrawRectangle(ToRawRectF(rfs[i].X, rfs[i].Y, rfs[i].Width, rfs[i].Height), red);
                             }
                         }
                         else
@@ -726,7 +744,7 @@ namespace Bio
                         {
                             RawVector2 pf = ToScreenSpace(an.GetPoint(0)).ToRaw();
                             RawVector2 pf2 = ToScreenSpace(an.GetPoint(1)).ToRaw();
-                            dx.RenderTarget2D.DrawLine(pf,pf2, b);
+                            dx.RenderTarget2D.DrawLine(pf, pf2, b);
                             RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(width));
                             for (int i = 0; i < rfs.Length; i++)
                             {
@@ -750,7 +768,7 @@ namespace Bio
                             RectangleF r = ToScreenSpace(an.BoundingBox);
                             RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(width));
                             RawRectangleF rf = ToRawRectF(rfs[0].X, rfs[0].Y, rfs[0].Width, rfs[0].Height);
-                            SharpDX.Direct2D1.Ellipse e = new SharpDX.Direct2D1.Ellipse(new RawVector2(rf.Left + (Math.Abs(r.Width) / 2) - (rfs[0].Width/2), rf.Top + (Math.Abs(r.Height) / 2) - (rfs[0].Height/2)), -r.Width / 2 , -r.Height / 2);
+                            SharpDX.Direct2D1.Ellipse e = new SharpDX.Direct2D1.Ellipse(new RawVector2(rf.Left + (Math.Abs(r.Width) / 2) - (rfs[0].Width / 2), rf.Top + (Math.Abs(r.Height) / 2) - (rfs[0].Height / 2)), -r.Width / 2, -r.Height / 2);
                             dx.RenderTarget2D.DrawEllipse(e, b);
                             for (int i = 0; i < rfs.Length; i++)
                             {
@@ -762,10 +780,10 @@ namespace Bio
                         {
                             RawVector2 pf;
                             RawVector2 pf2;
-                            for (int i = 0; i < an.PointsD.Count-1; i++)
+                            for (int i = 0; i < an.PointsD.Count - 1; i++)
                             {
                                 pf = ToScreenSpace(an.GetPoint(i)).ToRaw();
-                                pf2 = ToScreenSpace(an.GetPoint(i+1)).ToRaw();
+                                pf2 = ToScreenSpace(an.GetPoint(i + 1)).ToRaw();
                                 dx.RenderTarget2D.DrawLine(pf, pf2, b);
                             }
                             pf = ToScreenSpace(an.GetPoint(0)).ToRaw();
@@ -815,7 +833,7 @@ namespace Bio
                         if (an.type == ROI.Type.Label)
                         {
                             RectangleF rec = ToScreenSpace(an.Rect);
-                            RawRectangleF r =ToRawRectF(rec.X,rec.Y,rec.Width,rec.Height);
+                            RawRectangleF r = ToRawRectF(rec.X, rec.Y, rec.Width, rec.Height);
                             SharpDX.DirectWrite.TextFormat tex = new SharpDX.DirectWrite.TextFormat(dx.FactoryDWrite, an.font.FontFamily.ToString(), an.font.Size);
                             dx.RenderTarget2D.DrawText(an.Text, tex, r, b);
                             tex.Dispose();
@@ -861,12 +879,12 @@ namespace Bio
                                 for (int i = 0; i < rects.Count; i++)
                                 {
                                     RectangleF ri = ToScreenSpace(rects[i]);
-                                    dx.RenderTarget2D.DrawRectangle(ToRawRectF(ri.X,ri.Y,ri.Width,ri.Height),blue);
+                                    dx.RenderTarget2D.DrawRectangle(ToRawRectF(ri.X, ri.Y, ri.Width, ri.Height), blue);
                                 }
                             }
                             rects.Clear();
                         }
-                        
+
                     }
                 }
                 pen.Dispose();
@@ -874,6 +892,7 @@ namespace Bio
                 mag.Dispose();
                 green.Dispose();
                 blue.Dispose();
+                gray.Dispose();
                 b.Dispose();
                 dx.EndDraw();
                 return;
@@ -883,6 +902,10 @@ namespace Bio
         {
             UpdateStatus();
             update = refresh;
+            if (HardwareAcceleration)
+            {
+                //dxPanel.Invalidate();
+            }
             if (update)
             {
                 pictureBox.Invalidate();
@@ -891,7 +914,7 @@ namespace Bio
         }
         public void UpdateImages()
         {
-            if (Images.Count == 0)
+            if (SelectedImage == null)
                 return;
             for (int i = 0; i < Bitmaps.Count; i++)
             {
@@ -899,9 +922,6 @@ namespace Bio
             }
             GC.Collect();
             Bitmaps.Clear();
-
-            if (SelectedImage == null)
-                SelectedIndex = 0;
             if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
             {
                 InitGUI();
@@ -911,12 +931,12 @@ namespace Bio
             {
                 if (dBitmaps != null)
                 {
-                    if(dBitmaps.Length > i)
-                    if (dBitmaps[i] != null)
-                    {
-                        dBitmaps[i].Dispose();
-                        dBitmaps[i] = null;
-                    }
+                    if (dBitmaps.Length > i)
+                        if (dBitmaps[i] != null)
+                        {
+                            dBitmaps[i].Dispose();
+                            dBitmaps[i] = null;
+                        }
                 }
                 else
                     dBitmaps = new SharpDX.Direct2D1.Bitmap[Images.Count];
@@ -983,9 +1003,9 @@ namespace Bio
                     else
                         bitmap = b.GetEmission(coords, b.RChannel.RangeR, b.GChannel.RangeG, b.BChannel.RangeB);
                 }
-                if(bitmap!=null)
-                if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
-                    bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
+                if (bitmap != null)
+                    if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
+                        bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
 
                 if (HardwareAcceleration && dx != null)
                 {
@@ -1010,7 +1030,7 @@ namespace Bio
                 return;
             if (Bitmaps.Count == 0)
                 return;
-            
+
             ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
             bitmap = null;
             GC.Collect();
@@ -1061,7 +1081,7 @@ namespace Bio
                 else
                     bitmap = (Bitmap)SelectedImage.Buffers[index].ImageRGB;
             }
-            else if(Mode == ViewMode.Emission)
+            else if (Mode == ViewMode.Emission)
             {
                 if (SelectedImage.isPyramidal)
                 {
@@ -1076,8 +1096,8 @@ namespace Bio
             }
 
             if (bitmap != null)
-            if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
-                bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
+                if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
+                    bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
 
             if (HardwareAcceleration)
             {
@@ -1089,7 +1109,7 @@ namespace Bio
                 dBitmaps[SelectedIndex] = DBitmap.FromImage(dx.RenderTarget2D, bitmap);
             }
 
-           
+
             if (SelectedIndex < Bitmaps.Count)
                 Bitmaps[SelectedIndex] = bitmap;
             else
@@ -1330,18 +1350,18 @@ namespace Bio
                 if (zBar.Value - 1 >= zBar.Minimum)
                     zBar.Value -= 1;
             }
-            if(SelectedImage!=null)
-            if (Ctrl && SelectedImage.isPyramidal)
-                if (e.Delta > 0)
-                {
-                    if (resolution - 1 > 0)
-                        Resolution--;
-                }
-                else
-                {
-                    if (resolution + 1 < SelectedImage.Resolutions.Count)
-                        Resolution++;
-                }
+            if (SelectedImage != null)
+                if (Ctrl && SelectedImage.isPyramidal)
+                    if (e.Delta > 0)
+                    {
+                        if (resolution - 1 > 0)
+                            Resolution--;
+                    }
+                    else
+                    {
+                        if (resolution + 1 < SelectedImage.Resolutions.Count)
+                            Resolution++;
+                    }
         }
         private void ZTrackBar_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -1523,6 +1543,11 @@ namespace Bio
                 return;
             if (!updateOverlay)
                 return;
+            if (HardwareAcceleration)
+            {
+                RenderFrame();
+                return;
+            }
             SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
             Pen pen = null;
             Pen red = null;
@@ -1716,7 +1741,7 @@ namespace Bio
         SizeF dSize = new SizeF(1, 1);
         private void DrawView(System.Drawing.Graphics g)
         {
-            if(HardwareAcceleration)
+            if (HardwareAcceleration)
             {
                 RenderFrame();
                 return;
@@ -1783,13 +1808,14 @@ namespace Bio
         Point mouseD = new Point(0, 0);
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
-            selectedImage = SelectedImage;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
+            tools.ToolMove(p, mouseDownButtons);
+            if (SelectedImage == null)
+            {
+                return;
+            }
             PointF ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + p.X + ", " + p.Y + ")";
-            tools.ToolMove(p, mouseDownButtons);
 
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
@@ -1902,50 +1928,50 @@ namespace Bio
                 }
 
             UpdateStatus();
-            
+
             pd = p;
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
             if (e.Button == MouseButtons.Middle)
             {
                 PointD pd = new PointD(p.X - mouseDown.X, p.Y - mouseDown.Y);
                 origin = new PointD(origin.X + pd.X, origin.Y + pd.Y);
-                if (SelectedImage.isPyramidal)
-                {
-                    Point pf = new Point(e.X - mouseD.X, e.Y - mouseD.Y);
-                    PyramidalOrigin = new Point(PyramidalOrigin.X - pf.X, PyramidalOrigin.Y - pf.Y);
-                    UpdateImage();
-                    UpdateView();
-                }
+                if (SelectedImage != null)
+                    if (SelectedImage.isPyramidal)
+                    {
+                        Point pf = new Point(e.X - mouseD.X, e.Y - mouseD.Y);
+                        PyramidalOrigin = new Point(PyramidalOrigin.X - pf.X, PyramidalOrigin.Y - pf.Y);
+                    }
+                UpdateImage();
+                UpdateView();
             }
             mouseUpButtons = e.Button;
             mouseDownButtons = MouseButtons.None;
             mouseUp = p;
             down = false;
             up = true;
+            if (SelectedImage == null)
+                return;
             tools.ToolUp(p, e.Button);
-
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
             selectedImage = SelectedImage;
             mouseDownButtons = e.Button;
             mouseUpButtons = MouseButtons.None;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
-            PointF ip = SelectedImage.ToImageSpace(p);
             pd = new PointD(p.X, p.Y);
             mouseDown = pd;
             mouseD = e.Location;
             down = true;
             up = false;
+            if (SelectedImage == null)
+                return;
+            PointF ip = SelectedImage.ToImageSpace(p);
             tools.BringToFront();
             int ind = 0;
             foreach (BioImage b in Images)
@@ -2084,7 +2110,7 @@ namespace Bio
                     TextInput input = new TextInput(item.Text);
                     if (input.ShowDialog() != DialogResult.OK)
                         return;
-                    item.Text = input.textInput;
+                    item.Text = input.TextValue;
                     item.font = input.font;
                     item.strokeColor = input.color;
                     UpdateOverlay();
@@ -2223,10 +2249,10 @@ namespace Bio
             if (HardwareAcceleration)
             {
                 RectangleF f = ToScreenRectF(x, y, 1, 1);
-                RawRectangleF rf = ToRawRectF(f.X,f.Y,f.Width,f.Height);
+                RawRectangleF rf = ToRawRectF(f.X, f.Y, f.Width, f.Height);
                 return new PointD(rf.Left, rf.Top);
             }
-            
+
             double fx = ToScreenScaleW(Origin.X + x);
             double fy = ToScreenScaleH(Origin.Y + y);
             return new PointD(fx, fy);
@@ -2256,7 +2282,7 @@ namespace Bio
         }
         public float ToScreenScaleW(double x)
         {
-            if(HardwareAcceleration)
+            if (HardwareAcceleration)
             {
                 return (float)(-x * PxWmicron * Scale.Width);
             }
@@ -2293,7 +2319,7 @@ namespace Bio
         {
             double xd = dxPanel.Width / 2;
             double yd = dxPanel.Height / 2;
-            return new RawRectangleF((float)(xd - x),(float)(yd - y), (float)(xd - (x + w)),(float)(yd - (y + h)));
+            return new RawRectangleF((float)(xd - x), (float)(yd - y), (float)(xd - (x + w)), (float)(yd - (y + h)));
         }
         public RectangleF ToScreenSpace(RectangleD p)
         {
@@ -2331,7 +2357,22 @@ namespace Bio
             }
             return rs;
         }
-
+        public float ToScreenW(double x)
+        {
+            if (HardwareAcceleration)
+            {
+                return (float)(-x * PxWmicron);
+            }
+            return (float)(x * PxWmicron);
+        }
+        public float ToScreenH(double y)
+        {
+            if (HardwareAcceleration)
+            {
+                return (float)(-y * PxHmicron);
+            }
+            return (float)(y * PxHmicron);
+        }
         private void ImageView_KeyDown(object sender, KeyEventArgs e)
         {
             double moveAmount = 5 * Scale.Width;
@@ -2384,9 +2425,18 @@ namespace Bio
             double dx = SelectedImage.Volume.Width / 2;
             double dy = SelectedImage.Volume.Height / 2;
             Origin = new PointD(-(SelectedImage.Volume.Location.X + dx), -(SelectedImage.Volume.Location.Y + dy));
-            double wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
-            double wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
-            Scale = new SizeF((float)wy,(float)wy);
+            double wx, wy;
+            if (HardwareAcceleration)
+            {
+                wx = pictureBox.Width / ToScreenW(SelectedImage.Volume.Width);
+                wy = pictureBox.Height / ToScreenH(SelectedImage.Volume.Height);
+            }
+            else
+            {
+                wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
+                wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
+            }
+            Scale = new SizeF((float)wy, (float)wy);
             UpdateView();
         }
         public void GoToImage(int i)
@@ -2394,8 +2444,17 @@ namespace Bio
             double dx = Images[i].Volume.Width / 2;
             double dy = Images[i].Volume.Height / 2;
             Origin = new PointD(-(Images[i].Volume.Location.X + dx), -(Images[i].Volume.Location.Y + dy));
-            double wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
-            double wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
+            double wx, wy;
+            if (HardwareAcceleration)
+            {
+                wx = pictureBox.Width / ToScreenW(SelectedImage.Volume.Width);
+                wy = pictureBox.Height / ToScreenH(SelectedImage.Volume.Height);
+            }
+            else
+            {
+                wx = pictureBox.Width / ToScreenScaleW(SelectedImage.Volume.Width);
+                wy = pictureBox.Height / ToScreenScaleH(SelectedImage.Volume.Height);
+            }
             Scale = new SizeF((float)wy, (float)wy);
             UpdateView();
         }
@@ -2407,7 +2466,6 @@ namespace Bio
         {
             Origin = new PointD(mouseDown.X, mouseDown.Y);
         }
-
         private void goToImageToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
@@ -2419,7 +2477,6 @@ namespace Bio
                 item.DropDownItems.Add(it);
             }
         }
-
         private void goToImageToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             int i = 0;
@@ -2433,14 +2490,36 @@ namespace Bio
                 i++;
             }
         }
+        public new void Dispose()
+        {
+            for (int i = 0; i < Bitmaps.Count; i++)
+            {
+                if (Bitmaps[i] != null)
+                    Bitmaps[i].Dispose();
+            }
+            foreach (BioImage item in Images)
+            {
+                Bio.Images.RemoveImage(item);
+            }
+        }
         public void GoToStage()
         {
+
             RectangleD d = Microscope.GetViewRectangle();
             double dx = d.W / 2;
             double dy = d.H / 2;
             Origin = new PointD(-(d.X + dx), -(d.Y + dy));
-            double wx = pictureBox.Width / ToScreenScaleW(d.W);
-            double wy = pictureBox.Height / ToScreenScaleH(d.H);
+            double wx, wy;
+            if (HardwareAcceleration)
+            {
+                wx = Math.Abs(pictureBox.Width / ToScreenW(d.W));
+                wy = Math.Abs(pictureBox.Height / ToScreenH(d.H));
+            }
+            else
+            {
+                wx = Math.Abs(pictureBox.Width / ToScreenScaleW(d.W));
+                wy = Math.Abs(pictureBox.Height / ToScreenScaleH(d.H));
+            }
             scale.Width = (float)wy;
             scale.Height = (float)wy;
             update = true;
@@ -2482,19 +2561,6 @@ namespace Bio
         private void moveStageToImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MoveStageToImage();
-        }
-
-        public new void Dispose()
-        {
-            for (int i = 0; i < Bitmaps.Count; i++)
-            {
-                if(Bitmaps[i]!=null)
-                Bitmaps[i].Dispose();
-            }
-            foreach (BioImage item in Images)
-            {
-                Bio.Images.RemoveImage(item);
-            }
         }
 
         private void goToToolStripMenuItem_Click_1(object sender, EventArgs e)

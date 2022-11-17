@@ -21,16 +21,19 @@ namespace Bio
         private void runBut_Click(object sender, EventArgs e)
         {
             object o = Scripting.Script.RunString(textBox.Text);
-            consoleBox.Text += o.ToString() + Environment.NewLine;
+            consoleBox.Text += textBox.Text + Environment.NewLine + o.ToString() + Environment.NewLine;
             textBox.Text = "";
         }
 
         private void imagejBut_Click(object sender, EventArgs e)
         {
+            if (ImageView.SelectedImage == null)
+                return;
             ImageJ.RunOnImage(textBox.Text, headlessBox.Checked, tabRadioBut.Checked, biofBox.Checked);
             consoleBox.Text += textBox.Text + Environment.NewLine;
             textBox.Text = "";
             string filename = "";
+            
             if (ImageView.SelectedImage.ID.EndsWith(".ome.tif"))
             {
                 filename = System.IO.Path.GetFileNameWithoutExtension(ImageView.SelectedImage.ID);

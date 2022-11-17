@@ -493,7 +493,9 @@ namespace Bio
             ImageView v = (ImageView)tabControl.SelectedTab.Controls[0];
             tabControl.TabPages.RemoveAt(tabControl.SelectedIndex);
             v.Dispose();
-
+            Images.RemoveImage(SelectedImage);
+            SelectedImage.Dispose();
+            GC.Collect();
         }
 
         private void openOMEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -696,23 +698,32 @@ namespace Bio
 
         }
 
-        private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
-        {
-            App.viewer.AddImage(BioImage.OpenFile(e.FullPath));
-        }
-
         private void addImagesToTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
             for (int i = 0; i < openFilesDialog.FileNames.Length; i++)
             {
-                if(i == 0 && tabControl.TabPages.Count == 0)
+                if (i == 0 && tabControl.TabPages.Count == 0)
                 {
+                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0]);
+                    for (int f = 0; f < bts.Length; f++)
+                    {
+                        if (f == 0 && i == 0)
+                            AddTab(bts[f]);
+                        else
+                            Viewer.AddImage(bts[f]);
+                    }
                     AddTab(BioImage.OpenFile(openFilesDialog.FileNames[0]));
                 }
                 else
-                    App.viewer.AddImage(BioImage.OpenFile(openFilesDialog.FileNames[i]));
+                {
+                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0]);
+                    for (int f = 0; f < bts.Length; f++)
+                    {
+                        Viewer.AddImage(bts[f]);
+                    }
+                }
             }
             App.viewer.GoToImage();
         }
@@ -827,6 +838,7 @@ namespace Bio
         {
             if(App.viewer != null)
             App.viewer.GoToImage();
+            
             Function.Initialize();
         }
 

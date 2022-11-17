@@ -210,9 +210,7 @@ namespace Bio
         ROI anno = new ROI();
         public void ToolDown(PointD e, MouseButtons buts)
         {
-            if (App.viewer == null)
-                return;
-            if (currentTool == null)
+            if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
             System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
@@ -333,7 +331,7 @@ namespace Bio
                     return;
                 an.font = ti.font;
                 an.strokeColor = ti.color;
-                an.Text = ti.textInput;
+                an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
             else
@@ -350,11 +348,7 @@ namespace Bio
         public void ToolUp(PointD e, MouseButtons buts)
         {
             System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
-            if (App.viewer == null)
-                return;
-            if (currentTool == null)
-                return;
-            if (anno == null)
+            if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
             if (currentTool.type == Tool.Type.point && buts == MouseButtons.Left)
@@ -508,6 +502,14 @@ namespace Bio
             if (App.viewer == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetMove(e, buts));
+            if (Tools.currentTool.type == Tools.Tool.Type.pan && buts == MouseButtons.Left || buts == MouseButtons.Middle)
+            {
+                PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
+                App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
+                UpdateView();
+            }
+            if (ImageView.SelectedImage == null)
+                return;
             System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
@@ -530,8 +532,8 @@ namespace Bio
                     anno.AddPoint(new PointD(e.X, e.Y));
                 }
                 UpdateOverlay();
-            }
-            else
+            }else
+            
             if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle)
             {
                 if (anno.GetPointCount() == 4)
@@ -615,13 +617,7 @@ namespace Bio
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, d.X, d.Y);
                 UpdateOverlay();
             }
-            if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts == MouseButtons.Middle || buts == MouseButtons.Left))
-            {
-                PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
-                App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
-                UpdateView();
-            }
-            else
+            
             if (buts == MouseButtons.Left && currentTool.type == Tool.Type.eraser)
             {
                 Graphics.Graphics g = Graphics.Graphics.FromImage(ImageView.SelectedBuffer);
