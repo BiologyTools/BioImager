@@ -924,12 +924,12 @@ namespace Bio
         public static void TakeImage()
         {
             TakeImage(0);
+            App.viewer.AddImage(bi);
         }
         public static void TakeImage(int i)
         {
             if (Properties.Settings.Default.SimulateCamera)
             {
-                
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
                 b.stageSizeX = b.Volume.Location.X;
@@ -938,6 +938,10 @@ namespace Bio
                 b.Filename = Images.GetImageName(App.stage.ImageName);
                 if(i==0)
                 {
+                    if (bi == null)
+                    {
+                        bi = MicroscopeSetup.simImage;
+                    }
                     bi.Volume.Location = b.Volume.Location;
                     bi.Channels = MicroscopeSetup.simImage.Channels;
                     bi.stageSizeX = b.Volume.Location.X;

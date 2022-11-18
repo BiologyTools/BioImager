@@ -67,8 +67,11 @@ namespace Bio
             Mode = ViewMode.Filtered;
             Resolution = im.series;
             UpdateView();
-            dx = new Direct2D();
-            dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
+            if (HardwareAcceleration)
+            {
+                dx = new Direct2D();
+                dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
+            }
         }
         public ImageView()
         {
@@ -98,8 +101,11 @@ namespace Bio
             UpdateImages();
             GoToImage();
             UpdateView();
-            dx = new Direct2D();
-            dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
+            if (HardwareAcceleration)
+            {
+                dx = new Direct2D();
+                dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
+            }
         }
         ~ImageView()
         {
@@ -348,9 +354,16 @@ namespace Bio
                     rgbBoxsPanel.BringToFront();
                     cBar.SendToBack();
                     cLabel.SendToBack();
-                    dxPanel.Visible = false;
-                    pictureBox.BringToFront();
-                    overlayPictureBox.BringToFront();
+                    if (HardwareAcceleration)
+                    {
+                        dxPanel.Visible = HardwareAcceleration;
+                        dxPanel.BringToFront();
+                    }
+                    else
+                    {
+                        pictureBox.BringToFront();
+                        overlayPictureBox.BringToFront();
+                    }
                 }
                 else
                 if (viewMode == ViewMode.Filtered)
@@ -358,9 +371,16 @@ namespace Bio
                     rgbBoxsPanel.SendToBack();
                     cBar.BringToFront();
                     cLabel.BringToFront();
-                    dxPanel.Visible = false;
-                    pictureBox.BringToFront();
-                    overlayPictureBox.BringToFront();
+                    if (HardwareAcceleration)
+                    {
+                        dxPanel.Visible = HardwareAcceleration;
+                        dxPanel.BringToFront();
+                    }
+                    else
+                    {
+                        pictureBox.BringToFront();
+                        overlayPictureBox.BringToFront();
+                    }
                 }
                 else
                 if (viewMode == ViewMode.Raw)
@@ -368,9 +388,16 @@ namespace Bio
                     rgbBoxsPanel.SendToBack();
                     cBar.BringToFront();
                     cLabel.BringToFront();
-                    dxPanel.Visible = false;
-                    pictureBox.BringToFront();
-                    overlayPictureBox.BringToFront();
+                    if (HardwareAcceleration)
+                    {
+                        dxPanel.Visible = HardwareAcceleration;
+                        dxPanel.BringToFront();
+                    }
+                    else
+                    {
+                        pictureBox.BringToFront();
+                        overlayPictureBox.BringToFront();
+                    }
                 }
                 else
                 {
@@ -378,10 +405,16 @@ namespace Bio
                     rgbBoxsPanel.BringToFront();
                     cBar.SendToBack();
                     cLabel.SendToBack();
-                    dxPanel.Visible = false;
-                    //dxPanel.Visible = false;
-                    pictureBox.BringToFront();
-                    overlayPictureBox.BringToFront();
+                    if (HardwareAcceleration)
+                    {
+                        dxPanel.Visible = HardwareAcceleration;
+                        dxPanel.BringToFront();
+                    }
+                    else
+                    {
+                        pictureBox.BringToFront();
+                        overlayPictureBox.BringToFront();
+                    }
                 }
             }
         }
@@ -482,6 +515,7 @@ namespace Bio
                 hardwareAcceleration = value;
                 if (value)
                 {
+                    GoToImage(0);
                     cBar.Value = 0;
                     rgbBoxsPanel.SendToBack();
                     pictureBox.BringToFront();
@@ -492,6 +526,7 @@ namespace Bio
                 }
                 else
                 {
+                    GoToImage(0);
                     rgbBoxsPanel.SendToBack();
                     cBar.BringToFront();
                     cLabel.BringToFront();
