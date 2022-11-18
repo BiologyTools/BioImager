@@ -205,7 +205,7 @@ namespace Bio
                 {
                     if (t == 0)
                     {
-                        viewer.ContextMenuStrip.Items.Add(sts[t]);
+                        viewer.ViewContextMenu.Items.Add(sts[t]);
                         goto start;
                     }
                     else if (t > 0 && t < sts.Length)

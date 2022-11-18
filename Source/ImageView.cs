@@ -25,7 +25,7 @@ namespace Bio
             InitializeComponent();
             serie = im.series;
             selectedImage = im;
-            tools = new Tools();
+            tools = App.tools;
             Dock = DockStyle.Fill;
             Images.Add(im);
             App.viewer = this;
@@ -73,7 +73,7 @@ namespace Bio
         public ImageView()
         {
             InitializeComponent();
-            tools = new Tools();
+            tools = App.tools;
             Dock = DockStyle.Fill;
             App.viewer = this;
             SetCoordinate(0, 0, 0);
@@ -677,7 +677,7 @@ namespace Bio
             if (HardwareAcceleration && dx != null)
             {
                 dx.BeginDraw();
-                dx.RenderTarget2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(1.0f, 1.0f, 1.0f, 1.0f));
+                dx.RenderTarget2D.Clear(new RawColor4(1.0f, 1.0f, 1.0f, 1.0f));
                 RectangleF rg = ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY);
                 //dx.RenderTarget2D.Transform = SharpDX.Matrix3x2.Rotation((float)Math.PI);
 
@@ -2504,7 +2504,6 @@ namespace Bio
         }
         public void GoToStage()
         {
-
             RectangleD d = Microscope.GetViewRectangle();
             double dx = d.W / 2;
             double dy = d.H / 2;
@@ -2670,6 +2669,9 @@ namespace Bio
             dx.Update(conf, dxPanel.Handle);
             UpdateView();
         }
-
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            Function.Initialize();
+        }
     }
 }

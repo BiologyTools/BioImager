@@ -159,6 +159,8 @@ namespace Bio
             valBox.Value = (decimal)func.Value;
             if (func.FuncType == Function.FunctionType.ImageJ)
                 imageJRadioBut.Checked = true;
+            else
+                imageJRadioBut.Checked = false;
             menuPath.Text = func.MenuPath;
             contextMenuPath.Text = func.ContextPath;
         }
@@ -558,6 +560,7 @@ namespace Bio
             {
                 string fs = System.IO.File.ReadAllText(sts[i]);
                 Function f = Function.Parse(fs);
+                if(!Functions.ContainsKey(f.Name))
                 Functions.Add(f.Name, f);
                 App.AddMenu(f.MenuPath, f);
                 App.AddContextMenu(f.ContextPath, f);
