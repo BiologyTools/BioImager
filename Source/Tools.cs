@@ -213,7 +213,11 @@ namespace Bio
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
-            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
+            PointF p;
+            if (App.viewer.HardwareAcceleration)
+                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
+            else
+                p = ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
@@ -347,7 +351,11 @@ namespace Bio
         }        
         public void ToolUp(PointD e, MouseButtons buts)
         {
-            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
+            PointF p;
+            if (App.viewer.HardwareAcceleration)
+                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
+            else
+                p = ImageView.SelectedImage.ToImageSpace(e);
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
@@ -510,7 +518,11 @@ namespace Bio
             }
             if (ImageView.SelectedImage == null)
                 return;
-            System.Drawing.PointF p = ImageView.SelectedImage.ToImageSpace(e);
+            PointF p;
+            if (App.viewer.HardwareAcceleration)
+                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
+            else
+                p = ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);

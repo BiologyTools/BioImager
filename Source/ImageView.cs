@@ -1063,7 +1063,7 @@ namespace Bio
         {
             if (SelectedImage == null)
                 return;
-            if (Bitmaps.Count == 0)
+            if (Bitmaps.Count == 0 && dBitmaps.Length == 0)
                 return;
 
             ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
@@ -1849,8 +1849,13 @@ namespace Bio
             {
                 return;
             }
-            PointF ip = SelectedImage.ToImageSpace(p);
-            mousePoint = "(" + p.X + ", " + p.Y + ")";
+            PointF ip;
+            if (HardwareAcceleration)
+                ip = SelectedImage.ToImageSpace(new PointD(SelectedImage.Volume.Width - p.X,SelectedImage.Volume.Height - p.Y));
+            else
+                ip = SelectedImage.ToImageSpace(p);
+
+            mousePoint = "(" + (SelectedImage.Volume.Width - p.X) + ", " + (SelectedImage.Volume.Height - p.Y) + ")";
 
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
@@ -1958,7 +1963,6 @@ namespace Bio
                     Graphics.Graphics g = Graphics.Graphics.FromImage(SelectedBuffer);
                     Graphics.Pen pen = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedImage.bitsPerPixel);
                     g.FillEllipse(new Rectangle((int)ip.X, (int)ip.Y, (int)Tools.StrokeWidth, (int)Tools.StrokeWidth), pen.color);
-                    update = true;
                     UpdateImage();
                 }
 
@@ -2006,7 +2010,11 @@ namespace Bio
             up = false;
             if (SelectedImage == null)
                 return;
-            PointF ip = SelectedImage.ToImageSpace(p);
+            PointF ip;
+            if (HardwareAcceleration)
+                ip = SelectedImage.ToImageSpace(new PointD(SelectedImage.Volume.Width - p.X, SelectedImage.Volume.Height - p.Y));
+            else
+                ip = SelectedImage.ToImageSpace(p);
             tools.BringToFront();
             int ind = 0;
             foreach (BioImage b in Images)
@@ -2476,6 +2484,8 @@ namespace Bio
         }
         public void GoToImage(int i)
         {
+            if (Images.Count <= i)
+                return;
             double dx = Images[i].Volume.Width / 2;
             double dy = Images[i].Volume.Height / 2;
             Origin = new PointD(-(Images[i].Volume.Location.X + dx), -(Images[i].Volume.Location.Y + dy));
