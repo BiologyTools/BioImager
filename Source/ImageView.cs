@@ -1063,6 +1063,8 @@ namespace Bio
         {
             if (SelectedImage == null)
                 return;
+            if (HardwareAcceleration && dBitmaps == null)
+                UpdateImages();
             if (Bitmaps.Count == 0 && dBitmaps.Length == 0)
                 return;
 
@@ -1849,13 +1851,8 @@ namespace Bio
             {
                 return;
             }
-            PointF ip;
-            if (HardwareAcceleration)
-                ip = SelectedImage.ToImageSpace(new PointD(SelectedImage.Volume.Width - p.X,SelectedImage.Volume.Height - p.Y));
-            else
-                ip = SelectedImage.ToImageSpace(p);
-
-            mousePoint = "(" + (SelectedImage.Volume.Width - p.X) + ", " + (SelectedImage.Volume.Height - p.Y) + ")";
+            PointF ip = SelectedImage.ToImageSpace(p);
+            mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
 
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
@@ -2404,7 +2401,7 @@ namespace Bio
         {
             if (HardwareAcceleration)
             {
-                return (float)(-x * PxWmicron);
+                return (float)(x * PxWmicron);
             }
             return (float)(x * PxWmicron);
         }
@@ -2412,7 +2409,7 @@ namespace Bio
         {
             if (HardwareAcceleration)
             {
-                return (float)(-y * PxHmicron);
+                return (float)(y * PxHmicron);
             }
             return (float)(y * PxHmicron);
         }

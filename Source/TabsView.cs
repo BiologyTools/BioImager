@@ -493,8 +493,11 @@ namespace Bio
             ImageView v = (ImageView)tabControl.SelectedTab.Controls[0];
             tabControl.TabPages.RemoveAt(tabControl.SelectedIndex);
             v.Dispose();
-            Images.RemoveImage(SelectedImage);
-            SelectedImage.Dispose();
+            foreach (BioImage item in v.Images)
+            {
+                Images.RemoveImage(item);
+                item.Dispose();
+            }
             GC.Collect();
         }
 
