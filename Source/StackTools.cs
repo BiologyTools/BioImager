@@ -95,7 +95,11 @@ namespace Bio
         {
             if (stackABox.SelectedIndex == -1)
                 return;
-            ImageA.SplitChannels();
+            BioImage[] bms = ImageA.SplitChannels();
+            for (int i = 0; i < bms.Length; i++)
+            {
+                App.tabsView.AddTab(bms[i]);
+            }
             UpdateStacks();
         }
 
@@ -126,6 +130,18 @@ namespace Bio
         {
             e.Cancel = true;
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void mergeZBut_Click(object sender, EventArgs e)
+        {
+            if (ImageA != null)
+                App.tabsView.AddTab(BioImage.MergeZ(ImageA));
+        }
+
+        private void mergeTBut_Click(object sender, EventArgs e)
+        {
+            if (ImageA != null)
+                App.tabsView.AddTab(BioImage.MergeT(ImageA));
         }
     }
 }

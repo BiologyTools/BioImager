@@ -33,12 +33,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.zEndBox = new System.Windows.Forms.NumericUpDown();
+            this.zContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setMaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label5 = new System.Windows.Forms.Label();
             this.zStartBox = new System.Windows.Forms.NumericUpDown();
             this.cEndBox = new System.Windows.Forms.NumericUpDown();
+            this.cContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setMaxCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label6 = new System.Windows.Forms.Label();
             this.cStartBox = new System.Windows.Forms.NumericUpDown();
             this.tEndBox = new System.Windows.Forms.NumericUpDown();
+            this.tContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setMaxTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label7 = new System.Windows.Forms.Label();
             this.tStartBox = new System.Windows.Forms.NumericUpDown();
             this.substackBut = new System.Windows.Forms.Button();
@@ -48,21 +54,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.stackBBox = new System.Windows.Forms.ComboBox();
-            this.zContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setMaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setMaxCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setMaxTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeZBut = new System.Windows.Forms.Button();
+            this.mergeTBut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.zEndBox)).BeginInit();
+            this.zContextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zStartBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cEndBox)).BeginInit();
+            this.cContextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cStartBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tEndBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tStartBox)).BeginInit();
-            this.zContextMenuStrip.SuspendLayout();
-            this.cContextMenuStrip.SuspendLayout();
             this.tContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tStartBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -107,6 +109,20 @@
             0,
             0,
             0});
+            // 
+            // zContextMenuStrip
+            // 
+            this.zContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setMaxToolStripMenuItem});
+            this.zContextMenuStrip.Name = "zContextMenuStrip";
+            this.zContextMenuStrip.Size = new System.Drawing.Size(117, 26);
+            // 
+            // setMaxToolStripMenuItem
+            // 
+            this.setMaxToolStripMenuItem.Name = "setMaxToolStripMenuItem";
+            this.setMaxToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.setMaxToolStripMenuItem.Text = "Set Max";
+            this.setMaxToolStripMenuItem.Click += new System.EventHandler(this.setMaxToolStripMenuItem_Click);
             // 
             // label5
             // 
@@ -153,6 +169,20 @@
             0,
             0});
             // 
+            // cContextMenuStrip
+            // 
+            this.cContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setMaxCToolStripMenuItem});
+            this.cContextMenuStrip.Name = "zContextMenuStrip";
+            this.cContextMenuStrip.Size = new System.Drawing.Size(117, 26);
+            // 
+            // setMaxCToolStripMenuItem
+            // 
+            this.setMaxCToolStripMenuItem.Name = "setMaxCToolStripMenuItem";
+            this.setMaxCToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.setMaxCToolStripMenuItem.Text = "Set Max";
+            this.setMaxCToolStripMenuItem.Click += new System.EventHandler(this.setMaxCToolStripMenuItem_Click);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -197,6 +227,20 @@
             0,
             0,
             0});
+            // 
+            // tContextMenuStrip
+            // 
+            this.tContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setMaxTToolStripMenuItem});
+            this.tContextMenuStrip.Name = "zContextMenuStrip";
+            this.tContextMenuStrip.Size = new System.Drawing.Size(117, 26);
+            // 
+            // setMaxTToolStripMenuItem
+            // 
+            this.setMaxTToolStripMenuItem.Name = "setMaxTToolStripMenuItem";
+            this.setMaxTToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.setMaxTToolStripMenuItem.Text = "Set Max";
+            this.setMaxTToolStripMenuItem.Click += new System.EventHandler(this.setMaxTToolStripMenuItem_Click);
             // 
             // label7
             // 
@@ -288,54 +332,34 @@
             this.stackBBox.TabIndex = 21;
             this.stackBBox.SelectedIndexChanged += new System.EventHandler(this.stackBBox_SelectedIndexChanged);
             // 
-            // zContextMenuStrip
+            // mergeZBut
             // 
-            this.zContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setMaxToolStripMenuItem});
-            this.zContextMenuStrip.Name = "zContextMenuStrip";
-            this.zContextMenuStrip.Size = new System.Drawing.Size(117, 26);
+            this.mergeZBut.Location = new System.Drawing.Point(12, 191);
+            this.mergeZBut.Name = "mergeZBut";
+            this.mergeZBut.Size = new System.Drawing.Size(96, 23);
+            this.mergeZBut.TabIndex = 23;
+            this.mergeZBut.Text = "Merge Z";
+            this.mergeZBut.UseVisualStyleBackColor = true;
+            this.mergeZBut.Click += new System.EventHandler(this.mergeZBut_Click);
             // 
-            // setMaxToolStripMenuItem
+            // mergeTBut
             // 
-            this.setMaxToolStripMenuItem.Name = "setMaxToolStripMenuItem";
-            this.setMaxToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.setMaxToolStripMenuItem.Text = "Set Max";
-            this.setMaxToolStripMenuItem.Click += new System.EventHandler(this.setMaxToolStripMenuItem_Click);
-            // 
-            // cContextMenuStrip
-            // 
-            this.cContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setMaxCToolStripMenuItem});
-            this.cContextMenuStrip.Name = "zContextMenuStrip";
-            this.cContextMenuStrip.Size = new System.Drawing.Size(117, 26);
-            // 
-            // setMaxCToolStripMenuItem
-            // 
-            this.setMaxCToolStripMenuItem.Name = "setMaxCToolStripMenuItem";
-            this.setMaxCToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.setMaxCToolStripMenuItem.Text = "Set Max";
-            this.setMaxCToolStripMenuItem.Click += new System.EventHandler(this.setMaxCToolStripMenuItem_Click);
-            // 
-            // tContextMenuStrip
-            // 
-            this.tContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setMaxTToolStripMenuItem});
-            this.tContextMenuStrip.Name = "zContextMenuStrip";
-            this.tContextMenuStrip.Size = new System.Drawing.Size(117, 26);
-            // 
-            // setMaxTToolStripMenuItem
-            // 
-            this.setMaxTToolStripMenuItem.Name = "setMaxTToolStripMenuItem";
-            this.setMaxTToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.setMaxTToolStripMenuItem.Text = "Set Max";
-            this.setMaxTToolStripMenuItem.Click += new System.EventHandler(this.setMaxTToolStripMenuItem_Click);
+            this.mergeTBut.Location = new System.Drawing.Point(12, 220);
+            this.mergeTBut.Name = "mergeTBut";
+            this.mergeTBut.Size = new System.Drawing.Size(96, 23);
+            this.mergeTBut.TabIndex = 24;
+            this.mergeTBut.Text = "Merge T";
+            this.mergeTBut.UseVisualStyleBackColor = true;
+            this.mergeTBut.Click += new System.EventHandler(this.mergeTBut_Click);
             // 
             // StackTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(224, 223);
+            this.ClientSize = new System.Drawing.Size(224, 251);
+            this.Controls.Add(this.mergeTBut);
+            this.Controls.Add(this.mergeZBut);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.stackBBox);
             this.Controls.Add(this.label1);
@@ -362,14 +386,14 @@
             this.Activated += new System.EventHandler(this.StackTools_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StackTools_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.zEndBox)).EndInit();
+            this.zContextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.zStartBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cEndBox)).EndInit();
+            this.cContextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cStartBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tEndBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tStartBox)).EndInit();
-            this.zContextMenuStrip.ResumeLayout(false);
-            this.cContextMenuStrip.ResumeLayout(false);
             this.tContextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tStartBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,5 +425,7 @@
         private System.Windows.Forms.ToolStripMenuItem setMaxCToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip tContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem setMaxTToolStripMenuItem;
+        private System.Windows.Forms.Button mergeZBut;
+        private System.Windows.Forms.Button mergeTBut;
     }
 }

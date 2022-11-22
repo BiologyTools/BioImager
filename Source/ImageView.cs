@@ -60,6 +60,10 @@ namespace Bio
             {
                 hScrollBar.Visible = false;
                 vScrollBar.Visible = false;
+                pictureBox.Width += 18;
+                pictureBox.Height += 18;
+                overlayPictureBox.Width += 18;
+                overlayPictureBox.Height += 18;
             }
             update = true;
             UpdateImages();
@@ -207,6 +211,22 @@ namespace Bio
         {
             Images.Add(im);
             SelectedIndex = Images.Count - 1;
+            if (im.isPyramidal)
+            {
+                hScrollBar.Maximum = im.Resolutions[resolution].SizeX;
+                vScrollBar.Maximum = im.Resolutions[resolution].SizeY;
+                hScrollBar.Visible = true;
+                vScrollBar.Visible = true;
+            }
+            else
+            {
+                hScrollBar.Visible = false;
+                vScrollBar.Visible = false;
+                pictureBox.Width += 18;
+                pictureBox.Height += 18;
+                overlayPictureBox.Width += 18;
+                overlayPictureBox.Height += 18;
+            }
             InitGUI();
             UpdateImages();
             GoToImage(Images.Count - 1);
@@ -508,6 +528,9 @@ namespace Bio
         {
             get
             {
+                if (Images.Count > 0)
+                    if (Images[0].isPyramidal)
+                        return false;
                 return hardwareAcceleration;
             }
             set
@@ -1063,11 +1086,6 @@ namespace Bio
         {
             if (SelectedImage == null)
                 return;
-            if (HardwareAcceleration && dBitmaps == null)
-                UpdateImages();
-            if (Bitmaps.Count == 0 && dBitmaps.Length == 0)
-                return;
-
             ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
             bitmap = null;
             GC.Collect();
@@ -2706,10 +2724,13 @@ namespace Bio
         Configuration conf = new Configuration();
         private void dxPanel_SizeChanged(object sender, EventArgs e)
         {
-            conf.Width = dxPanel.Width;
-            conf.Height = dxPanel.Height;
-            dx.Update(conf, dxPanel.Handle);
-            UpdateView();
+            if (HardwareAcceleration)
+            {
+                conf.Width = dxPanel.Width;
+                conf.Height = dxPanel.Height;
+                dx.Update(conf, dxPanel.Handle);
+                UpdateView();
+            }
         }
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
         {

@@ -1,7 +1,6 @@
-﻿using Bio.Graphics;
-using SharpDX;
+﻿using SharpDX;
 
-namespace Bio.Graphics.DX.Graphics
+namespace Bio.Graphics
 {
     public class DCamera                    // 53 lines
     {

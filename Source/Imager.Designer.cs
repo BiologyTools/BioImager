@@ -32,9 +32,8 @@ namespace Bio
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Imager));
             this.statusTimer = new System.Windows.Forms.Timer(this.components);
-            this.statusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label22 = new System.Windows.Forms.Label();
@@ -170,17 +169,11 @@ namespace Bio
             this.statusTimer.Interval = 1000;
             this.statusTimer.Tick += new System.EventHandler(this.statusTimer_Tick);
             // 
-            // statusLabel2
-            // 
-            this.statusLabel2.Name = "statusLabel2";
-            this.statusLabel2.Size = new System.Drawing.Size(0, 17);
-            // 
             // statusStrip
             // 
             this.statusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel2,
-            this.statusLabel1,
+            this.statusLabel,
             this.toolStripStatusLabel2,
             this.toolStripStatusLabel1});
             this.statusStrip.Location = new System.Drawing.Point(0, 480);
@@ -189,10 +182,10 @@ namespace Bio
             this.statusStrip.TabIndex = 7;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // statusLabel1
+            // statusLabel
             // 
-            this.statusLabel1.Name = "statusLabel1";
-            this.statusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStripStatusLabel2
             // 
@@ -1450,7 +1443,6 @@ namespace Bio
 
         #endregion
         private System.Windows.Forms.Timer statusTimer;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel2;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.Timer controllerJoystickUpdate;
         private System.Windows.Forms.Label label5;
@@ -1502,7 +1494,7 @@ namespace Bio
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label l3PressedLabel;
         private System.Windows.Forms.Label r3PressedLabel;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.Label lastSelectedSnapDistanceLabel;
         private System.Windows.Forms.Label label27;

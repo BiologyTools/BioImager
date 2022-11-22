@@ -1,22 +1,21 @@
-﻿using Bio.Graphics.DX;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Bio.Graphics.DX
+namespace Bio.Graphics
 {
-    public class DTextureShader                 // 224 lines
+    public class DColorShader                   // 199 lines
     {
-        // Structs
+        // Structures.
         [StructLayout(LayoutKind.Sequential)]
         internal struct DVertex
         {
+            public static int AppendAlignedElement = 12;
             public Vector3 position;
-            public Vector2 texture;
+            public Vector4 color;
         }
         [StructLayout(LayoutKind.Sequential)]
         internal struct DMatrixBuffer
@@ -26,38 +25,39 @@ namespace Bio.Graphics.DX
             public Matrix projection;
         }
 
-        // Properties
+        // Properties.
         public VertexShader VertexShader { get; set; }
         public PixelShader PixelShader { get; set; }
         public InputLayout Layout { get; set; }
         public SharpDX.Direct3D11.Buffer ConstantMatrixBuffer { get; set; }
-        public SamplerState SamplerState { get; set; }
 
         // Constructor
-        public DTextureShader() { }
+        public DColorShader() { }
 
-        // Methods
-        public bool Initialize(SharpDX.Direct3D11.Device device, IntPtr windowsHandler)
+        // Methods.
+        public bool Initialize(Device device, IntPtr windowsHandle)
         {
             // Initialize the vertex and pixel shaders.
-            return InitializeShader(device, windowsHandler, "texture.vs", "texture.ps");
+            return InitializeShader(device, windowsHandle,"Color.vs", "Color.ps");
         }
-        private bool InitializeShader(SharpDX.Direct3D11.Device device, IntPtr windowsHandler, string vsFileName, string psFileName)
+        private bool InitializeShader(Device device, IntPtr windowsHandle, string vsFileName, string psFileName)
         {
             try
             {
                 // Setup full pathes
-                vsFileName = Bio.Graphics.DX.DSystemConfiguration.ShaderFilePath + vsFileName;
-                psFileName = Bio.Graphics.DX.DSystemConfiguration.ShaderFilePath + psFileName;
+                vsFileName = DSystemConfiguration.ShaderFilePath + vsFileName;
+                psFileName = DSystemConfiguration.ShaderFilePath + psFileName;
 
-                // Compile the Vertex Shader & Pixel Shader code.
-                ShaderBytecode vertexShaderByteCode = ShaderBytecode.CompileFromFile(vsFileName, "TextureVertexShader", "vs_4_0", ShaderFlags.None, EffectFlags.None);
-                ShaderBytecode pixelShaderByteCode = ShaderBytecode.CompileFromFile(psFileName, "TexturePixelShader", "ps_4_0", ShaderFlags.None, EffectFlags.None);
-
-                // Create the Vertex & Pixel Shaders from the buffer.
+                // Compile the vertex shader code.
+                ShaderBytecode vertexShaderByteCode = ShaderBytecode.CompileFromFile(vsFileName, "ColorVertexShader", "vs_4_0", ShaderFlags.None, EffectFlags.None);
+                // Compile the pixel shader code.
+                ShaderBytecode pixelShaderByteCode = ShaderBytecode.CompileFromFile(psFileName, "ColorPixelShader", "ps_4_0", ShaderFlags.None, EffectFlags.None);
+                
+                // Create the vertex shader from the buffer.
                 VertexShader = new VertexShader(device, vertexShaderByteCode);
+                // Create the pixel shader from the buffer.
                 PixelShader = new PixelShader(device, pixelShaderByteCode);
-
+                
                 // Now setup the layout of the data that goes into the shader.
                 // This setup needs to match the VertexType structure in the Model and in the shader.
                 InputElement[] inputElements = new InputElement[] 
@@ -66,17 +66,17 @@ namespace Bio.Graphics.DX
                     {
                         SemanticName = "POSITION",
                         SemanticIndex = 0,
-                        Format = Format.R32G32B32_Float,
+                        Format = SharpDX.DXGI.Format.R32G32B32_Float,
                         Slot = 0,
                         AlignedByteOffset = 0,
                         Classification = InputClassification.PerVertexData,
                         InstanceDataStepRate = 0
                     },
-                    new InputElement()
+                    new InputElement() 
                     {
-                        SemanticName = "TEXCOORD",
+                        SemanticName = "COLOR",
                         SemanticIndex = 0,
-                        Format = Format.R32G32_Float,
+                        Format = SharpDX.DXGI.Format.R32G32B32A32_Float,
                         Slot = 0,
                         AlignedByteOffset = InputElement.AppendAligned,
                         Classification = InputClassification.PerVertexData,
@@ -84,18 +84,18 @@ namespace Bio.Graphics.DX
                     }
                 };
 
-                // Create the vertex input the layout. Kin dof like a Vertex Declaration.
+                // Create the vertex input the layout.
                 Layout = new InputLayout(device, ShaderSignature.GetInputSignature(vertexShaderByteCode), inputElements);
 
                 // Release the vertex and pixel shader buffers, since they are no longer needed.
                 vertexShaderByteCode.Dispose();
                 pixelShaderByteCode.Dispose();
 
-                // Setup the description of the dynamic matrix constant Matrix buffer that is in the vertex shader.
-                BufferDescription matrixBufferDescription = new BufferDescription() 
+                // Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+                BufferDescription matrixBufDesc = new BufferDescription() 
                 {
                     Usage = ResourceUsage.Dynamic,
-                    SizeInBytes = Utilities.SizeOf<DMatrixBuffer>(),
+                    SizeInBytes = Utilities.SizeOf<DMatrixBuffer>(), // was Matrix
                     BindFlags = BindFlags.ConstantBuffer,
                     CpuAccessFlags = CpuAccessFlags.Write,
                     OptionFlags = ResourceOptionFlags.None,
@@ -103,25 +103,7 @@ namespace Bio.Graphics.DX
                 };
 
                 // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-                ConstantMatrixBuffer = new SharpDX.Direct3D11.Buffer(device, matrixBufferDescription);
-
-                // Create a texture sampler state description.
-                SamplerStateDescription samplerDesc = new SamplerStateDescription() 
-                {
-                    Filter = SharpDX.Direct3D11.Filter.MinMagMipLinear,
-                    AddressU = TextureAddressMode.Wrap,
-                    AddressV = TextureAddressMode.Wrap,
-                    AddressW = TextureAddressMode.Wrap,
-                    MipLodBias = 0,
-                    MaximumAnisotropy = 1,
-                    ComparisonFunction = Comparison.Always,
-                    BorderColor = new Color4(0, 0, 0, 0),  // Black Border.
-                    MinimumLod = 0,
-                    MaximumLod = float.MaxValue
-                };
-
-                // Create the texture sampler state.
-                SamplerState = new SamplerState(device, samplerDesc);
+                ConstantMatrixBuffer = new SharpDX.Direct3D11.Buffer(device, matrixBufDesc);
 
                 return true;
             }
@@ -138,9 +120,6 @@ namespace Bio.Graphics.DX
         }
         private void ShuddownShader()
         {
-            // Release the sampler state.
-            SamplerState?.Dispose();
-            SamplerState = null;
             // Release the matrix constant buffer.
             ConstantMatrixBuffer?.Dispose();
             ConstantMatrixBuffer = null;
@@ -154,10 +133,10 @@ namespace Bio.Graphics.DX
             VertexShader?.Dispose();
             VertexShader = null;
         }
-        public bool Render(DeviceContext deviceContext, int indexCount, Matrix worldMatrix, Matrix viewMatrix, Matrix projectionMatrix, ShaderResourceView texture)
+        public bool Render(DeviceContext deviceContext, int indexCount, Matrix worldMatrix, Matrix viewMatrix, Matrix projectionMatrix)
         {
             // Set the shader parameters that it will use for rendering.
-            if (!SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture))
+            if (!SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix))
                 return false;
 
             // Now render the prepared buffers with the shader.
@@ -165,7 +144,7 @@ namespace Bio.Graphics.DX
 
             return true;
         }
-        private bool SetShaderParameters(DeviceContext deviceContext, Matrix worldMatrix, Matrix viewMatrix, Matrix projectionMatrix, ShaderResourceView texture)
+        private bool SetShaderParameters(DeviceContext deviceContext, Matrix worldMatrix, Matrix viewMatrix, Matrix projectionMatrix)
         {
             try
             {
@@ -176,10 +155,10 @@ namespace Bio.Graphics.DX
 
                 // Lock the constant buffer so it can be written to.
                 DataStream mappedResource;
-                deviceContext.MapSubresource(ConstantMatrixBuffer, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out mappedResource);
+                deviceContext.MapSubresource(ConstantMatrixBuffer, MapMode.WriteDiscard, MapFlags.None, out mappedResource);
 
-                // Copy the passed in matrices into the constant buffer.
-                DMatrixBuffer matrixBuffer = new DMatrixBuffer()
+                // Copy the matrices into the constant buffer.
+                DMatrixBuffer matrixBuffer = new DMatrixBuffer() 
                 {
                     world = worldMatrix,
                     view = viewMatrix,
@@ -191,13 +170,10 @@ namespace Bio.Graphics.DX
                 deviceContext.UnmapSubresource(ConstantMatrixBuffer, 0);
 
                 // Set the position of the constant buffer in the vertex shader.
-                int bufferPositionNumber = 0;
+                int bufferSlotNuber = 0;
 
                 // Finally set the constant buffer in the vertex shader with the updated values.
-                deviceContext.VertexShader.SetConstantBuffer(bufferPositionNumber, ConstantMatrixBuffer);
-
-                // Set shader resource in the pixel shader.
-                deviceContext.PixelShader.SetShaderResource(0, texture);
+                deviceContext.VertexShader.SetConstantBuffer(bufferSlotNuber, ConstantMatrixBuffer);
 
                 return true;
             }
@@ -214,9 +190,6 @@ namespace Bio.Graphics.DX
             // Set the vertex and pixel shaders that will be used to render this triangle.
             deviceContext.VertexShader.Set(VertexShader);
             deviceContext.PixelShader.Set(PixelShader);
-
-            // Set the sampler state in the pixel shader.
-            deviceContext.PixelShader.SetSampler(0, SamplerState);
 
             // Render the triangle.
             deviceContext.DrawIndexed(indexCount, 0, 0);

@@ -260,6 +260,12 @@
       <DependentUpon>FloodTool.cs</DependentUpon>
     </Compile>
     <Compile Include="Graphics\Graphics.cs" />
+    <Compile Include="Graphics\Graphics\DCamera.cs" />
+    <Compile Include="Graphics\Graphics\DColorShader.cs" />
+    <Compile Include="Graphics\Graphics\DDX11.cs" />
+    <Compile Include="Graphics\Graphics\DGraphics.cs" />
+    <Compile Include="Graphics\Graphics\DModel.cs" />
+    <Compile Include="Graphics\Input\DInput.cs" />
     <Compile Include="Graphics\PenTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +273,16 @@
       <DependentUpon>PenTool.cs</DependentUpon>
     </Compile>
     <Compile Include="Graphics\QueueLinearFloodFiller.cs" />
+    <Compile Include="Graphics\System\DPerfLogger.cs" />
+    <Compile Include="Graphics\System\DSystem.cs" />
+    <Compile Include="Graphics\System\DSystemConfiguration.cs" />
+    <Compile Include="Graphics\System\DTimer.cs" />
+    <Compile Include="Graphics\View3D.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Graphics\View3D.Designer.cs">
+      <DependentUpon>View3D.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Automation.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -524,6 +540,9 @@
     <EmbeddedResource Include="Graphics\PenTool.resx">
       <DependentUpon>PenTool.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\View3D.resx">
+      <DependentUpon>View3D.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Action.resx">
       <DependentUpon>Action.cs</DependentUpon>
     </EmbeddedResource>
@@ -688,7 +707,9 @@
     <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Graphics\Shaders\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

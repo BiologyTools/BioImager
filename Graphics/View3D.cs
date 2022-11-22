@@ -7,75 +7,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Bio.Graphics.DX;
+using Bio.Graphics;
 using SharpDX;
 
 namespace Bio
 {
-    public partial class View2D : Form
+    public partial class View3D : Form
     {
         DSystem sys = null;
-        List<BioImage> Images = new List<BioImage>();
         List<BufferInfo> Buffers = new List<BufferInfo>();
-        PointD Origin = new PointD();
-        SizeF Scale = new SizeF(1, 1);
+        Point3D Origin = new Point3D(0.01f, 0.01f, -1);
+        Vector3 r = new Vector3(0, (float)Math.PI, (float)Math.PI);
+        SizeF Scale = new SizeF(60, 60);
+        Matrix rot = Matrix.Identity;
         bool update = true;
-        float zoom = 10;
         bool fullScreen = false;
-        public View2D(List<BioImage> b)
+        public View3D()
         {
             InitializeComponent();
             MouseWheel += new System.Windows.Forms.MouseEventHandler(ImageView_MouseWheel);
-            Images = b;
-            for (int i = 0; i < b.Count; i++)
-            {
-                Buffers.Add(Images[i].SelectedBuffer);
-            }
             Initialize();
-            Origin = App.viewer.Origin;
-            // Change parent for overlay PictureBox.
-            /*
-            overlayPictureBox.Parent = pictureBox;
-            overlayPictureBox.Location = new Point(0, 0);
-            */
+        }
+        private void UpdateStatus()
+        {
+            toolStripStatusLabel.Text = Origin.ToString() + " Zoom:" + Scale.Width;
         }
         private void UpdateImage()
         {
-            sys.Graphics.Initialize(sys.Configuration, pictureBox.Handle, Images, zoom);
-            for (int i = 0; i < sys.Graphics.Bitmaps.Count; i++)
-            {
-                sys.Graphics.Bitmaps[i].Texture.TextureResource.Dispose();
-                sys.Graphics.Bitmaps[i].Texture.ShutDown();
-                sys.Graphics.Bitmaps[i].Texture = null;
-                sys.Graphics.Bitmaps[i].Shutdown();
-                sys.Graphics.Bitmaps[i] = null;
-                GC.Collect();
-                sys.Graphics.Bitmaps[i] = new Graphics.DX.Graphics.DBitmap();
-                sys.Graphics.Bitmaps[i].Initialize(sys.Graphics.Device, pictureBox.Width, pictureBox.Height, Images[i].SelectedBuffer);
-            }
+            sys.Graphics.Initialize(sys.Configuration, dxPanel.Handle, ImageView.SelectedImage);
+
         }
         Matrix world = Matrix.Identity;
         private void Initialize()
         {
             sys = new DSystem();
-            sys.Initialize("3D View", pictureBox.Width, pictureBox.Height, false, fullScreen, Images, pictureBox.Handle);
-            sys.Graphics.Camera.SetPosition((float)Origin.X, (float)Origin.Y, -10);
+            sys.Initialize("3D View", dxPanel.Width, dxPanel.Height, false, fullScreen, dxPanel.Handle);
+            //sys.Graphics.Camera.SetPosition((float)Origin.X, (float)Origin.Y, -10);
             sys.Configuration.Title = "3D View";
-            sys.Configuration.Width = pictureBox.Width;
-            sys.Configuration.Height = pictureBox.Height;
-            world = Matrix.Scaling(Scale.Width, Scale.Height, 1);
-            sys.Graphics.Initialize(sys.Configuration, pictureBox.Handle, Images, zoom);
-            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, pictureBox.Width, pictureBox.Height);
-            sys.Graphics.Frame(0, 0, pictureBox.Width, pictureBox.Height, world);
+            sys.Configuration.Width = dxPanel.Width;
+            sys.Configuration.Height = dxPanel.Height;
+            rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
+            world = rot * Matrix.Scaling(Scale.Width, Scale.Height, 1);
+            sys.Graphics.D3D.WorldMatrix = world;
+            sys.Graphics.Initialize(sys.Configuration, dxPanel.Handle, ImageView.SelectedImage);
+            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, dxPanel.Width, dxPanel.Height);
+            sys.Graphics.Frame();
         }
         public void UpdateView()
         {
-            sys.Configuration.Width = pictureBox.Width;
-            sys.Configuration.Height = pictureBox.Height;
-            world = Matrix.Scaling(Scale.Width, Scale.Height, 1);
-            sys.Graphics.Camera.SetPosition((float)-Origin.X, (float)-Origin.Y,-10);
-            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, pictureBox.Width, pictureBox.Height);
-            sys.Graphics.Frame(0, 0, pictureBox.Width, pictureBox.Height,world);
+            sys.Configuration.Width = dxPanel.Width;
+            sys.Configuration.Height = dxPanel.Height;
+            rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
+            world = rot * Matrix.Scaling(Scale.Width, Scale.Height, 1);
+            sys.Graphics.D3D.WorldMatrix = world;
+            //sys.Graphics.Camera.SetPosition((float)-Origin.X, (float)-Origin.Y,-10);
+            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, dxPanel.Width, dxPanel.Height);
+            sys.Graphics.Frame();
             if (update)
             UpdateImage();
             update = false;
@@ -92,15 +79,15 @@ namespace Bio
         }
         System.Drawing.Point mouseDown = new System.Drawing.Point();
         System.Drawing.Point mouseUp = new System.Drawing.Point();
-        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        private void dxPanel_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = e.Location;
         }
 
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        private void dxPanel_MouseMove(object sender, MouseEventArgs e)
         {
         }
-        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        private void dxPanel_MouseUp(object sender, MouseEventArgs e)
         {
             mouseUp = e.Location;
             if (e.Button == MouseButtons.Middle)
@@ -113,28 +100,51 @@ namespace Bio
 
         private void View3D_KeyDown(object sender, KeyEventArgs e)
         {
-            float moveAmount = 20;
+            float moveAmount = 0.1f;
             if(e.KeyCode == Keys.Up)
             {
                 Origin.Y += moveAmount;
-                UpdateView();
             }
             if (e.KeyCode == Keys.Down)
             {
                 Origin.Y -= moveAmount;
-                UpdateView();
             }
             if (e.KeyCode == Keys.Left)
             {
                 Origin.X -= moveAmount;
-                UpdateView();
             }
             if (e.KeyCode == Keys.Right)
             {
                 Origin.X += moveAmount;
-                UpdateView();
             }
-            
+            if (e.KeyCode == Keys.W)
+            {
+                r.X += 5.0f * ((float)Math.PI / 180.0f);
+            }
+            if (e.KeyCode == Keys.S)
+            {
+                r.X -= 5.0f * ((float)Math.PI / 180.0f);
+            }
+            if (e.KeyCode == Keys.A)
+            {
+                r.Y += 5.0f * ((float)Math.PI / 180.0f);
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                r.Y -= 5.0f * ((float)Math.PI / 180.0f);
+            }
+            if (e.KeyCode == Keys.Q)
+            {
+                r.Z += 5.0f * ((float)Math.PI / 180.0f);
+            }
+            if (e.KeyCode == Keys.E)
+            {
+                r.Z -= 5.0f * ((float)Math.PI / 180.0f);
+            }
+            rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
+            sys.Graphics.Camera.SetPosition((float)Origin.X, (float)Origin.Y, (float)Origin.Z);
+            UpdateStatus();
+            UpdateView();
         }
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -149,8 +159,7 @@ namespace Bio
                 Scale = new SizeF(Scale.Width - dx, Scale.Height - dy);
             }
             UpdateView();
+            UpdateStatus();
         }
-
-        
     }
 }

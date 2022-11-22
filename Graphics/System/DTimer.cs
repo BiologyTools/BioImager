@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Bio.Graphics.DX
+namespace Bio.Graphics
 {
     public class DTimer                 // 47 lines
     {

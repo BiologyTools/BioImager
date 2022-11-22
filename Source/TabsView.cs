@@ -947,5 +947,11 @@ namespace Bio
             BioImage b = BioImage.ImagesToStack(fd.FileNames);
             AddTab(b);
         }
+
+        private void _3dToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View3D d = new View3D();
+            d.Show();
+        }
     }
 }

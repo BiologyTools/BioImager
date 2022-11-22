@@ -687,7 +687,7 @@ namespace Bio
             this.pictureBox.Location = new System.Drawing.Point(0, 25);
             this.pictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(428, 269);
+            this.pictureBox.Size = new System.Drawing.Size(412, 251);
             this.pictureBox.TabIndex = 20;
             this.pictureBox.TabStop = false;
             this.pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
@@ -705,7 +705,7 @@ namespace Bio
             this.overlayPictureBox.Location = new System.Drawing.Point(0, 25);
             this.overlayPictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.overlayPictureBox.Name = "overlayPictureBox";
-            this.overlayPictureBox.Size = new System.Drawing.Size(428, 269);
+            this.overlayPictureBox.Size = new System.Drawing.Size(412, 251);
             this.overlayPictureBox.TabIndex = 19;
             this.overlayPictureBox.TabStop = false;
             this.overlayPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.overlayPictureBox_Paint);

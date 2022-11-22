@@ -238,7 +238,7 @@ namespace Bio
             Point3D p = Microscope.GetPosition();
             double f = Microscope.GetFocus();
             Point3D point = new Point3D(p.X, p.Y, f);
-            statusLabel1.Text = "Stage: " + p.X + " , " + p.Y + " Focus: " + f;
+            statusLabel.Text = "Stage: " + p.X + " , " + p.Y + " Focus: " + f;
             if(StoredImages.Count > storedImageBox.Items.Count)
             {
                 int dif = StoredImages.Count - storedImageBox.Items.Count;
@@ -459,6 +459,7 @@ namespace Bio
                 this.Location = pp;
             }
             string s = Win32.GetActiveWindowTitle();
+            statusLabel.Text = Microscope.GetPosition().ToString();
             if (s != null)
             if (s.Contains(Settings.Default.AppName))
             {

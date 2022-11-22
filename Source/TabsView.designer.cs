@@ -104,6 +104,7 @@ namespace Bio
             this.sepToolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.sepToolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.sepToolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this._3dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel.SuspendLayout();
             this.tabContextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -353,6 +354,7 @@ namespace Bio
             this.filteredToolStripMenuItem,
             this.rawToolStripMenuItem,
             this.emissionToolStripMenuItem,
+            this._3dToolStripMenuItem,
             this.sepToolStripMenuItem,
             this.dToolStripMenuItem,
             this.xMLToolStripMenuItem});
@@ -427,7 +429,7 @@ namespace Bio
             // setToolToolStripMenuItem
             // 
             this.setToolToolStripMenuItem.Name = "setToolToolStripMenuItem";
-            this.setToolToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.setToolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setToolToolStripMenuItem.Text = "Set Tool";
             this.setToolToolStripMenuItem.Click += new System.EventHandler(this.setToolToolStripMenuItem_Click);
             // 
@@ -621,35 +623,35 @@ namespace Bio
             // runToolStripMenuItem
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runToolStripMenuItem.Text = "Run";
             this.runToolStripMenuItem.DropDownOpening += new System.EventHandler(this.runToolStripMenuItem_DropDownOpening);
             // 
             // createFunctionToolStripMenuItem
             // 
             this.createFunctionToolStripMenuItem.Name = "createFunctionToolStripMenuItem";
-            this.createFunctionToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.createFunctionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createFunctionToolStripMenuItem.Text = "Functions Tool";
             this.createFunctionToolStripMenuItem.Click += new System.EventHandler(this.createFunctionToolStripMenuItem_Click);
             // 
             // consoleToolStripMenuItem
             // 
             this.consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
-            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.consoleToolStripMenuItem.Text = "Console";
             this.consoleToolStripMenuItem.Click += new System.EventHandler(this.consoleToolStripMenuItem_Click);
             // 
             // scriptRunnerToolStripMenuItem
             // 
             this.scriptRunnerToolStripMenuItem.Name = "scriptRunnerToolStripMenuItem";
-            this.scriptRunnerToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.scriptRunnerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scriptRunnerToolStripMenuItem.Text = "Script Runner";
             this.scriptRunnerToolStripMenuItem.Click += new System.EventHandler(this.scriptRunnerToolStripMenuItem_Click_1);
             // 
             // scriptRecorderToolStripMenuItem
             // 
             this.scriptRecorderToolStripMenuItem.Name = "scriptRecorderToolStripMenuItem";
-            this.scriptRecorderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.scriptRecorderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scriptRecorderToolStripMenuItem.Text = "Script Recorder";
             this.scriptRecorderToolStripMenuItem.Click += new System.EventHandler(this.scriptRecorderToolStripMenuItem_Click_1);
             // 
@@ -681,6 +683,13 @@ namespace Bio
             // 
             this.sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
             this.sepToolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            // 
+            // _3dToolStripMenuItem
+            // 
+            this._3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
+            this._3dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this._3dToolStripMenuItem.Text = "3D";
+            this._3dToolStripMenuItem.Click += new System.EventHandler(this._3dToolStripMenuItem_Click);
             // 
             // TabsView
             // 
@@ -784,5 +793,6 @@ namespace Bio
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem _3dToolStripMenuItem;
     }
 }

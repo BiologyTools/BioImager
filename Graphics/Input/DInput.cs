@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Bio.Graphics.DX.Input
+namespace Bio.Graphics
 {
     public class DInput                 // 31 lines
     {
