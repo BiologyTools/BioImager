@@ -17,7 +17,7 @@ namespace Bio
     {
         DSystem sys = null;
         List<BufferInfo> Buffers = new List<BufferInfo>();
-        Point3D Origin = new Point3D(0.1f, -0.1f, -1);
+        Vector3 Origin = new Vector3(0.1f, -0.1f, -1);
         Vector3 r = new Vector3(0, (float)Math.PI, (float)Math.PI);
         SizeF Scale = new SizeF(1f, 1f);
         Matrix rot = Matrix.Identity;
@@ -77,6 +77,7 @@ namespace Bio
             rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
             world = rot * Matrix.Scaling(Scale.Width, Scale.Height, 1);
             sys.Graphics.D3D.WorldMatrix = world;
+            sys.Graphics.Camera.SetPosition(Origin.X, Origin.Y, Origin.Z);
             sys.Graphics.Frame(RRange, GRange, BRange);
         }
 
@@ -99,17 +100,17 @@ namespace Bio
 
         private void dxPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle && Ctrl)
+            if (e.Button == MouseButtons.Middle && !Ctrl)
             {
-                Origin.X += e.X - mouseDown.X;
-                Origin.Y += e.Y - mouseDown.Y;
+                Origin.X -= (e.X - mouseDown.X) * 0.01f;
+                Origin.Y += (e.Y - mouseDown.Y) * 0.01f;
                 mouseDown = e.Location;
                 UpdateView();
             }
-            if (e.Button == MouseButtons.Middle && !Ctrl)
+            if (e.Button == MouseButtons.Middle && Ctrl)
             {
-                r.X += (float)((e.X - mouseDown.X) * (Math.PI / 180));
-                r.Y += (float)((e.Y - mouseDown.Y) * (Math.PI / 180));
+                r.X += (float)((e.Y - mouseDown.Y) * (Math.PI / 180));
+                r.Y += (float)((e.X - mouseDown.X) * (Math.PI / 180));
                 mouseDown = e.Location;
                 UpdateView();
             }
@@ -117,12 +118,6 @@ namespace Bio
         private void dxPanel_MouseUp(object sender, MouseEventArgs e)
         {
             mouseUp = e.Location;
-            if (e.Button == MouseButtons.Middle)
-            {
-                Origin.X = -(mouseUp.X - mouseDown.X);
-                Origin.Y = -(mouseUp.Y - mouseDown.Y);
-                UpdateView();
-            }
         }
 
         private void View3D_KeyDown(object sender, KeyEventArgs e)
@@ -191,9 +186,9 @@ namespace Bio
 
         private void trackBarRMin_ValueChanged(object sender, EventArgs e)
         {
-            RRange = new IntRange((int)rMinBox.Value, (int)rMinBox.Value);
-            GRange = new IntRange((int)gMinBox.Value, (int)gMinBox.Value);
-            BRange = new IntRange((int)bMinBox.Value, (int)bMinBox.Value);
+            RRange = new IntRange((int)rMinBox.Value, (int)rMaxBox.Value);
+            GRange = new IntRange((int)gMinBox.Value, (int)gMaxBox.Value);
+            BRange = new IntRange((int)bMinBox.Value, (int)bMaxBox.Value);
             UpdateView();
         }
     }

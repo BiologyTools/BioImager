@@ -24,15 +24,10 @@ namespace Bio.Graphics
             public Matrix world;
             public Matrix view;
             public Matrix projection;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct DMinMaxBuffer
-        {
             public Vector4 rMinMax;
             public Vector4 gMinMax;
             public Vector4 bMinMax;
         }
-
         // Properties.
         public VertexShader VertexShader { get; set; }
         public PixelShader PixelShader { get; set; }
@@ -119,21 +114,6 @@ namespace Bio.Graphics
 
             // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
             ConstantMatrixBuffer = new SharpDX.Direct3D11.Buffer(device, matrixBufDesc);
-
-            // Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
-            BufferDescription minmaxBufDesc = new BufferDescription()
-            {
-                Usage = ResourceUsage.Dynamic,
-                SizeInBytes = Utilities.SizeOf<DMinMaxBuffer>(),
-                BindFlags = BindFlags.ConstantBuffer,
-                CpuAccessFlags = CpuAccessFlags.Write,
-                OptionFlags = ResourceOptionFlags.None,
-                StructureByteStride = 0
-            };
-
-            // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-            ConstantMinMaxBuffer = new SharpDX.Direct3D11.Buffer(device, matrixBufDesc);
-
             return true;
         }
         public void ShutDown()
@@ -180,60 +160,27 @@ namespace Bio.Graphics
                 DataStream mappedResource;
                 deviceContext.MapSubresource(ConstantMatrixBuffer, MapMode.WriteDiscard, MapFlags.None, out mappedResource);
 
+                float f;
+                if(BitsPerPixel > 8)
+                    f = ushort.MaxValue;
+                else
+                    f = byte.MaxValue;
+
                 // Copy the matrices into the constant buffer.
                 DMatrixBuffer matrixBuffer = new DMatrixBuffer()
                 {
                     world = worldMatrix,
                     view = viewMatrix,
-                    projection = projectionMatrix
+                    projection = projectionMatrix,
+                    rMinMax = new Vector4((float)r.Min / f, (float)r.Max / f, 0, 0),
+                    gMinMax = new Vector4((float)g.Min / f, (float)g.Max / f, 0, 0),
+                    bMinMax = new Vector4((float)b.Min / f, (float)b.Max / f, 0, 0)
                 };
                 mappedResource.Write(matrixBuffer);
-
                 // Unlock the constant buffer.
                 deviceContext.UnmapSubresource(ConstantMatrixBuffer, 0);
-
-                // Set the position of the constant buffer in the vertex shader.
-                int bufferSlotNuber = 0;
-
                 // Finally set the constant buffer in the vertex shader with the updated values.
-                deviceContext.VertexShader.SetConstantBuffer(bufferSlotNuber, ConstantMatrixBuffer);
-
-                // Lock the constant buffer so it can be written to.
-                DataStream mappedResource2;
-                deviceContext.MapSubresource(ConstantMinMaxBuffer, MapMode.WriteDiscard, MapFlags.None, out mappedResource2);
-
-                // Copy the matrices into the constant buffer.
-                DMinMaxBuffer minmaxBuffer;
-                if (BitsPerPixel > 8)
-                {
-                    float f = ushort.MaxValue;
-                    minmaxBuffer = new DMinMaxBuffer()
-                    {
-                        rMinMax = new Vector4((float)r.Min / f, (float)r.Max / f, 0, 0),
-                        gMinMax = new Vector4((float)g.Min / f, (float)g.Max / f, 0, 0),
-                        bMinMax = new Vector4((float)b.Min / f, (float)b.Max / f, 0, 0)
-                    };
-                }
-                else
-                {
-                    float f = byte.MaxValue;
-                    minmaxBuffer = new DMinMaxBuffer()
-                    {
-                        rMinMax = new Vector4((float)r.Min / f, (float)r.Max / f, 0, 0),
-                        gMinMax = new Vector4((float)g.Min / f, (float)g.Max / f, 0, 0),
-                        bMinMax = new Vector4((float)b.Min / f, (float)b.Max / f, 0, 0)
-                    };
-                }
-                mappedResource2.Write(matrixBuffer);
-
-                // Unlock the constant buffer.
-                deviceContext.UnmapSubresource(ConstantMinMaxBuffer, 1);
-
-                // Set the position of the constant buffer in the vertex shader.
-                int bufferSlotNuber2 = 0;
-
-                // Finally set the constant buffer in the vertex shader with the updated values.
-                deviceContext.GeometryShader.SetConstantBuffer(bufferSlotNuber, ConstantMinMaxBuffer);
+                deviceContext.VertexShader.SetConstantBuffer(0, ConstantMatrixBuffer);
 
                 return true;
             }

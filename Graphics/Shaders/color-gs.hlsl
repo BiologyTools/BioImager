@@ -52,29 +52,25 @@ void ColorGeometryShader(point v2g input[1], inout TriangleStream<g2f> triStream
         float2 screenPos = FromClipSpace(input[0].position);
         float clipPosW = input[0].position.w;
         v.color = input[0].color;
-        //if ((v.color.x > rMinMax.x && v.color.x < rMinMax.y) || (v.color.y > gMinMax.x && v.color.y < gMinMax.y) || (v.color.z > bMinMax.x && v.color.z < bMinMax.y))
-        if ((v.color.x > rMinMax.x) || (v.color.y > gMinMax.x) || (v.color.z > bMinMax.x))
-        {
-            float s = 0.02;
-            v.position = ToClipSpace(screenPos + float2(-s, -s), clipPosW);
-            triStream.Append(v);
+        float s = 0.02;
+        v.position = ToClipSpace(screenPos + float2(-s, -s), clipPosW);
+        triStream.Append(v);
 
-            v.position = ToClipSpace(screenPos + float2(-s, s), clipPosW);
-            triStream.Append(v);
+        v.position = ToClipSpace(screenPos + float2(-s, s), clipPosW);
+        triStream.Append(v);
 
-            v.position = ToClipSpace(screenPos + float2(s, s), clipPosW);
-            triStream.Append(v);
-            triStream.RestartStrip();
+        v.position = ToClipSpace(screenPos + float2(s, s), clipPosW);
+        triStream.Append(v);
+        triStream.RestartStrip();
 
-            v.position = ToClipSpace(screenPos + float2(s, -s), clipPosW);
-            triStream.Append(v);
+        v.position = ToClipSpace(screenPos + float2(s, -s), clipPosW);
+        triStream.Append(v);
 
-            v.position = ToClipSpace(screenPos + float2(-s, -s), clipPosW);
-            triStream.Append(v);
+        v.position = ToClipSpace(screenPos + float2(-s, -s), clipPosW);
+        triStream.Append(v);
 
-            v.position = ToClipSpace(screenPos + float2(s, s), clipPosW);
-            triStream.Append(v);
-            triStream.RestartStrip();
-        }
+        v.position = ToClipSpace(screenPos + float2(s, s), clipPosW);
+        triStream.Append(v);
+        triStream.RestartStrip();
     }
 }
