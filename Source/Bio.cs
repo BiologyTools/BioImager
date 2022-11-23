@@ -321,10 +321,6 @@ namespace Bio
             color.Bf = z;
             return color;
         }
-        public SharpDX.Vector4 ToVector()
-        {
-            return new SharpDX.Vector4(Rf, Gf, Bf, 1);
-        }
         public byte[] GetBytes(PixelFormat px)
         {
             if (px == PixelFormat.Format8bppIndexed)
@@ -380,6 +376,10 @@ namespace Bio
                 System.Drawing.Color c = System.Drawing.Color.FromArgb((byte)r, (byte)g, (byte)b);
                 return c;
             }
+        }
+        public SharpDX.Vector4 ToVector()
+        {
+            return new SharpDX.Vector4(Rf, Gf, Bf, 1.0f);
         }
         public override string ToString()
         {
@@ -1808,14 +1808,14 @@ namespace Bio
                     int indexRGB = x * 6;
                     int index16 = x * 2;
                     //R
-                    bt[rowRGB + indexRGB + 4]     = bfs[2].Bytes[row16 + index16];
-                    bt[rowRGB + indexRGB + 5] = bfs[2].Bytes[row16 + index16+1];
+                    bt[rowRGB + indexRGB]     = bfs[2].Bytes[row16 + index16];
+                    bt[rowRGB + indexRGB + 1] = bfs[2].Bytes[row16 + index16+1];
                     //G
                     bt[rowRGB + indexRGB + 2] = bfs[1].Bytes[row16 + index16];
                     bt[rowRGB + indexRGB + 3] = bfs[1].Bytes[row16 + index16+1];
                     //B
-                    bt[rowRGB + indexRGB] = bfs[0].Bytes[row16 + index16];
-                    bt[rowRGB + indexRGB + 1] = bfs[0].Bytes[row16 + index16+1];
+                    bt[rowRGB + indexRGB + 4] = bfs[0].Bytes[row16 + index16];
+                    bt[rowRGB + indexRGB + 5] = bfs[0].Bytes[row16 + index16+1];
                 }
             }
             BufferInfo bf = new BufferInfo(bfs[0].ID, bfs[0].SizeX, bfs[0].SizeY,PixelFormat.Format48bppRgb, bt, bfs[0].Coordinate, 0, bfs[0].Plane);
@@ -4667,36 +4667,6 @@ namespace Bio
                     return Channels[0];
             }
         }
-        public IntRange RRange
-        {
-            get
-            {
-                if (Channels[0].range.Length == 1)
-                    return Channels[rgbChannels[0]].RangeR;
-                else
-                    return Channels[0].RangeR;
-            }
-        }
-        public IntRange GRange
-        {
-            get
-            {
-                if (Channels[0].range.Length == 1)
-                    return Channels[rgbChannels[1]].RangeG;
-                else
-                    return Channels[0].RangeG;
-            }
-        }
-        public IntRange BRange
-        {
-            get
-            {
-                if (Channels[0].range.Length == 1)
-                    return Channels[rgbChannels[2]].RangeB;
-                else
-                    return Channels[0].RangeB;
-            }
-        }
         public class ImageJDesc
         {
             public string ImageJ;
@@ -4837,7 +4807,27 @@ namespace Bio
         {
             get { return sizeT; }
         }
-
+        public IntRange RRange
+        {
+            get
+            {
+                return RChannel.RangeR;
+            }
+        }
+        public IntRange GRange
+        {
+            get
+            {
+                return GChannel.RangeG;
+            }
+        }
+        public IntRange BRange
+        {
+            get
+            {
+                return BChannel.RangeB;
+            }
+        }
         public BufferInfo SelectedBuffer
         {
             get
@@ -7687,6 +7677,7 @@ namespace Bio
                     Application.DoEvents();
                 }
             }
+
             int pls = b.meta.getPlaneCount(serie);
             if (pls == b.Buffers.Count)
             for (int bi = 0; bi < b.Buffers.Count; bi++)

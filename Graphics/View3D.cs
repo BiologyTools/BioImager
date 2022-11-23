@@ -191,5 +191,10 @@ namespace Bio
             BRange = new IntRange((int)bMinBox.Value, (int)bMaxBox.Value);
             UpdateView();
         }
+
+        private void View3D_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            sys.ShutDown();
+        }
     }
 }

@@ -1075,7 +1075,7 @@ namespace Bio
                         dBitmaps[bi].Dispose();
                         dBitmaps[bi] = null;
                     }
-                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, bitmap);
+                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, BufferInfo.To32Bit(bitmap));
                 }
                 else
                     Bitmaps.Add(bitmap);

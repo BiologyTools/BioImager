@@ -304,6 +304,7 @@ namespace Bio
             this.KeyPreview = true;
             this.Name = "View3D";
             this.Text = "3D View";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.View3D_FormClosing);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.View3D_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.View3D_KeyDown);
             this.Resize += new System.EventHandler(this.View3D_Resize);

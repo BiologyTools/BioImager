@@ -34,7 +34,6 @@ namespace Bio.Graphics
         public GeometryShader GeometryShader { get; set; }
         public InputLayout Layout { get; set; }
         public SharpDX.Direct3D11.Buffer ConstantMatrixBuffer { get; set; }
-        public SharpDX.Direct3D11.Buffer ConstantMinMaxBuffer { get; set; }
         public int BitsPerPixel { get; set; }
 
         // Constructor

@@ -273,7 +273,6 @@
       <DependentUpon>PenTool.cs</DependentUpon>
     </Compile>
     <Compile Include="Graphics\QueueLinearFloodFiller.cs" />
-    <Compile Include="Graphics\System\DPerfLogger.cs" />
     <Compile Include="Graphics\System\DSystem.cs" />
     <Compile Include="Graphics\System\DSystemConfiguration.cs" />
     <Compile Include="Graphics\System\DTimer.cs" />
