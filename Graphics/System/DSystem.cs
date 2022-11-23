@@ -1,4 +1,5 @@
-﻿using SharpDX.Windows;
+﻿using AForge;
+using SharpDX.Windows;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -36,7 +37,7 @@ namespace Bio.Graphics
 
             return result;
         }
-        public bool Frame()
+        public bool Frame(IntRange r, IntRange g, IntRange b)
         {
             // Check if the user pressed escape and wants to exit the application.
             if (Input.IsKeyDown(Keys.Escape))
@@ -52,7 +53,7 @@ namespace Bio.Graphics
             }
             */
             // Do the frame processing for the graphics object.
-            return Graphics.Frame();
+            return Graphics.Frame(r,g,b);
         }
         public void ShutDown()
         {

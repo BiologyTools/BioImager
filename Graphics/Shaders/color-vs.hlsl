@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Filename: color.vs
+// Filename: color-vs.hlsl
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -36,8 +36,6 @@ struct PixelInputType
 PixelInputType ColorVertexShader(VertexInputType input)
 {
     PixelInputType output;
-    
-
 	// Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 
@@ -45,7 +43,6 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
-    
 	// Store the input color for the pixel shader to use.
     output.color = input.color;
     

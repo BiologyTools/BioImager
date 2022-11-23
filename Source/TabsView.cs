@@ -950,7 +950,7 @@ namespace Bio
 
         private void _3dToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            View3D d = new View3D();
+            View3D d = new View3D(ImageView.SelectedImage);
             d.Show();
         }
     }

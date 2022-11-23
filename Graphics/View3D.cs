@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AForge;
 using Bio.Graphics;
 using SharpDX;
 
@@ -16,26 +17,43 @@ namespace Bio
     {
         DSystem sys = null;
         List<BufferInfo> Buffers = new List<BufferInfo>();
-        Point3D Origin = new Point3D(0.01f, 0.01f, -1);
+        Point3D Origin = new Point3D(0.1f, -0.1f, -1);
         Vector3 r = new Vector3(0, (float)Math.PI, (float)Math.PI);
-        SizeF Scale = new SizeF(60, 60);
+        SizeF Scale = new SizeF(1f, 1f);
         Matrix rot = Matrix.Identity;
         bool update = true;
         bool fullScreen = false;
-        public View3D()
+
+        public static IntRange RRange { get; set; }
+        public static IntRange GRange { get; set; }
+        public static IntRange BRange { get; set; }
+        public static bool Ctrl
+        {
+            get
+            {
+                return Win32.GetKeyState(Keys.LControlKey);
+            }
+        }
+        public View3D(BioImage im)
         {
             InitializeComponent();
             MouseWheel += new System.Windows.Forms.MouseEventHandler(ImageView_MouseWheel);
+            RRange = im.RRange;
+            GRange = im.GRange;
+            BRange = im.BRange;
             Initialize();
+            rMinBox.Value = im.RRange.Min;
+            gMinBox.Value = im.GRange.Min;
+            bMinBox.Value = im.BRange.Min;
+            rMaxBox.Value = im.RRange.Max;
+            gMaxBox.Value = im.GRange.Max;
+            bMaxBox.Value = im.BRange.Max;
+            UpdateView();
+            UpdateStatus();
         }
         private void UpdateStatus()
         {
             toolStripStatusLabel.Text = Origin.ToString() + " Zoom:" + Scale.Width;
-        }
-        private void UpdateImage()
-        {
-            sys.Graphics.Initialize(sys.Configuration, dxPanel.Handle, ImageView.SelectedImage);
-
         }
         Matrix world = Matrix.Identity;
         private void Initialize()
@@ -47,11 +65,10 @@ namespace Bio
             sys.Configuration.Width = dxPanel.Width;
             sys.Configuration.Height = dxPanel.Height;
             rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
-            world = rot * Matrix.Scaling(Scale.Width, Scale.Height, 1);
+            world = rot;// * Matrix.Scaling(Scale.Width, Scale.Height, 1);
             sys.Graphics.D3D.WorldMatrix = world;
             sys.Graphics.Initialize(sys.Configuration, dxPanel.Handle, ImageView.SelectedImage);
-            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, dxPanel.Width, dxPanel.Height);
-            sys.Graphics.Frame();
+            sys.Graphics.Frame(RRange,GRange,BRange);
         }
         public void UpdateView()
         {
@@ -60,16 +77,12 @@ namespace Bio
             rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
             world = rot * Matrix.Scaling(Scale.Width, Scale.Height, 1);
             sys.Graphics.D3D.WorldMatrix = world;
-            //sys.Graphics.Camera.SetPosition((float)-Origin.X, (float)-Origin.Y,-10);
-            //sys.Graphics.Frame((float)App.viewer.Origin.X, (float)App.viewer.Origin.Y, dxPanel.Width, dxPanel.Height);
-            sys.Graphics.Frame();
-            if (update)
-            UpdateImage();
-            update = false;
+            sys.Graphics.Frame(RRange, GRange, BRange);
         }
 
         private void View3D_Resize(object sender, EventArgs e)
         {
+
             UpdateView();
         }
 
@@ -86,6 +99,20 @@ namespace Bio
 
         private void dxPanel_MouseMove(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Middle && Ctrl)
+            {
+                Origin.X += e.X - mouseDown.X;
+                Origin.Y += e.Y - mouseDown.Y;
+                mouseDown = e.Location;
+                UpdateView();
+            }
+            if (e.Button == MouseButtons.Middle && !Ctrl)
+            {
+                r.X += (float)((e.X - mouseDown.X) * (Math.PI / 180));
+                r.Y += (float)((e.Y - mouseDown.Y) * (Math.PI / 180));
+                mouseDown = e.Location;
+                UpdateView();
+            }
         }
         private void dxPanel_MouseUp(object sender, MouseEventArgs e)
         {
@@ -100,6 +127,7 @@ namespace Bio
 
         private void View3D_KeyDown(object sender, KeyEventArgs e)
         {
+            dxPanel.Focus();
             float moveAmount = 0.1f;
             if(e.KeyCode == Keys.Up)
             {
@@ -141,7 +169,6 @@ namespace Bio
             {
                 r.Z -= 5.0f * ((float)Math.PI / 180.0f);
             }
-            rot = Matrix.RotationX(r.X) * Matrix.RotationY(r.Y) * Matrix.RotationZ(r.Z);
             sys.Graphics.Camera.SetPosition((float)Origin.X, (float)Origin.Y, (float)Origin.Z);
             UpdateStatus();
             UpdateView();
@@ -160,6 +187,14 @@ namespace Bio
             }
             UpdateView();
             UpdateStatus();
+        }
+
+        private void trackBarRMin_ValueChanged(object sender, EventArgs e)
+        {
+            RRange = new IntRange((int)rMinBox.Value, (int)rMinBox.Value);
+            GRange = new IntRange((int)gMinBox.Value, (int)gMinBox.Value);
+            BRange = new IntRange((int)bMinBox.Value, (int)bMinBox.Value);
+            UpdateView();
         }
     }
 }

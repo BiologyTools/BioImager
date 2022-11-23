@@ -903,13 +903,16 @@ namespace Bio
                         }
                         if (labels)
                         {
-                            //Lets draw the text of this ROI in the middle of the RO
-                            float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
-                            float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
-                            RawRectangleF r = ToRawRectF(fw, fh, an.TextSize.Width, an.TextSize.Height);
-                            SharpDX.DirectWrite.TextFormat tex = new SharpDX.DirectWrite.TextFormat(dx.FactoryDWrite, an.font.FontFamily.ToString(), an.font.Size);
-                            dx.RenderTarget2D.DrawText(an.Text, tex, r, b);
-                            tex.Dispose();
+                            if (an.Text != null)
+                            {
+                                //Lets draw the text of this ROI in the middle of the RO
+                                float fw = ((float)an.Rect.X + ((float)an.Rect.W / 2)) - ((float)an.TextSize.Width / 2);
+                                float fh = ((float)an.Rect.Y + ((float)an.Rect.H / 2)) - ((float)an.TextSize.Height / 2);
+                                RawRectangleF r = ToRawRectF(fw, fh, an.TextSize.Width, an.TextSize.Height);
+                                SharpDX.DirectWrite.TextFormat tex = new SharpDX.DirectWrite.TextFormat(dx.FactoryDWrite, an.font.FontFamily.ToString(), an.font.Size);
+                                dx.RenderTarget2D.DrawText(an.Text, tex, r, b);
+                                tex.Dispose();
+                            }
                         }
                         if (bounds)
                         {

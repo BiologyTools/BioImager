@@ -50,13 +50,14 @@ namespace Bio.Graphics
                         col = im.Buffers[im.Coords[z,0,0]].GetPixel(x, y);
                         int ind = (im.SizeX * y + x)*(z+1);
                         Vector4 vec = col.ToVector() * 10f;
-                        if ((im.RRange.Min < col.R || im.GRange.Min < col.G || im.BRange.Min < col.B) && (im.RRange.Max > col.R || im.GRange.Max > col.G || im.BRange.Max > col.B))
-                            vec.W = 0.25f;
+                        float f = (float)ushort.MaxValue;
+                        if ((im.RRange.Min < col.R && im.GRange.Min < col.G && im.BRange.Min < col.B))
+                            vec.W = 0.5f;
                         else
                             vec.W = 0;
                         vertices[ind] = new DColorShader.DVertex()
                         {
-                            position = new Vector3((float)x / (float)im.SizeX * 0.01f, (float)y / (float)im.SizeY * 0.01f, ((float)z * (float)im.physicalSizeZ) / im.SizeZ * 0.01f),
+                            position = new Vector3((float)x / (float)im.SizeX, (float)y / (float)im.SizeY, ((float)z / im.SizeZ) * 0.1f),
                             color = vec
                         };
                     }

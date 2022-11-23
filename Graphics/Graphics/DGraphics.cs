@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AForge;
+using System;
 using System.Windows.Forms;
 
 namespace Bio.Graphics
@@ -11,7 +12,7 @@ namespace Bio.Graphics
         public DModel Model { get; set; }
         private DColorShader ColorShader { get; set; }
         public DTimer Timer { get; set; }
-
+        public int BitsPerPixel { get; set; }
         // Constructor
         public DGraphics() { }
 
@@ -31,7 +32,7 @@ namespace Bio.Graphics
                 Camera = new DCamera();
 
                 // Set the initial position of the camera.
-                Camera.SetPosition(0.1f, 0.1f, -1);
+                Camera.SetPosition(0.1f, -0.1f, -1);
 
                 // Create the model object.
                 Model = new DModel();
@@ -44,7 +45,7 @@ namespace Bio.Graphics
                 ColorShader = new DColorShader();
 
                 // Initialize the color shader object.
-                if (!ColorShader.Initialize(D3D.Device, windowHandle))
+                if (!ColorShader.Initialize(D3D.Device, windowHandle, im.bitsPerPixel))
                     return false;
 
                 // Create the Timer
@@ -53,7 +54,7 @@ namespace Bio.Graphics
                 // Initialize the Timer
                 if (!Timer.Initialize())
                     return false;
-
+                BitsPerPixel = im.bitsPerPixel;
                 return true;
             }
             catch (Exception ex)
@@ -78,12 +79,12 @@ namespace Bio.Graphics
             D3D?.ShutDown();
             D3D = null;
         }
-        public bool Frame()
+        public bool Frame(IntRange r, IntRange g, IntRange b)
         {
             // Render the graphics scene.
-            return Render();
+            return Render(r,g,b);
         }
-        private bool Render()
+        private bool Render(IntRange r, IntRange g, IntRange b)
         {
             // Clear the buffer to begin the scene.
             D3D.BeginScene(0.0f, 0.0f, 0.0f, 1f);
@@ -100,7 +101,7 @@ namespace Bio.Graphics
             Model.Render(D3D.DeviceContext);
 
             // Render the model using the color shader.
-            if (!ColorShader.Render(D3D.DeviceContext, Model.IndexCount, worldMatrix, viewMatrix, projectionMatrix))
+            if (!ColorShader.Render(D3D.DeviceContext, Model.IndexCount, worldMatrix, viewMatrix, projectionMatrix, r, g, b))
                 return false;
 
             // Present the rendered scene to the screen.
