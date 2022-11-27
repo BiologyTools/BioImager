@@ -72,6 +72,8 @@ namespace Bio
 
         private static void Init()
         {
+            if (!Properties.Settings.Default.Setup)
+                new Setup().ShowDialog();
             App.Initialize();
             Filters.Init();
             App.imager.Show();

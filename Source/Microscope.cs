@@ -67,8 +67,15 @@ namespace Bio
         }
         public void SetPosition(double px, double py)
         {
+            if (Recorder.recordMicroscope)
+                Recorder.AddLine("Microscope.Stage.SetPosition(" + px + "," + py + ");");
             x = px;
             y = py;
+            if(Properties.Settings.Default.PMicroscope)
+            {
+                Microscope.pMicroscope.SetPosition(new PointD(px, py));
+            }
+            else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             { 
                 object[] setPosArgs = new object[5];
@@ -108,6 +115,13 @@ namespace Bio
         }
         public PointD GetPosition()
         {
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                PointD pd;
+                Microscope.pMicroscope.GetPosition(out pd);
+                return pd;
+            }
+            else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] args = new object[3];
@@ -212,6 +226,11 @@ namespace Bio
         {
             if (Recorder.recordMicroscope)
                 Recorder.AddLine("Microscope.Focus.SetFocus(" + f + ");");
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                PointD p = Microscope.Stage.GetPosition();
+                Microscope.pMicroscope.SetPosition(new Point3D(p.X,p.Y,f));
+            }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] args = new object[3];
@@ -525,6 +544,30 @@ namespace Bio
         }
     }
 
+    public class FilterWheel
+    {
+        public int GetPosition()
+        {
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                int pos;
+                Microscope.pMicroscope.GetFilterWheelPosition(out pos);
+                return pos;
+            }
+            return -1;
+        }
+        public void SetPosition(int i)
+        {
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                int pos;
+                Microscope.pMicroscope.SetFilterWheelPosition(i);
+                if (Recorder.recordMicroscope)
+                    Recorder.AddLine("Microscope.FilterWheel.SetPosition(" + i + ");");
+            }
+        }
+    }
+
     public static class Microscope
     {
         public enum Actions
@@ -552,6 +595,7 @@ namespace Bio
         public static Objectives Objectives = null;
         public static TLShutter TLShutter = null;
         public static RLShutter RLShutter = null;
+        public static FilterWheel FilterWheel = new FilterWheel();
         public static double UpperLimit, LowerLimit, fInterVal;
         public static object CmdSetMode = null;
         public static bool initialized = false;
@@ -565,6 +609,7 @@ namespace Bio
         public static int sessionID = -1;
         public static string userRx = "";
         public static PointD viewSize;
+        public static PMicroscope pMicroscope = null;
 
         public static Objectives.Objective Objective
         {
@@ -579,6 +624,16 @@ namespace Bio
                 return;
             int err;
             folder = Properties.Settings.Default.ImagingPath;
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                pMicroscope = new PMicroscope();
+                pMicroscope.Initialize(Properties.Settings.Default.PFilterWheel, Properties.Settings.Default.PStage);
+                bool b = pMicroscope.SetPosition(new Point3D(100, 100, 100));
+                Point3D p;
+                bool res = pMicroscope.GetPosition3D(out p);
+                bool bb = pMicroscope.TakeImage(Application.StartupPath + "\\Image");
+            }
+            else
             if (Properties.Settings.Default.AppPath == "")
             {
                 OpenFileDialog fl = new OpenFileDialog();
@@ -589,6 +644,7 @@ namespace Bio
                 Properties.Settings.Default.AppPath = fl.FileName;
                 fl.Dispose();
             }
+            else
             if (Properties.Settings.Default.LibPath == "")
             {
                 OpenFileDialog fl = new OpenFileDialog();
@@ -1090,6 +1146,10 @@ namespace Bio
             Objectives.Objective o = Objectives.GetObjective();
             PointD d = Stage.GetPosition();
             return new RectangleD(d.X, d.Y, viewSize.X, viewSize.Y);
+        }
+        public static void Close()
+        {
+            PMicroscope.Stop();
         }
     }
 

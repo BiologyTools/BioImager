@@ -685,6 +685,7 @@ namespace Bio
         private void TabsView_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveProperties();
+            Microscope.Close();
             App.imager.Close();
             App.stage.Close();
             App.nodeView.Close();

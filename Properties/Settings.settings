@@ -120,7 +120,19 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Setup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PFilterWheel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PYRO:SimulatedFilterWheel@127.0.0.1:8001</Value>
+    </Setting>
+    <Setting Name="PStage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PYRO:SimulatedStage@127.0.0.1:8002</Value>
+    </Setting>
+    <Setting Name="PMicroscope" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PCamera" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SimulatedCamera</Value>
     </Setting>
   </Settings>
 </SettingsFile>

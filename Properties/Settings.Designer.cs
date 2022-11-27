@@ -493,13 +493,61 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool Setup {
             get {
                 return ((bool)(this["Setup"]));
             }
             set {
                 this["Setup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PYRO:SimulatedFilterWheel@127.0.0.1:8001")]
+        public string PFilterWheel {
+            get {
+                return ((string)(this["PFilterWheel"]));
+            }
+            set {
+                this["PFilterWheel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PYRO:SimulatedStage@127.0.0.1:8002")]
+        public string PStage {
+            get {
+                return ((string)(this["PStage"]));
+            }
+            set {
+                this["PStage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PMicroscope {
+            get {
+                return ((bool)(this["PMicroscope"]));
+            }
+            set {
+                this["PMicroscope"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SimulatedCamera")]
+        public string PCamera {
+            get {
+                return ((string)(this["PCamera"]));
+            }
+            set {
+                this["PCamera"] = value;
             }
         }
     }
