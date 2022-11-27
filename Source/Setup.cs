@@ -52,5 +52,24 @@ namespace Bio
         {
             Properties.Settings.Default.PMicroscope = libRadioBut.Checked;
         }
+
+        private void setImagingBut_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog d = new OpenFileDialog();
+            d.Title = "Select Imaging Application Executable"
+            if (d.ShowDialog() != DialogResult.OK)
+                return;
+            imgPathBox.Text = d.FileName;
+        }
+
+        private void setLibraryBut_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog d = new OpenFileDialog();
+            d.Title = "Select Imaging Library";
+            if (d.ShowDialog() != DialogResult.OK)
+                return;
+            libraryPathBox.Text = d.FileName;
+           
+        }
     }
 }

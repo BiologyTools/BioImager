@@ -74,6 +74,7 @@ namespace Bio
             this.setImagingBut.TabIndex = 30;
             this.setImagingBut.Text = "Set";
             this.setImagingBut.UseVisualStyleBackColor = false;
+            this.setImagingBut.Click += new System.EventHandler(this.setImagingBut_Click);
             // 
             // setLibraryBut
             // 
@@ -86,6 +87,7 @@ namespace Bio
             this.setLibraryBut.TabIndex = 33;
             this.setLibraryBut.Text = "Set";
             this.setLibraryBut.UseVisualStyleBackColor = false;
+            this.setLibraryBut.Click += new System.EventHandler(this.setLibraryBut_Click);
             // 
             // libraryPathBox
             // 
