@@ -56,7 +56,7 @@ namespace Bio
         private void setImagingBut_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();
-            d.Title = "Select Imaging Application Executable"
+            d.Title = "Select Imaging Application Executable";
             if (d.ShowDialog() != DialogResult.OK)
                 return;
             imgPathBox.Text = d.FileName;
