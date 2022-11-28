@@ -43,7 +43,7 @@ namespace Bio.PythonMicroscope
             this.pxBox = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.cameraBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // saveBut
@@ -200,22 +200,22 @@ namespace Bio.PythonMicroscope
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(12, 43);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.Size = new System.Drawing.Size(68, 13);
             this.label5.TabIndex = 39;
-            this.label5.Text = "Python Functions:";
+            this.label5.Text = "Camera URI:";
             // 
-            // textBox1
+            // cameraBox
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cameraBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(124, 41);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(317, 20);
-            this.textBox1.TabIndex = 40;
-            this.textBox1.Text = "PYRO:SimulatedCamera@127.0.0.1:8000";
+            this.cameraBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.cameraBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cameraBox.ForeColor = System.Drawing.Color.White;
+            this.cameraBox.Location = new System.Drawing.Point(124, 41);
+            this.cameraBox.Name = "cameraBox";
+            this.cameraBox.Size = new System.Drawing.Size(317, 20);
+            this.cameraBox.TabIndex = 40;
+            this.cameraBox.Text = "PYRO:SimulatedCamera@127.0.0.1:8000";
             // 
             // PythonMicroscopes
             // 
@@ -223,7 +223,7 @@ namespace Bio.PythonMicroscope
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
             this.ClientSize = new System.Drawing.Size(449, 475);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.cameraBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pxBox);
@@ -240,7 +240,7 @@ namespace Bio.PythonMicroscope
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PythonMicroscopes";
-            this.Text = "Python Microscopes";
+            this.Text = "Python Microscope Setup";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,6 +261,6 @@ namespace Bio.PythonMicroscope
         private System.Windows.Forms.ComboBox pxBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox cameraBox;
     }
 }
