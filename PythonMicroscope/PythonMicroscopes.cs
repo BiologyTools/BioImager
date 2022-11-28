@@ -18,6 +18,14 @@ namespace Bio.PythonMicroscope
             InitializeComponent();
             panel.Controls.Add(view);
             view.Dock = DockStyle.Fill;
+            int i = 0;
+            foreach (System.Drawing.Imaging.PixelFormat p in (System.Drawing.Imaging.PixelFormat[])Enum.GetValues(typeof(System.Drawing.Imaging.PixelFormat)))
+            {
+                if (Properties.Settings.Default.PCameraFormat == p.ToString())
+                    pxBox.SelectedItem = p.ToString();
+                i++;
+            }
+            funcsBox.SelectedIndex = 4;
         }
         private void filterWheelBox_TextChanged(object sender, EventArgs e)
         {
@@ -31,7 +39,7 @@ namespace Bio.PythonMicroscope
 
         private void editConfigBut_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("notepad.exe " + Application.StartupPath + "/PythonMicroscope/microscope/config.txt");
+            System.Diagnostics.Process.Start("notepad.exe", Application.StartupPath + "/PythonMicroscope/microscope/config.txt");
         }
 
         private void initBut_Click(object sender, EventArgs e)
@@ -60,5 +68,10 @@ namespace Bio.PythonMicroscope
             System.IO.File.WriteAllText(Application.StartupPath + "/PythonMicroscope/microscope/" + funcsBox.SelectedItem.ToString(), view.TextBox.Text);
         }
 
+        private void pxBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PCameraFormat = pxBox.Text;
+            Properties.Settings.Default.Save();
+        }
     }
 }

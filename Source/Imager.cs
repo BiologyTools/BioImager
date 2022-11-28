@@ -459,6 +459,7 @@ namespace Bio
                 this.Location = pp;
             }
             string s = Win32.GetActiveWindowTitle();
+            if(!Properties.Settings.Default.PMicroscope)
             statusLabel.Text = Microscope.GetPosition().ToString();
             if (s != null)
             if (s.Contains(Settings.Default.AppName))

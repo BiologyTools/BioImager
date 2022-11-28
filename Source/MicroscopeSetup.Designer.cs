@@ -205,6 +205,7 @@ namespace Bio
             this.button23 = new System.Windows.Forms.Button();
             this.useLibBox = new System.Windows.Forms.CheckBox();
             this.setLibBut = new System.Windows.Forms.Button();
+            this.pythonMicroscopeBut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA1Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA2Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA4Box)).BeginInit();
@@ -2452,12 +2453,25 @@ namespace Bio
             this.setLibBut.UseVisualStyleBackColor = false;
             this.setLibBut.Click += new System.EventHandler(this.setLibBut_Click);
             // 
+            // pythonMicroscopeBut
+            // 
+            this.pythonMicroscopeBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.pythonMicroscopeBut.ForeColor = System.Drawing.Color.White;
+            this.pythonMicroscopeBut.Location = new System.Drawing.Point(716, 358);
+            this.pythonMicroscopeBut.Name = "pythonMicroscopeBut";
+            this.pythonMicroscopeBut.Size = new System.Drawing.Size(175, 23);
+            this.pythonMicroscopeBut.TabIndex = 213;
+            this.pythonMicroscopeBut.Text = "Python Microscope Configuration";
+            this.pythonMicroscopeBut.UseVisualStyleBackColor = false;
+            this.pythonMicroscopeBut.Click += new System.EventHandler(this.pythonMicroscopeBut_Click);
+            // 
             // MicroscopeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
             this.ClientSize = new System.Drawing.Size(956, 413);
+            this.Controls.Add(this.pythonMicroscopeBut);
             this.Controls.Add(this.setLibBut);
             this.Controls.Add(this.useLibBox);
             this.Controls.Add(this.button23);
@@ -2873,5 +2887,6 @@ namespace Bio
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.CheckBox useLibBox;
         private System.Windows.Forms.Button setLibBut;
+        private System.Windows.Forms.Button pythonMicroscopeBut;
     }
 }

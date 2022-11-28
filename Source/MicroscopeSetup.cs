@@ -519,5 +519,11 @@ namespace Bio
         {
             App.lib.Show();
         }
+
+        private void pythonMicroscopeBut_Click(object sender, EventArgs e)
+        {
+            PythonMicroscope.PythonMicroscopes pm = new PythonMicroscope.PythonMicroscopes();
+            pm.Show();
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace Bio
                     Console.Write(res);
                 }
             }
+            Application.DoEvents();
             return res;
         }
         public static void Start()
@@ -130,7 +131,7 @@ namespace Bio
         }
         public bool TakeImage(string path)
         {
-           string s = run_cmd("takeimage.py", Properties.Settings.Default.PCamera + " " + path);
+           string s = run_cmd("takeimage.py", path);
            if (s.Contains("OK"))
                 return true;
             else
@@ -138,11 +139,23 @@ namespace Bio
         }
         public bool SetExposure(float f)
         {
-            string s = run_cmd("setexposure.py", Properties.Settings.Default.PCamera + " " + f);
+            string s = run_cmd("setexposure.py", f.ToString());
             if (s.Contains("OK"))
                 return true;
             else
                 return false;
+        }
+        public bool GetSize(out int width, out int height)
+        {
+            string s = run_cmd("getcamrect.py","");
+            width = 0;
+            height = 0;
+            if (!s.Contains("OK"))
+                return false;
+            string[] sts = s.Split();
+            width = int.Parse(sts[0]);
+            height = int.Parse(sts[2]);
+            return true;
         }
     }
 }

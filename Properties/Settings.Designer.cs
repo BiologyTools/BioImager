@@ -550,5 +550,17 @@ namespace Bio.Properties {
                 this["PCamera"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Format8bppIndexed")]
+        public string PCameraFormat {
+            get {
+                return ((string)(this["PCameraFormat"]));
+            }
+            set {
+                this["PCameraFormat"] = value;
+            }
+        }
     }
 }

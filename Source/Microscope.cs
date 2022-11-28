@@ -247,8 +247,12 @@ namespace Bio
         }
         public double GetFocus()
         {
-            if (Recorder.recordMicroscope)
-            Recorder.AddLine("Microscope.Focus.SetFocus(" + z + ");");
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                Point3D p;
+                Microscope.pMicroscope.GetPosition3D(out p);
+                return p.Z;
+            }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] getPosFocArgs = new object[1];
@@ -324,9 +328,12 @@ namespace Bio
                 }
             }
         }
-        public Objectives()
+        public Objectives(int count)
         {
-
+            for (int i = 0; i < count; i++)
+            {
+                List.Add(new Objective(null, i));
+            }
         }
         public class Objective
         {
@@ -610,7 +617,7 @@ namespace Bio
         public static string userRx = "";
         public static PointD viewSize;
         public static PMicroscope pMicroscope = null;
-
+        public static int ImageCount = 0;
         public static Objectives.Objective Objective
         {
             get
@@ -632,6 +639,9 @@ namespace Bio
                 Point3D p;
                 bool res = pMicroscope.GetPosition3D(out p);
                 bool bb = pMicroscope.TakeImage(Application.StartupPath + "\\Image");
+                Objectives = new Objectives(6);
+                Stage = new Stage();
+                Focus = new Focus();
             }
             else
             if (Properties.Settings.Default.AppPath == "")
@@ -753,7 +763,11 @@ namespace Bio
                     return;
                 }
                 err = sdk.Cmd(sessionID, "controller.stage.hostdirection.set 1 1", ref userRx);
+                Objectives = new Objectives(sdk.GetNosePiecePositions());
+                Stage = new Stage();
+                Focus = new Focus();
             }
+
             RectangleD rec = GetObjectiveViewRectangle();
             viewSize = new PointD(rec.W, rec.H);
             Watcher();
@@ -941,11 +955,12 @@ namespace Bio
         private static string folder = "";
         public static string GetFolder()
         {
+
             object o = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder");
             string s = null;
             if (o != null)
                 s = o.ToString();
-            if (s == null && folder == "")
+            if (s == null && folder == "" && Properties.Settings.Default.ImagingPath == "")
             {
                 FolderBrowserDialog fs = new FolderBrowserDialog();
                 fs.Description = "Select Imaging Folder";
@@ -962,8 +977,8 @@ namespace Bio
             }
             else
             {
-                folder = s;
-                return s;
+                folder = Properties.Settings.Default.ImagingPath;
+                return folder;
             }
         }
         public static void SetFolder(string fol)
@@ -984,7 +999,7 @@ namespace Bio
         }
         public static void TakeImage(int i)
         {
-            if (Properties.Settings.Default.SimulateCamera)
+            if (Properties.Settings.Default.SimulateCamera && !Properties.Settings.Default.PMicroscope)
             {
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 b.Volume.Location = GetPosition();
@@ -1012,12 +1027,55 @@ namespace Bio
 
                 watcher.Path = Properties.Settings.Default.ImagingPath;
                 watcher.EnableRaisingEvents = true;
-                string p = GetFolder() + "/" + b.Filename + "-" + i + ".ome.tif";
-                BioImage.SaveOME(p,b.ID);
+                string file;
+                if (folder == "" || folder == null)
+                    file = Properties.Settings.Default.ImageName + i;
+                else
+                    file = folder + "/" + Properties.Settings.Default.ImageName + i;
+                BioImage.SaveOME(file, b.ID);
                 Application.DoEvents();
             }
             else
             {
+                if(Properties.Settings.Default.PMicroscope)
+                {
+                    folder = GetFolder();
+                    string file;
+                    if (folder == "" || folder == null)
+                        file = Properties.Settings.Default.ImageName + (ImageCount + 1).ToString();
+                    else
+                        file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount + 1);
+                    pMicroscope.TakeImage(file);
+                    ImageCount++;
+                    byte[] bts = File.ReadAllBytes(file);
+                    int w, h;
+                    System.Drawing.Imaging.PixelFormat px;
+                    Enum.TryParse<System.Drawing.Imaging.PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
+                    pMicroscope.GetSize(out w, out h);
+                    BufferInfo bf = new BufferInfo(file, w, h, px,bts, new ZCT(0, 0, 0),0);
+                    Statistics.CalcStatistics(bf);
+                    BioImage bm = new BioImage(file);
+                    bm.Buffers.Add(bf);
+                    //Set the physical size to be 96 dpi
+                    bm.physicalSizeX = 96f / 2540f;
+                    bm.physicalSizeY = 96f / 2540f;
+                    bm.physicalSizeZ = 1;
+                    PointD p = Stage.GetPosition();
+                    double f = Focus.GetFocus();
+                    bm.bitsPerPixel = bf.BitsPerPixel;
+                    bm.stageSizeX = p.X;
+                    bm.stageSizeY = p.Y;
+                    bm.stageSizeZ = f;
+                    bm.UpdateCoords(1,1,1);
+                    for (int c = 0; c < bf.RGBChannelsCount; c++)
+                    {
+                        bm.Channels.Add(new Channel(i, bf.BitsPerPixel, bf.RGBChannelsCount));
+                    }
+                    Images.AddImage(bm);
+                    BioImage.SaveOME(file + ".ome.tif", bm.ID);
+                    currentImage = bm;
+                }
+                else
                 App.imager.PerformFunction(Function.Functions["TakeImage"]);
             } 
         }

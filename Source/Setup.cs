@@ -21,7 +21,7 @@ namespace Bio
         {
             if (imgPathBox.Text != "")
             {
-                Properties.Settings.Default.ImagingPath = imgPathBox.Text;
+                Properties.Settings.Default.AppPath = imgPathBox.Text;
             }
             else
                 return;
@@ -33,6 +33,7 @@ namespace Bio
                 return;
             Properties.Settings.Default.Setup = true;
             DialogResult = DialogResult.OK;
+            Properties.Settings.Default.Save();
             this.Close();
         }
 

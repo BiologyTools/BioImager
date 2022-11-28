@@ -134,5 +134,8 @@
     <Setting Name="PCamera" Type="System.String" Scope="User">
       <Value Profile="(Default)">SimulatedCamera</Value>
     </Setting>
+    <Setting Name="PCameraFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Format8bppIndexed</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
