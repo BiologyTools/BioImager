@@ -358,6 +358,7 @@ namespace Bio
         {
             TextInput ti = new TextInput("Property" + propBox.Items.Count);
             ti.Text = "Set Property Name";
+            ti.TopMost = true;
             if (ti.ShowDialog() != DialogResult.OK)
                 return;
             propRecStatusLabel.Text = "Property Recording: Started";
@@ -388,14 +389,23 @@ namespace Bio
                 Clipboard.SetImage((Bitmap)Automation.GetProperty(n.recording.Name));
             else
             {
-                string s = (string)Automation.GetProperty(n.recording.Name);
-                MessageBox.Show(s);
+                if (n.recording.List.Last().Value == Automation.Action.ValueType.TogglePattern)
+                {
+                    bool b = (bool)Automation.GetProperty(n.recording.Name);
+                    MessageBox.Show(b.ToString());
+                }
+                else
+                {
+                    string s = (string)Automation.GetProperty(n.recording.Name);
+                    MessageBox.Show(s);
+                }
             }
         }
         private void setPropBut_Click(object sender, EventArgs e)
         {
             TextInput ti = new TextInput("Property" + propBox.Items.Count);
             ti.Text = "Set Text To Set";
+            ti.TopMost = true;
             if (propView.SelectedNode == null)
                 return;
             Node n = (Node)propView.SelectedNode.Tag;

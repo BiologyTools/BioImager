@@ -441,6 +441,7 @@ namespace Bio
                 return;
             Properties.Settings.Default.SimulatedImage = openFileDialog.FileName;
             Properties.Settings.Default.Save();
+            simImage = BioImage.OpenFile(openFileDialog.FileName);
         }
 
         private void simCameraBox_CheckedChanged(object sender, EventArgs e)
@@ -522,7 +523,7 @@ namespace Bio
 
         private void pythonMicroscopeBut_Click(object sender, EventArgs e)
         {
-            PythonMicroscope.PythonMicroscopes pm = new PythonMicroscope.PythonMicroscopes();
+            PythonMicroscope.MicroscopeSetup pm = new PythonMicroscope.MicroscopeSetup();
             pm.Show();
         }
     }

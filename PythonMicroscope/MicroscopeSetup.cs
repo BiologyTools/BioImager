@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace Bio.PythonMicroscope
 {
-    public partial class PythonMicroscopes : Form
+    public partial class MicroscopeSetup : Form
     {
         CodeView view = new CodeView();
-        public PythonMicroscopes()
+        public MicroscopeSetup()
         {
             InitializeComponent();
             panel.Controls.Add(view);
@@ -46,7 +46,7 @@ namespace Bio.PythonMicroscope
         {
             if(startBut.Text == "Start Server")
             {
-                Microscope.pMicroscope.Initialize(Properties.Settings.Default.PFilterWheel, Properties.Settings.Default.PStage);
+                Microscope.pMicroscope.Initialize();
                 PMicroscope.Start();
                 startBut.Text = "Stop Server";
             }
@@ -72,6 +72,11 @@ namespace Bio.PythonMicroscope
         {
             Properties.Settings.Default.PCameraFormat = pxBox.Text;
             Properties.Settings.Default.Save();
+        }
+
+        private void cameraBox_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PStage = stageBox.Text;
         }
     }
 }

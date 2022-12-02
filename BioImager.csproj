@@ -118,6 +118,18 @@
     <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="IronPython, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>packages\IronPython.2.7.12\lib\net45\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>packages\IronPython.2.7.12\lib\net45\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.SQLite, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>packages\IronPython.2.7.12\lib\net45\IronPython.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Wpf, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>packages\IronPython.2.7.12\lib\net45\IronPython.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -291,11 +303,11 @@
     <Compile Include="Graphics\View3D.Designer.cs">
       <DependentUpon>View3D.cs</DependentUpon>
     </Compile>
-    <Compile Include="PythonMicroscope\PythonMicroscopes.cs">
+    <Compile Include="PythonMicroscope\MicroscopeSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PythonMicroscope\PythonMicroscopes.Designer.cs">
-      <DependentUpon>PythonMicroscopes.cs</DependentUpon>
+    <Compile Include="PythonMicroscope\MicroscopeSetup.Designer.cs">
+      <DependentUpon>MicroscopeSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Automation.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -564,8 +576,8 @@
     <EmbeddedResource Include="Graphics\View3D.resx">
       <DependentUpon>View3D.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PythonMicroscope\PythonMicroscopes.resx">
-      <DependentUpon>PythonMicroscopes.cs</DependentUpon>
+    <EmbeddedResource Include="PythonMicroscope\MicroscopeSetup.resx">
+      <DependentUpon>MicroscopeSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Action.resx">
       <DependentUpon>Action.cs</DependentUpon>

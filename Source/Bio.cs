@@ -5570,6 +5570,7 @@ namespace Bio
         {
             id = file;
             filename = Images.GetImageName(id);
+            this.file = file;
             Coordinate = new ZCT();
             rgbChannels[0] = 0;
             rgbChannels[1] = 0;
@@ -6944,28 +6945,28 @@ namespace Bio
                     if (b.Buffers[bu].Plane.Delta != 0)
                     {
                         ome.units.quantity.Time t = new ome.units.quantity.Time(java.lang.Double.valueOf(b.Buffers[bu].Plane.Delta), ome.units.UNITS.MILLISECOND);
-                        omexml.setPlaneDeltaT(t, serie, bu);
+                        omexml.setPlaneDeltaT(t, bu, serie);
                     }
                     if (b.Buffers[bu].Plane.Exposure != 0)
                     {
                         ome.units.quantity.Time et = new ome.units.quantity.Time(java.lang.Double.valueOf(b.Buffers[bu].Plane.Exposure), ome.units.UNITS.MILLISECOND);
-                        omexml.setPlaneExposureTime(et, serie, bu);
+                        omexml.setPlaneExposureTime(et, bu, serie);
                     }
                     ome.units.quantity.Length lx = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.X), ome.units.UNITS.MICROMETER);
                     ome.units.quantity.Length ly = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.Y), ome.units.UNITS.MICROMETER);
                     ome.units.quantity.Length lz = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.Z), ome.units.UNITS.MICROMETER);
-                    omexml.setPlanePositionX(lx, serie, bu);
-                    omexml.setPlanePositionY(ly, serie, bu);
-                    omexml.setPlanePositionZ(lz, serie, bu);
-                    omexml.setPlaneTheC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), serie, bu);
-                    omexml.setPlaneTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), serie, bu);
-                    omexml.setPlaneTheT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), serie, bu);
+                    omexml.setPlanePositionX(lx, bu, serie);
+                    omexml.setPlanePositionY(ly, bu, serie);
+                    omexml.setPlanePositionZ(lz, bu, serie);
+                    omexml.setPlaneTheC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), bu, serie);
+                    omexml.setPlaneTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), bu, serie);
+                    omexml.setPlaneTheT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), bu, serie);
                     
-                    omexml.setTiffDataPlaneCount(new NonNegativeInteger(java.lang.Integer.valueOf(1)), serie, bu);
-                    omexml.setTiffDataIFD(new NonNegativeInteger(java.lang.Integer.valueOf(bu)), serie, bu);
-                    omexml.setTiffDataFirstC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), serie, bu);
-                    omexml.setTiffDataFirstZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), serie, bu);
-                    omexml.setTiffDataFirstT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), serie, bu);
+                    omexml.setTiffDataPlaneCount(new NonNegativeInteger(java.lang.Integer.valueOf(1)), bu, serie);
+                    omexml.setTiffDataIFD(new NonNegativeInteger(java.lang.Integer.valueOf(bu)), bu, serie);
+                    omexml.setTiffDataFirstC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), bu, serie);
+                    omexml.setTiffDataFirstZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), bu, serie);
+                    omexml.setTiffDataFirstT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), bu, serie);
                     
                 }
                 
@@ -7582,6 +7583,7 @@ namespace Bio
                         Statistics.CalcStatistics(inf);
                     }
                     float prog = (float)p / ((float)(serie + 1) * pages);
+                    if(progress)
                     pr.UpdateProgressF(prog);
                     Application.DoEvents();
                 }

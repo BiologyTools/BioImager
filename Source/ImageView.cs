@@ -768,7 +768,7 @@ namespace Bio
                         dx.RenderTarget2D.DrawRectangle(ToRawRectF(r.X, r.Y, r.Width, r.Height), blue);
                     }
                 }
-                RectangleD re = Microscope.GetViewRectangle();
+                RectangleD re = Microscope.GetViewRectangle(false);
                 RectangleF vr = ToScreenRectF(re.X, re.Y, re.W, re.H);
                 RawRectangleF rr = ToRawRectF(vr.X, vr.Y, vr.Width, vr.Height);
                 dx.RenderTarget2D.DrawRectangle(rr, red);
@@ -965,7 +965,7 @@ namespace Bio
             update = refresh;
             if (HardwareAcceleration)
             {
-                //dxPanel.Invalidate();
+                RenderFrame();
             }
             if (update)
             {
@@ -1782,8 +1782,6 @@ namespace Bio
             g.ScaleTransform(Scale.Width, Scale.Height);
             DrawOverlay(g);
             TabsView.graphics = g;
-            Point3D p = Microscope.GetPosition();
-
             if ((Tools.currentTool.type == Tools.Tool.Type.rectSel && down) || (Tools.currentTool.type == Tools.Tool.Type.magic && down))
             {
                 Pen mag = new Pen(Brushes.Magenta, (float)1 / Scale.Width);
@@ -1811,7 +1809,7 @@ namespace Bio
                 Scale = new SizeF(1, 1);
             g.ScaleTransform(Scale.Width, Scale.Height);
             g.FillRectangle(Brushes.LightGray, ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY));
-            RectangleF[] rfs = new RectangleF[1] { Microscope.GetViewRectangle().ToRectangleF() };
+            RectangleF[] rfs = new RectangleF[1] { Microscope.GetViewRectangle(false).ToRectangleF() };
             rfs[0] = ToScreenRectF(rfs[0].X, rfs[0].Y, rfs[0].Width, rfs[0].Height);
             Pen red = new Pen(Brushes.Red, 1 / Scale.Width);
             g.DrawRectangles(red, rfs);
@@ -2567,7 +2565,7 @@ namespace Bio
         }
         public void GoToStage()
         {
-            RectangleD d = Microscope.GetViewRectangle();
+            RectangleD d = Microscope.GetViewRectangle(false);
             double dx = d.W / 2;
             double dy = d.H / 2;
             Origin = new PointD(-(d.X + dx), -(d.Y + dy));

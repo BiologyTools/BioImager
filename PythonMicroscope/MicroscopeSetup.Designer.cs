@@ -1,7 +1,7 @@
 ﻿
 namespace Bio.PythonMicroscope
 {
-    partial class PythonMicroscopes
+    partial class MicroscopeSetup
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Bio.PythonMicroscope
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PythonMicroscopes));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MicroscopeSetup));
             this.saveBut = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -216,8 +216,9 @@ namespace Bio.PythonMicroscope
             this.cameraBox.Size = new System.Drawing.Size(317, 20);
             this.cameraBox.TabIndex = 40;
             this.cameraBox.Text = "PYRO:SimulatedCamera@127.0.0.1:8000";
+            this.cameraBox.TextChanged += new System.EventHandler(this.cameraBox_TextChanged);
             // 
-            // PythonMicroscopes
+            // MicroscopeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -239,7 +240,7 @@ namespace Bio.PythonMicroscope
             this.Controls.Add(this.saveBut);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "PythonMicroscopes";
+            this.Name = "MicroscopeSetup";
             this.Text = "Python Microscope Setup";
             this.ResumeLayout(false);
             this.PerformLayout();

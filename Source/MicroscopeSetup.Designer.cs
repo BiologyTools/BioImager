@@ -180,8 +180,6 @@ namespace Bio
             this.objectiveL7Box = new System.Windows.Forms.NumericUpDown();
             this.label73 = new System.Windows.Forms.Label();
             this.objectiveA7Box = new System.Windows.Forms.NumericUpDown();
-            this.button19 = new System.Windows.Forms.Button();
-            this.label74 = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
             this.label77 = new System.Windows.Forms.Label();
             this.button20 = new System.Windows.Forms.Button();
@@ -201,11 +199,13 @@ namespace Bio
             this.button28 = new System.Windows.Forms.Button();
             this.button29 = new System.Windows.Forms.Button();
             this.button30 = new System.Windows.Forms.Button();
-            this.button31 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.useLibBox = new System.Windows.Forms.CheckBox();
             this.setLibBut = new System.Windows.Forms.Button();
             this.pythonMicroscopeBut = new System.Windows.Forms.Button();
+            this.label74 = new System.Windows.Forms.Label();
+            this.button19 = new System.Windows.Forms.Button();
+            this.button31 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA1Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA2Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA4Box)).BeginInit();
@@ -2165,29 +2165,6 @@ namespace Bio
             this.objectiveA7Box.TabIndex = 170;
             this.objectiveA7Box.ValueChanged += new System.EventHandler(this.objectiveA7Box_ValueChanged);
             // 
-            // button19
-            // 
-            this.button19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.button19.ForeColor = System.Drawing.Color.White;
-            this.button19.Location = new System.Drawing.Point(222, 379);
-            this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(63, 23);
-            this.button19.TabIndex = 186;
-            this.button19.Tag = "SetO7";
-            this.button19.Text = "Set";
-            this.button19.UseVisualStyleBackColor = false;
-            this.button19.Click += new System.EventHandler(this.SetProperty);
-            // 
-            // label74
-            // 
-            this.label74.AutoSize = true;
-            this.label74.ForeColor = System.Drawing.Color.White;
-            this.label74.Location = new System.Drawing.Point(158, 384);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(58, 13);
-            this.label74.TabIndex = 185;
-            this.label74.Text = "Objective7";
-            // 
             // label75
             // 
             this.label75.AutoSize = true;
@@ -2403,19 +2380,6 @@ namespace Bio
             this.button30.UseVisualStyleBackColor = false;
             this.button30.Click += new System.EventHandler(this.SetGetProperty);
             // 
-            // button31
-            // 
-            this.button31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.button31.ForeColor = System.Drawing.Color.White;
-            this.button31.Location = new System.Drawing.Point(288, 378);
-            this.button31.Name = "button31";
-            this.button31.Size = new System.Drawing.Size(63, 23);
-            this.button31.TabIndex = 209;
-            this.button31.Tag = "GetO7";
-            this.button31.Text = "Get";
-            this.button31.UseVisualStyleBackColor = false;
-            this.button31.Click += new System.EventHandler(this.SetGetProperty);
-            // 
             // button23
             // 
             this.button23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
@@ -2465,12 +2429,48 @@ namespace Bio
             this.pythonMicroscopeBut.UseVisualStyleBackColor = false;
             this.pythonMicroscopeBut.Click += new System.EventHandler(this.pythonMicroscopeBut_Click);
             // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.ForeColor = System.Drawing.Color.White;
+            this.label74.Location = new System.Drawing.Point(158, 384);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(58, 13);
+            this.label74.TabIndex = 185;
+            this.label74.Text = "Objective7";
+            // 
+            // button19
+            // 
+            this.button19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.button19.ForeColor = System.Drawing.Color.White;
+            this.button19.Location = new System.Drawing.Point(222, 379);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(63, 23);
+            this.button19.TabIndex = 186;
+            this.button19.Tag = "SetO7";
+            this.button19.Text = "Set";
+            this.button19.UseVisualStyleBackColor = false;
+            this.button19.Click += new System.EventHandler(this.SetProperty);
+            // 
+            // button31
+            // 
+            this.button31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
+            this.button31.ForeColor = System.Drawing.Color.White;
+            this.button31.Location = new System.Drawing.Point(288, 378);
+            this.button31.Name = "button31";
+            this.button31.Size = new System.Drawing.Size(63, 23);
+            this.button31.TabIndex = 209;
+            this.button31.Tag = "GetO7";
+            this.button31.Text = "Get";
+            this.button31.UseVisualStyleBackColor = false;
+            this.button31.Click += new System.EventHandler(this.SetGetProperty);
+            // 
             // MicroscopeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(956, 413);
+            this.ClientSize = new System.Drawing.Size(956, 405);
             this.Controls.Add(this.pythonMicroscopeBut);
             this.Controls.Add(this.setLibBut);
             this.Controls.Add(this.useLibBox);
@@ -2862,8 +2862,6 @@ namespace Bio
         private System.Windows.Forms.NumericUpDown objectiveL7Box;
         private System.Windows.Forms.Label label73;
         private System.Windows.Forms.NumericUpDown objectiveA7Box;
-        private System.Windows.Forms.Button button19;
-        private System.Windows.Forms.Label label74;
         private System.Windows.Forms.Label label75;
         private System.Windows.Forms.Label label77;
         private System.Windows.Forms.Button button20;
@@ -2883,10 +2881,12 @@ namespace Bio
         private System.Windows.Forms.Button button28;
         private System.Windows.Forms.Button button29;
         private System.Windows.Forms.Button button30;
-        private System.Windows.Forms.Button button31;
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.CheckBox useLibBox;
         private System.Windows.Forms.Button setLibBut;
         private System.Windows.Forms.Button pythonMicroscopeBut;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Button button19;
+        private System.Windows.Forms.Button button31;
     }
 }

@@ -529,7 +529,7 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool PMicroscope {
             get {
                 return ((bool)(this["PMicroscope"]));
@@ -541,7 +541,7 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("SimulatedCamera")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PYRO:SimulatedCamera@127.0.0.1:8000")]
         public string PCamera {
             get {
                 return ((string)(this["PCamera"]));

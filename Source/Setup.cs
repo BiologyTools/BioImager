@@ -70,7 +70,7 @@ namespace Bio
             if (d.ShowDialog() != DialogResult.OK)
                 return;
             libraryPathBox.Text = d.FileName;
-           
+            Properties.Settings.Default.PMicroscope = false;
         }
     }
 }

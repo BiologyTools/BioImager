@@ -13,6 +13,11 @@ namespace Bio
     public class PMicroscope
     {
         public static Process deviceServer;
+        public static PointD location;
+        public static double focus;
+        public static Process commandProcess;
+        public static StreamWriter input;
+        public static StreamReader output;
         public static string run_cmd(string cmd, string args)
         {
             ProcessStartInfo start = new ProcessStartInfo();
@@ -34,6 +39,20 @@ namespace Bio
             Application.DoEvents();
             return res;
         }
+        public static void StartCommand(string cmd, string args)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = "python.exe";
+            start.Arguments = string.Format("{0} {1}", cmd, args);
+            start.WorkingDirectory = Application.StartupPath + "/PythonMicroscope/microscope";
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            start.RedirectStandardInput = true;
+            start.CreateNoWindow = false;
+            commandProcess = Process.Start(start);
+            input = commandProcess.StandardInput;
+            output = commandProcess.StandardOutput;
+        }
         public static void Start()
         {
             ProcessStartInfo start = new ProcessStartInfo();
@@ -47,24 +66,28 @@ namespace Bio
         }
         public static void Stop()
         {
+            if(!deviceServer.HasExited)
             deviceServer.Kill();
         }
-        public bool Initialize(string filterwheel, string stage)
+        public bool Initialize()
         {
             //We start the device server
             Start();
-            string s = run_cmd("initialize.py", Properties.Settings.Default.PFilterWheel + " " + Properties.Settings.Default.PStage);
-            if (s.Contains("OK"))
-                return true;
-            else
+            string s = run_cmd("initialize.py", Properties.Settings.Default.PStage);
+            if (!s.Contains("OK"))
                 return false;
+            return true;
         }
 
         public bool SetPosition(Point3D p)
         {
             string s = run_cmd("setstagexyz.py", Properties.Settings.Default.PStage + " " + p.X + " " + p.Y + " " + p.Z);
             if (s.Contains("OK"))
+            {
+                focus = p.Z;
+                location = new PointD(p.X, p.Y);
                 return true;
+            }
             else
                 return false;
         }
@@ -72,17 +95,26 @@ namespace Bio
         {
             string s = run_cmd("setstagexy.py", Properties.Settings.Default.PStage + " " + p.X + " " + p.Y);
             if (s.Contains("OK"))
+            {
+                location = p;
                 return true;
+            }
             else
                 return false;
         }
-        public bool GetPosition3D(out Point3D p)
+        public bool GetPosition3D(out Point3D p, bool update)
         {
+            if(!update)
+            {
+                p = new Point3D(location.X, location.Y, focus);
+                return true;
+            }
             string s = run_cmd("getstagexyz.py", Properties.Settings.Default.PStage);
             if (s.Contains("OK"))
             {
                 string[] sts = s.Split();
                 p = new Point3D(double.Parse(sts[0]), double.Parse(sts[2]), double.Parse(sts[4]));
+                focus = p.Z;
                 return true;
             }
             else
@@ -91,13 +123,19 @@ namespace Bio
                 return false;
             }
         }
-        public bool GetPosition(out PointD p)
+        public bool GetPosition(out PointD p,bool update)
         {
+            if (!update)
+            {
+                p = location;
+                return true;
+            }
             string s = run_cmd("getstagexy.py", Properties.Settings.Default.PStage);
             if (s.Contains("OK"))
             {
                 string[] sts = s.Split();
                 p = new PointD(double.Parse(sts[0]), double.Parse(sts[2]));
+                location = p;
                 return true;
             }
             else
@@ -147,7 +185,7 @@ namespace Bio
         }
         public bool GetSize(out int width, out int height)
         {
-            string s = run_cmd("getcamrect.py","");
+            string s = run_cmd("getcamrect.py",Properties.Settings.Default.PCamera);
             width = 0;
             height = 0;
             if (!s.Contains("OK"))

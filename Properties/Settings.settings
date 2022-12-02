@@ -129,10 +129,10 @@
       <Value Profile="(Default)">PYRO:SimulatedStage@127.0.0.1:8002</Value>
     </Setting>
     <Setting Name="PMicroscope" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="PCamera" Type="System.String" Scope="User">
-      <Value Profile="(Default)">SimulatedCamera</Value>
+      <Value Profile="(Default)">PYRO:SimulatedCamera@127.0.0.1:8000</Value>
     </Setting>
     <Setting Name="PCameraFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">Format8bppIndexed</Value>

@@ -52,6 +52,7 @@ namespace Bio
                 ValuePattern,
                 SelectionPattern,
                 TextPattern,
+                TogglePattern,
                 Image,
             }
 
@@ -314,6 +315,7 @@ namespace Bio
             }
             public object Get()
             {
+                if(list.Count > 1)
                 for (int i = 0; i < list.Count; i++)
                 {
                     Action ac = list[i];
@@ -331,6 +333,8 @@ namespace Bio
                     return AutomationHelpers.GetText(ae);
                 else if (la.Value == Action.ValueType.ValuePattern)
                     return AutomationHelpers.GetValue(ae);
+                else if (la.Value == Action.ValueType.TogglePattern)
+                    return AutomationHelpers.GetToggle(ae);
                 else
                     return AutomationHelpers.GetImage(ae);
             }
@@ -416,7 +420,7 @@ namespace Bio
         public static object GetProperty(string prop)
         {
             Recorder.AddLine("Automation.GetProperty(" + '"' + prop + '"' + ");");
-            return rec.Get();
+            return Properties[prop].Get();
         }
         public static void SetProperty(string prop, string val)
         {
@@ -1025,7 +1029,7 @@ namespace Bio
                 }
                 return i;
             }
-            public static bool IsElementToggledOn(AutomationElement element)
+            public static bool GetToggle(AutomationElement element)
             {
                 if (element == null)
                 {

@@ -105,7 +105,8 @@ namespace Bio.Graphics
             int w = image.Width;
             int h = image.Height;
             Bitmap b = null;
-            // Loads from file using System.Drawing.Image
+            if (image.PixelFormat != System.Drawing.Imaging.PixelFormat.Format8bppIndexed && image.PixelFormat != System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
+                image = BufferInfo.SwitchRedBlue(image);
             BitmapData d = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
             var bitmap = image;
             var bitmapProperties = new BitmapProperties(new PixelFormat(Format.R8G8B8A8_UNorm, AlphaMode.Ignore));
