@@ -1015,7 +1015,6 @@ namespace Bio
         private static string folder = "";
         public static string GetFolder()
         {
-
             object o = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder");
             string s = null;
             if (o != null)
@@ -1032,6 +1031,7 @@ namespace Bio
                 else
                 {
                     fs.Dispose();
+                    Properties.Settings.Default.ImagingPath = fs.SelectedPath;
                     return fs.SelectedPath;
                 }
             }
@@ -1073,78 +1073,75 @@ namespace Bio
                 BioImage.SaveOME(file, b.ID);
                 Images.RemoveImage(b);
             }
+            else if (Properties.Settings.Default.PMicroscope)
+            {
+                folder = GetFolder();
+                string file;
+                if (folder == "" || folder == null)
+                    file = Properties.Settings.Default.ImageName + (ImageCount++).ToString();
+                else
+                    file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++);
+                pMicroscope.TakeImage(file);
+                byte[] bts = File.ReadAllBytes(file);
+                int w, h;
+                System.Drawing.Imaging.PixelFormat px;
+                Enum.TryParse<System.Drawing.Imaging.PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
+                pMicroscope.GetSize(out w, out h);
+                BufferInfo bf = new BufferInfo(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
+                Statistics.CalcStatistics(bf);
+                BioImage bm = new BioImage(file + ".ome.tif");
+                bm.Buffers.Add(bf);
+                //Set the physical size based on objective view
+                RectangleD rec = GetViewRectangle(false);
+                bm.physicalSizeX = rec.W / bm.SizeX;
+                bm.physicalSizeY = rec.H / bm.SizeY;
+                bm.physicalSizeZ = 1;
+                double f = Focus.GetFocus();
+                bm.bitsPerPixel = bf.BitsPerPixel;
+                bm.stageSizeX = rec.X;
+                bm.stageSizeY = rec.Y;
+                bm.stageSizeZ = f;
+                bm.UpdateCoords(1, 1, 1);
+                bm.Volume = new VolumeD(new Point3D(bm.stageSizeX, bm.stageSizeY, bm.stageSizeZ), new Point3D(bm.physicalSizeX * bm.SizeX, bm.physicalSizeY * bm.SizeY, bm.physicalSizeZ * bm.SizeZ));
+                for (int c = 0; c < bf.RGBChannelsCount; c++)
+                {
+                    bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
+                }
+                //We wait for threshold image statistics calculation
+                do
+                {
+                    Thread.Sleep(50);
+                } while (bm.Buffers[bm.Buffers.Count - 1].Stats == null);
+                Statistics.ClearCalcBuffer();
+                BioImage.AutoThreshold(bm, false);
+                if (!imagingStack)
+                {   
+                    Images.AddImage(bm);
+                    BioImage.SaveOME(file + ".ome.tif", bm.ID);
+                    if (bm.bitsPerPixel > 8)
+                        bm.StackThreshold(true);
+                    else
+                        bm.StackThreshold(false);
+                    App.viewer.AddImage(bm);
+                }
+                else
+                    bi.Buffers.Add(bm.Buffers[0]);
+                //We delete the temporary file created by camera.
+                File.Delete(file);
+                currentImage = bm;
+            }
             else
             {
-                if (Properties.Settings.Default.PMicroscope)
+                if (Function.Functions.ContainsKey("TakeImage"))
                 {
-                    folder = GetFolder();
-                    string file;
-                    if (folder == "" || folder == null)
-                        file = Properties.Settings.Default.ImageName + (ImageCount++).ToString();
-                    else
-                        file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++);
-                    pMicroscope.TakeImage(file);
-                    byte[] bts = File.ReadAllBytes(file);
-                    int w, h;
-                    System.Drawing.Imaging.PixelFormat px;
-                    Enum.TryParse<System.Drawing.Imaging.PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
-                    pMicroscope.GetSize(out w, out h);
-                    BufferInfo bf = new BufferInfo(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
-                    Statistics.CalcStatistics(bf);
-                    BioImage bm = new BioImage(file + ".ome.tif");
-                    bm.Buffers.Add(bf);
-                    //Set the physical size based on objective view
-                    RectangleD rec = GetViewRectangle(false);
-                    bm.physicalSizeX = rec.W / bm.SizeX;
-                    bm.physicalSizeY = rec.H / bm.SizeY;
-                    bm.physicalSizeZ = 1;
-                    double f = Focus.GetFocus();
-                    bm.bitsPerPixel = bf.BitsPerPixel;
-                    bm.stageSizeX = rec.X;
-                    bm.stageSizeY = rec.Y;
-                    bm.stageSizeZ = f;
-                    bm.UpdateCoords(1, 1, 1);
-                    bm.Volume = new VolumeD(new Point3D(bm.stageSizeX, bm.stageSizeY, bm.stageSizeZ), new Point3D(bm.physicalSizeX * bm.SizeX, bm.physicalSizeY * bm.SizeY, bm.physicalSizeZ * bm.SizeZ));
-                    for (int c = 0; c < bf.RGBChannelsCount; c++)
-                    {
-                        bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
-                    }
-                    //We wait for threshold image statistics calculation
-                    do
-                    {
-                        Thread.Sleep(50);
-                    } while (bm.Buffers[bm.Buffers.Count - 1].Stats == null);
-                    Statistics.ClearCalcBuffer();
-                    BioImage.AutoThreshold(bm, false);
-                    if (!imagingStack)
-                    {   
-                        Images.AddImage(bm);
-                        BioImage.SaveOME(file + ".ome.tif", bm.ID);
-                        if (bm.bitsPerPixel > 8)
-                            bm.StackThreshold(true);
-                        else
-                            bm.StackThreshold(false);
-                        App.viewer.AddImage(bm);
-                    }
-                    else
-                        bi.Buffers.Add(bm.Buffers[0]);
-                    //We delete the temporary file created by camera.
-                    File.Delete(file);
-                    currentImage = bm;
+                    App.imager.PerformFunction(Function.Functions["TakeImage"]);
                 }
                 else
                 {
-                    if (Function.Functions.ContainsKey("TakeImage"))
-                    {
-                        App.imager.PerformFunction(Function.Functions["TakeImage"]);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Go to Microscope Setup to set 'Take Image' function eg. a Button shortcut or GUI recording. Or set camera simulation on & set Camera image.", "Function 'TakeImage' not defined.");
-                        return;
-                    }
+                    MessageBox.Show("Go to Microscope Setup to set 'TakeImage' function eg. a Button shortcut or GUI recording. Or set camera simulation on & set Camera image.", "Function 'TakeImage' not defined.");
+                    return;
                 }
-            } 
+            }
         }
         public static BioImage TakeImageStack()
         {

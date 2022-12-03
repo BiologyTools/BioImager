@@ -228,15 +228,6 @@ namespace Bio
             Microscope.TakeTiles(im.SizeX, im.SizeY);
         }
 
-        private void stackTiles_Click(object sender, EventArgs e)
-        {
-            ImageTiles im = new ImageTiles();
-            if (im.ShowDialog() != DialogResult.OK)
-                return;
-            bool leftright = true;
-            Microscope.TakeTilesStack(im.SizeX, im.SizeY,(double)upperLimBox.Value, (double)lowerLimBox.Value, (double)fIntervalBox.Value);
-        }
-
         private void setFolderBut_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fs = new FolderBrowserDialog();

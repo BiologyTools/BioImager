@@ -108,7 +108,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ImageName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Sample</Value>
+      <Value Profile="(Default)">Image</Value>
     </Setting>
     <Setting Name="Planes" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

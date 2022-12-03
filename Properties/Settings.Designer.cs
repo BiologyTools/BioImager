@@ -445,7 +445,7 @@ namespace Bio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sample")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Image")]
         public string ImageName {
             get {
                 return ((string)(this["ImageName"]));
