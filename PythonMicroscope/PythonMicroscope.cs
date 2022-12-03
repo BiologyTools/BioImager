@@ -15,9 +15,6 @@ namespace Bio
         public static Process deviceServer;
         public static PointD location;
         public static double focus;
-        public static Process commandProcess;
-        public static StreamWriter input;
-        public static StreamReader output;
         public static string run_cmd(string cmd, string args)
         {
             ProcessStartInfo start = new ProcessStartInfo();
@@ -47,11 +44,7 @@ namespace Bio
             start.WorkingDirectory = Application.StartupPath + "/PythonMicroscope/microscope";
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
-            start.RedirectStandardInput = true;
             start.CreateNoWindow = false;
-            commandProcess = Process.Start(start);
-            input = commandProcess.StandardInput;
-            output = commandProcess.StandardOutput;
         }
         public static void Start()
         {
@@ -66,6 +59,7 @@ namespace Bio
         }
         public static void Stop()
         {
+            if(deviceServer!=null)
             if(!deviceServer.HasExited)
             deviceServer.Kill();
         }

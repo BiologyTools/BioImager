@@ -178,31 +178,30 @@ namespace Bio
 
         private void setUpperBut_Click(object sender, EventArgs e)
         {
-            upperLimBox.Value = (decimal)Microscope.Focus.GetFocus();
+            upperLimBox.Value = (decimal)Microscope.Focus.GetFocus(true);
         }
 
         private void setLowerBut_Click(object sender, EventArgs e)
         {
-            lowerLimBox.Value = (decimal)Microscope.Focus.GetFocus();
+            lowerLimBox.Value = (decimal)Microscope.Focus.GetFocus(true);
         }
 
         private void fIntervalBox_ValueChanged(object sender, EventArgs e)
         {
             Microscope.fInterVal = (double)fIntervalBox.Value;
+            UpdateSlices();
         }
-
+        private void UpdateSlices()
+        {
+            double d = (double)upperLimBox.Value - (double)lowerLimBox.Value;
+            sliceBox.Value = (decimal)(d / (double)fIntervalBox.Value);
+        }
         private void sliceBox_ValueChanged(object sender, EventArgs e)
         {
-            double d = Math.Abs((double)upperLimBox.Value - (double)lowerLimBox.Value);
-            d = d / (double)sliceBox.Value;
-            double dd = d / (double)fIntervalBox.Value;
-            if (dd == 0)
-            {
-                lowerLimBox.Value = upperLimBox.Value - (sliceBox.Value * fIntervalBox.Value);
-                d = Math.Abs((double)upperLimBox.Value - (double)lowerLimBox.Value);
-                d = d / (double)sliceBox.Value;
-            }
-            fIntervalBox.Value = (decimal)d;
+            double d = (double)upperLimBox.Value - (double)lowerLimBox.Value;
+            double interval = d / (double)sliceBox.Value;
+            double dd = interval / (double)fIntervalBox.Value;
+            fIntervalBox.Value = (decimal)interval;
         }
 
         private void upperLimBox_ValueChanged(object sender, EventArgs e)
@@ -226,22 +225,7 @@ namespace Bio
             ImageTiles im = new ImageTiles();
             if (im.ShowDialog() != DialogResult.OK)
                 return;
-            bool leftright = true;
-            for (int y = 0; y < im.SizeY; y++)
-            {
-                if(y!=0)
-                Microscope.MoveFieldDown();
-                leftright = !leftright;
-                Microscope.TakeImage();
-                for (int x = 0; x < im.SizeX-1; x++)
-                {
-                    if (leftright)
-                        Microscope.MoveFieldRight();
-                    else
-                        Microscope.MoveFieldLeft();
-                    Microscope.TakeImage();
-                }
-            }
+            Microscope.TakeTiles(im.SizeX, im.SizeY);
         }
 
         private void stackTiles_Click(object sender, EventArgs e)
@@ -250,21 +234,7 @@ namespace Bio
             if (im.ShowDialog() != DialogResult.OK)
                 return;
             bool leftright = true;
-            for (int y = 0; y < im.SizeY; y++)
-            {
-                if (y != 0)
-                    Microscope.MoveFieldDown();
-                leftright = !leftright;
-                Microscope.TakeImageStack();
-                for (int x = 0; x < im.SizeX - 1; x++)
-                {
-                    if (leftright)
-                        Microscope.MoveFieldRight();
-                    else
-                        Microscope.MoveFieldLeft();
-                    Microscope.TakeImageStack();
-                }
-            }
+            Microscope.TakeTilesStack(im.SizeX, im.SizeY,(double)upperLimBox.Value, (double)lowerLimBox.Value, (double)fIntervalBox.Value);
         }
 
         private void setFolderBut_Click(object sender, EventArgs e)
@@ -280,6 +250,7 @@ namespace Bio
                 fs.Dispose();
                 folderBox.Text = fs.SelectedPath;
                 Microscope.SetFolder(fs.SelectedPath);
+                Properties.Settings.Default.ImagingPath = fs.SelectedPath;
             }
         }
 

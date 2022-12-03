@@ -33,9 +33,9 @@ namespace Bio
                 axisType = Microscope.Types["IMTBAxis"];
                 xAxis = Microscope.GetProperty("IMTBStage", "XAxis", Stage.stage);
                 yAxis = Microscope.GetProperty("IMTBStage", "YAxis", Stage.stage);
-                PointD d = GetPosition();
-                x = GetPositionX();
-                y = GetPositionY();
+                PointD d = GetPosition(true);
+                x = d.X;
+                y = d.Y;
                 UpdateSWLimit();
             }
         }
@@ -103,17 +103,17 @@ namespace Bio
             y = py;
             SetPosition(x, py);
         }
-        public double GetPositionX()
+        public double GetPositionX(bool update)
         {
-            x = GetPosition().X;
+            x = GetPosition(update).X;
             return x;
         }
-        public double GetPositionY()
+        public double GetPositionY(bool update)
         {
-            y = GetPosition().Y;
+            y = GetPosition(update).Y;
             return y;
         }
-        public PointD GetPosition()
+        public PointD GetPosition(bool update)
         {
             if (Properties.Settings.Default.PMicroscope)
             {
@@ -139,22 +139,22 @@ namespace Bio
         }
         public void MoveUp(double m)
         {
-            double y = GetPositionY() - m;
+            double y = GetPositionY(true) - m;
             SetPositionY(y);
         }
         public void MoveDown(double m)
         {
-            double y = GetPositionY() + m;
+            double y = GetPositionY(true) + m;
             SetPositionY(y);
         }
         public void MoveRight(double m)
         {
-            double x = GetPositionX() + m;
+            double x = GetPositionX(true) + m;
             SetPositionX(x);
         }
         public void MoveLeft(double m)
         {
-            double x = GetPositionX() - m;
+            double x = GetPositionX(true) - m;
             SetPositionX(x);
         }
         public void UpdateSWLimit()
@@ -228,7 +228,7 @@ namespace Bio
                 Recorder.AddLine("Microscope.Focus.SetFocus(" + f + ");");
             if (Properties.Settings.Default.PMicroscope)
             {
-                PointD p = Microscope.Stage.GetPosition();
+                PointD p = Microscope.Stage.GetPosition(true);
                 Microscope.pMicroscope.SetPosition(new Point3D(p.X,p.Y,f));
             }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -251,10 +251,14 @@ namespace Bio
         }
         public double GetFocus()
         {
+            return GetFocus(false);
+        }
+        public double GetFocus(bool update)
+        {
             if (Properties.Settings.Default.PMicroscope)
             {
                 Point3D p;
-                Microscope.pMicroscope.GetPosition3D(out p,false);
+                Microscope.pMicroscope.GetPosition3D(out p, update);
                 return p.Z;
             }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -864,7 +868,7 @@ namespace Bio
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 //We check to see if focus & stage are correctly calibrated on lower limit and perform calibration if necessary
-                PointD cur = Stage.GetPosition();
+                PointD cur = Stage.GetPosition(true);
                 double z = Focus.GetFocus();
                 Type mt = Types["MTBCalibrationModes"];
 
@@ -899,7 +903,7 @@ namespace Bio
 
         public static Point3D GetPosition()
         {
-            PointD p = Stage.GetPosition();
+            PointD p = Stage.GetPosition(false);
             double f = Focus.GetFocus();
             return new Point3D(p.X, p.Y, f);
         }
@@ -987,22 +991,18 @@ namespace Bio
         {
             Stage.MoveUp(viewSize.Y);
         }
-
         public static void MoveFieldRight()
         {
             Stage.MoveRight(viewSize.X);
         }
-
         public static void MoveFieldDown()
         {
             Stage.MoveDown(viewSize.Y);
         }
-
         public static void MoveFieldLeft()
         {
             Stage.MoveLeft(viewSize.X);
         }
-
         public static void SetFocus(double d)
         {
             Focus.SetFocus(d);
@@ -1051,70 +1051,45 @@ namespace Bio
             Properties.Settings.Default.ImagingPath = folder;
             Properties.Settings.Default.Save();
         }
-
         public static void TakeImage()
-        {
-            TakeImage(0);
-        }
-        public static void TakeImage(int i)
         {
             if (Properties.Settings.Default.SimulateCamera && !Properties.Settings.Default.PMicroscope)
             {
                 folder = GetFolder();
                 BioImage b = MicroscopeSetup.simImage.Copy();
-                b.Volume.Location = GetPosition();
-                b.stageSizeX = b.Volume.Location.X;
-                b.stageSizeY = b.Volume.Location.Y;
-                b.stageSizeZ = b.Volume.Location.Z;
-                b.Filename = Images.GetImageName(App.stage.ImageName);
-                if(i==0)
-                {
-                    if (bi == null)
-                    {
-                        bi = MicroscopeSetup.simImage;
-                    }
-                    bi.Volume.Location = b.Volume.Location;
-                    bi.Channels = MicroscopeSetup.simImage.Channels;
-                    bi.stageSizeX = b.Volume.Location.X;
-                    bi.stageSizeY = b.Volume.Location.Y;
-                    bi.stageSizeZ = b.Volume.Location.Z;
-                    bi.physicalSizeX = b.physicalSizeX;
-                    bi.physicalSizeY = b.physicalSizeY;
-                    bi.physicalSizeZ = b.physicalSizeZ;
-                }
-                
-                b.Buffers[i].Plane = new Plane();
-                b.Buffers[i].Plane.Coordinate = new ZCT(i, 0, 0);
-                b.Buffers[i].Plane.Location = GetPosition();
-                
-                watcher.Path = Properties.Settings.Default.ImagingPath;
-                watcher.EnableRaisingEvents = true;
+                Point3D p = GetPosition();
+                b.Volume.Location = p;
+                b.stageSizeX = p.X;
+                b.stageSizeY = p.Y;
+                b.stageSizeZ = p.Z;
                 string file;
                 if (folder == "" || folder == null)
-                    file = Properties.Settings.Default.ImageName + i + ".ome.tif";
+                    file = Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
                 else
-                    file = folder + "/" + Properties.Settings.Default.ImageName + i + ".ome.tif";
+                    file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
+                b.ID = file;
+                b.file = file;
+                Images.AddImage(b);
                 BioImage.SaveOME(file, b.ID);
-                Application.DoEvents();
+                Images.RemoveImage(b);
             }
             else
             {
-                if(Properties.Settings.Default.PMicroscope)
+                if (Properties.Settings.Default.PMicroscope)
                 {
                     folder = GetFolder();
                     string file;
                     if (folder == "" || folder == null)
-                        file = Properties.Settings.Default.ImageName + (ImageCount + 1).ToString();
+                        file = Properties.Settings.Default.ImageName + (ImageCount++).ToString();
                     else
-                        file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount + 1);
+                        file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++);
                     pMicroscope.TakeImage(file);
-                    ImageCount++;
                     byte[] bts = File.ReadAllBytes(file);
                     int w, h;
                     System.Drawing.Imaging.PixelFormat px;
                     Enum.TryParse<System.Drawing.Imaging.PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
                     pMicroscope.GetSize(out w, out h);
-                    BufferInfo bf = new BufferInfo(file, w, h, px,bts, new ZCT(0, 0, 0),0);
+                    BufferInfo bf = new BufferInfo(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
                     Statistics.CalcStatistics(bf);
                     BioImage bm = new BioImage(file + ".ome.tif");
                     bm.Buffers.Add(bf);
@@ -1128,11 +1103,11 @@ namespace Bio
                     bm.stageSizeX = rec.X;
                     bm.stageSizeY = rec.Y;
                     bm.stageSizeZ = f;
-                    bm.UpdateCoords(1,1,1);
+                    bm.UpdateCoords(1, 1, 1);
                     bm.Volume = new VolumeD(new Point3D(bm.stageSizeX, bm.stageSizeY, bm.stageSizeZ), new Point3D(bm.physicalSizeX * bm.SizeX, bm.physicalSizeY * bm.SizeY, bm.physicalSizeZ * bm.SizeZ));
                     for (int c = 0; c < bf.RGBChannelsCount; c++)
                     {
-                        bm.Channels.Add(new Channel(i, bf.BitsPerPixel, bf.RGBChannelsCount));
+                        bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
                     }
                     //We wait for threshold image statistics calculation
                     do
@@ -1141,21 +1116,34 @@ namespace Bio
                     } while (bm.Buffers[bm.Buffers.Count - 1].Stats == null);
                     Statistics.ClearCalcBuffer();
                     BioImage.AutoThreshold(bm, false);
-                    Images.AddImage(bm);
-                    BioImage.SaveOME(file + ".ome.tif", bm.ID);
-                    if (bm.bitsPerPixel > 8)
-                        bm.StackThreshold(true);
-                    else
-                        bm.StackThreshold(false);
-
                     if (!imagingStack)
+                    {   
+                        Images.AddImage(bm);
+                        BioImage.SaveOME(file + ".ome.tif", bm.ID);
+                        if (bm.bitsPerPixel > 8)
+                            bm.StackThreshold(true);
+                        else
+                            bm.StackThreshold(false);
                         App.viewer.AddImage(bm);
+                    }
                     else
                         bi.Buffers.Add(bm.Buffers[0]);
+                    //We delete the temporary file created by camera.
+                    File.Delete(file);
                     currentImage = bm;
                 }
                 else
-                App.imager.PerformFunction(Function.Functions["TakeImage"]);
+                {
+                    if (Function.Functions.ContainsKey("TakeImage"))
+                    {
+                        App.imager.PerformFunction(Function.Functions["TakeImage"]);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Go to Microscope Setup to set 'Take Image' function eg. a Button shortcut or GUI recording. Or set camera simulation on & set Camera image.", "Function 'TakeImage' not defined.");
+                        return;
+                    }
+                }
             } 
         }
         public static BioImage TakeImageStack()
@@ -1175,6 +1163,37 @@ namespace Bio
         static BioImage bi;
         static BioImage currentImage;
         static bool imagingStack = false;
+        static List<BioImage> images = new List<BioImage>();
+        static Dictionary<int,string> locked = new Dictionary<int, string>();
+        static void LockWait()
+        {
+            do
+            {
+                Thread.Sleep(500);
+                for (int i = 0; i < locked.Count; i++)
+                {
+                    //We wait till the new file is no longer written into.
+                    do
+                    {
+                        List<Process> pr = FileUtil.Locking(locked[i]);
+                        FileInfo fi = new FileInfo(locked[i]);
+                        if (pr.Count == 0 && fi.Length > 0)
+                            break;
+                        fi = null;
+                    } while (true);
+                    currentImage = BioImage.OpenOME(locked[i], 0, false, false, 0, 0, 0, 0);
+                    if (imagingStack)
+                        bi.Buffers.AddRange(currentImage.Buffers);
+                    else
+                        images.Add(currentImage);
+                }
+            } while (imagingStack);
+        }
+        private static void WaitLocking()
+        {
+            System.Threading.Thread t = new Thread(LockWait);
+            t.Start();
+        }
         private static void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
         {
             if (!Properties.Settings.Default.PMicroscope)
@@ -1182,36 +1201,39 @@ namespace Bio
                 //We will only open files with an extension
                 if (!Path.HasExtension(e.FullPath))
                     return;
-                //We wait till the new file is no longer written into.
-                do
-                {
-                    List<Process> pr = FileUtil.Locking(e.FullPath);
-                    FileInfo fi = new FileInfo(e.FullPath);
-                    if (pr.Count == 0 && fi.Length > 0)
-                        break;
-                    fi = null;
-                } while (true);
-                currentImage = BioImage.OpenOME(e.FullPath, 0, false, false, 0, 0, 0, 0);
-                if (imagingStack)
-                    bi.Buffers.AddRange(currentImage.Buffers);
+                locked.Add(ImageCount-1,e.FullPath);
             }
         }
         public static BioImage TakeImageStack(double UpperLimit, double LowerLimit, double interval)
         {
             imagingStack = true;
+            //We start the locking wait loop
+            WaitLocking();
             bi = new BioImage(Properties.Settings.Default.ImageName);
             watcher.Path = GetFolder();
             Focus.SetFocus(UpperLimit);
-            double d = Math.Abs(UpperLimit - LowerLimit);
-            double dd = d / fInterVal;
+            double d = UpperLimit - LowerLimit;
+            double dd = d / interval;
             for (int i = 0; i < dd; i++)
             {
-                TakeImage(i);
+                TakeImage();
                 //If this is the last image we don't need to move the focus. 
                 if (i < dd)
                     Focus.SetFocus(Focus.GetFocus() - fInterVal);
                 Application.DoEvents();
             }
+            //If we are using the imaging application to take images we need to add them to the viewer as the filesystemwatcher
+            //can't add them due to thread access violation
+            if (!Properties.Settings.Default.PMicroscope)
+            {
+                //First we wait till all the images are loaded
+                do
+                {
+                    Thread.Sleep(100);
+                    Application.DoEvents();
+                } while (bi.Buffers.Count < (int)dd);
+            }
+            
             bi.UpdateCoords(bi.Buffers.Count, 1, 1);
             for (int c = 0; c < bi.Buffers[0].RGBChannelsCount; c++)
             {
@@ -1235,51 +1257,63 @@ namespace Bio
             Images.AddImage(bi);
             imagingStack = false;
             currentImage = bi;
+            images.Clear();
+            App.viewer.AddImage(currentImage);
+            locked.Clear();
+            ImageCount = 0;
             return bi;
         }
         public static void TakeTiles(int width, int height)
         {
             bool leftright = true;
+            if (Properties.Settings.Default.PMicroscope)
+            {
+                Point3D p = Microscope.GetPosition();
+                //We ensure that the cached position is same as actual position
+                Microscope.SetPosition(p);
+            }
             for (int y = 0; y < height; y++)
             {
                 if (y != 0)
-                    MoveFieldDown();
+                {
+                    Microscope.MoveFieldDown();
+                }
                 leftright = !leftright;
-                TakeImage();
-                for (int x = 0; x < width; x++)
+                Microscope.TakeImage();
+                for (int x = 0; x < width - 1; x++)
                 {
                     if (leftright)
-                        MoveFieldRight();
+                    {
+                        Microscope.MoveFieldRight();
+                    }
                     else
-                        MoveFieldLeft();
-                    TakeImage();
+                    {
+                        Microscope.MoveFieldLeft();
+                    }
+                    Microscope.TakeImage();
                 }
             }
-        }
-        public static void TakeTilesStack(int width, int height, double UpperLimit, double LowerLimit, double interval)
-        {
-            bool leftright = true;
-            for (int y = 0; y < height; y++)
+            //If we are using the imaging application to take images we need to add them to the viewer as the filesystemwatcher
+            //can't add them due to thread access violation
+            if(!Properties.Settings.Default.PMicroscope)
             {
-                if (y != 0)
-                    Microscope.MoveFieldDown();
-                leftright = !leftright;
-                Microscope.TakeImageStack(UpperLimit, LowerLimit, interval);
-                for (int x = 0; x < width; x++)
+                //First we wait till all the images are loaded
+                do
                 {
-                    if(x != 0)
-                    if (leftright)
-                        Microscope.MoveFieldRight();
-                    else
-                        Microscope.MoveFieldLeft();
-                    Microscope.TakeImageStack(UpperLimit, LowerLimit, interval);
+                    Thread.Sleep(100);
+                    Application.DoEvents();
+                } while (images.Count < width * height);
+                for (int i = 0; i < images.Count; i++)
+                {
+                    App.viewer.AddImage(images[i]);
                 }
+                images.Clear();
             }
         }
         public static RectangleD GetObjectiveViewRectangle()
         {
             Objectives.Objective o = Objectives.GetObjective();
-            PointD d = Stage.GetPosition();
+            PointD d = Stage.GetPosition(false);
             return new RectangleD(d.X, d.Y, o.ViewWidth, o.ViewHeight);
         }
         public static RectangleD GetViewRectangle(bool update)
@@ -1287,7 +1321,7 @@ namespace Bio
             Objectives.Objective o = Objectives.GetObjective();
             if (update)
             {
-                PointD d = Stage.GetPosition();
+                PointD d = Stage.GetPosition(false);
                 return new RectangleD(d.X, d.Y, viewSize.X, viewSize.Y);
             }
             else
@@ -1298,7 +1332,7 @@ namespace Bio
                 }
                 else
                 {
-                    PointD d = Stage.GetPosition();
+                    PointD d = Stage.GetPosition(false);
                     return new RectangleD(d.X, d.Y, viewSize.X, viewSize.Y);
                 }
             }

@@ -2654,7 +2654,7 @@ namespace Bio
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Microscope GUI Setup";
+            this.Text = "Microscope Setup";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MicroscopeSetup_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA1Box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectiveA2Box)).EndInit();

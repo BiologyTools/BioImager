@@ -49,7 +49,6 @@ namespace Bio
             this.setFolderBut = new System.Windows.Forms.Button();
             this.folderBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.stackTiles = new System.Windows.Forms.Button();
             this.tilesBut = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.nameBox = new System.Windows.Forms.TextBox();
@@ -250,7 +249,6 @@ namespace Bio
             this.panel2.Controls.Add(this.setFolderBut);
             this.panel2.Controls.Add(this.folderBox);
             this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.stackTiles);
             this.panel2.Controls.Add(this.tilesBut);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.nameBox);
@@ -316,18 +314,6 @@ namespace Bio
             this.label8.TabIndex = 169;
             this.label8.Text = "Imaging Folder";
             // 
-            // stackTiles
-            // 
-            this.stackTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.stackTiles.ForeColor = System.Drawing.Color.White;
-            this.stackTiles.Location = new System.Drawing.Point(162, 192);
-            this.stackTiles.Name = "stackTiles";
-            this.stackTiles.Size = new System.Drawing.Size(105, 25);
-            this.stackTiles.TabIndex = 168;
-            this.stackTiles.Text = "Take Stack Tiles";
-            this.stackTiles.UseVisualStyleBackColor = false;
-            this.stackTiles.Click += new System.EventHandler(this.stackTiles_Click);
-            // 
             // tilesBut
             // 
             this.tilesBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
@@ -376,6 +362,11 @@ namespace Bio
             this.fIntervalBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.fIntervalBox.DecimalPlaces = 6;
             this.fIntervalBox.ForeColor = System.Drawing.Color.White;
+            this.fIntervalBox.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.fIntervalBox.Location = new System.Drawing.Point(12, 213);
             this.fIntervalBox.Maximum = new decimal(new int[] {
             100000,
@@ -391,10 +382,10 @@ namespace Bio
             this.fIntervalBox.Size = new System.Drawing.Size(79, 20);
             this.fIntervalBox.TabIndex = 27;
             this.fIntervalBox.Value = new decimal(new int[] {
-            25,
+            5,
             0,
             0,
-            131072});
+            0});
             this.fIntervalBox.ValueChanged += new System.EventHandler(this.fIntervalBox_ValueChanged);
             // 
             // setLowerBut
@@ -471,7 +462,7 @@ namespace Bio
             this.sliceBox.Size = new System.Drawing.Size(79, 20);
             this.sliceBox.TabIndex = 21;
             this.sliceBox.Value = new decimal(new int[] {
-            50,
+            5,
             0,
             0,
             0});
@@ -522,10 +513,10 @@ namespace Bio
             this.upperLimBox.Size = new System.Drawing.Size(79, 20);
             this.upperLimBox.TabIndex = 12;
             this.upperLimBox.Value = new decimal(new int[] {
-            1249000,
+            125,
             0,
             0,
-            262144});
+            0});
             this.upperLimBox.ValueChanged += new System.EventHandler(this.upperLimBox_ValueChanged);
             // 
             // lowerLimBox
@@ -543,10 +534,10 @@ namespace Bio
             this.lowerLimBox.Size = new System.Drawing.Size(79, 20);
             this.lowerLimBox.TabIndex = 14;
             this.lowerLimBox.Value = new decimal(new int[] {
-            1002000,
+            100,
             0,
             0,
-            262144});
+            0});
             this.lowerLimBox.ValueChanged += new System.EventHandler(this.lowerLimBox_ValueChanged);
             // 
             // takeImageBut
@@ -674,7 +665,6 @@ namespace Bio
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox nameBox;
         private System.Windows.Forms.Button tilesBut;
-        private System.Windows.Forms.Button stackTiles;
         private System.Windows.Forms.Button setFolderBut;
         private System.Windows.Forms.TextBox folderBox;
         private System.Windows.Forms.Label label8;
