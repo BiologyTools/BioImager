@@ -1,8 +1,6 @@
 ﻿import Pyro4
 import sys
 stage = Pyro4.Proxy(sys.argv[1])
-stage.enable()
-print(sys.argv)
 x_axis = stage.axes["x"]
 y_axis = stage.axes["y"]
 z_axis = stage.axes["z"]
