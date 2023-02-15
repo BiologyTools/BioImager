@@ -954,5 +954,32 @@ namespace Bio
             View3D d = new View3D(ImageView.SelectedImage);
             d.Show();
         }
+
+        private void importImageJROIToSelectedImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openImageJROI.ShowDialog() != DialogResult.OK)
+                return;
+            foreach (string item in openImageJROI.FileNames)
+            {
+                ImageView.SelectedImage.Annotations.Add(ImageJ.RoiDecoder.open(item));
+            }
+            App.viewer.UpdateView();
+        }
+
+        private void exportImageJROIFromSelectedImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveImageJROI.Title = "Set Filename for exported ROI's.";
+            saveImageJROI.FileName = ImageView.SelectedImage.Filename;
+            if (saveImageJROI.ShowDialog() != DialogResult.OK)
+                return;
+            int i = 1;
+            foreach (ROI roi in ImageView.SelectedImage.Annotations)
+            {
+                string s = Path.GetDirectoryName(saveImageJROI.FileName) + "//" + Path.GetFileNameWithoutExtension(saveImageJDialog.FileName) + "-" + i + ".roi";
+                ImageJ.RoiEncoder.save(roi, s);
+                i++;
+            }
+            App.viewer.UpdateView();
+        }
     }
 }

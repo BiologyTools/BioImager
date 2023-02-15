@@ -631,6 +631,13 @@ namespace Bio
                 return Points;
             }
         }
+        public PointD[] PointsImage
+        {
+            get
+            {
+                return ImageView.SelectedImage.ToImageSpace(PointsD);
+            }
+        }
         private List<RectangleF> selectBoxs = new List<RectangleF>();
         public List<int> selectedPoints = new List<int>();
         public RectangleD BoundingBox;
@@ -644,6 +651,7 @@ namespace Bio
         public string roiName = "";
         public int serie = 0;
         private string text = "";
+        public string properties;
 
         public double strokeWidth = 1;
         public int shapeIndex = 0;
@@ -835,6 +843,28 @@ namespace Bio
         public void AddPoints(PointD[] p)
         {
             Points.AddRange(p);
+            UpdateBoundingBox();
+        }
+        /// > Adds a range of float points to the Points collection and updates the bounding box
+        /// 
+        /// @param p The points to add to the polygon
+        public void AddPoints(float[] xp, float[] yp)
+        {
+            for (int i = 0; i < xp.Length; i++)
+            {
+                Points.Add(new PointD(xp[i], yp[i]));
+            }
+            UpdateBoundingBox();
+        }
+        /// > Adds a range of float points to the Points collection and updates the bounding box
+        /// 
+        /// @param p The points to add to the polygon
+        public void AddPoints(int[] xp, int[] yp)
+        {
+            for (int i = 0; i < xp.Length; i++)
+            {
+                Points.Add(new PointD(xp[i], yp[i]));
+            }
             UpdateBoundingBox();
         }
         public void RemovePoints(int[] indexs)

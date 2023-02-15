@@ -51,14 +51,17 @@ namespace Bio
             this.openOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openOMESeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sepToolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.addImagesToTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addImagesOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sepToolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveTabTiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imagesToStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sepToolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.imagesToStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newTabViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +70,7 @@ namespace Bio
             this.filteredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emissionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._3dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sepToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,10 +105,10 @@ namespace Bio
             this.scriptRecorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sepToolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.sepToolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.sepToolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this._3dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importImageJROIToSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportImageJROIFromSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openImageJROI = new System.Windows.Forms.OpenFileDialog();
+            this.saveImageJROI = new System.Windows.Forms.SaveFileDialog();
             this.panel.SuspendLayout();
             this.tabContextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -270,6 +274,11 @@ namespace Bio
             this.openSeriesToolStripMenuItem.Text = "Open Series";
             this.openSeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click_1);
             // 
+            // sepToolStripMenuItem1
+            // 
+            this.sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
+            this.sepToolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
+            // 
             // addImagesToTabToolStripMenuItem
             // 
             this.addImagesToTabToolStripMenuItem.Name = "addImagesToTabToolStripMenuItem";
@@ -283,6 +292,11 @@ namespace Bio
             this.addImagesOMEToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.addImagesOMEToolStripMenuItem.Text = "Add OME Images To Tab";
             this.addImagesOMEToolStripMenuItem.Click += new System.EventHandler(this.addImagesOMEToolStripMenuItem_Click);
+            // 
+            // sepToolStripMenuItem2
+            // 
+            this.sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
+            this.sepToolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -312,19 +326,24 @@ namespace Bio
             this.saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
             this.saveTabTiffToolStripMenuItem.Click += new System.EventHandler(this.saveTabTiffToolStripMenuItem_Click);
             // 
-            // imagesToStackToolStripMenuItem
-            // 
-            this.imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
-            this.imagesToStackToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.imagesToStackToolStripMenuItem.Text = "Images To Stack";
-            this.imagesToStackToolStripMenuItem.Click += new System.EventHandler(this.imagesToStackToolStripMenuItem_Click);
-            // 
             // saveSeriesToolStripMenuItem
             // 
             this.saveSeriesToolStripMenuItem.Name = "saveSeriesToolStripMenuItem";
             this.saveSeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveSeriesToolStripMenuItem.Text = "Save Series";
             this.saveSeriesToolStripMenuItem.Click += new System.EventHandler(this.saveSeriesToolStripMenuItem_Click);
+            // 
+            // sepToolStripMenuItem3
+            // 
+            this.sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
+            this.sepToolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            // 
+            // imagesToStackToolStripMenuItem
+            // 
+            this.imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
+            this.imagesToStackToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.imagesToStackToolStripMenuItem.Text = "Images To Stack";
+            this.imagesToStackToolStripMenuItem.Click += new System.EventHandler(this.imagesToStackToolStripMenuItem_Click);
             // 
             // newTabViewToolStripMenuItem
             // 
@@ -395,6 +414,13 @@ namespace Bio
             this.emissionToolStripMenuItem.Text = "Emission";
             this.emissionToolStripMenuItem.Click += new System.EventHandler(this.emissionToolStripMenuItem_Click);
             // 
+            // _3dToolStripMenuItem
+            // 
+            this._3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
+            this._3dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this._3dToolStripMenuItem.Text = "3D";
+            this._3dToolStripMenuItem.Click += new System.EventHandler(this._3dToolStripMenuItem_Click);
+            // 
             // sepToolStripMenuItem
             // 
             this.sepToolStripMenuItem.Name = "sepToolStripMenuItem";
@@ -429,7 +455,7 @@ namespace Bio
             // setToolToolStripMenuItem
             // 
             this.setToolToolStripMenuItem.Name = "setToolToolStripMenuItem";
-            this.setToolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.setToolToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.setToolToolStripMenuItem.Text = "Set Tool";
             this.setToolToolStripMenuItem.Click += new System.EventHandler(this.setToolToolStripMenuItem_Click);
             // 
@@ -439,7 +465,9 @@ namespace Bio
             this.rOIManagerToolStripMenuItem,
             this.exportCSVToolStripMenuItem,
             this.importCSVToolStripMenuItem,
-            this.exportROIsOfFolderOfImagesToolStripMenuItem});
+            this.exportROIsOfFolderOfImagesToolStripMenuItem,
+            this.importImageJROIToSelectedImageToolStripMenuItem,
+            this.exportImageJROIFromSelectedImageToolStripMenuItem});
             this.rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
             this.rOIToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.rOIToolStripMenuItem.Text = "ROI";
@@ -447,28 +475,28 @@ namespace Bio
             // rOIManagerToolStripMenuItem
             // 
             this.rOIManagerToolStripMenuItem.Name = "rOIManagerToolStripMenuItem";
-            this.rOIManagerToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.rOIManagerToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
             this.rOIManagerToolStripMenuItem.Text = "ROI Manager";
             this.rOIManagerToolStripMenuItem.Click += new System.EventHandler(this.rOIManagerToolStripMenuItem_Click);
             // 
             // exportCSVToolStripMenuItem
             // 
             this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
             this.exportCSVToolStripMenuItem.Text = "Export ROI\'s to CSV";
             this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_Click);
             // 
             // importCSVToolStripMenuItem
             // 
             this.importCSVToolStripMenuItem.Name = "importCSVToolStripMenuItem";
-            this.importCSVToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.importCSVToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
             this.importCSVToolStripMenuItem.Text = "Import ROI\'s from CSV";
             this.importCSVToolStripMenuItem.Click += new System.EventHandler(this.importCSVToolStripMenuItem_Click);
             // 
             // exportROIsOfFolderOfImagesToolStripMenuItem
             // 
             this.exportROIsOfFolderOfImagesToolStripMenuItem.Name = "exportROIsOfFolderOfImagesToolStripMenuItem";
-            this.exportROIsOfFolderOfImagesToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.exportROIsOfFolderOfImagesToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
             this.exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI\'s of Folder of Images";
             this.exportROIsOfFolderOfImagesToolStripMenuItem.Click += new System.EventHandler(this.exportROIsOfFolderOfImagesToolStripMenuItem_Click);
             // 
@@ -623,35 +651,35 @@ namespace Bio
             // runToolStripMenuItem
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.runToolStripMenuItem.Text = "Run";
             this.runToolStripMenuItem.DropDownOpening += new System.EventHandler(this.runToolStripMenuItem_DropDownOpening);
             // 
             // createFunctionToolStripMenuItem
             // 
             this.createFunctionToolStripMenuItem.Name = "createFunctionToolStripMenuItem";
-            this.createFunctionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createFunctionToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.createFunctionToolStripMenuItem.Text = "Functions Tool";
             this.createFunctionToolStripMenuItem.Click += new System.EventHandler(this.createFunctionToolStripMenuItem_Click);
             // 
             // consoleToolStripMenuItem
             // 
             this.consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
-            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.consoleToolStripMenuItem.Text = "Console";
             this.consoleToolStripMenuItem.Click += new System.EventHandler(this.consoleToolStripMenuItem_Click);
             // 
             // scriptRunnerToolStripMenuItem
             // 
             this.scriptRunnerToolStripMenuItem.Name = "scriptRunnerToolStripMenuItem";
-            this.scriptRunnerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scriptRunnerToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.scriptRunnerToolStripMenuItem.Text = "Script Runner";
             this.scriptRunnerToolStripMenuItem.Click += new System.EventHandler(this.scriptRunnerToolStripMenuItem_Click_1);
             // 
             // scriptRecorderToolStripMenuItem
             // 
             this.scriptRecorderToolStripMenuItem.Name = "scriptRecorderToolStripMenuItem";
-            this.scriptRecorderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scriptRecorderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.scriptRecorderToolStripMenuItem.Text = "Script Recorder";
             this.scriptRecorderToolStripMenuItem.Click += new System.EventHandler(this.scriptRecorderToolStripMenuItem_Click_1);
             // 
@@ -669,27 +697,31 @@ namespace Bio
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // sepToolStripMenuItem1
+            // importImageJROIToSelectedImageToolStripMenuItem
             // 
-            this.sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
-            this.sepToolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
+            this.importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
+            this.importImageJROIToSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
+            this.importImageJROIToSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.importImageJROIToSelectedImageToolStripMenuItem_Click);
             // 
-            // sepToolStripMenuItem2
+            // exportImageJROIFromSelectedImageToolStripMenuItem
             // 
-            this.sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
-            this.sepToolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.exportImageJROIFromSelectedImageToolStripMenuItem_Click);
             // 
-            // sepToolStripMenuItem3
+            // openImageJROI
             // 
-            this.sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
-            this.sepToolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            this.openImageJROI.DefaultExt = "csv";
+            this.openImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
+            this.openImageJROI.Title = "Import ImageJ ROI";
             // 
-            // _3dToolStripMenuItem
+            // saveImageJROI
             // 
-            this._3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
-            this._3dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this._3dToolStripMenuItem.Text = "3D";
-            this._3dToolStripMenuItem.Click += new System.EventHandler(this._3dToolStripMenuItem_Click);
+            this.saveImageJROI.DefaultExt = "csv";
+            this.saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
+            this.saveImageJROI.Title = "Save ROIs to CSV";
             // 
             // TabsView
             // 
@@ -794,5 +826,9 @@ namespace Bio
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem _3dToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importImageJROIToSelectedImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportImageJROIFromSelectedImageToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openImageJROI;
+        private System.Windows.Forms.SaveFileDialog saveImageJROI;
     }
 }
