@@ -975,7 +975,7 @@ namespace Bio
             int i = 1;
             foreach (ROI roi in ImageView.SelectedImage.Annotations)
             {
-                string s = Path.GetDirectoryName(saveImageJROI.FileName) + "//" + Path.GetFileNameWithoutExtension(saveImageJDialog.FileName) + "-" + i + ".roi";
+                string s = Path.GetDirectoryName(saveImageJROI.FileName) + "//" + Path.GetFileNameWithoutExtension(saveImageJROI.FileName) + "-" + i + ".roi";
                 ImageJ.RoiEncoder.save(roi, s);
                 i++;
             }

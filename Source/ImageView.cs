@@ -781,8 +781,9 @@ namespace Bio
                 {
                     foreach (ROI an in bi.Annotations)
                     {
+                        if (zBar.Value != an.coord.Z || cBar.Value != an.coord.C || tBar.Value != an.coord.T)
+                            continue;
                         float w = Math.Abs(Scale.Width);
-
                         Font fo = new Font(an.font.FontFamily, (float)(an.strokeWidth / w) * an.font.Size);
                         PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
                         float width = (float)ToViewSizeW(ROI.selectBoxSize / w);
