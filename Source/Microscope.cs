@@ -24,6 +24,7 @@ namespace Bio
         public static double maxX;
         public static double minY;
         public static double maxY;
+        /* Creating a new instance of the Stage class. */
         public Stage(object st)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -65,6 +66,11 @@ namespace Bio
         {
             Thread.Sleep(moveWait);
         }
+
+        /// The function sets the position of the stage to the given coordinates
+        /// 
+        /// @param px x position in microns
+        /// @param py y-coordinate
         public void SetPosition(double px, double py)
         {
             if (Recorder.recordMicroscope)
@@ -93,26 +99,55 @@ namespace Bio
             if (App.viewer != null)
                 App.viewer.UpdateView(true);
         }
+       
+        /// This function sets the position of the object to the given x and y coordinates
+        /// 
+        /// @param px The new x position of the object
         public void SetPositionX(double px)
         {
             x = px;
             SetPosition(px, y);
         }
+        
+       /// This function sets the position of the object to the given x and y coordinates
+       /// 
+       /// @param py The y position of the object
         public void SetPositionY(double py)
         {
             y = py;
             SetPosition(x, py);
         }
+        
+        /// This function returns the X position of the mouse cursor
+        /// 
+        /// @param update If true, the position will be updated before returning the value.
+        /// 
+        /// @return The position of the object in the X axis.
         public double GetPositionX(bool update)
         {
             x = GetPosition(update).X;
             return x;
         }
+        
+        /// GetPositionY() returns the Y coordinate of the current position of the mouse cursor
+        /// 
+        /// @param update If true, the position will be updated before returning the value.
+        /// 
+        /// @return The position of the object in the Y axis.
         public double GetPositionY(bool update)
         {
             y = GetPosition(update).Y;
             return y;
         }
+        
+       /// If the microscope is a Prior, get the position from the Prior SDK. If the microscope is a
+       /// MTB, get the position from the MTB SDK. If the microscope is a Piezosystem, get the position
+       /// from the Piezosystem SDK
+       /// 
+       /// @param update true if the position should be updated from the microscope, false if the
+       /// position should be returned from the cache.
+       /// 
+       /// @return A PointD object.
         public PointD GetPosition(bool update)
         {
             if (Properties.Settings.Default.PMicroscope)
@@ -137,26 +172,44 @@ namespace Bio
             }
             return new PointD(x, y);
         }
+        
+       /// Move the stage up by the specified  amount of microns
+       /// 
+       /// @param m The amount of pixels to move the object up by.
         public void MoveUp(double m)
         {
             double y = GetPositionY(true) - m;
             SetPositionY(y);
         }
+       
+        /// Move the stage down by the specified amount of microns
+        /// 
+        /// @param m The amount to move the object by.
         public void MoveDown(double m)
         {
             double y = GetPositionY(true) + m;
             SetPositionY(y);
         }
+        
+        /// Move the stage right by the specified amount of microns
+        /// 
+        /// @param m The amount to move the object by.
         public void MoveRight(double m)
         {
             double x = GetPositionX(true) + m;
             SetPositionX(x);
         }
+        
+        /// Move the stage left by the specified amount of microns
+        /// 
+        /// @param m The amount to move the object by.
         public void MoveLeft(double m)
         {
             double x = GetPositionX(true) - m;
             SetPositionX(x);
         }
+        
+        /// It gets the software limits of the microscope stage
         public void UpdateSWLimit()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -176,6 +229,13 @@ namespace Bio
             }
            
         }
+       
+        /// It sets the limits of the stage movement
+        /// 
+        /// @param xmin minimum x value
+        /// @param xmax the maximum x value
+        /// @param ymin -0.0025
+        /// @param ymax -0.0015
         public void SetSWLimit(double xmin, double xmax, double ymin, double ymax)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -210,6 +270,7 @@ namespace Bio
         public static double upperLimit;
         public static double lowerLimit;
         private static double z;
+        /* Creating a new instance of the Focus class. */
         public Focus(object foc)
         {
             focus = foc;
@@ -222,6 +283,10 @@ namespace Bio
         {
 
         }
+
+        /// Sets the z-axis based on microscope configuration.
+        /// 
+        /// @param f the focus value
         public void SetFocus(double f)
         {
             if (Recorder.recordMicroscope)
@@ -249,10 +314,22 @@ namespace Bio
                 Automation.SetProperty("SetFocus", f.ToString());
             }
         }
+
+       /// This function returns the z-axis position
+       /// 
+       /// @return The z-axis position of the microscope.
         public double GetFocus()
         {
             return GetFocus(false);
         }
+
+        /// If the microscope is a Prior, get the Z position from the SDK. If it's a MTB, get the Z
+        /// position from the MTB SDK. If it's a PMicroscope, get the Z position from the PMicroscope
+        /// SDK. If it's a custom microscope, get the Z position from the custom SDK
+        /// 
+        /// @param update boolean, if true, the focus is updated from the microscope
+        /// 
+        /// @return The z position of the microscope.
         public double GetFocus(bool update)
         {
             if (Properties.Settings.Default.PMicroscope)
@@ -278,6 +355,10 @@ namespace Bio
             }
             return z;
         }
+
+        /// It gets the lower and upper limits of the focus axis
+        /// 
+        /// @return The return value is a PointD object.
         public PointD GetSWLimit()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -295,6 +376,12 @@ namespace Bio
             }
             return new PointD(lowerLimit, upperLimit);
         }
+
+        /// The function takes two double values, xd and yd, and sets the upper and lower limits of the
+        /// focus axis
+        /// 
+        /// @param xd the upper limit of the focus
+        /// @param yd the lower limit of the focus
         public void SetSWLimit(double xd, double yd)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -321,6 +408,7 @@ namespace Bio
         public static Type changerType = null;
         public static object changer;
 
+        /* Creating a list of objectives. */
         public Objectives(object objs)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -340,6 +428,7 @@ namespace Bio
                 }
             }
         }
+       /* Creating a list of objectives. */
         public Objectives(int count)
         {
             for (int i = 0; i < count; i++)
@@ -347,6 +436,7 @@ namespace Bio
                 List.Add(new Objective(null, i));
             }
         }
+        /* The Objective class is a class that contains all the information about the objective */
         public class Objective
         {
             public Dictionary<string, object> config = new Dictionary<string, object>();
@@ -427,6 +517,8 @@ namespace Bio
         }
         private int index;
         public int moveWait = 1000;
+        
+        /// It waits for a second to give time for stage movements. 
         private void MoveWait()
         {
             Thread.Sleep(moveWait);
@@ -442,6 +534,13 @@ namespace Bio
                 SetPosition(value);
             }
         }
+        
+        /// The function is called with an integer argument, and it sets the microscope objective to
+        /// that integer
+        /// 
+        /// @param index the index of the objective to be set
+        /// 
+        /// @return The return value is a boolean.
         public void SetPosition(int index)
         {
             if (Recorder.recordMicroscope)
@@ -462,6 +561,7 @@ namespace Bio
                 bool resObj = (bool)changerType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, changer, setObjPosArgs);
             }
         }
+        
         public int GetPosition()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -526,6 +626,12 @@ namespace Bio
             }
             return 0;
         }
+        /// If the library path contains "MTB", then return the list at the position of the
+        /// changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)
+        /// 
+        /// If the library path does not contain "MTB", then return the list at the index
+        /// 
+        /// @return The Objective object.
         public Objective GetObjective()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -542,6 +648,7 @@ namespace Bio
         public static Type tlType;
         public static object tlShutter = null;
         public static int position;
+        /* Creating a new instance of the TLShutter class. */
         public TLShutter(object tlShut)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -550,6 +657,11 @@ namespace Bio
                 tlType = Microscope.Types["IMTBChanger"];
             }
         }
+        
+        /// If the library path contains "MTB", then invoke the get_Position method on the tlShutter
+        /// object. Otherwise, return the position variable
+        /// 
+        /// @return The position of the shutter.
         public short GetPosition()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -557,6 +669,13 @@ namespace Bio
             else
             return (short)position;
         }
+        
+       /// The function takes an integer as an argument and sets the position of the shutter to the
+       /// value of the integer. 
+       /// 
+       /// The function is called by the following line of code:
+       /// 
+       /// @param p 0 or 1
         public void SetPosition(int p)
         {
             if (Recorder.recordMicroscope)
@@ -584,6 +703,8 @@ namespace Bio
         public static Type rlType;
         public static object rlShutter = null;
         public static int position;
+        
+        /* Creating a new instance of the RLShutter class. */
         public RLShutter(object rlShut)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -593,6 +714,11 @@ namespace Bio
             }
 
         }
+        
+        /// If the library path contains "MTB", then return the position of the shutter, otherwise
+        /// return the position of the shutter
+        /// 
+        /// @return The position of the shutter.
         public short GetPosition()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -600,6 +726,11 @@ namespace Bio
             else
                 return (short)position;
         }
+       
+        /// The function takes an integer as an argument, and if the microscope is an MTB, it sets the
+        /// position of the RLShutter to the value of the integer
+        /// 
+        /// @param p
         public void SetPosition(int p)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -617,6 +748,10 @@ namespace Bio
 
     public class FilterWheel
     {
+        
+        /// Get the current position of the filter wheel
+        /// 
+        /// @return The position of the filter wheel.
         public int GetPosition()
         {
             if (Properties.Settings.Default.PMicroscope)
@@ -627,6 +762,11 @@ namespace Bio
             }
             return -1;
         }
+        
+        /// The function takes an integer as an argument and sets the filter wheel position to that
+        /// integer
+        /// 
+        /// @param i The position to set the filter wheel to.
         public void SetPosition(int i)
         {
             if (Properties.Settings.Default.PMicroscope)
@@ -689,6 +829,10 @@ namespace Bio
                 return Objectives.GetObjective();
             }
         }
+        
+        /// The function initializes the microscope and the imaging library
+        /// 
+        /// @return The return value is an object.
         public static void Initialize()
         {
             if (initialized)
@@ -837,21 +981,60 @@ namespace Bio
             Watcher();
             initialized = true;
         }
+
+        /// It invokes a method on an object
+        /// 
+        /// @param Type The type of the object you want to invoke the method on.
+        /// @param name The name of the method to invoke.
+        /// @param o The object to invoke the method on.
+        /// @param args The arguments to pass to the method. This array of arguments must match in number,
+        /// order, and type the parameters of the method to be invoked. If there are no parameters, args must be
+        /// null.
+        /// 
+        /// @return The return value of the method.
         public static object Invoke(Type type, string name, object o, object[] args)
         {
             return type.InvokeMember(name, BindingFlags.InvokeMethod, null, o, args);
         }
+
+        /// It takes a type name, a method name, an object, and an array of arguments, and returns the result of
+        /// invoking the method on the object with the arguments
+        /// 
+        /// @param type The type of the object you want to invoke the method on.
+        /// @param name The name of the method to invoke.
+        /// @param o The object to invoke the method on.
+        /// @param args The arguments to pass to the method. This array of arguments must match in number,
+        /// order, and type the parameters of the method to be invoked. If there are no parameters, args must be
+        /// null.
+        /// 
+        /// @return The return value of the method.
         public static object Invoke(string type, string name, object o, object[] args)
         {
             Type t = Types[type];
             return t.InvokeMember(name, BindingFlags.InvokeMethod, null, o, args);
         }
+
+        /// > Get the property value of the object of the given type and name
+        /// 
+        /// @param type The type of the object you want to get the property from.
+        /// @param name The name of the property you want to get the value of.
+        /// @param obj The object you want to get the property from
+        /// 
+        /// @return The value of the property.
         public static object GetProperty(string type, string name, object obj)
         {
             Type myType = Types[type];
             PropertyInfo p = myType.GetProperty(name);
             return p.GetValue(obj);
         }
+
+        /// It takes a string type and a string name and returns an object that is the enum value of the
+        /// type with the name
+        /// 
+        /// @param type The type of the enum you want to get the value from.
+        /// @param name The name of the enum
+        /// 
+        /// @return The enum value.
         public static object GetEnum(string type, string name)
         {
             Array ar = Enum.GetValues(Types[type]);
@@ -863,6 +1046,10 @@ namespace Bio
             return null;
         }
 
+        /// It checks to see if the stage and focus are calibrated on the lower limit and if not, it
+        /// calibrates them
+        /// 
+        /// @param calibMode "OnLowerLimit"
         public static void CalibrateXYZ(string calibMode)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -901,6 +1088,11 @@ namespace Bio
             }
         }
 
+        
+        /// Get the current stage position and focus position, and return a Point3D object containing
+        /// the stage position and focus position
+        /// 
+        /// @return A Point3D object.
         public static Point3D GetPosition()
         {
             PointD p = Stage.GetPosition(false);
@@ -908,6 +1100,10 @@ namespace Bio
             return new Point3D(p.X, p.Y, f);
         }
 
+       
+        /// It sets the position of the stage and focus to the values in the Point3D object
+        /// 
+        /// @param Point3D a class that contains 3 doubles, X, Y, and Z.
         public static void SetPosition(Point3D p)
         {
             Stage.SetPosition(p.X,p.Y);
@@ -915,11 +1111,15 @@ namespace Bio
             Microscope.redraw = true;
         }
 
+       /// SetPosition(PointD p) sets the position of the stage to the PointD p
+       /// 
+       /// @param PointD a class that contains an X and Y coordinate
         public static void SetPosition(PointD p)
         {
             Stage.SetPosition(p.X, p.Y);
             Microscope.redraw = true;
         }
+        /// If the shutter is closed, open it
         public static void OpenRL()
         {
             //If shutter is closed we open it.
@@ -927,6 +1127,8 @@ namespace Bio
                 RLShutter.SetPosition(1);
         }
 
+        
+       /// If the shutter is closed, open it
         public static void OpenTL()
         {
             //If shutter is closed we open it.
@@ -934,6 +1136,7 @@ namespace Bio
                 TLShutter.SetPosition(1);
         }
 
+        /// If the shutter is open, then close it
         public static void CloseRL()
         {
             //If shutter is open then we close it.
@@ -941,6 +1144,7 @@ namespace Bio
                 RLShutter.SetPosition(1);
         }
 
+        /// If the shutter is open, then we close it
         public static void CloseTL()
         {
             //If shutter is open then we close it.
@@ -948,71 +1152,112 @@ namespace Bio
                 TLShutter.SetPosition(1);
         }
 
+        /// This function sets the position of the TL shutter to the value of the variable tl
+        /// 
+        /// @param tl the position of the shutter
         public static void SetTL(uint tl)
         {
             TLShutter.SetPosition((short)tl);
         }
 
+       /// Set the position of the RLShutter to the value of tr
+       /// 
+       /// @param tr The position of the shutter.
         public static void SetRL(uint tr)
         {
             RLShutter.SetPosition((short)tr);
         }
 
+        /// It returns the position of the TLShutter object
+        /// 
+        /// @return The position of the shutter.
         public static int GetTL()
         {
             return TLShutter.GetPosition();
         }
 
+        /// GetRL() returns the position of the RLShutter object.
+        /// 
+        /// @return The position of the RLShutter.
         public static int GetRL()
         {
             return RLShutter.GetPosition();
         }
 
+        /// Move the stage up by a distance of d
+        /// 
+        /// @param d The distance to move the stage up.
         public static void MoveUp(double d)
         {
             Stage.MoveUp(d);
         }
 
+        /// MoveRight(double d) moves the stage right by d
+        /// 
+        /// @param d The distance to move the stage in millimeters.
         public static void MoveRight(double d)
         {
             Stage.MoveRight(d);
         }
 
+        /// Move the stage down by the specified amount
+        /// 
+        /// @param d The distance to move the stage down.
         public static void MoveDown(double d)
         {
             Stage.MoveDown(d);
         }
 
+        /// Move the stage left by the specified distance
+        /// 
+        /// @param d The distance to move the stage in mm.
         public static void MoveLeft(double d)
         {
             Stage.MoveLeft(d);
         }
+        /// Move the field up by the height of the view
         public static void MoveFieldUp()
         {
             Stage.MoveUp(viewSize.Y);
         }
+        /// Move the field right by the width of the view
         public static void MoveFieldRight()
         {
             Stage.MoveRight(viewSize.X);
         }
+        /// Move the field down by one unit
         public static void MoveFieldDown()
         {
             Stage.MoveDown(viewSize.Y);
         }
+       /// Move the field left by the width of the viewport
         public static void MoveFieldLeft()
         {
             Stage.MoveLeft(viewSize.X);
         }
+        /// > The function `SetFocus` is a static function that takes a double as a parameter and calls the
+        /// static function `SetFocus` on the class `Focus` with the parameter `d`
+        /// 
+        /// @param d The double value to set the focus to.
         public static void SetFocus(double d)
         {
             Focus.SetFocus(d);
         }
 
+       /// It returns the current focus of the z-axis.
+       /// 
+       /// @return The focus of the z-axis.
         public static double GetFocus()
         {
             return Focus.GetFocus();
         }
         private static string folder = "";
+        /// If the folder is not set, prompt the user to select a folder. 
+        /// If the user selects a folder, set the folder to the selected folder. 
+        /// If the user does not select a folder, return null. 
+        /// If the folder is set, return the folder.
+        /// 
+        /// @return The folder path.
         public static string GetFolder()
         {
             object o = Recordings.GetProperty(Automation.Action.ValueType.ValuePattern, "GetFolder");
@@ -1041,6 +1286,10 @@ namespace Bio
                 return folder;
             }
         }
+        /// If the folder doesn't exist, create it. If the property exists, set it. Set the folder
+        /// variable to the folder. Set the ImagingPath property to the folder. Save the settings
+        /// 
+        /// @param fol the folder to save the images to
         public static void SetFolder(string fol)
         {
             if (!Directory.Exists(fol))
@@ -1051,6 +1300,9 @@ namespace Bio
             Properties.Settings.Default.ImagingPath = folder;
             Properties.Settings.Default.Save();
         }
+        /// It takes an image from the camera and saves it to a file
+        /// 
+        /// @return The image is being returned.
         public static void TakeImage()
         {
             if (Properties.Settings.Default.SimulateCamera && !Properties.Settings.Default.PMicroscope)
@@ -1143,11 +1395,16 @@ namespace Bio
                 }
             }
         }
+        /// This function takes a stack of images from the camera and returns a BioImage object
+        /// 
+        /// @return A BioImage object.
         public static BioImage TakeImageStack()
         {
             return TakeImageStack(UpperLimit, LowerLimit, fInterVal);
         }
         static FileSystemWatcher watcher = new FileSystemWatcher();
+       /// This function is called when the user clicks the "Start" button. It gets the folder path from
+       /// the textbox, sets the watcher's path to that folder, and enables the watcher.
         public static void Watcher()
         {
             string s = GetFolder();
@@ -1162,6 +1419,7 @@ namespace Bio
         static bool imagingStack = false;
         static List<BioImage> images = new List<BioImage>();
         static Dictionary<int,string> locked = new Dictionary<int, string>();
+        /// We wait till the new file is no longer written into
         static void LockWait()
         {
             do
@@ -1186,11 +1444,18 @@ namespace Bio
                 }
             } while (imagingStack);
         }
+        /// It creates a new thread and starts it. The thread will call the LockWait function
         private static void WaitLocking()
         {
             System.Threading.Thread t = new Thread(LockWait);
             t.Start();
         }
+        /// If the program is not in the microscope mode, then we will add the file to the locked list
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param FileSystemEventArgs 
+        /// 
+        /// @return The file path of the image that was just created.
         private static void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
         {
             if (!Properties.Settings.Default.PMicroscope)
@@ -1201,6 +1466,31 @@ namespace Bio
                 locked.Add(ImageCount-1,e.FullPath);
             }
         }
+        /// It takes an image stack from the microscope and adds it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it to the viewer. 
+        /// 
+        /// The function is called from the main thread and it's purpose is to take an image stack from
+        /// the microscope and add it
+        /// 
+        /// @param UpperLimit The upper limit of the stack
+        /// @param LowerLimit The lowest focus position
+        /// @param interval The interval between each image.
+        /// 
+        /// @return A BioImage object.
         public static BioImage TakeImageStack(double UpperLimit, double LowerLimit, double interval)
         {
             imagingStack = true;
@@ -1260,6 +1550,10 @@ namespace Bio
             ImageCount = 0;
             return bi;
         }
+        /// It takes a number of images in a grid pattern
+        /// 
+        /// @param width The number of tiles in the x direction
+        /// @param height The number of fields to take in the y direction
         public static void TakeTiles(int width, int height)
         {
             bool leftright = true;
@@ -1307,12 +1601,22 @@ namespace Bio
                 images.Clear();
             }
         }
+        /// It returns a rectangle that represents the viewable area of the current objective
+        /// 
+        /// @return A rectangle with the dimensions of the viewport.
         public static RectangleD GetObjectiveViewRectangle()
         {
             Objectives.Objective o = Objectives.GetObjective();
             PointD d = Stage.GetPosition(false);
             return new RectangleD(d.X, d.Y, o.ViewWidth, o.ViewHeight);
         }
+        /// If the microscope is in PMicroscope mode, return the PMicroscope rectangle, otherwise return
+        /// the stage rectangle
+        /// 
+        /// @param update Boolean value that determines whether the view rectangle should be updated or
+        /// not.
+        /// 
+        /// @return A rectangle with the dimensions of the viewport.
         public static RectangleD GetViewRectangle(bool update)
         {
             Objectives.Objective o = Objectives.GetObjective();

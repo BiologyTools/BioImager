@@ -27,6 +27,11 @@ namespace Bio
     public static class Images
     {
         public static List<BioImage> images = new List<BioImage>();
+        /// It takes a string as an argument and returns a BioImage object
+        /// 
+        /// @param ids The ID of the image you want to get.
+        /// 
+        /// @return The image that matches the ID.
         public static BioImage GetImage(string ids)
         {
             for (int i = 0; i < images.Count; i++)
@@ -36,6 +41,9 @@ namespace Bio
             }
             return null;
         }
+        /// It adds an image to the list of images
+        /// 
+        /// @param BioImage The class that contains the image data.
         public static void AddImage(BioImage im)
         {
             im.Filename = GetImageName(im.ID);
@@ -45,6 +53,12 @@ namespace Bio
             //App.Image = im;
             //NodeView.viewer.AddTab(im);
         }
+        /// It takes a string as an argument, and returns the number of times that string appears in the
+        /// list of images
+        /// 
+        /// @param s The name of the image
+        /// 
+        /// @return The number of images that have the same name as the image being passed in.
         public static int GetImageCountByName(string s)
         {
             int i = 0;
@@ -56,6 +70,12 @@ namespace Bio
             }
             return i;
         }
+        /// If the image name has a dash followed by a number, increment the number. If not, add a dash
+        /// and a number
+        /// 
+        /// @param s The name of the image.
+        /// 
+        /// @return The name of the image.
         public static string GetImageName(string s)
         {
             //Here we create a unique ID for an image.
@@ -160,6 +180,7 @@ namespace Bio
                 return true;
         }
     }
+    /* A struct that is used to store the resolution of an image. */
     public struct Resolution
     {
         int x;
@@ -227,6 +248,7 @@ namespace Bio
         B,
         Gray
     }
+    /* A struct that is used to store a color in a 16 bit format. */
     public struct ColorS : IDisposable
     {
         public byte[] bytes;
@@ -494,6 +516,7 @@ namespace Bio
         }
 
     }
+    /* The ROI class is a class that represents a region of interest in an image. */
     public class ROI
     {
         public enum Type
@@ -961,6 +984,7 @@ namespace Bio
             return type.ToString() + ", " + Text + " (" + W + ", " + H + "); " + " (" + Point.X + ", " + Point.Y + ") " + coord.ToString();
         }
     }
+
     public class Channel : IDisposable
     {
         public IntRange[] range;
@@ -1367,6 +1391,7 @@ namespace Bio
             }
         }
     }
+    /* A plane is a 3D point with a ZCT coordinate and a delta */
     public class Plane
     {
         private double exposure;
@@ -1396,6 +1421,14 @@ namespace Bio
     }
     public class BufferInfo : IDisposable
     {
+        /// It takes a pixel coordinate and a color channel (0, 1, or 2) and returns the value of that
+        /// color channel at that pixel
+        /// 
+        /// @param x The x coordinate of the pixel to get the value of
+        /// @param y The y coordinate of the pixel to get the value of.
+        /// @param RGBChannel 0 = Red, 1 = Green, 2 = Blue
+        /// 
+        /// @return The value of the pixel at the given coordinates.
         public ushort GetValueRGB(int x, int y, int RGBChannel)
         {
             if (bytes == null)
@@ -1417,6 +1450,12 @@ namespace Bio
                 return bytes[index];
             }
         }
+       /// > Get the pixel value at the specified location
+       /// 
+       /// @param ix x coordinate of the pixel
+       /// @param iy The y coordinate of the pixel to get.
+       /// 
+       /// @return A ColorS object.
         public ColorS GetPixel(int ix, int iy)
         {
             if (isRGB)
@@ -1427,6 +1466,13 @@ namespace Bio
                 return new ColorS(s, s, s);
             }
         }
+        /// If the image is RGB, then set the color of the pixel at the given coordinates to the given
+        /// color. Otherwise, set the value of the pixel at the given coordinates to the given color's
+        /// red value
+        /// 
+        /// @param ix x-coordinate of the pixel
+        /// @param iy The y-coordinate of the pixel.
+        /// @param ColorS a struct that contains 3 floats (R, G, B)
         public void SetPixel(int ix, int iy, ColorS col)
         {
             if (isRGB)
@@ -1436,6 +1482,11 @@ namespace Bio
             else
                 SetValue(ix, iy, col.R);
         }
+        /// It takes a pixel coordinate and a value, and sets the pixel to that value
+        /// 
+        /// @param x The x coordinate of the pixel to set
+        /// @param y The y coordinate of the pixel to set
+        /// @param value the value to be set
         public void SetValue(int x, int y, ushort value)
         {
             int stridex = SizeX;
@@ -1453,6 +1504,13 @@ namespace Bio
                 bytes[index] = (byte)value;
             }
         }
+        /// The function takes a pixel coordinate (ix, iy) and a color channel (RGBChannel) and a value
+        /// (value) and sets the pixel value to the value
+        /// 
+        /// @param ix x coordinate of the pixel
+        /// @param iy The y coordinate of the pixel to set.
+        /// @param RGBChannel 0 = Red, 1 = Green, 2 = Blue
+        /// @param value the value to set the pixel to
         public void SetValueRGB(int ix, int iy, int RGBChannel, ushort value)
         {
             int x = ix;
@@ -1478,6 +1536,11 @@ namespace Bio
                 bytes[index] = (byte)value;
             }
         }
+        /// The function takes a pixel coordinate and a color value and sets the pixel to that color
+        /// 
+        /// @param ix x coordinate of the pixel
+        /// @param iy The y coordinate of the pixel to set
+        /// @param ColorS a struct that contains a byte array of 6 bytes.
         public void SetColorRGB(int ix, int iy, ColorS value)
         {
             int x = ix;
@@ -1501,6 +1564,13 @@ namespace Bio
                 bytes[index2] = (byte)value.B;
             }
         }
+        /// It takes a filepath and an index and returns a string that is the filepath with a slash and
+        /// the index appended to it
+        /// 
+        /// @param filepath The path to the file.
+        /// @param index The index of the file in the folder.
+        /// 
+        /// @return The filepath and the index.
         public static string CreateID(string filepath, int index)
         {
             if (filepath == null)
@@ -1715,6 +1785,11 @@ namespace Bio
         string file;
         bool littleEndian = BitConverter.IsLittleEndian;
         Plane plane = null;
+        /// It takes a bitmap, switches the red and blue channels if necessary, rotates it 180 degrees,
+        /// and then gets the bytes from the bitmap
+        /// 
+        /// @param Bitmap The bitmap to be converted to a byte array
+        /// @param switchRGB If true, the red and blue channels are switched.
         public void SetImage(Bitmap bitmap, bool switchRGB)
         {
             if (switchRGB)
@@ -1725,6 +1800,13 @@ namespace Bio
             SizeY = bitmap.Height;
             bytes = GetBuffer((Bitmap)bitmap, Stride);
         }
+        /// If the stride is not divisible by 4, add 2 to it until it is. If the stride is divisible by
+        /// 3 but not 2, add 1 to it until it is divisible by 4. If the stride is divisible by 2 but not
+        /// 3, add 3 to it until it is divisible by 4
+        /// 
+        /// @param stride The stride of the image.
+        /// 
+        /// @return The padded stride of the image.
         private static int GetStridePadded(int stride)
         {
             if (stride % 4 == 0)
@@ -1740,6 +1822,18 @@ namespace Bio
                 return stride + 5;
             return newstride;
         }
+        /// It takes a byte array, width, height, stride, and pixel format and returns a new byte array
+        /// with the stride padded to a multiple of 4
+        /// 
+        /// @param bts the byte array of the image
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param stride The stride is the width of a single row of pixels (a scan line), rounded up to
+        /// a four-byte boundary. If the stride is positive, the bitmap is top-down. If the stride is
+        /// negative, the bitmap is bottom-up.
+        /// @param PixelFormat The pixel format of the image.
+        /// 
+        /// @return A byte array.
         private static byte[] GetPaddedBuffer(byte[] bts, int w, int h, int stride, PixelFormat px)
         {
             int newstride = GetStridePadded(stride);
@@ -1772,6 +1866,18 @@ namespace Bio
             }
             return newbts;
         }
+        /// It takes a byte array of RGB48 data, and converts it to three 16-bit grayscale bitmaps
+        /// 
+        /// @param file the file name
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param stride the number of bytes per row
+        /// @param bts the byte array of the image
+        /// @param ZCT a struct that contains the Z, C, and T coordinates of the image.
+        /// @param index the index of the image in the file
+        /// @param Plane enum with values XY, XZ, YZ
+        /// 
+        /// @return A BufferInfo array of 3 elements.
         public static BufferInfo[] RGB48To16(string file, int w, int h, int stride, byte[] bts, ZCT coord, int index, Plane plane)
         {
             BufferInfo[] bfs = new BufferInfo[3];
@@ -1823,6 +1929,12 @@ namespace Bio
             bfs[2].RotateFlip(RotateFlipType.Rotate180FlipNone);
             return bfs;
         }
+        /// It takes a list of BufferInfo objects, each of which contains a byte array of 16-bit pixel
+        /// data, and returns a single BufferInfo object containing a byte array of 48-bit pixel data
+        /// 
+        /// @param bfs an array of BufferInfo objects.
+        /// 
+        /// @return A BufferInfo object.
         public static BufferInfo RGB16To48(BufferInfo[] bfs)
         {
             //If this is a 2 channel image we fill the last channel with black.
@@ -1883,6 +1995,12 @@ namespace Bio
                 return bf;
             }
         }
+        /// It takes a 16 bit image and converts it to a 48 bit image by copying the red value to the
+        /// green and blue values
+        /// 
+        /// @param BufferInfo This is a class that contains the following properties:
+        /// 
+        /// @return A BufferInfo object.
         public static BufferInfo RGB16To48(BufferInfo bfs)
         {
             byte[] bt = new byte[bfs.SizeY * (bfs.SizeX * 2 * 3)];
@@ -1911,6 +2029,16 @@ namespace Bio
             BufferInfo bf = new BufferInfo(bfs.ID, bfs.SizeX, bfs.SizeY, PixelFormat.Format48bppRgb, bt, bfs.Coordinate, 0, bfs.Plane);
             return bf;
         }
+        /// It takes a buffer of RGB data, and returns a bitmap
+        /// 
+        /// @param bfs an array of BufferInfo objects.  These are the buffers that are returned from the
+        /// camera.  The first one is the red channel, the second is the green channel, and the third is
+        /// the blue channel.
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A Bitmap object.
         public static Bitmap GetRGBBitmap(BufferInfo[] bfs, IntRange rr, IntRange rg, IntRange rb)
         {
             int stride;
@@ -1987,6 +2115,14 @@ namespace Bio
             }
             return GetBitmap(w, h, w * 3, PixelFormat.Format24bppRgb, bt);
         }
+        /// It takes a buffer, a color, and a range, and returns a bitmap with the color applied to the
+        /// buffer
+        /// 
+        /// @param BufferInfo This is a class that contains the information about the buffer.
+        /// @param IntRange This is a struct that contains a min and max value.
+        /// @param col The color to use for the emission.
+        /// 
+        /// @return A Bitmap object.
         public static Bitmap GetEmissionBitmap(BufferInfo bfs, IntRange rr, System.Drawing.Color col)
         {
             int stride;
@@ -2133,6 +2269,14 @@ namespace Bio
             else
                 return GetBitmap(w, h, w * 3 * 2, PixelFormat.Format24bppRgb, bt);
         }
+        /// It takes a list of buffer info objects and a list of channel objects and returns a bitmap of
+        /// the emission data
+        /// 
+        /// @param bfs an array of BufferInfo objects, each of which contains a buffer of data (a byte
+        /// array) and the size of the buffer (SizeX and SizeY).
+        /// @param chans an array of Channel objects, which are defined as:
+        /// 
+        /// @return A bitmap of the emission image.
         public static Bitmap GetEmissionBitmap(BufferInfo[] bfs, Channel[] chans)
         {
             Bitmap bm = new Bitmap(bfs[0].SizeX, bfs[0].SizeY, PixelFormat.Format24bppRgb);
@@ -2145,6 +2289,12 @@ namespace Bio
             }
             return bm;
         }
+        /// It takes an array of BufferInfo objects, each of which contains a byte array of 8-bit pixel
+        /// data, and returns a single BufferInfo object containing a byte array of 24-bit pixel data
+        /// 
+        /// @param bfs an array of BufferInfo objects.
+        /// 
+        /// @return A BufferInfo object.
         public static BufferInfo RGB8To24(BufferInfo[] bfs)
         {
             //If this is a 2 channel image we fill the last channel with black.
@@ -2197,6 +2347,11 @@ namespace Bio
                 return new BufferInfo(bfs[0].ID, bfs[0].SizeX, bfs[0].SizeY, PixelFormat.Format24bppRgb, bt, bfs[0].Coordinate, 0);
             }
         }
+        /// It takes a buffer of 8-bit grayscale pixels and converts it to a buffer of 24-bit RGB pixels
+        /// 
+        /// @param BufferInfo This is a class that contains the following properties:
+        /// 
+        /// @return A BufferInfo object.
         public static BufferInfo RGB8To24(BufferInfo bfs)
         {
             byte[] bt = new byte[bfs.SizeY * (bfs.SizeX * 3)];
@@ -2222,6 +2377,11 @@ namespace Bio
             BufferInfo bf = new BufferInfo(bfs.ID, bfs.SizeX, bfs.SizeY, PixelFormat.Format24bppRgb, bt, bfs.Coordinate, 0);
             return bf;
         }
+       /// It takes a 24-bit bitmap and returns an array of 3 8-bit bitmaps, one for each color channel.
+       /// 
+       /// @param Bitmap The image to be converted
+       /// 
+       /// @return A Bitmap array.
         public static Bitmap[] RGB24To8(Bitmap info)
         {
             Bitmap[] bfs = new Bitmap[3];
@@ -2236,6 +2396,16 @@ namespace Bio
             cb = null;
             return bfs;
         }
+        /// If the stride is not a multiple of 4, then pad the buffer with zeros and create a new bitmap
+        /// with the padded buffer
+        /// 
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param stride The stride of the image.
+        /// @param PixelFormat Format24bppRgb
+        /// @param bts the byte array of the image
+        /// 
+        /// @return A Bitmap object.
         public static unsafe Bitmap GetBitmap(int w, int h, int stride, PixelFormat px, byte[] bts)
         {
             fixed (byte* numPtr1 = bts)
@@ -2252,6 +2422,14 @@ namespace Bio
                 }
             }
         }
+        /// It takes a byte array of RGB or RGBA data and converts it to a Bitmap
+        /// 
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param PixelFormat The pixel format of the image.
+        /// @param bts the byte array of the image
+        /// 
+        /// @return A Bitmap object.
         public static unsafe Bitmap GetBitmapRGB(int w, int h, PixelFormat px, byte[] bts)
         {
             if (px == PixelFormat.Format32bppArgb)
@@ -2411,6 +2589,14 @@ namespace Bio
             
             throw new NotSupportedException("Pixelformat " + px + " is not supported.");
         }
+        /// It takes a byte array of RGB data and returns a pointer to a 32 bit ARGB image
+        /// 
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param PixelFormat The pixel format of the image.
+        /// @param bts the byte array of the image
+        /// 
+        /// @return A pointer to the first byte of the image data.
         public static unsafe IntPtr GetRGBData(int w, int h, PixelFormat px, byte[] bts)
         {
             if (px == PixelFormat.Format24bppRgb)
@@ -2541,6 +2727,19 @@ namespace Bio
             }
             throw new NotSupportedException("Pixelformat " + px + " is not supported.");
         }
+        /// It takes a byte array, a width, a height, a stride, a pixel format, and three ranges, and
+        /// returns a bitmap
+        /// 
+        /// @param w width of the image
+        /// @param h height of the image
+        /// @param stride the number of bytes per row of the image.
+        /// @param PixelFormat The pixel format of the image.
+        /// @param bts the byte array of the image
+        /// @param IntRange a class that holds a min and max value.
+        /// @param IntRange a class that holds a min and max value.
+        /// @param IntRange a class that holds a min and max value.
+        /// 
+        /// @return A Bitmap object.
         public static Bitmap GetFiltered(int w, int h, int stride, PixelFormat px, byte[] bts, IntRange rr, IntRange rg, IntRange rb)
         {
             if (px == PixelFormat.Format24bppRgb)
@@ -2760,10 +2959,21 @@ namespace Bio
             }
             throw new InvalidDataException("Bio supports only 8, 16 24, 32, 48 bit images.");
         }
+        /// It takes a range of red, green, and blue values and returns a bitmap that contains only the
+        /// pixels that fall within the range
+        /// 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A bitmap.
         public Bitmap GetFiltered(IntRange rr, IntRange rg, IntRange rb)
         {
             return BufferInfo.GetFiltered(SizeX, SizeY, Stride, PixelFormat, Bytes, rr, rg, rb);
         }
+        /// It takes a rectangle and crops the image to that rectangle
+        /// 
+        /// @param Rectangle The rectangle to crop to.
         public void Crop(Rectangle r)
         {
             //This crop function supports 16 bit images unlike Bitmap class.
@@ -2819,6 +3029,11 @@ namespace Bio
             SizeX = r.Width;
             SizeY = r.Height;
         }
+       /// It takes a rectangle and returns a bitmap of the rectangle
+       /// 
+       /// @param Rectangle The rectangle to crop the image to.
+       /// 
+       /// @return A Bitmap object.
         public Bitmap GetCropBitmap(Rectangle r)
         {
             //This crop function supports 16 bit images unlike Bitmap class.
@@ -2873,6 +3088,11 @@ namespace Bio
             }
 
         }
+        /// It takes a rectangle and returns a BufferInfo object that contains the cropped image
+        /// 
+        /// @param Rectangle The rectangle to crop
+        /// 
+        /// @return A BufferInfo object.
         public BufferInfo GetCropBuffer(Rectangle r)
         {
             BufferInfo inf = null;
@@ -2929,6 +3149,7 @@ namespace Bio
                 return new BufferInfo(ID, bmp, Coordinate, 0);
             }
         }
+        /* Creating a new BufferInfo object. */
         public BufferInfo(string file, int w, int h, PixelFormat px, byte[] bts, ZCT coord, int index)
         {
             ID = CreateID(file, index);
@@ -2940,6 +3161,7 @@ namespace Bio
             if (isRGB)
                 SwitchRedBlue();
         }
+        /* Creating a new BufferInfo object. */
         public BufferInfo(string file, int w, int h, PixelFormat px, byte[] bts, ZCT coord, int index, Plane plane)
         {
             ID = CreateID(file, index);
@@ -3009,6 +3231,27 @@ namespace Bio
                 SwitchRedBlue();
             Bytes = bts;
         }
+        /// "Extract the red and blue channels from the image, then replace the red channel with the
+        /// blue channel and the blue channel with the red channel."
+        /// 
+        /// The function is pretty straightforward. 
+        /// 
+        /// First, we create two ExtractChannel objects, one for the red channel and one for the blue
+        /// channel. 
+        /// 
+        /// Then, we apply the filters to the image and store the results in two new Bitmap objects. 
+        /// 
+        /// Next, we create two ReplaceChannel objects, one for the red channel and one for the blue
+        /// channel. 
+        /// 
+        /// Finally, we apply the filters to the original image, replacing the red channel with the blue
+        /// channel and the blue channel with the red channel. 
+        /// 
+        /// The result is an image with the red and blue channels swapped
+        /// 
+        /// @param Bitmap The image to be processed
+        /// 
+        /// @return The image is being returned.
         public static Bitmap SwitchRedBlue(Bitmap image)
         {
             ExtractChannel cr = new ExtractChannel(AForge.Imaging.RGB.R);
@@ -3026,6 +3269,9 @@ namespace Bio
             bImage.Dispose();
             return image;
         }
+        /// It switches the red and blue channels of the image
+        /// 
+        /// @return A byte array.
         public void SwitchRedBlue()
         {
             if (PixelFormat == PixelFormat.Format8bppIndexed || PixelFormat == PixelFormat.Format16bppGrayScale || Bytes == null)
@@ -3077,6 +3323,13 @@ namespace Bio
                 }
             }
         }
+        /// It takes a buffer, copies it, flips it, rotates it, and then copies the bytes from the
+        /// bitmap to a byte array
+        /// 
+        /// @param littleEndian true if the image is in little endian format, false if it's in big
+        /// endian format.
+        /// 
+        /// @return A byte array of the image data.
         public byte[] GetSaveBytes(bool littleEndian)
         {
             BufferInfo bf = this.Copy();
@@ -3097,6 +3350,15 @@ namespace Bio
             bitmap.Dispose();
             return bytes;
         }
+        /// It takes a bitmap, locks it, copies the bytes into a byte array, reverses the byte array,
+        /// and then unlocks the bitmap
+        /// 
+        /// @param Bitmap The bitmap to convert to a byte array
+        /// @param stride The stride is the width of a single row of pixels (a scan line), rounded up to
+        /// a four-byte boundary. If the stride is positive, the bitmap is top-down. If the stride is
+        /// negative, the bitmap is bottom-up.
+        /// 
+        /// @return A byte array of the image data.
         public static byte[] GetBuffer(Bitmap bmp, int stride)
         {
             BitmapData data = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
@@ -3109,21 +3371,13 @@ namespace Bio
 
             return bytes;
         }
-        public static Bitmap To24Bit(Bitmap b)
-        {
-            Bitmap bm = new Bitmap(b.Width, b.Height, PixelFormat.Format24bppRgb);
-            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bm);
-            if (b.PixelFormat == PixelFormat.Format16bppGrayScale || b.PixelFormat == PixelFormat.Format48bppRgb)
-            {
-                g.DrawImage(AForge.Imaging.Image.Convert16bppTo8bpp(b), 0, 0);
-            }
-            else
-            {
-                g.DrawImage(b, 0, 0);
-            }
-            g.Dispose();
-            return bm;
-        }
+        /// "If the image is 16bpp, convert it to 8bpp, then draw it to a 24bpp bitmap."
+        /// 
+        /// The reason for this is that the AForge library doesn't support 16bpp images
+        /// 
+        /// @param Bitmap The bitmap to convert
+        /// 
+        /// @return A Bitmap object.
         public static Bitmap To32Bit(Bitmap b)
         {
             Bitmap bm = new Bitmap(b.Width, b.Height, PixelFormat.Format32bppArgb);
@@ -3135,6 +3389,8 @@ namespace Bio
             g.DrawImage(b, 0, 0);
             return bm;
         }
+        /// It creates a new bitmap with the same dimensions as the original, but with a 32 bit pixel
+        /// format, then it draws the original image onto the new bitmap
         public void RGBTo32Bit()
         {
             Bitmap bm = new Bitmap(SizeX, SizeY, PixelFormat.Format32bppArgb);
@@ -3142,6 +3398,14 @@ namespace Bio
             g.DrawImage((Bitmap)Image, 0, 0);
             Image = bm;
         }
+        /// It takes an image, extracts the two channels you want to switch, replaces the channels in
+        /// the original image, and returns the original image with the channels switched
+        /// 
+        /// @param Bitmap The image to be processed
+        /// @param c1 The channel to be replaced
+        /// @param c2 The channel to be replaced
+        /// 
+        /// @return The image is being returned.
         public static Bitmap SwitchChannels(Bitmap image, int c1, int c2)
         {
             ExtractChannel cr = new ExtractChannel((short)c1);
@@ -3158,6 +3422,10 @@ namespace Bio
             return image;
         }
 
+        /// It creates a new byte array, copies the bytes from the original array into the new array,
+        /// and then creates a new BufferInfo object with the new byte array
+        /// 
+        /// @return A new BufferInfo object.
         public BufferInfo Copy()
         {
             byte[] bt = new byte[Bytes.Length];
@@ -3169,6 +3437,10 @@ namespace Bio
             bf.plane = Plane;
             return bf;
         }
+        /// It creates a new BufferInfo object, copies the values of the current object into the new
+        /// object, and returns the new object
+        /// 
+        /// @return A new BufferInfo object.
         public BufferInfo CopyInfo()
         {
             BufferInfo bf = new BufferInfo(SizeX, SizeY, PixelFormat, null, Coordinate, ID);
@@ -3176,18 +3448,23 @@ namespace Bio
             bf.plane = Plane;
             return bf;
         }
+       /// Convert the image to 8 bit, rotate it 180 degrees, and set the image to the new image
         public void To8Bit()
         {
             Bitmap bm = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)Image);
             bm.RotateFlip(RotateFlipType.Rotate180FlipNone);
             Image = bm;
         }
+        /// Convert the image to 16 bit
         public void To16Bit()
         {
             Bitmap bm = AForge.Imaging.Image.Convert8bppTo16bpp((Bitmap)Image);
             Image = bm;
         }
 
+        /// It converts the image to RGB format
+        /// 
+        /// @return A byte array of the image in RGB format.
         public void ToRGB()
         {
             int stride;
@@ -3259,6 +3536,9 @@ namespace Bio
                 PixelFormat = PixelFormat.Format24bppRgb;
             }
         }
+        /// It takes a bitmap, clones it, rotates it, and then sets the image to the rotated bitmap
+        /// 
+        /// @param RotateFlipType 
         public void RotateFlip(RotateFlipType rot)
         {
             Bitmap fl = (Bitmap)Image.Clone();
@@ -3266,6 +3546,7 @@ namespace Bio
             Image = fl;
             fl.Dispose();
         }
+        /* Checking if the image is RGB or not. */
         public bool isRGB
         {
             get
@@ -3276,10 +3557,14 @@ namespace Bio
                     return true;
             }
         }
+       /// It returns the ID of the object.
+       /// 
+       /// @return The ID of the object.
         public override string ToString()
         {
             return ID;
         }
+        /// It's a function that disposes of the object's resources
         public void Dispose()
         {
             bytes = null;
@@ -3469,11 +3754,24 @@ namespace Bio
     }
     public static class Filters
     {
+        /// It returns the filter object that has the name that was passed in
+        /// 
+        /// @param name The name of the filter.
+        /// 
+        /// @return The value of the key "name" in the dictionary "filters"
         public static Filt GetFilter(string name)
         {
             return filters[name];
         }
         public static Dictionary<string, Filt> filters = new Dictionary<string, Filt>();
+       /// It takes an image, applies a filter to it, and returns the filtered image
+       /// 
+       /// @param id the id of the image to apply the filter to
+       /// @param name The name of the filter to apply.
+       /// @param inPlace If true, the image will be modified in place. If false, a new image will be
+       /// created.
+       /// 
+       /// @return The image that was filtered.
         public static BioImage Base(string id, string name, bool inPlace)
         {
             BioImage img = Images.GetImage(id);
@@ -3502,6 +3800,16 @@ namespace Bio
             }
             return img;
         }
+        /// This function takes two images, applies a filter to the first image, and then applies the
+        /// second image as an overlay to the first image
+        /// 
+        /// @param id the id of the image to be filtered
+        /// @param id2 the image to be filtered
+        /// @param name The name of the filter.
+        /// @param inPlace true if you want to apply the filter to the image in place, false if you want
+        /// to create a new image with the filter applied.
+        /// 
+        /// @return The image that was filtered.
         public static BioImage Base2(string id, string id2, string name, bool inPlace)
         {
             BioImage c2 = Images.GetImage(id);
@@ -3533,6 +3841,14 @@ namespace Bio
             }
             return img;
         }
+        /// It takes an image, applies a filter to it, and returns the image
+        /// 
+        /// @param id the id of the image to apply the filter to
+        /// @param name The name of the filter to apply.
+        /// @param inPlace If true, the image will be modified in place. If false, a copy of the image
+        /// will be made and the copy will be modified.
+        /// 
+        /// @return The image that was filtered.
         public static BioImage InPlace(string id, string name, bool inPlace)
         {
             BioImage img = Images.GetImage(id);
@@ -3562,6 +3878,16 @@ namespace Bio
             }
             return img;
         }
+        /// This function takes two images, applies a filter to the first image, and returns the first
+        /// image
+        /// 
+        /// @param id the id of the image to be filtered
+        /// @param id2 the id of the image to be filtered
+        /// @param name The name of the filter to apply.
+        /// @param inPlace true if you want to modify the original image, false if you want to create a
+        /// new image
+        /// 
+        /// @return The image that was filtered.
         public static BioImage InPlace2(string id, string id2, string name, bool inPlace)
         {
             BioImage c2 = Images.GetImage(id);
@@ -3593,6 +3919,14 @@ namespace Bio
             }
             return img;
         }
+        /// It takes an image, applies a filter to it, and returns the image
+        /// 
+        /// @param id the id of the image to apply the filter to
+        /// @param name The name of the filter to apply.
+        /// @param inPlace If true, the original image is modified. If false, a copy of the original
+        /// image is modified.
+        /// 
+        /// @return The image that was filtered.
         public static BioImage InPlacePartial(string id, string name, bool inPlace)
         {
             BioImage img = Images.GetImage(id);
@@ -3622,6 +3956,15 @@ namespace Bio
             }
             return img;
         }
+        /// This function takes an image, resizes it, and returns the resized image
+        /// 
+        /// @param id the id of the image to be resized
+        /// @param name The name of the filter to use.
+        /// @param inPlace whether to apply the filter to the original image or to a copy of it
+        /// @param w width
+        /// @param h height
+        /// 
+        /// @return The image that was resized.
         public static BioImage Resize(string id, string name, bool inPlace, int w, int h)
         {
             BioImage img = Images.GetImage(id);
@@ -3652,6 +3995,18 @@ namespace Bio
             }
             return img;
         }
+        /// This function takes an image, rotates it, and returns the rotated image
+        /// 
+        /// @param id the id of the image to be filtered
+        /// @param name The name of the filter.
+        /// @param inPlace whether to apply the filter to the original image or to a copy of it
+        /// @param angle the angle to rotate the image
+        /// @param a alpha
+        /// @param r red
+        /// @param g green
+        /// @param b blue
+        /// 
+        /// @return The image that was rotated.
         public static BioImage Rotate(string id, string name, bool inPlace, float angle, int a, int r, int g, int b)
         {
             BioImage img = Images.GetImage(id);
@@ -3684,6 +4039,15 @@ namespace Bio
             return img;
 
         }
+        /// This function takes an image, applies a filter to it, and returns the filtered image
+        /// 
+        /// @param id the id of the image to be transformed
+        /// @param name The name of the filter
+        /// @param inPlace true if you want to apply the filter to the original image, false if you want
+        /// to create a new image with the filter applied
+        /// @param angle the angle of rotation
+        /// 
+        /// @return The image that was transformed.
         public static BioImage Transformation(string id, string name, bool inPlace, float angle)
         {
             BioImage img = Images.GetImage(id);
@@ -3712,6 +4076,14 @@ namespace Bio
             }
             return img;
         }
+        /// It takes an image, applies a filter to it, and returns the filtered image
+        /// 
+        /// @param id the id of the image to be filtered
+        /// @param name The name of the filter to apply.
+        /// @param inPlace If true, the original image will be modified. If false, a copy of the image
+        /// will be made and the copy will be modified.
+        /// 
+        /// @return The image that was copied.
         public static BioImage Copy(string id, string name, bool inPlace)
         {
             BioImage img = Images.GetImage(id);
@@ -3740,6 +4112,15 @@ namespace Bio
             }
             return img;
         }
+        /// It takes an image, crops it, and returns the cropped image
+        /// 
+        /// @param id the id of the image to crop
+        /// @param x x coordinate of the top left corner of the rectangle
+        /// @param y y coordinate of the top left corner of the rectangle
+        /// @param w width of the rectangle
+        /// @param h height
+        /// 
+        /// @return The cropped image.
         public static BioImage Crop(string id, double x, double y, double w, double h)
         {
             BioImage c = Images.GetImage(id);
@@ -3759,6 +4140,8 @@ namespace Bio
         {
             return Crop(id, r.X, r.Y, r.W, r.H);
         }
+       /// It creates a dictionary of filters, where the key is the name of the filter and the value is
+       /// the filter itself
         public static void Init()
         {
             //Base Filters
@@ -3959,6 +4342,7 @@ namespace Bio
 
         }
     }
+    /* It calculates the histogram of an image */
     public class Statistics
     {
         private int[] values = null;
@@ -4300,6 +4684,7 @@ namespace Bio
             values = null;
         }
     }
+    /* The class is used to store the physical and stage sizes of an image */
     public class ImageInfo
     {
         bool HasPhysicalXY = false;
@@ -4391,6 +4776,7 @@ namespace Bio
             inf.StageSizeZ = StageSizeZ;
             inf.HasStageXY = HasStageXY;
             inf.HasStageXYZ = HasStageXYZ;
+            inf.series = series;
             return inf;
         }
 
@@ -4659,6 +5045,11 @@ namespace Bio
             public int count;
             public bool bit8color = false;
 
+            /// It takes a BioImage object and returns an ImageJDesc object
+            /// 
+            /// @param BioImage The image to be converted
+            /// 
+            /// @return The ImageJDesc object.
             public ImageJDesc FromImage(BioImage b)
             {
                 ImageJ = "";
@@ -4689,6 +5080,9 @@ namespace Bio
                 max = b.Channels[0].RangeR.Max;
                 return this;
             }
+            /// It returns a string that contains the values of all the variables in the class
+            /// 
+            /// @return A string.
             public string GetString()
             {
                 string s = "";
@@ -4707,6 +5101,12 @@ namespace Bio
                 s += "max=" + max.ToString() + "\n";
                 return s;
             }
+            /// The function takes a string and splits it into an array of strings, then it loops
+            /// through the array and assigns the values to the variables
+            /// 
+            /// @param desc the string that contains the parameters
+            /// 
+            /// @return The string is being returned.
             public void SetString(string desc)
             {
                 string[] lines = desc.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
@@ -4751,6 +5151,7 @@ namespace Bio
 
             }
         }
+       /* A property that returns the size of the first buffer in the list. */
         public int SizeX
         {
             get
@@ -4760,6 +5161,7 @@ namespace Bio
                 else return 0;
             }
         }
+        /* A property that returns the size of the Y axis of the first buffer in the list. */
         public int SizeY
         {
             get
@@ -4859,6 +5261,9 @@ namespace Bio
                 return initialized;
             }
         }
+        /// It converts a 16 bit image to an 8 bit image
+        /// 
+        /// @return A list of BufferInfo objects.
         public void To8Bit()
         {
             if (Buffers[0].RGBChannelsCount == 4)
@@ -4954,6 +5359,9 @@ namespace Bio
             bitsPerPixel = 8;
             Recorder.AddLine("Bio.Table.GetImage(" + '"' + ID + '"' + ")" + "." + "To8Bit();");
         }
+        /// It converts the image to 16 bit, and then calculates the threshold for the image
+        /// 
+        /// @return A list of BufferInfo objects.
         public void To16Bit()
         {
             if (Buffers[0].RGBChannelsCount == 4)
@@ -5061,6 +5469,9 @@ namespace Bio
             StackThreshold(true);
             Recorder.AddLine("Bio.Table.GetImage(" + '"' + ID + '"' + ")" + "." + "To16Bit();");
         }
+        /// Converts a 16 bit image to a 24 bit image
+        /// 
+        /// @return A Bitmap
         public void To24Bit()
         {
             if (Buffers[0].PixelFormat == PixelFormat.Format24bppRgb)
@@ -5183,6 +5594,9 @@ namespace Bio
             //StackThreshold(false);
             Recorder.AddLine("Bio.Table.GetImage(" + '"' + ID + '"' + ")" + "." + "To24Bit();");
         }
+        /// It converts the image to 32 bit, calculates the statistics, and then thresholds the image
+        /// 
+        /// @return The image is being returned.
         public void To32Bit()
         {
             if (Buffers[0].PixelFormat == PixelFormat.Format32bppArgb)
@@ -5209,6 +5623,9 @@ namespace Bio
             AutoThreshold(this, false);
             Recorder.AddLine("Bio.Table.GetImage(" + '"' + ID + '"' + ")" + "." + "To32Bit();");
         }
+        /// It converts the image to 48 bit RGB
+        /// 
+        /// @return A list of BufferInfo objects.
         public void To48Bit()
         {
             if (Buffers[0].RGBChannelsCount == 4)
@@ -5315,6 +5732,9 @@ namespace Bio
             AutoThreshold(this, false);
             Recorder.AddLine("Bio.Table.GetImage(" + '"' + ID + '"' + ")" + "." + "To48Bit();");
         }
+        /// It rotates and flips the image
+        /// 
+        /// @param RotateFlipType 
         public void RotateFlip(RotateFlipType rot)
         {
             for (int i = 0; i < Buffers.Count; i++)
@@ -5322,6 +5742,14 @@ namespace Bio
                 Buffers[i].RotateFlip(rot);
             }
         }
+        /// Bake(int rmin, int rmax, int gmin, int gmax, int bmin, int bmax)
+        /// 
+        /// @param rmin The minimum value of the red channel.
+        /// @param rmax The maximum value of the red channel.
+        /// @param gmin The minimum value of the green channel.
+        /// @param gmax The maximum value of the green channel.
+        /// @param bmin The minimum value of the blue channel.
+        /// @param bmax The maximum value of the blue channel.
         public void Bake(int rmin, int rmax, int gmin, int gmax, int bmin, int bmax)
         {
             Bake(new IntRange(rmin, rmax), new IntRange(gmin, gmax), new IntRange(bmin, bmax));
@@ -5361,6 +5789,7 @@ namespace Bio
             App.tabsView.AddTab(bm);
             Recorder.AddLine("ImageView.SelectedImage.Bake(" + rf.Min + "," + rf.Max + "," + gf.Min + "," + gf.Max + "," + bf.Min + "," + bf.Max + ");");
         }
+        /* Updating the coordinates of the image. */
         public void UpdateCoords()
         {
             int z = 0;
@@ -5390,6 +5819,12 @@ namespace Bio
                 }
             }
         }
+       /// It takes the number of Z, C, and T planes in the image and then assigns each image buffer a
+       /// coordinate in the ZCT array
+       /// 
+       /// @param sz number of z-slices
+       /// @param sc number of channels
+       /// @param st number of time points
         public void UpdateCoords(int sz, int sc, int st)
         {
             int z = 0;
@@ -5422,6 +5857,12 @@ namespace Bio
                 }
             }
         }
+        /// It takes a list of images and assigns them to a 3D array of coordinates
+        /// 
+        /// @param sz size of the Z dimension
+        /// @param sc number of channels
+        /// @param st number of time points
+        /// @param order XYCZT or XYZCT
         public void UpdateCoords(int sz, int sc, int st, string order)
         {
             int z = 0;
@@ -5483,22 +5924,48 @@ namespace Bio
             }
         }
 
+        /// Convert a physical distance to an image distance
+        /// 
+        /// @param d the distance in millimeters
+        /// 
+        /// @return The value of d divided by the physicalSizeX.
         public double ToImageSizeX(double d)
         {
             return d / physicalSizeX;
         }
+        /// Convert a physical distance to an image distance
+        /// 
+        /// @param d the distance in millimeters
+        /// 
+        /// @return The image size in the Y direction.
         public double ToImageSizeY(double d)
         {
             return d / physicalSizeY;
         }
+       /// > Convert a physical X coordinate to an image X coordinate
+       /// 
+       /// @param x the x coordinate of the point in the image
+       /// 
+       /// @return The x-coordinate of the image space.
         public double ToImageSpaceX(double x)
         {
             return (float)((x - stageSizeX) / physicalSizeX);
         }
+        /// > Convert a Y coordinate from stage space to image space
+        /// 
+        /// @param y the y coordinate of the point in the image
+        /// 
+        /// @return The return value is the y-coordinate of the image.
         public double ToImageSpaceY(double y)
         {
             return (float)((y - stageSizeY) / physicalSizeY);
         }
+        /// > The function takes a point in the stage coordinate system and returns a point in the image
+        /// coordinate system
+        /// 
+        /// @param PointD a class that contains two double values, X and Y.
+        /// 
+        /// @return A PointF object.
         public System.Drawing.PointF ToImageSpace(PointD p)
         {
             System.Drawing.PointF pp = new System.Drawing.Point();
@@ -5506,6 +5973,11 @@ namespace Bio
             pp.Y = (float)((p.Y - stageSizeY) / physicalSizeY);
             return pp;
         }
+       /// It takes a list of points in physical space and returns a list of points in image space
+       /// 
+       /// @param p List of points in stage space
+       /// 
+       /// @return A PointD array.
         public PointD[] ToImageSpace(List<PointD> p)
         {
             PointD[] ps = new PointD[p.Count];
@@ -5518,6 +5990,12 @@ namespace Bio
             }
             return ps;
         }
+        /// > The function takes a list of points in the stage coordinate system and returns a list of
+        /// points in the image coordinate system
+        /// 
+        /// @param p the points to be converted
+        /// 
+        /// @return A PointF array.
         public PointF[] ToImageSpace(PointF[] p)
         {
             PointF[] ps = new PointF[p.Length];
@@ -5530,6 +6008,11 @@ namespace Bio
             }
             return ps;
         }
+        /// > Convert a rectangle in physical space to a rectangle in image space
+        /// 
+        /// @param RectangleD 
+        /// 
+        /// @return A RectangleF object.
         public System.Drawing.RectangleF ToImageSpace(RectangleD p)
         {
             System.Drawing.RectangleF r = new RectangleF();
@@ -5540,6 +6023,11 @@ namespace Bio
             r.Height = (int)(p.H / physicalSizeY);
             return r;
         }
+        /// > The function takes a point in the volume space and returns a point in the stage space
+        /// 
+        /// @param PointD A struct that contains an X and Y value.
+        /// 
+        /// @return A PointD object.
         public PointD ToStageSpace(PointD p)
         {
             PointD pp = new PointD();
@@ -5547,6 +6035,16 @@ namespace Bio
             pp.Y = ((p.Y * physicalSizeY) + Volume.Location.Y);
             return pp;
         }
+        /// > The function takes a point in the volume space and converts it to a point in the stage
+        /// space
+        /// 
+        /// @param PointD A custom class that holds an X and Y coordinate.
+        /// @param physicalSizeX The width of the stage in mm
+        /// @param physicalSizeY The height of the stage in mm
+        /// @param volumeX The X coordinate of the top left corner of the volume in stage space.
+        /// @param volumeY The Y position of the top left corner of the volume in stage space.
+        /// 
+        /// @return A PointD object.
         public static PointD ToStageSpace(PointD p, double physicalSizeX, double physicalSizeY, double volumeX, double volumeY)
         {
             PointD pp = new PointD();
@@ -5554,6 +6052,12 @@ namespace Bio
             pp.Y = ((p.Y * physicalSizeY) + volumeY);
             return pp;
         }
+        /// > Convert a rectangle from the coordinate space of the image to the coordinate space of the
+        /// stage
+        /// 
+        /// @param RectangleD A rectangle with double precision coordinates.
+        /// 
+        /// @return A RectangleD object.
         public RectangleD ToStageSpace(RectangleD p)
         {
             RectangleD r = new RectangleD();
@@ -5563,6 +6067,16 @@ namespace Bio
             r.H = (p.H * physicalSizeY);
             return r;
         }
+        /// > This function takes a rectangle in the coordinate space of the image and converts it to
+        /// the coordinate space of the stage
+        /// 
+        /// @param RectangleD A rectangle with double precision.
+        /// @param physicalSizeX The width of the physical screen in pixels
+        /// @param physicalSizeY The height of the stage in pixels
+        /// @param volumeX The X position of the volume in stage space.
+        /// @param volumeY The Y position of the top of the volume in stage space.
+        /// 
+        /// @return A RectangleD object.
         public static RectangleD ToStageSpace(RectangleD p, double physicalSizeX, double physicalSizeY, double volumeX, double volumeY)
         {
             RectangleD r = new RectangleD();
@@ -5572,6 +6086,12 @@ namespace Bio
             r.H = (p.H * physicalSizeY);
             return r;
         }
+        /// It takes a list of points in the coordinate system of the image and returns a list of points
+        /// in the coordinate system of the stage
+        /// 
+        /// @param p The array of points to convert
+        /// 
+        /// @return A PointD[] array.
         public PointD[] ToStageSpace(PointD[] p)
         {
             PointD[] ps = new PointD[p.Length];
@@ -5584,6 +6104,17 @@ namespace Bio
             }
             return ps;
         }
+        /// It takes a list of points, and converts them from a coordinate system where the origin is in
+        /// the center of the image, to a coordinate system where the origin is in the top left corner
+        /// of the image
+        /// 
+        /// @param p the array of points to convert
+        /// @param physicalSizeX The width of the image in microns
+        /// @param physicalSizeY The height of the image in microns
+        /// @param volumeX The X position of the volume in stage space.
+        /// @param volumeY The Y position of the top left corner of the volume in stage space.
+        /// 
+        /// @return A PointD array.
         public static PointD[] ToStageSpace(PointD[] p, double physicalSizeX, double physicalSizeY, double volumeX, double volumeY)
         {
             PointD[] ps = new PointD[p.Length];
@@ -5596,6 +6127,7 @@ namespace Bio
             }
             return ps;
         }
+        /* Creating a new BioImage object. */
         public BioImage(string file)
         {
             id = file;
@@ -5606,6 +6138,19 @@ namespace Bio
             rgbChannels[1] = 0;
             rgbChannels[2] = 0;
         }
+       /// It takes a BioImage object, and returns a new BioImage object that is a subset of the
+       /// original
+       /// 
+       /// @param BioImage the image to be processed
+       /// @param ser series number
+       /// @param zs starting z-plane
+       /// @param ze end of z-stack
+       /// @param cs channel start
+       /// @param ce channel end
+       /// @param ts time start
+       /// @param te time end
+       /// 
+       /// @return A new BioImage object.
         public static BioImage Substack(BioImage orig, int ser, int zs, int ze, int cs, int ce, int ts, int te)
         {
             BioImage b = CopyInfo(orig, false, false);
@@ -5649,6 +6194,12 @@ namespace Bio
             Recorder.AddLine("Bio.BioImage.Substack(" + '"' + orig.Filename + '"' + "," + ser + "," + zs + "," + ze + "," + cs + "," + ce + "," + ts + "," + te + ");");
             return b;
         }
+        /// This function takes two images and merges them together
+        /// 
+        /// @param BioImage The image to be merged
+        /// @param BioImage The image to be merged
+        /// 
+        /// @return A new BioImage object.
         public static BioImage MergeChannels(BioImage b2, BioImage b)
         {
             BioImage res = new BioImage(b2.ID);
@@ -5734,12 +6285,36 @@ namespace Bio
             Recorder.AddLine("Bio.BioImage.MergeChannels(" + '"' + b.ID + '"' + "," + '"' + b2.ID + '"' + ");");
             return res;
         }
+        /// MergeChannels(b, b2) takes two images, b and b2, and merges the channels of b2 into b
+        /// 
+        /// @param bname The name of the first image
+        /// @param b2name The name of the image to merge with the first image.
+        /// 
+        /// @return A BioImage object.
         public static BioImage MergeChannels(string bname, string b2name)
         {
             BioImage b = Images.GetImage(bname);
             BioImage b2 = Images.GetImage(b2name);
             return MergeChannels(b, b2);
         }
+       /// It takes a 3D image and merges the Z-stack into a single 2D image. 
+       /// 
+       /// The function takes a BioImage object as an argument. It then creates a new BioImage object,
+       /// which is a copy of the original BioImage object, but with the Z-dimension set to 1. 
+       /// 
+       /// The function then loops through the C and T dimensions of the original BioImage object, and
+       /// for each C and T, it creates a new Merge object, which is a class that is used to merge two
+       /// images. The first image is the first image in the Z-stack, and the second image is a blank
+       /// image. The function then loops through the remaining images in the Z-stack, and merges each
+       /// image with the previous image. 
+       /// 
+       /// The function then creates a new BufferInfo object, which is a class that contains information
+       /// about an image. The function then adds the BufferInfo object to the Buffers list of the new
+       /// BioImage
+       /// 
+       /// @param BioImage The image to be merged
+       /// 
+       /// @return A new BioImage object.
         public static BioImage MergeZ(BioImage b)
         {
             BioImage bi = BioImage.CopyInfo(b, true, true);
@@ -5816,6 +6391,9 @@ namespace Bio
             Recorder.AddLine("Bio.BioImage.MergeT(" + '"' + b.ID + '"' + ");");
             return bi;
         }
+        /// It takes a single image and splits it into three separate images, one for each color channel
+        /// 
+        /// @return An array of BioImages.
         public BioImage[] SplitChannels()
         {
             BioImage[] bms;
@@ -5915,10 +6493,20 @@ namespace Bio
             Recorder.AddLine("Bio.BioImage.SplitChannels(" + '"' + Filename + '"' + ");");
             return bms;
         }
+        /// > SplitChannels splits a BioImage into its constituent channels
+        /// 
+        /// @param BioImage The image to split
+        /// 
+        /// @return An array of BioImages
         public static BioImage[] SplitChannels(BioImage bb)
         {
             return bb.SplitChannels();
         }
+        /// This function takes an image and splits it into its individual channels
+        /// 
+        /// @param name The name of the image to split.
+        /// 
+        /// @return An array of BioImage objects.
         public static BioImage[] SplitChannels(string name)
         {
             return SplitChannels(Images.GetImage(name));
@@ -5930,14 +6518,36 @@ namespace Bio
         private static ExtractChannel extractG = new ExtractChannel(AForge.Imaging.RGB.G);
         private static ExtractChannel extractB = new ExtractChannel(AForge.Imaging.RGB.B);
 
+        /// It returns an image from a buffer based on the z, c, and t coordinates
+        /// 
+        /// @param z the z-stack index
+        /// @param c channel
+        /// @param t time
+        /// 
+        /// @return The image at the specified coordinates.
         public Image GetImageByCoord(int z, int c, int t)
         {
             return Buffers[Coords[z, c, t]].ImageRGB;
         }
+        /// > Get the bitmap from the buffer at the given coordinates
+        /// 
+        /// @param z the z-stack index
+        /// @param c channel
+        /// @param t time
+        /// 
+        /// @return A Bitmap object.
         public Bitmap GetBitmap(int z, int c, int t)
         {
             return (Bitmap)Buffers[Coords[z, c, t]].Image;
         }
+        /// > GetIndex(x,y) = (y * stridex + x) * 2
+        /// 
+        /// The stridex is the width of the image in bytes. 
+        /// 
+        /// @param ix x coordinate of the pixel
+        /// @param iy The y coordinate of the pixel
+        /// 
+        /// @return The index of the pixel in the array.
         public int GetIndex(int ix, int iy)
         {
             if (ix > SizeX || iy > SizeY || ix < 0 || iy < 0)
@@ -5954,6 +6564,13 @@ namespace Bio
                 return (y * stridex + x);
             }
         }
+        /// > The function returns the index of the pixel in the buffer
+        /// 
+        /// @param ix x coordinate of the pixel
+        /// @param iy The y coordinate of the pixel
+        /// @param index 0 = Red, 1 = Green, 2 = Blue
+        /// 
+        /// @return The index of the pixel in the buffer.
         public int GetIndexRGB(int ix, int iy, int index)
         {
             int stridex = SizeX;
@@ -5969,6 +6586,11 @@ namespace Bio
                 return (y * stridex + x) * index;
             }
         }
+       /// > This function returns the value of a pixel at a given coordinate
+       /// 
+       /// @param ZCTXY a struct that contains the X, Y, Z, C, and T coordinates of the pixel.
+       /// 
+       /// @return The value of the pixel at the given coordinate.
         public ushort GetValue(ZCTXY coord)
         {
             if (coord.X < 0 || coord.Y < 0 || coord.X > SizeX || coord.Y > SizeY)
@@ -5988,6 +6610,12 @@ namespace Bio
                 return GetValueRGB(coord, 0);
             return 0;
         }
+       /// > Get the value of the pixel at the given coordinates in the given buffer
+       /// 
+       /// @param ZCTXY a struct that contains the Z, C, T, X, and Y coordinates of the pixel.
+       /// @param index 0, 1, 2
+       /// 
+       /// @return A ushort value.
         public ushort GetValueRGB(ZCTXY coord, int index)
         {
             int ind = Coords[coord.Z, coord.C, coord.T];
@@ -6002,14 +6630,38 @@ namespace Bio
                 return c.B;
             throw new IndexOutOfRangeException();
         }
+        /// > This function returns the value of the pixel at the given coordinates
+        /// 
+        /// @param ZCT Z is the Z-plane, C is the channel, T is the timepoint
+        /// @param x x coordinate of the pixel
+        /// @param y the y coordinate of the pixel
+        /// 
+        /// @return The value of the pixel at the given coordinates.
         public ushort GetValue(ZCT coord, int x, int y)
         {
             return GetValueRGB(new ZCTXY(coord.Z, coord.C, coord.T, x, y),0);
         }
+        /// > This function returns the value of the pixel at the specified ZCTXY coordinates
+        /// 
+        /// @param z The Z-plane of the image.
+        /// @param c channel
+        /// @param t time
+        /// @param x x coordinate of the pixel
+        /// @param y the y coordinate of the pixel
+        /// 
+        /// @return The value of the pixel at the given coordinates.
         public ushort GetValue(int z, int c, int t, int x, int y)
         {
             return GetValue(new ZCTXY(z, c, t, x, y));
         }
+       /// > Get the value of a pixel at a given coordinate
+       /// 
+       /// @param ZCT The ZCT coordinate of the image.
+       /// @param x x coordinate of the pixel
+       /// @param y the y coordinate of the pixel
+       /// @param RGBindex 0 = Red, 1 = Green, 2 = Blue
+       /// 
+       /// @return The value of the pixel at the given coordinates.
         public ushort GetValueRGB(ZCT coord, int x, int y, int RGBindex)
         {
             ZCTXY c = new ZCTXY(coord.Z, coord.C, coord.T, x, y);
@@ -6020,37 +6672,89 @@ namespace Bio
             else
                 return GetValue(coord, x, y);
         }
+        /// This function returns the value of the pixel at the specified Z, C, T, X, Y, and RGBindex
+        /// 
+        /// @param z The Z-plane index
+        /// @param c channel
+        /// @param t time index
+        /// @param x x coordinate of the pixel
+        /// @param y The y coordinate of the pixel
+        /// @param RGBindex 0 = Red, 1 = Green, 2 = Blue
+        /// 
+        /// @return The value of the pixel at the given coordinates.
         public ushort GetValueRGB(int z, int c, int t, int x, int y, int RGBindex)
         {
             return GetValueRGB(new ZCT(z, c, t), x, y, RGBindex);
         }
+        /// It takes a coordinate and a value, and sets the value at that coordinate
+        /// 
+        /// @param ZCTXY a struct that contains the Z, C, T, X, and Y coordinates of the pixel
+        /// @param value the value to be set
         public void SetValue(ZCTXY coord, ushort value)
         {
             int i = Coords[coord.Z, coord.C, coord.T];
             Buffers[i].SetValue(coord.X, coord.Y, value);
         }
+        /// It sets the value of a pixel in a buffer
+        /// 
+        /// @param x The x coordinate of the pixel to set.
+        /// @param y The y coordinate of the pixel to set.
+        /// @param ind The index of the buffer to set the value in.
+        /// @param value The value to set the pixel to.
         public void SetValue(int x, int y, int ind, ushort value)
         {
             Buffers[ind].SetValue(x, y, value);
         }
+        /// This function sets the value of a pixel at a given x,y coordinate in a given image plane
+        /// 
+        /// @param x x coordinate of the pixel
+        /// @param y The y coordinate of the pixel to set.
+        /// @param ZCT a struct that contains the Z, C, and T coordinates of the pixel
+        /// @param value the value to set
         public void SetValue(int x, int y, ZCT coord, ushort value)
         {
             SetValue(x, y, Coords[coord.Z, coord.C, coord.T], value);
         }
+        /// It takes a coordinate and a value and sets the value at that coordinate in the buffer
+        /// 
+        /// @param ZCTXY a struct that contains the Z, C, T, X, and Y coordinates of the pixel
+        /// @param RGBindex 0 = Red, 1 = Green, 2 = Blue
+        /// @param value the value to be set
         public void SetValueRGB(ZCTXY coord, int RGBindex, ushort value)
         {
             int ind = Coords[coord.Z, coord.C, coord.T];
             Buffers[ind].SetValueRGB(coord.X, coord.Y, RGBindex, value);
         }
+        /// > This function returns a Bitmap object from the image data
+        /// 
+        /// @param ZCT Z = Z-stack, C = channel, T = timepoint
+        /// 
+        /// @return A Bitmap object.
         public Bitmap GetBitmap(ZCT coord)
         {
             return (Bitmap)GetImageByCoord(coord.Z, coord.C, coord.T);
         }
+        /// > Get the image at the specified ZCT coordinate, and return a filtered version of it
+        /// 
+        /// @param ZCT Z is the Z-stack, C is the channel, T is the timepoint
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A bitmap.
         public Bitmap GetFiltered(ZCT coord, IntRange r, IntRange g, IntRange b)
         {
             int index = Coords[coord.Z, coord.C, coord.T];
             return GetFiltered(index, r, g, b);
         }
+        /// It takes a range of RGB values and returns a filtered image
+        /// 
+        /// @param ind the index of the buffer to get the filtered image from
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A Bitmap
         public Bitmap GetFiltered(int ind, IntRange r, IntRange g, IntRange b)
         {
             if (Buffers[ind].BitsPerPixel > 8)
@@ -6071,6 +6775,12 @@ namespace Bio
                 return BioImage.filter8.Apply((Bitmap)Buffers[ind].ImageRGB);
             }
         }
+        /// It takes an image, and returns a single channel of that image
+        /// 
+        /// @param ind the index of the buffer
+        /// @param RGB enum with R, G, B
+        /// 
+        /// @return A Bitmap
         public Bitmap GetChannelImage(int ind, RGB rGB)
         {
             BufferInfo bf = Buffers[ind];
@@ -6087,6 +6797,29 @@ namespace Bio
             else
                 throw new InvalidOperationException();
         }
+        /// > This function returns a bitmap of the emission image for the given ZCT coordinate. 
+        /// 
+        /// The function is a bit complicated because it has to handle the case where the image is a
+        /// single channel image. In that case, the function has to combine the emission images from
+        /// each channel into a single image. 
+        /// 
+        /// The function starts by checking if the image is a single channel image. If it is, then the
+        /// function creates an array of `BufferInfo` objects, one for each channel. The function then
+        /// loops through each channel and gets the index of the buffer for the given ZCT coordinate.
+        /// The function then stores the buffer in the array. 
+        /// 
+        /// The function then calls the `GetEmissionBitmap` function of the `BufferInfo` class to
+        /// combine the emission images from each channel into a single image. The function then returns
+        /// the combined image. 
+        /// 
+        /// If the image is not a single channel image, then the function gets the index of
+        /// 
+        /// @param ZCT Z, C, T coordinates
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A bitmap of the image.
         public Bitmap GetEmission(ZCT coord, IntRange rf, IntRange gf, IntRange bf)
         {
             if (RGBChannelCount == 1)
@@ -6105,6 +6838,14 @@ namespace Bio
                 return (Bitmap)Buffers[index].Image; 
             }
         }
+        /// > Get the RGB bitmap for the specified ZCT coordinate
+        /// 
+        /// @param ZCT a 3-dimensional coordinate (Z, C, T)
+        /// @param IntRange 
+        /// @param IntRange 
+        /// @param IntRange 
+        /// 
+        /// @return A bitmap.
         public Bitmap GetRGBBitmap(ZCT coord, IntRange rf, IntRange gf, IntRange bf)
         {
             int index = Coords[coord.Z, coord.C, coord.T];
@@ -6132,6 +6873,12 @@ namespace Bio
         }
 
         public static Stopwatch swatch = new Stopwatch();
+        /// > GetAnnotations() returns a list of ROI objects that are associated with the ZCT coordinate
+        /// passed in as a parameter
+        /// 
+        /// @param ZCT a 3D coordinate (Z, C, T)
+        /// 
+        /// @return A list of ROI objects.
         public List<ROI> GetAnnotations(ZCT coord)
         {
             List<ROI> annotations = new List<ROI>();
@@ -6144,6 +6891,14 @@ namespace Bio
             }
             return annotations;
         }
+        /// This function returns a list of ROI objects that have the same Z, C, and T coordinates as
+        /// the input parameters
+        /// 
+        /// @param Z The Z-plane of the image
+        /// @param C Channel
+        /// @param T Time
+        /// 
+        /// @return A list of ROI objects.
         public List<ROI> GetAnnotations(int Z, int C, int T)
         {
             List<ROI> annotations = new List<ROI>();
@@ -6156,6 +6911,8 @@ namespace Bio
         }
 
         public bool Loading = false;
+        /// We initialize OME on a seperate thread so the user doesn't have to wait for initialization
+        /// to view images.
         public static void Initialize()
         {
             //We initialize OME on a seperate thread so the user doesn't have to wait for initialization to
@@ -6163,6 +6920,7 @@ namespace Bio
             System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(InitOME));
             t.Start();
         }
+        /// > Initialize the OME-XML library
         private static void InitOME()
         {
             factory = new ServiceFactory();
@@ -6171,12 +6929,21 @@ namespace Bio
             writer = new ImageWriter();
             initialized = true;
         }
+        /// This function takes a string array of file names and a string ID and saves the files to the
+        /// database
+        /// 
+        /// @param file The file path to the file you want to save.
+        /// @param ID The ID of the series you want to save.
         public static void SaveFile(string file, string ID)
         {
             string[] sts = new string[1];
             sts[0] = file;
             SaveSeries(sts, ID);
         }
+        /// It takes a list of image files, and saves them as a multi-page TIFF file
+        /// 
+        /// @param files An array of file paths to the images to be saved.
+        /// @param ID The file name of the output file.
         public static void SaveSeries(string[] files, string ID)
         {
             string desc = "";
@@ -6281,6 +7048,12 @@ namespace Bio
             image.Dispose();
 
         }
+        /// It opens a tiff file, reads the number of pages, reads the number of channels, and then
+        /// reads each page into a BioImage object
+        /// 
+        /// @param file the path to the file
+        /// 
+        /// @return An array of BioImage objects.
         public static BioImage[] OpenSeries(string file)
         {
             Tiff image = Tiff.Open(file, "r");
@@ -6308,10 +7081,22 @@ namespace Bio
             }
             return bs;
         }
+        /// This function opens a file and returns a BioImage object
+        /// 
+        /// @param file The path to the file you want to open.
+        /// 
+        /// @return A BioImage object.
         public static BioImage OpenFile(string file)
         {
             return OpenFile(file, 0);
         }
+        /// It opens a file, reads the metadata, reads the image data, calculates the image statistics,
+        /// and returns the image
+        /// 
+        /// @param file The file to open
+        /// @param series The series number of the image to open.
+        /// 
+        /// @return A BioImage object.
         public static BioImage OpenFile(string file, int series)
         {
             if(isOME(file))
@@ -6637,6 +7422,12 @@ namespace Bio
             st.Stop();
             return b;
         }
+        /// > The function checks if the image is a tiff image and if it is, it checks if the image is a
+        /// series of images
+        /// 
+        /// @param file the path to the file
+        /// 
+        /// @return The return value is a boolean.
         public static bool isTiffSeries(string file)
         {
             Tiff image = Tiff.Open(file, "r");
@@ -6665,6 +7456,12 @@ namespace Bio
             }
             return false;
         }
+        /// If the file is a TIFF, check the image description for the OME XML. If it's not a TIFF,
+        /// assume it's OME
+        /// 
+        /// @param file the file path of the image
+        /// 
+        /// @return A boolean value.
         public static bool isOME(string file)
         {
             if (file.EndsWith(".tif") || file.EndsWith(".TIF") || file.EndsWith("tiff") || file.EndsWith("TIFF"))
@@ -6685,6 +7482,11 @@ namespace Bio
             }
             else return false;
         }
+        /// > If the file is an OME file and has more than one series, then it is a series
+        /// 
+        /// @param file the file path to the image
+        /// 
+        /// @return A boolean value.
         public static bool isOMESeries(string file)
         {
             if (!isOME(file))
@@ -6700,12 +7502,21 @@ namespace Bio
             reader = null;
             return ser;
         }
+        /// This function takes a string array of IDs and a file name and saves the OME-TIFF file
+        /// 
+        /// @param file the file to save to
+        /// @param ID The ID of the image to be saved
         public static void SaveOME(string file, string ID)
         {
             string[] sts = new string[1];
             sts[0] = ID;
             SaveOMESeries(sts, file, Properties.Settings.Default.Planes);
         }
+        /// It saves a series of images to a file, and saves the metadata to the same file
+        /// 
+        /// @param files an array of file paths to the images to be saved
+        /// @param f the file name to save to
+        /// @param planes if true, the planes will be saved as well.
         public static void SaveOMESeries(string[] files, string f, bool planes)
         {
             if (File.Exists(f))
@@ -7034,15 +7845,37 @@ namespace Bio
                 
             } while (!stop);
         }
+        /// > This function opens an OME file and returns a BioImage object
+        /// 
+        /// @param file the path to the file you want to open
+        /// 
+        /// @return A list of BioImages.
         public static BioImage OpenOME(string file)
         {
             return OpenOMESeries(file)[0];
         }
+        /// > OpenOME(string file, int serie)
+        /// 
+        /// The first parameter is a string, the second is an integer
+        /// 
+        /// @param file the path to the file
+        /// @param serie the image series to open
+        /// 
+        /// @return A BioImage object.
         public static BioImage OpenOME(string file, int serie)
         {
             Recorder.AddLine("Bio.BioImage.OpenOME(\"" + file + "\"," + serie + ");");
             return OpenOME(file, serie, true, false, 0, 0, 0, 0);
         }
+        /// It takes a list of files, and creates a new BioImage object with the first file in the list,
+        /// then adds the buffers from the rest of the files to the new BioImage object
+        /// 
+        /// @param files an array of file paths
+        /// @param sizeZ number of images in the stack
+        /// @param sizeC number of channels
+        /// @param sizeT number of time points
+        /// 
+        /// @return A BioImage object.
         public static BioImage FilesToStack(string[] files, int sizeZ, int sizeC, int sizeT)
         {
             BioImage b = new BioImage(files[0]);
@@ -7055,6 +7888,11 @@ namespace Bio
             Images.AddImage(b);
             return b;
         }
+        /// It takes a folder of images and creates a stack from them
+        /// 
+        /// @param path the path to the folder containing the images
+        /// 
+        /// @return A BioImage object.
         public static BioImage FolderToStack(string path)
         {
             string[] files = Directory.GetFiles(path);
@@ -7088,6 +7926,7 @@ namespace Bio
             Recorder.AddLine("BioImage.FolderToStack(\"" + path + "\");");
             return b;
         }
+
         public static BioImage OpenOME(string file, int serie, bool progress, bool tile, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {
             //We wait incase OME has not initialized yet.
@@ -8226,6 +9065,18 @@ namespace Bio
             return b;
         }
         ImageReader imRead = new ImageReader();
+        /// It reads a tile from a file, and returns a BufferInfo object
+        /// 
+        /// @param BioImage This is a class that contains the image file name, the image reader, and the
+        /// coordinates of the image.
+        /// @param ZCT Z, C, T
+        /// @param serie the series number (0-based)
+        /// @param tilex the x coordinate of the tile
+        /// @param tiley 0
+        /// @param tileSizeX the width of the tile
+        /// @param tileSizeY the height of the tile
+        /// 
+        /// @return A BufferInfo object.
         public static BufferInfo GetTile(BioImage b, ZCT coord, int serie, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {
             if (b.imRead == null)
@@ -8330,6 +9181,10 @@ namespace Bio
             //bf.SwitchRedBlue();
             return bf;
         }
+        /// This function sets the minimum and maximum values of the image stack to the minimum and
+        /// maximum values of the image stack
+        /// 
+        /// @param bit16 true = 16 bit, false = 8 bit
         public void StackThreshold(bool bit16)
         {
             if (bit16)
@@ -8359,6 +9214,16 @@ namespace Bio
                 bitsPerPixel = 8;
             }
         }
+        /// > If the number is less than or equal to 255, then it's 8 bits. If it's less than or equal
+        /// to 512, then it's 9 bits. If it's less than or equal to 1023, then it's 10 bits. If it's
+        /// less than or equal to 2047, then it's 11 bits. If it's less than or equal to 4095, then it's
+        /// 12 bits. If it's less than or equal to 8191, then it's 13 bits. If it's less than or equal
+        /// to 16383, then it's 14 bits. If it's less than or equal to 32767, then it's 15 bits. If it's
+        /// less than or equal to 65535, then it's 16 bits
+        /// 
+        /// @param bt The number of bits per pixel.
+        /// 
+        /// @return The number of bits per pixel.
         public static int GetBitsPerPixel(int bt)
         {
             if (bt <= 255)
@@ -8380,6 +9245,11 @@ namespace Bio
             else
                 return 16;
         }
+        /// It returns the maximum value of a bit.
+        /// 
+        /// @param bt bit depth
+        /// 
+        /// @return The maximum value of a bit.
         public static int GetBitMaxValue(int bt)
         {
             if (bt == 8)
@@ -8401,6 +9271,15 @@ namespace Bio
             else
                 return 65535;
         }
+        /// If the bits per pixel is 8, then the pixel format is either 8bppIndexed, 24bppRgb, or
+        /// 32bppArgb. If the bits per pixel is 16, then the pixel format is either 16bppGrayScale or
+        /// 48bppRgb
+        /// 
+        /// @param rgbChannelCount The number of channels in the image. For example, a grayscale image
+        /// has 1 channel, a color image has 3 channels (red, green, blue).
+        /// @param bitsPerPixel 8 or 16
+        /// 
+        /// @return The PixelFormat of the image.
         public static PixelFormat GetPixelFormat(int rgbChannelCount, int bitsPerPixel)
         {
             if(bitsPerPixel == 8)
@@ -8421,6 +9300,12 @@ namespace Bio
             }
             throw new NotSupportedException("Not supported pixel format.");
         }
+       /// It opens a file, checks if it's tiled, if it is, it opens the file with the highest
+       /// resolution, if it's not, it opens the file with the highest resolution
+       /// 
+       /// @param file The file to open.
+       /// 
+       /// @return An array of BioImage objects.
         public static BioImage[] OpenOMESeries(string file)
         {
             reader = new ImageReader();
@@ -8476,12 +9361,18 @@ namespace Bio
             }
             return bs;
         }
+        /// It opens a file in a new thread.
+        /// 
+        /// @param file The file to open
         public static void OpenAsync(string file)
         {
             Thread t = new Thread(OpenThread);
             t.Name = file;
             t.Start();
         }
+       /// It opens a file asynchronously
+       /// 
+       /// @param files The file(s) to open.
         public static void OpenAsync(string[] files)
         {
             foreach (string file in files)
@@ -8489,10 +9380,16 @@ namespace Bio
                 OpenAsync(file);
             }
         }
+        /// It opens a file
+        /// 
+        /// @param file The file to open.
         public static void Open(string file)
         {
             OpenFile(file);
         }
+        /// It opens a file
+        /// 
+        /// @param files The files to open.
         public static void Open(string[] files)
         {
             foreach (string file in files)
@@ -8500,6 +9397,11 @@ namespace Bio
                 Open(file);
             }
         }
+        /// It takes a list of files, opens them, and combines them into a single BioImage object
+        /// 
+        /// @param files an array of file paths
+        /// 
+        /// @return A BioImage object.
         public static BioImage ImagesToStack(string[] files)
         {
             BioImage[] bs = new BioImage[files.Length];
@@ -8536,21 +9438,33 @@ namespace Bio
             b.Volume = new VolumeD(bs[0].Volume.Location, new Point3D(bs[0].SizeX * bs[0].physicalSizeX, bs[0].SizeY * bs[0].physicalSizeY, (z + 1) * bs[0].physicalSizeZ));
             return b;
         }
+        /// The function takes a BioImage object, opens the file, and returns a new BioImage object
+        /// 
+        /// @param BioImage This is the class that contains the image data.
         public static void Update(BioImage b)
         {
             b = OpenFile(b.file);
         }
+        /// If the current state is not the same as the previous state, then set the previous state to
+        /// the current state and call the OnStateChanged function
         public void Update()
         {
             Update(this);
         }
 
         private static List<string> openfile = new List<string>();
+        /// The function OpenThread() is a private static function that takes no parameters. It creates
+        /// a string variable called file and assigns it the value of the current thread's name. It then
+        /// calls the function OpenFile() and passes it the file variable
         private static void OpenThread()
         {
             string file = Thread.CurrentThread.Name;
             OpenFile(file);
         }
+        /// It adds the file and ID to a list, then starts a new thread to save the file
+        /// 
+        /// @param file The file to save to
+        /// @param ID The ID of the file
         public static void SaveAsync(string file, string ID)
         {
             saveid.Add(file);
@@ -8558,12 +9472,17 @@ namespace Bio
             Thread t = new Thread(Save);
             t.Start();
         }
+        /// It takes a file and an ID and saves the file to the ID
+        /// 
+        /// @param file The file to save the data to.
+        /// @param ID The ID of the user
         public static void Save(string file, string ID)
         {
             SaveFile(file, ID);
         }
         private static List<string> savefile = new List<string>();
         private static List<string> saveid = new List<string>();
+        /// It saves all the files in the savefile list to the saveid list.
         private static void Save()
         {
             List<string> sts = new List<string>();
@@ -8580,12 +9499,17 @@ namespace Bio
         }
 
         private static List<string> openOMEfile = new List<string>();
+        /// It takes a string array of file paths, adds them to a list, and starts a new thread to open
+        /// the files
+        /// 
+        /// @param file The file path to the OME file.
         public static void OpenOMEThread(string[] file)
         {
             openOMEfile.AddRange(file);
             Thread t = new Thread(OpenOME);
             t.Start();
         }
+        /// It opens a file
         private static void OpenOME()
         {
             foreach (string f in openOMEfile)
@@ -8594,6 +9518,11 @@ namespace Bio
             }
             openOMEfile.Clear();
         }
+        /// It creates a new thread and starts it. 
+        /// 
+        /// The thread is a function called SaveOME.
+        /// @param file The filename to save the OME to
+        /// @param ID The ID of the OME file to save.
         public static void SaveOMEThread(string file, string ID)
         {
             saveOMEID = ID;
@@ -8603,6 +9532,7 @@ namespace Bio
         }
         private static string saveOMEfile;
         private static string saveOMEID;
+        /// It saves the OME file.
         private static void SaveOME()
         {
             SaveOME(saveOMEfile, saveOMEID);
@@ -8619,6 +9549,11 @@ namespace Bio
         public const char NewLine = '\n';
         public const string columns = "ROIID,ROINAME,TYPE,ID,SHAPEINDEX,TEXT,S,C,Z,T,X,Y,W,H,POINTS,STROKECOLOR,STROKECOLORW,FILLCOLOR,FONTSIZE\n";
 
+/// > Open the file, get the image description, and return it
+/// 
+/// @param file The path to the file you want to open.
+/// 
+/// @return The image description.
         public static string OpenXML(string file)
         {
             if (!file.EndsWith(".tif"))
@@ -8628,6 +9563,12 @@ namespace Bio
             return f[0].ToString();
         }
         
+        /// This function takes a file path to an OME-TIFF file and returns a list of ROI objects
+        /// 
+        /// @param file the path to the OME-TIFF file
+        /// @param series the series number of the image you want to read the ROIs from
+        /// 
+        /// @return A list of ROI objects.
         public static List<ROI> OpenOMEROIs(string file, int series)
         {
             List<ROI> Annotations = new List<ROI>();
@@ -8963,6 +9904,11 @@ namespace Bio
             imageReader.close();
             return Annotations;
         }
+        /// It takes a list of ROI objects and returns a string of all the ROI objects in the list
+        /// 
+        /// @param Annotations List of ROI objects
+        /// 
+        /// @return A string of the ROI's
         public static string ROIsToString(List<ROI> Annotations)
         {
             string s = "";
@@ -8972,6 +9918,11 @@ namespace Bio
             }
             return s;
         }
+        /// This function takes an ROI object and converts it to a string that can be written to a file
+        /// 
+        /// @param ROI The ROI object
+        /// 
+        /// @return A string
         public static string ROIToString(ROI an)
         {
             PointD[] points = an.GetPoints();
@@ -8992,6 +9943,11 @@ namespace Bio
                 an.W.ToString() + ',' + an.H.ToString() + ',' + sep.ToString() + pts + sep.ToString() + ',' + sColor + ',' + an.strokeWidth.ToString() + ',' + bColor + ',' + an.font.Size.ToString() + ',' + NewLine;
             return line;
         }
+        /// It takes a string and returns an ROI object
+        /// 
+        /// @param sts the string that contains the ROI data
+        /// 
+        /// @return A ROI object.
         public static ROI StringToROI(string sts)
         {
             //Works with either comma or tab separated values.
@@ -9154,12 +10110,21 @@ namespace Bio
 
             return an;
         }
+        /// This function takes a list of ROIs and writes them to a CSV file
+        /// 
+        /// @param filename the name of the file to be saved
+        /// @param Annotations List of ROI objects
         public static void ExportROIsCSV(string filename, List<ROI> Annotations)
         {
             string con = columns;
             con += ROIsToString(Annotations);
             File.WriteAllText(filename, con);
         }
+        /// It reads the CSV file and converts each line into a ROI object
+        /// 
+        /// @param filename The path to the CSV file.
+        /// 
+        /// @return A list of ROI objects.
         public static List<ROI> ImportROIsCSV(string filename)
         {
             List<ROI> list = new List<ROI>();
@@ -9173,6 +10138,13 @@ namespace Bio
             }
             return list;
         }
+        /// ExportROIFolder(path, filename)
+        /// 
+        /// This function takes a folder path and a filename as input and exports all the ROIs in the
+        /// folder as CSV files
+        /// 
+        /// @param path the path to the folder containing the OMERO ROI files
+        /// @param filename the name of the file you want to export
         public static void ExportROIFolder(string path, string filename)
         {
             string[] fs = Directory.GetFiles(path);
@@ -9188,6 +10160,12 @@ namespace Bio
 
         private static BioImage bstats = null;
         private static bool update = false;
+        /// It takes a BioImage object, and calculates the mean histogram for each channel, and for the
+        /// whole image
+        /// 
+        /// @param BioImage The image object that contains the image data.
+        /// @param updateImageStats If true, the image stats will be updated. If false, the image stats
+        /// will be used as is.
         public static void AutoThreshold(BioImage b, bool updateImageStats)
         {
             bstats = b;
@@ -9279,16 +10257,23 @@ namespace Bio
             b.statistics = statistics;
 
         }
+        /// It takes the average of the red, green, and blue values of each pixel in the image, and then
+        /// sets the red, green, and blue values of each pixel to that average
         public static void AutoThreshold()
         {
             AutoThreshold(bstats, update);
         }
+        /// It creates a new thread and starts it
+        /// 
+        /// @param BioImage This is a class that contains the image data and some other information.
         public static void AutoThresholdThread(BioImage b)
         {
             bstats = b;
             Thread th = new Thread(AutoThreshold);
             th.Start();
         }
+        /// It disposes of all the buffers and channels in the image, removes the image from the Images
+        /// list, and then calls the garbage collector
         public void Dispose()
         {
             for (int i = 0; i < Buffers.Count; i++)
@@ -9302,11 +10287,21 @@ namespace Bio
             Images.RemoveImage(this);
             GC.Collect();
         }
+        /// This function returns a string that contains the filename of the object, and the location of
+        /// the object
+        /// 
+        /// @return The filename, and the location of the volume.
         public override string ToString()
         {
             return Filename.ToString() + ", (" + Volume.Location.X + ", " + Volume.Location.Y + ", " + Volume.Location.Z + ")";
         }
 
+        /// This function divides each pixel in the image by a constant value
+        /// 
+        /// @param BioImage a class that contains a list of buffers (which are 2D arrays of floats)
+        /// @param b the value to divide by
+        /// 
+        /// @return The image itself.
         public static BioImage operator /(BioImage a, float b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9315,6 +10310,12 @@ namespace Bio
             }
             return a;
         }
+        /// This function multiplies each pixel in the image by a constant value
+        /// 
+        /// @param BioImage a class that contains a list of buffers (which are 2D arrays of floats)
+        /// @param b the image to be multiplied
+        /// 
+        /// @return The image itself.
         public static BioImage operator *(BioImage a, float b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9323,6 +10324,12 @@ namespace Bio
             }
             return a;
         }
+       /// This function adds a constant value to each pixel in the image
+       /// 
+       /// @param BioImage a class that contains a list of buffers (float[])
+       /// @param b the value to add to the image
+       /// 
+       /// @return The BioImage object is being returned.
         public static BioImage operator +(BioImage a, float b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9331,6 +10338,12 @@ namespace Bio
             }
             return a;
         }
+        /// This function subtracts a float from each pixel in the image
+        /// 
+        /// @param BioImage a class that contains a list of buffers (which are 2D arrays of floats)
+        /// @param b the value to subtract from the image
+        /// 
+        /// @return The image with the subtracted value.
         public static BioImage operator -(BioImage a, float b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9340,6 +10353,12 @@ namespace Bio
             return a;
         }
 
+        /// This function divides the color of each pixel in the image by the color of the second image
+        /// 
+        /// @param BioImage a class that contains a list of ColorS objects.
+        /// @param ColorS a struct that contains a byte for each color channel (R, G, B, A)
+        /// 
+        /// @return A BioImage object
         public static BioImage operator /(BioImage a, ColorS b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9348,6 +10367,12 @@ namespace Bio
             }
             return a;
         }
+        /// This function takes a BioImage object and a ColorS object and returns a BioImage object
+        /// 
+        /// @param BioImage a class that contains a list of ColorS objects.
+        /// @param ColorS a struct that contains a byte for each color channel (R, G, B, A)
+        /// 
+        /// @return A BioImage object
         public static BioImage operator *(BioImage a, ColorS b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9356,6 +10381,13 @@ namespace Bio
             }
             return a;
         }
+       /// It takes a BioImage object and a ColorS object and adds the ColorS object to each buffer in
+       /// the BioImage object
+       /// 
+       /// @param BioImage a class that contains a list of ColorS objects.
+       /// @param ColorS a struct that contains a byte for each color channel (R, G, B, A)
+       /// 
+       /// @return A BioImage object.
         public static BioImage operator +(BioImage a, ColorS b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
@@ -9364,6 +10396,12 @@ namespace Bio
             }
             return a;
         }
+        /// The function subtracts a color from each pixel in the image
+        /// 
+        /// @param BioImage a class that contains a list of ColorS objects.
+        /// @param ColorS a struct that contains a byte for each color channel (R, G, B, A)
+        /// 
+        /// @return The image is being returned.
         public static BioImage operator -(BioImage a, ColorS b)
         {
             for (int i = 0; i < a.Buffers.Count; i++)
