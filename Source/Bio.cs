@@ -3389,6 +3389,30 @@ namespace Bio
             g.DrawImage(b, 0, 0);
             return bm;
         }
+
+        /// "If the image is 16bpp, convert it to 8bpp, then draw it to a 24bpp bitmap."
+        /// 
+        /// The reason for this is that AForge.NET's image processing functions only work on 8bpp and
+        /// 24bpp images
+        /// 
+        /// @param Bitmap The bitmap to convert
+        /// 
+        /// @return A Bitmap object.
+        public static Bitmap To24Bit(Bitmap b)
+        {
+            Bitmap bm = new Bitmap(b.Width, b.Height, PixelFormat.Format24bppRgb);
+            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bm);
+            if (b.PixelFormat == PixelFormat.Format16bppGrayScale || b.PixelFormat == PixelFormat.Format48bppRgb)
+            {
+                g.DrawImage(AForge.Imaging.Image.Convert16bppTo8bpp(b), 0, 0);
+            }
+            else
+            {
+                g.DrawImage(b, 0, 0);
+            }
+            g.Dispose();
+            return bm;
+        }
         /// It creates a new bitmap with the same dimensions as the original, but with a 32 bit pixel
         /// format, then it draws the original image onto the new bitmap
         public void RGBTo32Bit()
