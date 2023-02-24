@@ -2569,7 +2569,7 @@ namespace Bio
                     {
                         //getting the pixels of current row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        int rowRGB = y * w *2 ;
+                        int rowRGB = y * w * 2;
                         //iterating through all the pixels in x direction
                         for (int x = 0; x < w; x++)
                         {
@@ -2586,9 +2586,10 @@ namespace Bio
                 bmp.UnlockBits(bmd);
                 return bmp;
             }
-            
+
             throw new NotSupportedException("Pixelformat " + px + " is not supported.");
         }
+
         /// It takes a byte array of RGB data and returns a pointer to a 32 bit ARGB image
         /// 
         /// @param w width of the image

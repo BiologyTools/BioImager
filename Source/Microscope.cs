@@ -746,6 +746,49 @@ namespace Bio
         }
     }
 
+    public class LightSource
+    {
+
+        public static Type tlType;
+        public static object tlHalogen = null;
+        public static double position;
+
+        public LightSource(object tlShut)
+        {
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                tlHalogen = tlShut;
+                tlType = Microscope.Types["IMTBContinual"];
+            }
+        }
+
+        public double GetPosition()
+        {
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] getPosFocArgs = new object[1];
+                getPosFocArgs[0] = "%";
+                object o = Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, tlHalogen, getPosFocArgs);
+                return (double)o;
+            }
+            return position;
+        }
+
+        public void SetPosition(double f)
+        {
+            if (Recorder.recordMicroscope)
+                Recorder.AddLine("Microscope.LightSource.SetPosition(" + f + ");");
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[3];
+                args[0] = f;
+                args[1] = "%";
+                args[2] = Microscope.CmdSetMode;
+                bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlHalogen, args);
+            }
+        }
+    }
+
     public class FilterWheel
     {
         
@@ -806,6 +849,7 @@ namespace Bio
         public static Objectives Objectives = null;
         public static TLShutter TLShutter = null;
         public static RLShutter RLShutter = null;
+        public static LightSource Light = null;
         public static FilterWheel FilterWheel = new FilterWheel();
         public static double UpperLimit, LowerLimit, fInterVal;
         public static object CmdSetMode = null;
@@ -909,12 +953,17 @@ namespace Bio
                 var rlShutter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
                 st[0] = "MTBObjectiveChanger";
                 var objs = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
-
+                st[0] = "MTBTLHalogenLamp";
+                var lamp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
                 Stage = new Stage(sta);
                 Focus = new Focus(foc);
                 Objectives = new Objectives(objs);
                 TLShutter = new TLShutter(tlShutter);
                 RLShutter = new RLShutter(rlShutter);
+                Light = new LightSource(lamp);
+                double l = Light.GetPosition();
+                Light.SetPosition(30);
+                double l2 = Light.GetPosition();
                 Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
                 PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);
                 //We calibrate the stage and focus, so that images are taken always with same calibration

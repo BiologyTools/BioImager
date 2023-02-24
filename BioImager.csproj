@@ -410,6 +410,12 @@
     <Compile Include="Source\Library.Designer.cs">
       <DependentUpon>Library.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Light.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Light.Designer.cs">
+      <DependentUpon>Light.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Microscope.cs" />
     <Compile Include="Source\MicroscopeSetup.cs">
       <SubType>Form</SubType>
@@ -626,6 +632,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Library.resx">
       <DependentUpon>Library.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Light.resx">
+      <DependentUpon>Light.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\MicroscopeSetup.resx">
       <DependentUpon>MicroscopeSetup.cs</DependentUpon>
