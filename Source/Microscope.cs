@@ -683,7 +683,7 @@ namespace Bio
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] args = new object[2];
-                args[0] = (short)0;
+                args[0] = (short)p;
                 args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
                 bool res = (bool)tlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlShutter, args);
                 position = p;
@@ -694,6 +694,53 @@ namespace Bio
                     Microscope.sdk.shutterClose();
                 else
                     Microscope.sdk.shutterOpen();
+            }
+        }
+    }
+    public class HXPShutter
+    {
+        public static Type tlType;
+        public static object tlShutter = null;
+        public static int position;
+        /* Creating a new instance of the TLShutter class. */
+        public HXPShutter(object tlShut)
+        {
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                tlShutter = tlShut;
+                tlType = Microscope.Types["IMTBChanger"];
+            }
+        }
+
+        /// If the library path contains "MTB", then invoke the get_Position method on the tlShutter
+        /// object. Otherwise, return the position variable
+        /// 
+        /// @return The position of the shutter.
+        public short GetPosition()
+        {
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+                return (short)tlType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, tlShutter, null);
+            else
+                return (short)position;
+        }
+
+        /// The function takes an integer as an argument and sets the position of the shutter to the
+        /// value of the integer. 
+        /// 
+        /// The function is called by the following line of code:
+        /// 
+        /// @param p 0 or 1
+        public void SetPosition(int p)
+        {
+            if (Recorder.recordMicroscope)
+                Recorder.AddLine("Microscope.TLShutter.SetPosition(" + p + ");");
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[2];
+                args[0] = (short)p;
+                args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
+                bool res = (bool)tlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlShutter, args);
+                position = p;
             }
         }
     }
@@ -710,7 +757,7 @@ namespace Bio
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 rlShutter = rlShut;
-                rlType = Microscope.Types["IMTBChanger"];
+                rlType = Microscope.Types["IMTBShutter"];
             }
 
         }
@@ -736,7 +783,7 @@ namespace Bio
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] args = new object[2];
-                args[0] = (short)0;
+                args[0] = (short)p;
                 args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
                 bool res = (bool)rlType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, rlShutter, args);
             }
@@ -748,27 +795,27 @@ namespace Bio
 
     public class LightSource
     {
-
-        public static Type tlType;
-        public static object tlHalogen = null;
-        public static double position;
-
+        public Type continualType;
+        public object light = null;
+        public double position;
+        public LightSource()
+        {
+        }
         public LightSource(object tlShut)
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                tlHalogen = tlShut;
-                tlType = Microscope.Types["IMTBContinual"];
+                light = tlShut;
+                continualType = Microscope.Types["IMTBContinual"];
             }
         }
-
         public double GetPosition()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 object[] getPosFocArgs = new object[1];
                 getPosFocArgs[0] = "%";
-                object o = Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, tlHalogen, getPosFocArgs);
+                object o = Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, light, getPosFocArgs);
                 return (double)o;
             }
             return position;
@@ -784,11 +831,11 @@ namespace Bio
                 args[0] = f;
                 args[1] = "%";
                 args[2] = Microscope.CmdSetMode;
-                bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, tlHalogen, args);
+                bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, light, args);
             }
         }
-    }
 
+    }
     public class FilterWheel
     {
         
@@ -849,7 +896,10 @@ namespace Bio
         public static Objectives Objectives = null;
         public static TLShutter TLShutter = null;
         public static RLShutter RLShutter = null;
-        public static LightSource Light = null;
+        public static LightSource TLHalogen = null;
+        public static LightSource RLHalogen = null;
+        public static LightSource HXP = null;
+        public static HXPShutter HXPShutter = null;
         public static FilterWheel FilterWheel = new FilterWheel();
         public static double UpperLimit, LowerLimit, fInterVal;
         public static object CmdSetMode = null;
@@ -954,16 +1004,22 @@ namespace Bio
                 st[0] = "MTBObjectiveChanger";
                 var objs = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
                 st[0] = "MTBTLHalogenLamp";
-                var lamp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                var tllamp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBRLHalogenLamp";
+                var rllamp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBHXPLamp";
+                var hxp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBHXP120Shutter";
+                var hxpShut = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
                 Stage = new Stage(sta);
                 Focus = new Focus(foc);
                 Objectives = new Objectives(objs);
                 TLShutter = new TLShutter(tlShutter);
                 RLShutter = new RLShutter(rlShutter);
-                Light = new LightSource(lamp);
-                double l = Light.GetPosition();
-                Light.SetPosition(30);
-                double l2 = Light.GetPosition();
+                TLHalogen = new LightSource(tllamp);
+                RLHalogen = new LightSource(rllamp);
+                HXP = new LightSource(hxp);
+                HXPShutter = new HXPShutter(hxpShut);
                 Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
                 PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);
                 //We calibrate the stage and focus, so that images are taken always with same calibration
