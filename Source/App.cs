@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bio.Source;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,7 @@ namespace Bio
         public static Automation automation = null;
         public static MicroscopeSetup setup = null;
         public static BioConsole console = null;
+        public static Light lightTool = null;
         public static Library lib = null;
         public static List<string> recent = new List<string>();
 
@@ -62,7 +64,7 @@ namespace Bio
             seriesTool = new Series();
             recordings = new Recordings();
             automation = new Automation();
-            
+            lightTool = new Light();
             lib = new Library();
             imager = new Imager();
             console = new BioConsole();

@@ -981,5 +981,10 @@ namespace Bio
             }
             App.viewer.UpdateView();
         }
+
+        private void lightToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.lightTool.Show();
+        }
     }
 }

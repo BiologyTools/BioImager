@@ -81,6 +81,8 @@ namespace Bio
             this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportROIsOfFolderOfImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importImageJROIToSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportImageJROIFromSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.channelsToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoThresholdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.channelsToolToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,10 +107,10 @@ namespace Bio
             this.scriptRecorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importImageJROIToSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportImageJROIFromSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openImageJROI = new System.Windows.Forms.OpenFileDialog();
             this.saveImageJROI = new System.Windows.Forms.SaveFileDialog();
+            this.microscopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lightToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel.SuspendLayout();
             this.tabContextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -133,7 +135,7 @@ namespace Bio
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.Location = new System.Drawing.Point(0, 24);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(584, 419);
+            this.panel.Size = new System.Drawing.Size(663, 419);
             this.panel.TabIndex = 1;
             // 
             // tabControl
@@ -143,7 +145,7 @@ namespace Bio
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(584, 419);
+            this.tabControl.Size = new System.Drawing.Size(663, 419);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -500,6 +502,20 @@ namespace Bio
             this.exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI\'s of Folder of Images";
             this.exportROIsOfFolderOfImagesToolStripMenuItem.Click += new System.EventHandler(this.exportROIsOfFolderOfImagesToolStripMenuItem_Click);
             // 
+            // importImageJROIToSelectedImageToolStripMenuItem
+            // 
+            this.importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
+            this.importImageJROIToSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
+            this.importImageJROIToSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.importImageJROIToSelectedImageToolStripMenuItem_Click);
+            // 
+            // exportImageJROIFromSelectedImageToolStripMenuItem
+            // 
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
+            this.exportImageJROIFromSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.exportImageJROIFromSelectedImageToolStripMenuItem_Click);
+            // 
             // channelsToolToolStripMenuItem
             // 
             this.channelsToolToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -576,10 +592,11 @@ namespace Bio
             this.filtersToolStripMenuItem,
             this.scriptToolStripMenuItem,
             this.automationToolStripMenuItem,
+            this.microscopeToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(584, 24);
+            this.menuStrip.Size = new System.Drawing.Size(663, 24);
             this.menuStrip.TabIndex = 0;
             // 
             // formatToolStripMenuItem
@@ -697,20 +714,6 @@ namespace Bio
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // importImageJROIToSelectedImageToolStripMenuItem
-            // 
-            this.importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
-            this.importImageJROIToSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
-            this.importImageJROIToSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.importImageJROIToSelectedImageToolStripMenuItem_Click);
-            // 
-            // exportImageJROIFromSelectedImageToolStripMenuItem
-            // 
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.exportImageJROIFromSelectedImageToolStripMenuItem_Click);
-            // 
             // openImageJROI
             // 
             this.openImageJROI.DefaultExt = "csv";
@@ -723,12 +726,27 @@ namespace Bio
             this.saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             this.saveImageJROI.Title = "Save ROIs to CSV";
             // 
+            // microscopeToolStripMenuItem
+            // 
+            this.microscopeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lightToolToolStripMenuItem});
+            this.microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
+            this.microscopeToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.microscopeToolStripMenuItem.Text = "Microscope";
+            // 
+            // lightToolToolStripMenuItem
+            // 
+            this.lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
+            this.lightToolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lightToolToolStripMenuItem.Text = "Light Path";
+            this.lightToolToolStripMenuItem.Click += new System.EventHandler(this.lightToolToolStripMenuItem_Click);
+            // 
             // TabsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(77)))), ((int)(((byte)(98)))));
-            this.ClientSize = new System.Drawing.Size(584, 443);
+            this.ClientSize = new System.Drawing.Size(663, 443);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -830,5 +848,7 @@ namespace Bio
         private System.Windows.Forms.ToolStripMenuItem exportImageJROIFromSelectedImageToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openImageJROI;
         private System.Windows.Forms.SaveFileDialog saveImageJROI;
+        private System.Windows.Forms.ToolStripMenuItem microscopeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lightToolToolStripMenuItem;
     }
 }

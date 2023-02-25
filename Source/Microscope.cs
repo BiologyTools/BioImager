@@ -757,7 +757,7 @@ namespace Bio
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 rlShutter = rlShut;
-                rlType = Microscope.Types["IMTBShutter"];
+                rlType = Microscope.Types["IMTBChanger"];
             }
 
         }
@@ -792,17 +792,18 @@ namespace Bio
                 Recorder.AddLine("Microscope.RLShutter.SetPosition(" + p + ");");
         }
     }
-
     public class LightSource
     {
         public Type continualType;
         public object light = null;
         public double position;
+        string name;
         public LightSource()
         {
         }
-        public LightSource(object tlShut)
+        public LightSource(object tlShut,string name)
         {
+            this.name = name;
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
                 light = tlShut;
@@ -813,6 +814,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
+                if (light == null)
+                    return -1;
                 object[] getPosFocArgs = new object[1];
                 getPosFocArgs[0] = "%";
                 object o = Microscope.Types["IMTBContinual"].InvokeMember("GetPosition", BindingFlags.InvokeMethod, null, light, getPosFocArgs);
@@ -820,7 +823,6 @@ namespace Bio
             }
             return position;
         }
-
         public void SetPosition(double f)
         {
             if (Recorder.recordMicroscope)
@@ -834,16 +836,30 @@ namespace Bio
                 bool resFoc = (bool)Microscope.Types["IMTBContinual"].InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, light, args);
             }
         }
-
+        public override string ToString()
+        {
+            return name;
+        }
     }
     public class FilterWheel
     {
-        
+        static Type filterType;
+        static object filterWheel = null;
+        static int position;
+        public FilterWheel() { }
+        public FilterWheel(object o) 
+        {
+            filterWheel = o;
+        }
         /// Get the current position of the filter wheel
         /// 
         /// @return The position of the filter wheel.
         public int GetPosition()
         {
+            if(Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                return (int)filterType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, filterWheel, null);
+            }
             if (Properties.Settings.Default.PMicroscope)
             {
                 int pos;
@@ -896,10 +912,12 @@ namespace Bio
         public static Objectives Objectives = null;
         public static TLShutter TLShutter = null;
         public static RLShutter RLShutter = null;
+        public static HXPShutter HXPShutter = null;
         public static LightSource TLHalogen = null;
         public static LightSource RLHalogen = null;
         public static LightSource HXP = null;
-        public static HXPShutter HXPShutter = null;
+        public static FilterWheel TLFilterWheel = null;
+        public static FilterWheel RLFilterWheel = null;
         public static FilterWheel FilterWheel = new FilterWheel();
         public static double UpperLimit, LowerLimit, fInterVal;
         public static object CmdSetMode = null;
@@ -1011,14 +1029,20 @@ namespace Bio
                 var hxp = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
                 st[0] = "MTBHXP120Shutter";
                 var hxpShut = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBTLFilterChanger1";
+                var tlfilter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                st[0] = "MTBRLFilterChanger1";
+                var rlfilter = r.InvokeMember("GetComponent", BindingFlags.InvokeMethod, null, root, st);
+                TLFilterWheel = new FilterWheel(tlfilter);
+                RLFilterWheel = new FilterWheel(rlfilter);
                 Stage = new Stage(sta);
                 Focus = new Focus(foc);
                 Objectives = new Objectives(objs);
                 TLShutter = new TLShutter(tlShutter);
                 RLShutter = new RLShutter(rlShutter);
-                TLHalogen = new LightSource(tllamp);
-                RLHalogen = new LightSource(rllamp);
-                HXP = new LightSource(hxp);
+                TLHalogen = new LightSource(tllamp,"TL Halogen");
+                RLHalogen = new LightSource(rllamp,"RL Halogen");
+                HXP = new LightSource(hxp,"HXP");
                 HXPShutter = new HXPShutter(hxpShut);
                 Point3D.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY, Focus.lowerLimit, Focus.upperLimit);
                 PointD.SetLimits(Stage.minX, Stage.maxX, Stage.minY, Stage.maxY);

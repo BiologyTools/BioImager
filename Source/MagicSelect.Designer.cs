@@ -160,7 +160,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MagicSelect";
             this.ShowInTaskbar = false;
-            this.Text = "Magick Select";
+            this.Text = "Magic Select";
             ((System.ComponentModel.ISupportInitialize)(this.numBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxBox)).EndInit();
