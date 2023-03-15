@@ -31,6 +31,7 @@ namespace Bio
         public static Library lib = null;
         public static List<string> recent = new List<string>();
 
+        /* A property that returns the current image. */
         public static BioImage Image
         {
             get 
@@ -49,6 +50,7 @@ namespace Bio
         {
             get { return Image.Annotations; }
         }
+        /// Initialize() is a function that initializes the BioImager UI
         public static void Initialize()
         {
             BioImage.Initialize();
@@ -72,6 +74,7 @@ namespace Bio
             
             //ImageJ.Initialize(Properties.Settings.Default.ImageJPath);
         }
+        /// Hide() hides all the tools
         public static void Hide()
         {
             tools.Hide();
@@ -83,6 +86,9 @@ namespace Bio
             recordings.Hide();
             console.Hide();
         }
+        /// If the ImageJ path is not set, prompt the user to set it
+        /// 
+        /// @return The return value is a boolean.
         public static bool SetImageJPath()
         {
             MessageBox.Show("ImageJ path not set. Set the ImageJ executable location.");
@@ -97,6 +103,9 @@ namespace Bio
             return true;
         }
 
+        /// It returns a list of all the items in a menu, including submenus
+        /// 
+        /// @param ToolStripMenuItem The menu item you want to get the sub items from.
         private static IEnumerable<ToolStripMenuItem> GetItems(ToolStripMenuItem item)
         {
             foreach (var dropDownItem in item.DropDownItems)
@@ -112,6 +121,9 @@ namespace Bio
                 }
             }
         }
+        /// It takes a menu strip and returns a list of all the menu items in the menu strip
+        /// 
+        /// @return A list of ToolStripMenuItems
         public static List<ToolStripMenuItem> GetMenuItems()
         {
             List<ToolStripMenuItem> allItems = new List<ToolStripMenuItem>();
@@ -122,6 +134,9 @@ namespace Bio
             }
             return allItems;
         }
+        /// It takes the context menu of the viewer and returns a list of all the items in the menu
+        /// 
+        /// @return A list of ToolStripMenuItems
         public static List<ToolStripMenuItem> GetContextItems()
         {
             List<ToolStripMenuItem> allItems = new List<ToolStripMenuItem>();
@@ -132,6 +147,13 @@ namespace Bio
             }
             return allItems;
         }
+        /// It takes a string and a function, and adds the function to the menu item specified by the
+        /// string
+        /// 
+        /// @param s The path to the menu item.
+        /// @param Function 
+        /// 
+        /// @return A ToolStripItem
         public static ToolStripItem GetMenuItemFromPath(string s, Function f)
         {
             if (s == "" || s == null)
@@ -179,6 +201,13 @@ namespace Bio
             }
             return item;
         }
+        /// It takes a string and a function, and adds the function to the context menu at the location
+        /// specified by the string
+        /// 
+        /// @param s The path to the item.
+        /// @param Function 
+        /// 
+        /// @return A ToolStripItem
         public static ToolStripItem GetContextMenuItemFromPath(string s, Function f)
         {
             if (s == "" || s == null)
@@ -226,20 +255,37 @@ namespace Bio
             }
             return item;
         }
+        /// It takes a string and a function and adds the function to the menu item specified by the
+        /// string
+        /// 
+        /// @param menu The menu path to add the menu item to.
+        /// @param Function The function that will be called when the menu item is clicked.
         public static void AddMenu(string menu, Function f)
         {
             GetMenuItemFromPath(menu, f);
         }
+        /// It takes a string and a function and adds a context menu item to the context menu
+        /// 
+        /// @param menu The path to the menu item.
+        /// @param Function The function that will be called when the menu item is clicked.
         public static void AddContextMenu(string menu, Function f)
         {
             GetContextMenuItemFromPath(menu, f);
         }
+        /// It takes a function, adds it to the menu, and then adds an event handler to the menu item
+        /// that calls the function when the menu item is clicked
+        /// 
+        /// @param sender The object that sent the event.
+        /// @param EventArgs The event arguments.
         private static void ItemClicked(object sender, EventArgs e)
         {
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             Function f = (Function)ts.Tag;
             f.PerformFunction(true);
         }
+        /// It takes a string, converts it to a ROI, and adds it to the list of ROIs
+        /// 
+        /// @param an the string representation of the ROI
         public static void AddROI(string an)
         {
             Annotations.Add(BioImage.StringToROI(an));

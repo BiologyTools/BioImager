@@ -15,6 +15,7 @@ namespace Bio
         private ScrollTextBox textBox = new ScrollTextBox();
         private ScrollTextBox lineBox = new ScrollTextBox();
         private int tabSize = 15;
+        /* Creating a new instance of the CodeView class. */
         public CodeView()
         {
             InitializeComponent();
@@ -41,6 +42,7 @@ namespace Bio
             }
         }
 
+        /* A property of the textbox. */
         public bool WordWrap
         {
             get
@@ -52,6 +54,7 @@ namespace Bio
                 textBox.WordWrap = value;
             }
         }
+        /// The lineBox's vertical scroll position is set to the textBox's vertical scroll position
         public void UpdateScroll()
         {
             lineBox.VerticalScrollPosition = textBox.VerticalScrollPosition;
@@ -124,6 +127,9 @@ namespace Bio
                 TryFireScrollEvent();
             }
 
+            /// If the user presses the up or down arrow key, then the scroll event is fired
+            /// 
+            /// @param e The event arguments.
             protected override void OnKeyUp
             (System.Windows.Forms.KeyEventArgs e
             )
@@ -152,6 +158,9 @@ namespace Bio
                 TryFireScrollEvent();
             }
 
+           /// If the mouse is up, then try to fire the scroll event.
+           /// 
+           /// @param e The mouse event arguments.
             protected override void OnMouseUp
             (System.Windows.Forms.MouseEventArgs e
             )
@@ -187,6 +196,10 @@ namespace Bio
                 TryFireScrollEvent();
             }
 
+            /// If the components are not null, dispose of them.
+            /// 
+            /// @param disposing true to release both managed and unmanaged resources; false to release
+            /// only unmanaged resources.
             protected override void Dispose
             (bool disposing
             )
@@ -196,6 +209,12 @@ namespace Bio
                 base.Dispose(disposing);
             }
 
+            /// It sets the scrollbar position and then sends a message to the window to update the
+            /// scrollbar
+            /// 
+            /// @param value The value to set the scrollbar to.
+            /// @param windowsMessage The message to send to the window.
+            /// @param scrollBarMessage 
             private void SetScroll
             (int value
             , uint windowsMessage
@@ -216,6 +235,11 @@ namespace Bio
                 );
             }
 
+            /// Get the scroll position of the scroll bar
+            /// 
+            /// @param scrollBarMessage 
+            /// 
+            /// @return The current position of the scroll bar.
             private int GetScroll
             (int scrollBarMessage
             )
@@ -237,6 +261,11 @@ namespace Bio
                 TryFireVerticalScrollEvent();
             }
 
+            /// If the scroll position has changed, fire a scroll event.
+            /// 
+            /// The function is called from the `OnMouseWheel` function.
+            /// 
+            /// @return The ScrollEventArgs object is being returned.
             private void TryFireHorizontalScrollEvent()
             {
 
@@ -271,6 +300,9 @@ namespace Bio
 
             }
 
+           /// If the scroll position has changed, fire the scroll event.
+           /// 
+           /// @return The ScrollEventArgs object is being returned.
             private void TryFireVerticalScrollEvent()
             {
                 // Don't do anything if there is no event handler

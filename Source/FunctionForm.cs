@@ -45,6 +45,7 @@ namespace Bio
             func.Name = name;
             Init();
         }
+        /// It initializes the form with the values of the function
         private void Init()
         {
             int ind = 0;
@@ -128,6 +129,7 @@ namespace Bio
             menuPath.Text = func.MenuPath;
             contextMenuPath.Text = func.ContextPath;
         }
+        /// It updates the items in the form
         private void UpdateItems()
         {
             int ind = 0;
@@ -164,21 +166,40 @@ namespace Bio
             menuPath.Text = func.MenuPath;
             contextMenuPath.Text = func.ContextPath;
         }
+        /// When the user selects a key from the dropdown menu, the function's key is set to the
+        /// selected key
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void keysBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.Key = (VirtualKeyCode)keysBox.SelectedItem;
             Func.FuncType = Function.FunctionType.Key;
         }
+        /// When the user selects a modifier key from the dropdown menu, the function's modifier is set
+        /// to the selected key
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void modifierBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.Modifier = (VirtualKeyCode)modifierBox.SelectedItem;
             Func.FuncType = Function.FunctionType.Key;
         }
+        /// When the user selects a new item in the stateBox, the state of the function is set to the
+        /// selected item and the function type is set to key
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void stateBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.State = (Function.ButtonState)stateBox.SelectedItem;
             Func.FuncType = Function.FunctionType.Key;
         }
+        /// It saves the function
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void applyButton_Click(object sender, EventArgs e)
         {
             func.Name = nameBox.Text;
@@ -210,39 +231,78 @@ namespace Bio
             func.Save();
             Init();
         }
+        /// When the user selects a property from the dropdown list, the function will set the File
+        /// property of the Func object to the name of the property selected, and the FuncType property
+        /// to Property
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void propBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.File = propBox.Text;
             Func.FuncType = Function.FunctionType.Property;
         }
+        /// When the user selects a recording from the dropdown box, the program will set the file name
+        /// to the selected recording and set the function type to recording.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void recBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.File = recBox.Text;
             Func.FuncType = Function.FunctionType.Recording;
         }
+        /// This function is called when the user clicks the "Set Macro File" button. It sets the macro
+        /// file to the file specified in the text box
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void setMacroFileBut_Click(object sender, EventArgs e)
         {
             Func.File = propBox.Text;
             Func.FuncType = Function.FunctionType.ImageJ;
         }
+        /// It sets the file path of the script file to the text in the textbox.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void setScriptFileBut_Click(object sender, EventArgs e)
         {
             Func.File = propBox.Text;
             Func.FuncType = Function.FunctionType.Script;
         }
+        /// When the value of the numeric up/down control changes, the value of the function is set to
+        /// the value of the numeric up/down control
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void valBox_ValueChanged(object sender, EventArgs e)
         {
             Func.Value = (double)valBox.Value;
         }
+        /// If the imageJRadioBut is checked, then the PerformFunction function is called with the
+        /// argument true. Otherwise, the PerformFunction function is called with the argument false
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void performBut_Click(object sender, EventArgs e)
         {
             MessageBox.Show(func.PerformFunction(imageJRadioBut.Checked).ToString());
         }
 
+        /// The function cancelBut_Click is a private function that takes two parameters, sender and e,
+        /// and returns nothing
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void cancelBut_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
         }
+        /// The text in the textbox is set to the script property of the function object
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void textBox_TextChanged(object sender, EventArgs e)
         {
             func.Script = textBox.Text;
@@ -252,28 +312,51 @@ namespace Bio
                 func.FuncType = Function.FunctionType.ImageJ;
         }
 
+        /// If the radio button is checked, set the function type to script
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void bioRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             if(bioRadioBut.Checked)
             func.FuncType = Function.FunctionType.Script;
         }
 
+        /// If the imageJRadioBut is checked, then set the function type to imageJ
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void imageJRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             if (imageJRadioBut.Checked)
                 func.FuncType = Function.FunctionType.ImageJ;
         }
 
+        /// The function is called when the text in the menuPath textbox is changed
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void menuPath_TextChanged(object sender, EventArgs e)
         {
             func.MenuPath = menuPath.Text;
         }
 
+        /// This function is called when the form is activated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void FunctionForm_Activated(object sender, EventArgs e)
         {
 
         }
 
+        /// If the user selects a function from the dropdown menu, the function is set to the selected
+        /// function and the items are updated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
+        /// 
+        /// @return The function that is selected in the combo box.
         private void funcsBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (funcsBox.SelectedIndex == -1)
@@ -282,16 +365,30 @@ namespace Bio
             UpdateItems();
         }
 
+        /// This function is called when the form is closing
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param FormClosingEventArgs 
         private void FunctionForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 
         }
 
+        /// When the text in the contextMenuPath textbox changes, the ContextPath variable in the func
+        /// class is set to the text in the contextMenuPath textbox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void contextMenuPath_TextChanged(object sender, EventArgs e)
         {
             func.ContextPath = contextMenuPath.Text;
         }
 
+        /// When the user selects a new function from the dropdown menu, the function type is changed to
+        /// the selected function
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void microBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             func.FuncType = (Function.FunctionType)microBox.SelectedItem;
@@ -301,6 +398,7 @@ namespace Bio
     public class Function
     {
         public static Dictionary<string, Function> Functions = new Dictionary<string, Function>();
+        /* Defining an enum. */
         public enum FunctionType
         {
             Key,
@@ -317,6 +415,7 @@ namespace Bio
             Script,
             None
         }
+        /* Defining an enumeration. */
         public enum ButtonState
         {
             Pressed,
@@ -324,6 +423,7 @@ namespace Bio
         }
 
         private ButtonState buttonState = ButtonState.Pressed;
+        /* A property. */
         public ButtonState State
         {
             get
@@ -337,6 +437,7 @@ namespace Bio
         }
 
         private VirtualKeyCode key;
+        /* A property of a class. */
         public VirtualKeyCode Key
         {
             get
@@ -472,6 +573,11 @@ namespace Bio
         }
 
         public static InputSimulator input = new InputSimulator();
+        /// It runs a function based on the type of function it is
+        /// 
+        /// @param imagej boolean
+        /// 
+        /// @return The return value is the object that is being returned.
         public object PerformFunction(bool imagej)
         {
             if(FuncType == FunctionType.Key && Script!="")
@@ -550,6 +656,8 @@ namespace Bio
             }
             return null;
         }
+        /// It reads all the files in the Functions folder, parses them into Function objects, and adds
+        /// them to the Functions dictionary
         public static void Initialize()
         {
             string st = Application.StartupPath + "/Functions";
@@ -566,6 +674,7 @@ namespace Bio
                 App.AddContextMenu(f.ContextPath, f);
             }
         }
+        /// It saves all the functions in the Functions dictionary to a file
         public void Save()
         {
             string st = Application.StartupPath;

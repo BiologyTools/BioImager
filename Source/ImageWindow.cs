@@ -12,6 +12,7 @@ namespace Bio
 {
     public partial class ImageWindow : Form
     {
+        /* Creating a new window with the image. */
         public ImageWindow(BioImage im)
         {
             InitializeComponent();

@@ -15,6 +15,12 @@ namespace Bio
         public static string ImageJPath;
         public static List<Process> processes = new List<Process>();
         private static Random rng = new Random();
+        /// It runs a macro in ImageJ
+        /// 
+        /// @param file the path to the macro file
+        /// @param param 
+        /// 
+        /// @return The macro is being returned.
         public static void RunMacro(string file, string param)
         {
             if(ImageJPath == "")
@@ -31,6 +37,13 @@ namespace Bio
             processes.Add(pr);
             Recorder.AddLine("ImageJ.RunMacro(" + file + "," + '"' + param + '"' + ");");
         }
+        /// It runs a macro in ImageJ
+        /// 
+        /// @param con The macro code
+        /// @param param The parameters to pass to the macro.
+        /// @param headless whether or not to run ImageJ in headless mode
+        /// 
+        /// @return The macro is returning a string.
         public static void RunString(string con, string param, bool headless)
         {
 
@@ -74,6 +87,17 @@ namespace Bio
             } while (!pr.HasExited);
             File.Delete(p);
         }
+        /// It runs a macro on the selected image, saves the result as a new image, and then opens the
+        /// new image in a new tab
+        /// 
+        /// @param con The ImageJ macro to run.
+        /// @param headless Whether to run ImageJ in headless mode.
+        /// @param onTab If true, the image will be opened in a new tab. If false, the image will be
+        /// opened in the current tab.
+        /// @param bioformats If the image is a bioformats image, it will use the bioformats importer to
+        /// open the image.
+        /// 
+        /// @return The return value is the result of the last statement in the script.
         public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats)
         {
             if (ImageJPath == "" || ImageJPath == null)
@@ -210,11 +234,15 @@ namespace Bio
             Recorder.AddLine("RunOnImage(\"" + con + "," + headless + "," + onTab + ");");
         }
         */
+        /// This function is used to initialize the path of the ImageJ.exe file
+        /// 
+        /// @param path The path to the ImageJ executable.
         public static void Initialize(string path)
         {
             ImageJPath = path;
         }
 
+        /* It reads a binary file and returns a ROI object */
         public class RoiDecoder
         {
             #region Params
@@ -638,6 +666,11 @@ namespace Bio
                 
             }
             */
+            /// It reads the stroke width and color from the ROI header
+            /// 
+            /// @param ROI The ROI object that is being created
+            /// @param hdr2Offset The offset of the second header.
+            /// @param scaleStrokeWidth if true, the stroke width is scaled by the magnification factor.
             void getStrokeWidthAndColor(ROI roi, int hdr2Offset, bool scaleStrokeWidth)
             {
                 double strokeWidth = getShort(STROKE_WIDTH);
@@ -693,6 +726,11 @@ namespace Bio
                 return roi;
             }
 	        */
+            /// It reads the font name, font size, and text from the ROI file and sets the font and text
+            /// properties of the ROI object
+            /// 
+            /// @param ROI The ROI object that is being created.
+            /// @param version 225
             void getTextRoi(ROI roi, int version)
             {
                 Rectangle r = roi.BoundingBox.ToRectangleInt();
@@ -734,6 +772,9 @@ namespace Bio
                 */
             }
 
+           /// It reads the name of the ROI from the file
+           /// 
+           /// @return The name of the ROI.
             string getRoiName()
             {
                 string fileName = name;
@@ -752,6 +793,9 @@ namespace Bio
                 return new string(namem);
             }
 
+           /// It reads the ROI properties from the file and returns them as a string
+           /// 
+           /// @return A string of characters.
             string getRoiProps()
             {
                 int hdr2Offset = getInt(HEADER2_OFFSET);
@@ -769,6 +813,11 @@ namespace Bio
                 return new string(props);
             }
 
+            /// > Reads the point counters from the file
+            /// 
+            /// @param n number of points
+            /// 
+            /// @return The number of points in the polygon.
             int[] getPointCounters(int n)
             {
                 int hdr2Offset = getInt(HEADER2_OFFSET);
@@ -786,11 +835,22 @@ namespace Bio
             }
 
 
+            /// It returns the value of the byte at the specified index in the data array
+            /// 
+            /// @param bas The base address of the byte to be read.
+            /// 
+            /// @return The byte at the given index.
             int getByte(int bas)
             {
                 return data[bas] & 255;
             }
 
+           /// > It reads two bytes from the data array, converts them to an integer, and returns the
+           /// integer
+           /// 
+           /// @param bas the starting position of the data in the byte array
+           /// 
+           /// @return The value of the short at the specified index.
             int getShort(int bas)
             {
                 int b0 = data[bas] & 255;
@@ -801,6 +861,11 @@ namespace Bio
                 return n;
             }
 
+           /// It returns the unsigned short value of the data at the given index.
+           /// 
+           /// @param bas The base address of the data.
+           /// 
+           /// @return The value of the two bytes at the given index.
             int getUnsignedShort(int bas)
             {
                 int b0 = data[bas] & 255;
@@ -808,6 +873,11 @@ namespace Bio
                 return (b0 << 8) + b1;
             }
 
+            /// It takes a byte array and an integer as input, and returns an integer
+            /// 
+            /// @param bas The base address of the data.
+            /// 
+            /// @return the value of the integer at the given base.
             int getInt(int bas)
             {
                 int b0 = data[bas] & 255;
@@ -817,6 +887,12 @@ namespace Bio
                 return ((b0 << 24) + (b1 << 16) + (b2 << 8) + b3);
             }
 
+/// It takes a base address, reads 4 bytes from that address, converts those 4 bytes into a float, and
+/// returns the float
+/// 
+/// @param bas The base address of the value you want to read.
+/// 
+/// @return The float value of the integer at the base address.
             float getFloat(int bas)
             {
                 //return BitConverter.ToSingle(getInt(bas));
@@ -824,7 +900,11 @@ namespace Bio
                 return BitConverter.ToSingle(bytes, 0);
             }
 
-            /** Opens an ROI from a byte array. */
+            /// It takes a byte array and returns a ROI object
+            /// 
+            /// @param bytes byte array of the ROI
+            /// 
+            /// @return A ROI object.
             public static ROI openFromByteArray(byte[] bytes)
             {
                 ROI roi = null;
@@ -844,6 +924,11 @@ namespace Bio
 
         }
 
+        /// > It converts the ROI type to the ImageJ type
+        /// 
+        /// @param ROI The ROI object to be written to the file.
+        /// 
+        /// @return The ROI type is being returned.
         static int GetImageJType(ROI roi)
         {
             //private int polygon = 0, rect = 1, oval = 2, line = 3, freeline = 4, polyline = 5, noRoi = 6, freehand = 7,
@@ -870,6 +955,11 @@ namespace Bio
             }
         }
 
+        /// It takes an ROI object and returns the x and y coordinates of the points in the ROI
+        /// 
+        /// @param ROI Region of Interest
+        /// @param xp x-coordinates of the points in the ROI
+        /// @param yp y-coordinates of the points in the ROI
         static void GetPointsXY(ROI roi, out int[] xp, out int[] yp)
         {
             int[] x = new int[roi.PointsD.Count];
@@ -885,17 +975,34 @@ namespace Bio
 
         }
 
+        /// The function takes an ROI and returns the X and Y coordinates of the ROI in image space
+        /// 
+        /// @param ROI Region of Interest
+        /// @param x The x coordinate of the ROI
+        /// @param y The y-coordinate of the ROI.
         static void GetXY(ROI roi, out float x, out float y)
         {
             PointF pd = ImageView.SelectedImage.ToImageSpace(new PointD(roi.X, roi.Y));
             x = pd.X;
             y = pd.Y;
         }
+       /// > This function takes a ROI and returns the width and height of the ROI in pixels
+       /// 
+       /// @param ROI The ROI object that you want to get the width and height of.
+       /// @param w width of the rectangle
+       /// @param h height of the rectangle
         static void GetWH(ROI roi, out float w, out float h)
         {
             w = (float)ImageView.SelectedImage.ToImageSizeX(roi.W);
             h = (float)ImageView.SelectedImage.ToImageSizeY(roi.H);
         }
+        /// It shifts the value right by one bit, then shifts it right again by the number of positions
+        /// specified by the pos parameter
+        /// 
+        /// @param value The value to be shifted.
+        /// @param pos the position of the bit to be moved
+        /// 
+        /// @return The value of the bit at the position specified.
         static int rightMove(int value, int pos)
         {
             if (pos != 0)
@@ -907,6 +1014,7 @@ namespace Bio
             }
             return value;
         }
+        /* It takes a ROI object and writes it to a file */
         public class RoiEncoder
         {
             static int HEADER_SIZE = 64;
@@ -988,6 +1096,12 @@ namespace Bio
                 return bytes;
             }
             */
+            /// It takes a ROI object and writes it to a file
+            /// 
+            /// @param ROI The ROI object to be saved
+            /// @param FileStream f
+            /// 
+            /// @return The data is being returned as a byte array.
             void write(ROI roi, FileStream f)
             {
                 RectangleD r = roi.Rect;
@@ -1249,6 +1363,9 @@ namespace Bio
                 f.Write(data,0,data.Length);
             }
 
+            /// It saves the stroke width and color of the ROI
+            /// 
+            /// @param ROI The ROI object that is being saved.
             void saveStrokeWidthAndColor(ROI roi)
             {
                 //BasicStroke stroke = roi.getStroke();
@@ -1262,6 +1379,13 @@ namespace Bio
                 putInt(RoiDecoder.FILL_COLOR, 0);
             }
 
+            /// It writes the header of the ROI file, then writes the header2 of the ROI file, then
+            /// writes the name of the ROI file, then writes the properties of the ROI file
+            /// 
+            /// @param ROI the ROI object
+            /// @param type 0
+            /// @param FileStream the file stream to write to
+            /// @param options 0
             void saveShapeRoi(ROI roi, int type, FileStream f, int options)
             {
                 //float[] shapeArray = ((ShapeRoi)roi).getShapeAsArray();
@@ -1323,6 +1447,9 @@ namespace Bio
                 putShort(RoiDecoder.OPTIONS, options);
             }
             */
+            /// The function takes a ROI object and converts it to a byte array
+            /// 
+            /// @param ROI The ROI object
             void saveTextRoi(ROI roi)
             {
                 //Font font = roi.getCurrentFont();
@@ -1374,6 +1501,10 @@ namespace Bio
                 return options;
             }
             */
+            /// It writes the header information of the ROI to the file
+            /// 
+            /// @param ROI the ROI object
+            /// @param hdr2Offset the offset of the header2
             void putHeader2(ROI roi, int hdr2Offset)
             {
                 //ij.IJ.log("putHeader2: "+hdr2Offset+" "+roiNameSize+"  "+roiName);
@@ -1402,6 +1533,11 @@ namespace Bio
                 putByte(hdr2Offset + RoiDecoder.GROUP, roi.serie);//roi.getGroup());
             }
 
+            /// The function takes a ROI object, and an offset value, and writes the name of the ROI to
+            /// the file at the offset
+            /// 
+            /// @param ROI the ROI object
+            /// @param hdr2Offset the offset of the header2
             void putName(ROI roi, int hdr2Offset)
             {
                 int offset = hdr2Offset + HEADER2_SIZE;
@@ -1412,6 +1548,13 @@ namespace Bio
                     putShort(offset + i * 2, roiName.ElementAt(i));
             }
 
+            /// The function `putProps` takes a ROI object and an integer offset as parameters. It then
+            /// calculates the offset of the ROI properties, and the length of the ROI properties. It
+            /// then writes the offset and length to the header, and then writes the ROI properties to
+            /// the byte array
+            /// 
+            /// @param ROI the ROI object
+            /// @param hdr2Offset the offset of the header2
             void putProps(ROI roi, int hdr2Offset)
             {
                 int offset = hdr2Offset + HEADER2_SIZE + roiNameSize;
@@ -1422,6 +1565,10 @@ namespace Bio
                     putShort(offset + i * 2, roiProps.ElementAt(i));
             }
 
+            /// > The function `putPointCounters` writes the counters of the ROI to the byte array
+            /// 
+            /// @param ROI the region of interest
+            /// @param hdr2Offset the offset of the header2
             void putPointCounters(ROI roi, int hdr2Offset)
             {
                 int offset = hdr2Offset + HEADER2_SIZE + roiNameSize + roiPropsSize;
@@ -1431,11 +1578,19 @@ namespace Bio
                 countersSize = 0;
             }
 
+            /// It takes a base address and a value, and writes the value to the base address
+            /// 
+            /// @param bas The base address of the memory block.
+            /// @param v The value to be written to the memory address.
             void putByte(int bas, int v)
             {
                 data[bas] = (byte)v;
             }
 
+            /// The function takes an integer value and shifts it right by 8 bits
+            /// 
+            /// @param bas the base address of the array
+            /// @param v the value to be converted to a byte
             void putShort(int bas, int v)
             {
                 //data[bas] = (byte)(v >>> 8);
@@ -1444,6 +1599,11 @@ namespace Bio
                 data[bas + 1] = (byte)v;
             }
 
+            /// > It takes a float and converts it to a byte array, then it takes the first 4 bytes of
+            /// the array and puts them into the data array
+            /// 
+            /// @param bas the base address of the data array
+            /// @param v the float value to be converted
             void putFloat(int bas, float v)
             {
                 byte[] bytes = BitConverter.GetBytes(v);
@@ -1455,6 +1615,10 @@ namespace Bio
                 data[bas + 3] = (byte)tmp;
             }
 
+            /// It takes an integer and writes it to the byte array
+            /// 
+            /// @param bas The base address of the data array.
+            /// @param i The integer to be converted to bytes.
             void putInt(int bas, int i)
             {
                 data[bas] = (byte)(i >> 24);

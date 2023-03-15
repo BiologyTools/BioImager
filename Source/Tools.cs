@@ -32,6 +32,8 @@ namespace Bio
         public static Rectangle selectionRectangle;
         public static Hashtable tools = new Hashtable();
         private AbstractFloodFiller floodFiller = null;
+        /* It's a class that contains a list of tools, and each tool has a type, a rectangle, a script,
+        and a tolerance. */
         public class Tool
         {
             public enum ToolType
@@ -160,6 +162,7 @@ namespace Bio
 
         public static RectangleD selectionRect;
         public Font font;
+        /* Initializing the tools. */
         public Tools()
         {
             InitializeComponent();
@@ -188,6 +191,8 @@ namespace Bio
         {
             App.viewer.UpdateView();
         }
+        /// It loops through all the controls in the form and if the control has a tag of "tool" it sets
+        /// the background color to white
         public void UpdateSelected()
         {
             foreach (Control item in this.Controls)
@@ -197,6 +202,7 @@ namespace Bio
                 item.BackColor = Color.White;
             }
         }
+        /// It updates the GUI
         private void UpdateGUI()
         {
             if (ImageView.SelectedImage != null)
@@ -208,6 +214,32 @@ namespace Bio
         }
 
         ROI anno = new ROI();
+       /// The function is called when the user clicks the mouse button. 
+       /// 
+       /// The function checks if the user is using the line, polygon, freeform, rectangle, ellipse,
+       /// delete, or text tool. 
+       /// 
+       /// If the user is using the line tool, the function creates a new ROI object and adds it to the
+       /// image's annotations. 
+       /// 
+       /// If the user is using the polygon tool, the function creates a new ROI object and adds it to
+       /// the image's annotations. 
+       /// 
+       /// If the user is using the freeform tool, the function creates a new ROI object and adds it to
+       /// the image's annotations. 
+       /// 
+       /// If the user is using the rectangle tool, the function creates a new ROI object and adds it to
+       /// the image's annotations. 
+       /// 
+       /// If the user is using the ellipse tool, the function creates a new ROI object and adds it to
+       /// the image's annotations. 
+       /// 
+       /// If
+       /// 
+       /// @param PointD A point with double precision
+       /// @param MouseButtons A set of values that indicate which mouse button was pressed.
+       /// 
+       /// @return The return type is void.
         public void ToolDown(PointD e, MouseButtons buts)
         {
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
@@ -349,6 +381,12 @@ namespace Bio
             
             UpdateOverlay();
         }        
+        /// The function ToolUp() is called when the mouse button is released
+        /// 
+        /// @param PointD X,Y
+        /// @param MouseButtons Left, Right, Middle, XButton1, XButton2
+        /// 
+        /// @return a RectangleF.
         public void ToolUp(PointD e, MouseButtons buts)
         {
             PointF p;
@@ -505,6 +543,13 @@ namespace Bio
             }
             UpdateOverlay();
         }
+        /// The function is called when the mouse is moved. It checks if the mouse is down and if the
+        /// current tool is the eraser. If so, it draws an ellipse on the image
+        /// 
+        /// @param PointD A point with double precision
+        /// @param MouseButtons Left, Right, Middle
+        /// 
+        /// @return the current tool.
         public void ToolMove(PointD e, MouseButtons buts)
         {
             if (App.viewer == null)
@@ -640,6 +685,11 @@ namespace Bio
             }
         }
 
+        /// When the movePanel is clicked, the currentTool is set to the move tool, the movePanel's
+        /// background color is set to light gray, and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void movePanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.move);
@@ -647,6 +697,11 @@ namespace Bio
             movePanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the textPanel, the currentTool is set to the text tool, the
+        /// textPanel's background color is set to light gray, and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void textPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.text);
@@ -654,6 +709,15 @@ namespace Bio
             textPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// This function is called when the user double clicks on the text panel. It sets the current
+        /// tool to the text tool, updates the selected tool, and sets the text panel's background color
+        /// to light gray. Then, it opens the font dialog box and sets the font to the font selected by
+        /// the user
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The font that was selected in the font dialog.
         private void textPanel_DoubleClick(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.text);
@@ -665,6 +729,11 @@ namespace Bio
             font = fontDialog.Font;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the pointPanel, the currentTool is set to the point tool, the
+        /// pointPanel's background color is set to light gray, and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void pointPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.point);
@@ -672,6 +741,11 @@ namespace Bio
             pointPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the linePanel, the currentTool is set to the line tool, the
+        /// linePanel's background color is set to light gray, and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void linePanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.line);
@@ -679,6 +753,12 @@ namespace Bio
             linePanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the rectangle panel, the current tool is set to the rectangle tool,
+        /// the selected tool is updated, the rectangle panel's background color is set to light gray,
+        /// and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void rectPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.rect);
@@ -686,6 +766,12 @@ namespace Bio
             rectPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the ellipse button is clicked, the current tool is set to the ellipse tool, the
+        /// selected tool is updated, the ellipse button's background color is set to light gray, and
+        /// the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void ellipsePanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.ellipse);
@@ -693,6 +779,12 @@ namespace Bio
             ellipsePanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the polygon button, the current tool is set to the polygon tool, the
+        /// selected tool is updated, the polygon button is highlighted, and the cursor is set to an
+        /// arrow
+        /// 
+        /// @param sender The control that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void polyPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.polygon);
@@ -700,6 +792,12 @@ namespace Bio
             polyPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the delete button is clicked, the current tool is set to the delete tool, the selected
+        /// tool is updated, the delete button's background color is set to light gray, and the cursor
+        /// is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void deletePanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.delete);
@@ -707,6 +805,11 @@ namespace Bio
             deletePanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the freeformPanel, the currentTool is set to the freeform tool, the
+        /// freeformPanel's background color is set to light gray, and the cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void freeformPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.freeform);
@@ -714,6 +817,12 @@ namespace Bio
             freeformPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the rectangle selection panel, the current tool is set to the
+        /// rectangle selection tool, the panel's background color is set to light gray, and the cursor
+        /// is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void rectSelPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.rectSel);
@@ -721,6 +830,12 @@ namespace Bio
             rectSelPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the user clicks on the panPanel, the currentTool is set to the pan tool, the selected
+        /// tool is updated, the panPanel's background color is set to light gray, and the cursor is set
+        /// to the hand cursor
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void panPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.pan);
@@ -728,6 +843,12 @@ namespace Bio
             panPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Hand;
         }
+        /// When the magicPanel is clicked, the currentTool is set to the magic tool, the selected tool
+        /// is updated, the magicPanel's background color is set to light gray, and the cursor is set to
+        /// the arrow cursor
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void magicPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.magic);
@@ -735,6 +856,12 @@ namespace Bio
             magicPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the bucketPanel is clicked, the currentTool is set to the bucket tool, the selected
+        /// tool is updated, the bucketPanel's background color is set to light gray, and the cursor is
+        /// set to an arrow
+        /// 
+        /// @param sender The control that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void bucketPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.bucket);
@@ -742,6 +869,12 @@ namespace Bio
             bucketPanel.BackColor = Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
+        /// When the pencilPanel is clicked, the currentTool is set to the pencil tool, the
+        /// pencilPanel's background color is set to light gray, and the cursor is set to the arrow
+        /// cursor
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void pencilPanel_Click(object sender, EventArgs e)
         {
             currentTool = GetTool(Tool.Type.pencil);
@@ -750,17 +883,35 @@ namespace Bio
             Cursor.Current = Cursors.Arrow;
         }
         MagicSelect magicSel = new MagicSelect(2);
+        /// If the user double clicks on the magicPanel, then the magicSel dialog box will appear
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data for the MouseDoubleClick event.
+        /// 
+        /// @return The result of the ShowDialog() method.
         private void magicPanel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (magicSel.ShowDialog() != DialogResult.OK)
                 return;
         }
+        /// When the form is closing, cancel the closing event and hide the form instead.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param FormClosingEventArgs The FormClosingEventArgs class contains the event data for the
+        /// FormClosing event.
         private void Tools_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }
 
+        /// It's a function that is called when the user double clicks on the pencil icon in the
+        /// toolbar.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The PenTool class is being returned.
         private void pencilPanel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             currentTool = GetTool(Tool.Type.pencil);
@@ -774,6 +925,15 @@ namespace Bio
             DrawColor = pt.Pen.color;
         }
 
+        /// The function is called when the user double clicks on the bucket tool. It sets the current
+        /// tool to the bucket tool, updates the selected tool, sets the bucket tool's background color
+        /// to light gray, sets the cursor to an arrow, and then creates a new flood tool with the
+        /// selected color and width
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The currentTool is being returned.
         private void bucketPanel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             currentTool = GetTool(Tool.Type.bucket);
@@ -788,6 +948,12 @@ namespace Bio
             currentTool.tolerance = pt.Tolerance;
         }
 
+        /// When the dropper panel is clicked, the current tool is set to the dropper tool, the selected
+        /// tool is updated, the dropper panel's background color is set to light gray, and the cursor
+        /// is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data generated by a mouse event.
         private void dropperPanel_MouseClick(object sender, MouseEventArgs e)
         {
             currentTool = GetTool(Tool.Type.dropper);
@@ -796,6 +962,13 @@ namespace Bio
             Cursor.Current = Cursors.Arrow;
         }
 
+        /// When the user clicks on the color1Box, a new ColorTool is created, and if the user clicks
+        /// OK, the DrawColor is set to the color the user selected.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The mouse event arguments.
+        /// 
+        /// @return The color that was selected.
         private void color1Box_MouseClick(object sender, MouseEventArgs e)
         {
             ColorTool t = new ColorTool(DrawColor, ImageView.SelectedBuffer.BitsPerPixel);
@@ -805,6 +978,13 @@ namespace Bio
             UpdateGUI();
         }
 
+        /// It opens a color dialog box and sets the color of the erase tool to the color selected in
+        /// the dialog box.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The mouse event arguments.
+        /// 
+        /// @return The color that was selected.
         private void color2Box_MouseClick(object sender, MouseEventArgs e)
         {
             ColorTool t = new ColorTool(EraseColor, ImageView.SelectedBuffer.BitsPerPixel);
@@ -814,11 +994,22 @@ namespace Bio
             UpdateGUI();
         }
 
+        /// When the value of the widthBox is changed, the width variable is set to the value of the
+        /// widthBox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void widthBox_ValueChanged(object sender, EventArgs e)
         {
             width = (int)widthBox.Value;
         }
 
+       /// When the user clicks on the eraser panel, the current tool is set to the eraser tool, the
+       /// selected tool is updated, the eraser panel's background color is set to light gray, and the
+       /// cursor is set to an arrow
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param MouseEventArgs The event data generated by a mouse event.
         private void eraserPanel_MouseClick(object sender, MouseEventArgs e)
         {
             currentTool = GetTool(Tool.Type.eraser);
@@ -827,6 +1018,10 @@ namespace Bio
             Cursor.Current = Cursors.Arrow;
         }
 
+        /// When the user clicks on the switchBox, the program swaps the DrawColor and EraseColor
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event arguments for the mouse click event.
         private void switchBox_MouseClick(object sender, MouseEventArgs e)
         {
             ColorS s = DrawColor;
@@ -835,6 +1030,10 @@ namespace Bio
             UpdateGUI();
         }
 
+        /// When the Tools menu is activated, update the GUI
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void Tools_Activated(object sender, EventArgs e)
         {
             UpdateGUI();

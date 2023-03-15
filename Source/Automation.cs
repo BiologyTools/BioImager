@@ -20,6 +20,7 @@ namespace Bio
         public static InputSimulator input;
         public static Dictionary<string, Recording> Recordings = new Dictionary<string, Recording>();
         public static Dictionary<string, Recording> Properties = new Dictionary<string, Recording>();
+        /* It's a class that represents an action that can be performed on an automation element */
         public class Action
         {
             private KeyEventArgs key;
@@ -277,6 +278,8 @@ namespace Bio
                     return Name + ", " + AutomationID + ", " + ClassName + ", " + ActionType + ", " + Index + ", " + mouse.Delta;
             }
         }
+        /* It's a class that represents a recording of a series of actions that can be performed on a
+        UI element. */
         public class Recording
         {
             private string name;
@@ -357,6 +360,7 @@ namespace Bio
             }
         }
 
+        /* A getter method that returns the value of the recording variable. */
         public static bool IsRecording
         {
             get { return recording; }
@@ -366,6 +370,7 @@ namespace Bio
         private static bool recording = false;
         private static bool move = false;
         public static Recording rec = new Recording();
+       /* Creating a global hook for the mouse and keyboard. */
         public Automation()
         {
             m_GlobalHook = Hook.GlobalEvents();
@@ -380,6 +385,7 @@ namespace Bio
         }
 
         //This represent the current element under the mouse.
+       /* Getting the element that the mouse is currently over. */
         public static AutomationElement Element
         {
             get
@@ -395,39 +401,56 @@ namespace Bio
                 return null;
             }
         }
+        /// It starts recording.
         public static void StartRecording()
         {
             recording = true;
             rec = new Recording();
         }
+        /// It stops the recording and adds it to the list of recordings
         public static void StopRecording()
         {
             recording=false;
             rec.Name = "Recording" + (Recordings.Count + 1);
             Recordings.Add(rec.Name,rec);
         }
+        /// > Start recording the properties of the current object
         public static void StartPropertyRecording()
         {
             recording = true;
             rec = new Recording();
         }
+        /// Stop recording the property and add it to the list of properties
         public static void StopPropertyRecording()
         {
             recording = false;
             rec.Name = "Property" + (Properties.Count+1);
             Properties.Add(rec.Name,rec);
         }
+        /// It takes a string as an argument, and returns an object
+        /// 
+        /// @param prop The name of the property to get.
+        /// 
+        /// @return The value of the property.
         public static object GetProperty(string prop)
         {
             Recorder.AddLine("Automation.GetProperty(" + '"' + prop + '"' + ");");
             return Properties[prop].Get();
         }
+       /// It takes a property name and a value, and sets the property to the value
+       /// 
+       /// @param prop The name of the property you want to set.
+       /// @param val The value to set the property to.
         public static void SetProperty(string prop, string val)
         {
             Recording rec = (Recording)Properties[prop];
             rec.Set(val);
             Recorder.AddLine("Automation.SetProperty(" + '"' + prop + '"' + "," + '"' + val + '"' + ");");
         }
+        /// If the dictionary contains the key, then update the value. Otherwise, add the key and value
+        /// to the dictionary
+        /// 
+        /// @param Recording 
         public static void AddProperty(Recording rec)
         {
             if (Properties.ContainsKey(rec.Name))
@@ -435,12 +458,23 @@ namespace Bio
             else
                 Properties.Add(rec.Name, rec);
         }
+        /// Runs a recording from the Properties collection
+        /// 
+        /// @param prop The name of the recording you want to run.
         public static void RunRecording(string prop)
         {
             Recording rec = (Recording)Properties[prop];
             rec.Run();
             Recorder.AddLine("Automation.RunRecording(" + '"' + prop + '"' + ");");
         }
+        /// If the user is recording, and the mouse is clicked, then add a new action to the list of
+        /// actions
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventExtArgs
+        /// https://github.com/gmamaladze/globalmousekeyhook/blob/master/MouseKeyHook/MouseEventExtArgs.cs
+        /// 
+        /// @return The return value is the AutomationElement that is under the mouse pointer.
         private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
         {
             if (!recording)
@@ -450,6 +484,14 @@ namespace Bio
                 return;
             rec.List.Add(new Action(Action.Type.mousedown, el.Current.ProcessId, e));
         }
+       /// If the user is recording, then get the current element and add a new action to the list of
+       /// actions
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param MouseEventExtArgs
+       /// https://github.com/gmamaladze/globalmousekeyhook/blob/master/MouseKeyHook/MouseEventExtArgs.cs
+       /// 
+       /// @return The AutomationElement is being returned.
         private void GlobalHookMouseUpExt(object sender, MouseEventExtArgs e)
         {
             if (!recording)
@@ -459,6 +501,14 @@ namespace Bio
                 return;
             rec.List.Add(new Action(Action.Type.mouseup, el.Current.ProcessId, e));
         }
+        /// If the mouse wheel is being used, and the mouse is over a window, then add the action to the
+        /// list of actions
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs
+        /// https://msdn.microsoft.com/en-us/library/system.windows.forms.mouseeventargs(v=vs.110).aspx
+        /// 
+        /// @return The return value is the AutomationElement that is currently under the mouse.
         private void GlobalHookMouseWheel(object sender, MouseEventArgs e)
         {
             if (!recording)
@@ -471,6 +521,14 @@ namespace Bio
             else
                 rec.List.Add(new Action(Action.Type.wheeldown, el.Current.ProcessId, e));
         }
+       /// If the mouse is moving, and we're recording, and we have an element, then add a mousemove
+       /// action to the list of actions
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param MouseEventExtArgs
+       /// https://github.com/gmamaladze/globalmousekeyhook/blob/master/MouseKeyHook/MouseEventExtArgs.cs
+       /// 
+       /// @return The return value is the current AutomationElement.
         private void GlobalHookMouseMoveExt(object sender, MouseEventExtArgs e)
         {
             if (!move)
@@ -483,6 +541,14 @@ namespace Bio
             rec.List.Add(new Action(Action.Type.mousemove, el.Current.ProcessId, e));
 
         }
+        /// If the user is recording, and the element is not null, then add a new action to the list of
+        /// actions
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyPressEventArgs
+        /// https://msdn.microsoft.com/en-us/library/system.windows.forms.keypresseventargs(v=vs.110).aspx
+        /// 
+        /// @return The current process ID.
         private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
         {
             if (!recording)
@@ -492,6 +558,14 @@ namespace Bio
                 return;
             rec.List.Add(new Action(Action.Type.keypress, el.Current.ProcessId, e));
         }
+        /// If the user is recording, and the user has selected an element, then add a new action to the
+        /// list of actions
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyEventArgs
+        /// https://msdn.microsoft.com/en-us/library/system.windows.input.keyeventargs(v=vs.110).aspx
+        /// 
+        /// @return The AutomationElement is being returned.
         private void GlobalHookKeyUp(object sender, KeyEventArgs e)
         {
             if (!recording)
@@ -501,6 +575,14 @@ namespace Bio
                 return;
             rec.List.Add(new Action(Action.Type.keyup, el.Current.ProcessId, e));
         }
+        /// If the user is recording, and the user presses a key, then add a new action to the list of
+        /// actions
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyEventArgs
+        /// https://msdn.microsoft.com/en-us/library/system.windows.input.keyeventargs(v=vs.110).aspx
+        /// 
+        /// @return The AutomationElement is being returned.
         private void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
             if (!recording)
@@ -511,6 +593,7 @@ namespace Bio
             rec.List.Add(new Action(Action.Type.keydown, el.Current.ProcessId, e));
         }
 
+        /* It's a class that helps you automate windows applications */
         public static class AutomationHelpers
         {
             public static List<AutomationElement> GetChildren(AutomationElement parent)

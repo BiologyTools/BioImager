@@ -17,6 +17,13 @@ namespace Bio
             InitializeComponent();
         }
 
+        /// If the user has entered a path to the image file and a path to the library file (or has
+        /// chosen to use Python), then the program will save the paths and close the dialog
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The DialogResult is being returned.
         private void okBut_Click(object sender, EventArgs e)
         {
             if (imgPathBox.Text != "")
@@ -37,6 +44,10 @@ namespace Bio
             this.Close();
         }
 
+        /// If the user clicks the cancel button, the program will close and exit
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void cancelBut_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -44,16 +55,32 @@ namespace Bio
             Application.Exit();
         }
 
+        /// If the user selects the Python radio button, then the PMicroscope variable is set to true
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void pythonRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PMicroscope = pythonRadioBut.Checked;
         }
 
+        /// If the user clicks on the libRadioBut radio button, then the PMicroscope variable in the
+        /// Settings.settings file is set to true
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void libRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PMicroscope = libRadioBut.Checked;
         }
 
+       /// It opens a file dialog, and if the user selects a file, it sets the text of the imgPathBox to
+       /// the path of the file
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+       /// 
+       /// @return The file path of the executable.
         private void setImagingBut_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();
@@ -63,6 +90,13 @@ namespace Bio
             imgPathBox.Text = d.FileName;
         }
 
+        /// The user clicks a button, a dialog box opens, the user selects a file, the file path is
+        /// displayed in a text box, and a boolean value is set to false
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The file path of the selected file.
         private void setLibraryBut_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();

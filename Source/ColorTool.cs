@@ -14,6 +14,7 @@ namespace Bio
     {
         private ColorS color = new ColorS(65535, 65535, 65535);
         private int bitsPerPixel = 16;
+        /* A property. */
         public ColorS Color
         {
             get
@@ -26,6 +27,7 @@ namespace Bio
             }
         }
 
+        /// It updates the GUI
         public void UpdateGUI()
         {
             color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
@@ -37,11 +39,13 @@ namespace Bio
             if (bBar.Value != blueBox.Value)
                 blueBox.Value = bBar.Value;
         }
+        /* A constructor. */
         public ColorTool()
         {
             InitializeComponent();
             UpdateGUI();
         }
+        /* A constructor. */
         public ColorTool(ColorS col, int bitPerPixel)
         {
             InitializeComponent();

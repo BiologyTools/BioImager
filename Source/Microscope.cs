@@ -13,6 +13,7 @@ using System.IO;
 
 namespace Bio
 {
+    /* It's a wrapper for the stage*/
     public class Stage
     {
         public static object stage;
@@ -262,6 +263,7 @@ namespace Bio
         }
     }
 
+    /* The Focus class is used to set and get the focus of the microscope */
     public class Focus
     {
         public static Type focusType;
@@ -402,6 +404,7 @@ namespace Bio
         }
     }
 
+    /* The Objectives class is a class that contains a list of objectives */
     public class Objectives
     {
         public List<Objective> List = new List<Objective>();
@@ -643,6 +646,7 @@ namespace Bio
         }
     }
 
+   /* The TLShutter class is a wrapper class for the shutter object */
     public class TLShutter
     {
         public static Type tlType;
@@ -697,6 +701,7 @@ namespace Bio
             }
         }
     }
+   /* The HXPShutter class is a wrapper class for the TLShutter class */
     public class HXPShutter
     {
         public static Type tlType;
@@ -745,6 +750,7 @@ namespace Bio
         }
     }
 
+    /* The RLShutter class is a wrapper class for the IMTBChanger interface */
     public class RLShutter
     {
         public static Type rlType;
@@ -792,6 +798,7 @@ namespace Bio
                 Recorder.AddLine("Microscope.RLShutter.SetPosition(" + p + ");");
         }
     }
+    /* The LightSource class is a wrapper class for the IMTBContinual interface. */
     public class LightSource
     {
         public Type continualType;
@@ -801,6 +808,7 @@ namespace Bio
         public LightSource()
         {
         }
+        /* Creating a new instance of the LightSource class. */
         public LightSource(object tlShut,string name)
         {
             this.name = name;
@@ -810,6 +818,9 @@ namespace Bio
                 continualType = Microscope.Types["IMTBContinual"];
             }
         }
+        /// If the microscope is a MTB, then get the position of the light source.
+        /// 
+        /// @return The position of the light source.
         public double GetPosition()
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -823,6 +834,10 @@ namespace Bio
             }
             return position;
         }
+        /// The function takes a double as an argument and then calls the SetPosition function of the
+        /// light source object
+        /// 
+        /// @param f the position of the light source
         public void SetPosition(double f)
         {
             if (Recorder.recordMicroscope)
@@ -841,6 +856,8 @@ namespace Bio
             return name;
         }
     }
+    /* The class is a wrapper for the filter wheel. It has two methods, one to get the current position
+    of the filter wheel and one to set the position of the filter wheel */
     public class FilterWheel
     {
         static Type filterType;
@@ -850,6 +867,7 @@ namespace Bio
         public FilterWheel(object o) 
         {
             filterWheel = o;
+            filterType = Microscope.Types["IMTBChanger"];
         }
         /// Get the current position of the filter wheel
         /// 
@@ -875,6 +893,14 @@ namespace Bio
         /// @param i The position to set the filter wheel to.
         public void SetPosition(int i)
         {
+            if (Properties.Settings.Default.LibPath.Contains("MTB"))
+            {
+                object[] args = new object[2];
+                args[0] = (short)i;
+                args[1] = Activator.CreateInstance(Microscope.Types["MTBCmdSetModes"]);
+                bool res = (bool)filterType.InvokeMember("SetPosition", BindingFlags.InvokeMethod, null, filterWheel, args);
+                return;
+            }
             if (Properties.Settings.Default.PMicroscope)
             {
                 int pos;
@@ -887,6 +913,7 @@ namespace Bio
 
     public static class Microscope
     {
+        /* Defining an enum. */
         public enum Actions
         {
             StageUp,
@@ -934,6 +961,7 @@ namespace Bio
         public static PointD viewSize;
         public static PMicroscope pMicroscope = null;
         public static int ImageCount = 0;
+        /* A property that returns the value of the GetObjective method. */
         public static Objectives.Objective Objective
         {
             get

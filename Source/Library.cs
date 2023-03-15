@@ -19,6 +19,13 @@ namespace Bio
             InitializeComponent();
         }
 
+        /// It opens a file dialog, and if the user selects a file, it creates a new Lib object with the
+        /// file name, and adds all the types in the Lib object to the typeBox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event data.
+        /// 
+        /// @return The file name of the file that was selected.
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() != DialogResult.OK)
@@ -28,6 +35,11 @@ namespace Bio
 
         }
 
+        /// It takes the selected item from the typeBox, and then adds the interfaces, methods, and
+        /// enums to their respective boxes
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event data.
         private void typeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Lib.TypeInfo item = (Lib.TypeInfo)typeBox.SelectedItem;
@@ -54,6 +66,7 @@ namespace Bio
         public Dictionary<string, Module> Modules = new Dictionary<string, Module>();
         public Dictionary<string, ConstructorInfo> Constructors = new Dictionary<string, ConstructorInfo>();
         public Dictionary<string, InterfaceMapping> Interfaces = new Dictionary<string, InterfaceMapping>();
+        /* It's a wrapper for a type that contains all the information about the type */
         public class TypeInfo
         {
             public enum Kind
@@ -127,11 +140,14 @@ namespace Bio
                 return type.Name;
             }
         }
+        /* The ObjectInfo class contains a TypeInfo object */
         public class ObjectInfo
         {
             public TypeInfo type;
             
         }
+        /* It's loading the dll, and then it's getting all the types, modules, interfaces,
+        constructors, properties, fields, methods, and members. */
         public Lib(string file)
         {
             dll = Assembly.LoadFile(file);
@@ -163,21 +179,52 @@ namespace Bio
                 Modules.Add(s, m);
             }
         }
+        /// It invokes a method on an object
+        /// 
+        /// @param Type The type of the object you want to invoke the method on.
+        /// @param name The name of the method to invoke.
+        /// @param o The object to invoke the method on.
+        /// @param args The arguments to pass to the method. This array of arguments must match in
+        /// number, order, and type the parameters of the method to be invoked. If there are no
+        /// parameters, args must be null.
+        /// 
+        /// @return The return value of the method.
         public object Invoke(Type type, string name, object o, object[] args)
         {
             return type.InvokeMember(name, BindingFlags.InvokeMethod, null, o, args);
         }
+        /// It takes a string, a name, an object, and an array of objects, and returns an object
+        /// 
+        /// @param st The name of the type.
+        /// @param name The name of the method to invoke.
+        /// @param o The object to invoke the method on.
+        /// @param args The arguments to pass to the method. This array of arguments must match in
+        /// number, order, and type the parameters of the method to be invoked. If there are no
+        /// parameters, args must be null.
+        /// 
+        /// @return The return value of the method.
         public object Invoke(string st, string name, object o, object[] args)
         {
             Type t = Types[st].type;
             return t.InvokeMember(name, BindingFlags.InvokeMethod, null, o, args);
         }
+        /// Get the property of the object with the given name
+        /// 
+        /// @param type The type of the object you want to get the property from.
+        /// @param name The name of the property
+        /// @param obj The object you want to get the property from
+        /// 
+        /// @return The value of the property.
         public object GetProperty(string type, string name, object obj)
         {
             Type myType = Types[type].type;
             PropertyInfo p = myType.GetProperty(name);
             return p.GetValue(obj);
         }
+        /// It gets all the values of an enum and adds them to a dictionary.
+        /// 
+        /// @param TypeInfo This is a class that contains the type, the name of the type, and a
+        /// dictionary of enums.
         private void GetEnums(TypeInfo type)
         {
             Array ar = Enum.GetValues(type.type);
@@ -187,6 +234,12 @@ namespace Bio
                 type.Enums.Add(item.ToString(), (Enum)item);
             }
         }
+        /// > Get all the interfaces that the type implements and add them to the type's Interfaces
+        /// dictionary
+        /// 
+        /// @param TypeInfo This is a class that contains the type, the type's name, the type's
+        /// namespace, the type's assembly, the type's base type, the type's interfaces, and the type's
+        /// methods.
         private void GetInterfaces(TypeInfo type)
         {
             Type[] ts = type.type.GetInterfaces();
@@ -195,6 +248,9 @@ namespace Bio
                 type.Interfaces.Add(item.ToString(), item);
             }
         }
+        /// It gets the constructors of a type and adds them to a dictionary
+        /// 
+        /// @param TypeInfo This is a class that I created to hold information about the type.
         private void GetConstructors(TypeInfo type)
         {
             ConstructorInfo[] ts = type.type.GetConstructors();
@@ -203,6 +259,9 @@ namespace Bio
                 type.Constructors.Add(item.ToString(), item);
             }
         }
+        /// > Get all the members of a type and add them to the type's member list
+        /// 
+        /// @param TypeInfo This is a class that contains the type and the members of the type.
         private void GetMembers(TypeInfo type)
         {
             MemberInfo[] ts = type.type.GetMembers();
@@ -211,6 +270,9 @@ namespace Bio
                 type.AddMember(item);
             }
         }
+        /// > Get all the properties of the type and add them to the type
+        /// 
+        /// @param TypeInfo This is a class that contains the type, the properties, and the methods.
         private void GetProperties(TypeInfo type)
         {
             PropertyInfo[] ts = type.type.GetProperties();
@@ -219,6 +281,9 @@ namespace Bio
                 type.AddProperty(item);
             }
         }
+        /// > Get all the fields of the type and add them to the type's field list
+        /// 
+        /// @param TypeInfo This is a class that contains the type, the fields, and the methods.
         private void GetFields(TypeInfo type)
         {
             FieldInfo[] ts = type.type.GetFields();
@@ -227,6 +292,9 @@ namespace Bio
                 type.AddField(item);
             }
         }
+        /// It takes a TypeInfo object and adds all the methods of the type to the TypeInfo object
+        /// 
+        /// @param TypeInfo This is a class that I created to store the information about the type.
         private void GetMethods(TypeInfo type)
         {
             MethodInfo[] ts = type.type.GetMethods();

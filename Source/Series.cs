@@ -18,6 +18,7 @@ namespace Bio
             UpdateItems();
         }
 
+        /// It clears the listbox and then adds all the items in the Images class to the listbox.
         public void UpdateItems()
         {
            imagesBox.Items.Clear();
@@ -27,6 +28,13 @@ namespace Bio
             }
         }
 
+        /// If the user has selected an image from the list of images, then add that image to the list
+        /// of images in the series
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The selected items from the imagesBox are being added to the seriesBox.
         private void addBut_Click(object sender, EventArgs e)
         {
             if (imagesBox.SelectedIndices.Count == 0)
@@ -37,6 +45,11 @@ namespace Bio
             }
         }
 
+        /// If the user has selected an item in the seriesBox, then remove the selected item from the
+        /// seriesBox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void removeBut_Click(object sender, EventArgs e)
         {
             if (seriesBox.SelectedIndices.Count == 0)
@@ -47,6 +60,10 @@ namespace Bio
             }
         }
 
+        /// > When the series is activated, update the items
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void Series_Activated(object sender, EventArgs e)
         {
             UpdateItems();

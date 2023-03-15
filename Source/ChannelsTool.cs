@@ -16,6 +16,7 @@ namespace Bio
                 return App.Channels;
             }
         }
+        /* A property that returns the selected channel from the channelsBox. */
         public Channel SelectedChannel
         {
             get
@@ -26,6 +27,7 @@ namespace Bio
                     return Channels[0];
             }
         }
+        /* A property that is used to get and set the value of the sampleBox.Value. */
         public int SelectedSample
         {
             get
@@ -37,6 +39,7 @@ namespace Bio
                 sampleBox.Value = (decimal)value;
             }
         }
+        /// It clears the listbox and then adds all the items in the Channels list to the listbox.
         public void UpdateItems()
         {
             channelsBox.Items.Clear();
@@ -45,6 +48,7 @@ namespace Bio
                 channelsBox.Items.Add(item);
             }
         }
+        /* Creating a new instance of the ChannelsTool class. */
         public ChannelsTool(List<Channel> Channels)
         {
             InitializeComponent();
@@ -62,6 +66,13 @@ namespace Bio
             statsPanel.Controls.Add(hist);
         }
 
+        /// When the user changes the minimum value of the histogram, the histogram is updated, the
+        /// image is updated, and the view is updated
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The value of the minBox.Value
         private void minBox_ValueChanged(object sender, EventArgs e)
         {
             if (channelsBox.SelectedIndex == -1)
@@ -76,6 +87,13 @@ namespace Bio
             App.viewer.UpdateImage();
             App.viewer.UpdateView();
         }
+        /// When the user changes the value of the maxBox, the histogram is updated to reflect the new
+        /// value
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The value of the maxBox.Value
         private void maxBox_ValueChanged(object sender, EventArgs e)
         {
             if (channelsBox.SelectedIndex == -1)
@@ -90,6 +108,13 @@ namespace Bio
             App.viewer.UpdateImage();
             App.viewer.UpdateView();
         }
+        /// When the user selects a channel from the dropdown menu, the function updates the histogram
+        /// and the image viewer
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs e
+        /// 
+        /// @return The SelectedChannel is being returned.
         private void channelsBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelsBox.SelectedIndex == -1)
@@ -117,6 +142,11 @@ namespace Bio
             excBox.Value = (decimal)SelectedChannel.Excitation;
             App.viewer.UpdateView();
         }
+        /// If the user selects a value in the dropdown list that is less than the current value of the numeric
+        /// up/down control, then set the numeric up/down control to the value selected in the dropdown list
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
 
         private void maxUintBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -126,12 +156,20 @@ namespace Bio
 
         }
 
+        /// If the user tries to close the form, cancel the close event and hide the form instead
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param FormClosingEventArgs The event data generated from the form closing.
         private void ChannelsTool_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }
 
+        /// For each channel, set the maximum value of each range to the value in the maxBox
+        /// 
+        /// @param sender
+        /// @param EventArgs System.EventArgs
         private void setMaxAllBut_Click(object sender, EventArgs e)
         {
             foreach (Channel c in Channels)
@@ -144,6 +182,10 @@ namespace Bio
             App.viewer.UpdateView();
         }
 
+        /// For each channel, set the minimum value of each range to the value in the minBox
+        /// 
+        /// @param sender
+        /// @param EventArgs System.EventArgs
         private void setMinAllBut_Click(object sender, EventArgs e)
         {
             foreach (Channel c in Channels)
@@ -156,6 +198,11 @@ namespace Bio
             App.viewer.UpdateView();
         }
 
+        /// This function is called when the user selects a channel from the dropdown menu. It updates
+        /// the histogram and the min/max values
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
         private void ChannelsTool_Activated(object sender, EventArgs e)
         {
             sampleBox.Maximum = SelectedChannel.SamplesPerPixel - 1;
@@ -170,11 +217,20 @@ namespace Bio
 
         }
 
+        /// When the user resizes the window, the histogram is updated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void ChannelsTool_ResizeEnd(object sender, EventArgs e)
         {
             hist.UpdateView();
         }
 
+        /// If the user selects a value in the dropdown box, the value of the numeric up/down box is set
+        /// to the same value
+        /// 
+        /// @param sender The control/object that raised the event.
+        /// @param EventArgs e
         private void maxUintBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = int.Parse((string)maxUintBox2.SelectedItem, System.Globalization.CultureInfo.InvariantCulture);
@@ -187,6 +243,11 @@ namespace Bio
             }
         }
 
+        /// When the user changes the value of the minimum graph value, the histogram's minimum graph
+        /// value is changed to the new value and the histogram is redrawn
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void minGraphBox_ValueChanged(object sender, EventArgs e)
         {
             if (hist != null)
@@ -196,6 +257,11 @@ namespace Bio
             }
         }
 
+        /// When the user changes the value of the maxGraphBox, the histogram's GraphMax property is set
+        /// to the new value and the histogram is redrawn
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void maxGraphBox_ValueChanged(object sender, EventArgs e)
         {
             if (hist != null)
@@ -204,6 +270,11 @@ namespace Bio
                 hist.Invalidate();
             }
         }
+        /// When the value of the binBox changes, the value of the binBox is assigned to the bin
+        /// property of the histogram
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void binBox_ValueChanged(object sender, EventArgs e)
         {
             if (hist != null)
@@ -213,12 +284,25 @@ namespace Bio
             }
         }
 
+        /// This function is called when the user clicks on the ChannelsTool
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs 
         private void ChannelsTool_MouseDown(object sender, MouseEventArgs e)
         {
             
         }
         private bool pressedX1 = false;
         private bool pressedX2 = false;
+        /// If the mouse is over the channelsBox and the user presses the XButton1, then the selected
+        /// index of the channelsBox is increased by one. If the user presses the XButton2, then the
+        /// selected index of the channelsBox is decreased by one
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The return statement is used to explicitly return from a method, i.e., it terminates
+        /// the execution of a method.
         private void ChannelsTool_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.XButton1)
@@ -249,6 +333,14 @@ namespace Bio
             pressedX2 = false;
         }
 
+        /// If the mouse wheel is scrolled up, increase the value of the maxGraphBox by 10 or 100,
+        /// depending on the current value of maxGraphBox. If the mouse wheel is scrolled down, decrease
+        /// the value of the maxGraphBox by 10 or 100, depending on the current value of maxGraphBox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The value of the maxGraphBox.Value is being returned.
         private void ChannelsTool_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta == 0)
@@ -274,22 +366,41 @@ namespace Bio
             }
         }
 
+        /// If the checkbox is checked, the histogram will be stacked.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void stackHistoBox_CheckedChanged(object sender, EventArgs e)
         {
             hist.StackHistogram = stackHistoBox.Checked;
             hist.Invalidate();
         }
 
+/// When the user clicks on the "Set Min" menu item, the value of the minBox is set to the value of the
+/// histogram's MouseValX property
+/// 
+/// @param sender The object that raised the event.
+/// @param EventArgs The event arguments.
         private void setMinToolStripMenuItem_Click(object sender, EventArgs e)
         {
             minBox.Value = (int)hist.MouseValX;
         }
 
+        /// When the user clicks on the "Set Max" menu item, the maxBox value is set to the value of the
+        /// histogram's mouse position
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void setMaxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maxBox.Value = (int)hist.MouseValX;
         }
 
+        /// The function takes the selected image and bakes it using the ranges of the R, G, and B
+        /// channels
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void applyBut_Click(object sender, EventArgs e)
         {
             ImageView.SelectedImage.Bake(ImageView.SelectedImage.RChannel.RangeR, ImageView.SelectedImage.GChannel.RangeG, ImageView.SelectedImage.BChannel.RangeB);
@@ -333,6 +444,10 @@ namespace Bio
             maxBox.Value = (decimal)SelectedChannel.stats[channelsBox.SelectedIndex].StackMean;
         }
 
+        /// The function updates the threshold values of the image
+        /// 
+        /// @param sender
+        /// @param EventArgs e
         private void updateBut_Click(object sender, EventArgs e)
         {
             if (ImageView.SelectedImage.bitsPerPixel > 8)
@@ -356,6 +471,11 @@ namespace Bio
             App.viewer.UpdateImage();
         }
 
+        /// When the user changes the sample number, the minimum and maximum values of the selected
+        /// channel are updated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void sampleBox_ValueChanged(object sender, EventArgs e)
         {
             if (channelsBox.SelectedIndex == -1)

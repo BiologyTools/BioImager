@@ -12,15 +12,19 @@ namespace Bio
 {
     public partial class Filter : Form
     {
+        /* The constructor of the class. */
         public Filter()
         {
             InitializeComponent();
             Init();
         }
+        /// It updates the status of the viewer
         private void UpdateView()
         {
             App.viewer.UpdateStatus();
         }
+        /* The Node class is a wrapper class for the TreeNode class. It allows us to add a Filt object
+        to a TreeNode object */
         public class Node
         {
             public TreeNode node;
@@ -35,6 +39,7 @@ namespace Bio
                 return filt.name.ToString();
             }
         }
+        /// It takes a list of filters and adds them to a treeview
         public void Init()
         {
             foreach (Filt.Type t in (Filt.Type[])Enum.GetValues(typeof(Filt.Type)))
@@ -53,6 +58,13 @@ namespace Bio
             }
         }
 
+        /// It takes the selected node from the treeview, and then applies the filter to the selected
+        /// image
+        /// 
+        /// @param inPlace true if the filter is applied to the original image, false if it's applied to
+        /// a copy of the image.
+        /// 
+        /// @return The return value is the result of the function.
         private void ApplyFilter(bool inPlace)
         {
             if (filterView.SelectedNode==null)
@@ -130,21 +142,37 @@ namespace Bio
             UpdateView();
         }
 
+       /// It applies the filter to the current image
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs The event arguments.
         private void applyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ApplyFilter(false);
         }
 
+/// It takes the current image, applies the filter, and then displays the new image
+/// 
+/// @param sender The object that raised the event.
+/// @param EventArgs The event arguments.
         private void applyRGBToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ApplyFilter(true);
         }
 
+        /// If the topMostBox checkbox is checked, then the form will be topmost
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void topMostBox_CheckedChanged(object sender, EventArgs e)
         {
             TopMost = topMostBox.Checked;
         }
 
+        /// If the user double clicks on a filter, apply the filter to the current view
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void filterView_DoubleClick(object sender, EventArgs e)
         {
             ApplyFilter(false);

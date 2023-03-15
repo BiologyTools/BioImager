@@ -12,6 +12,7 @@ namespace Bio.Source
 {
     public partial class Action : Form
     {
+        /* The constructor of the class. */
         public Action()
         {
             InitializeComponent();

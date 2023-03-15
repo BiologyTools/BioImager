@@ -14,6 +14,13 @@ namespace Bio
         public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;
+        /// It returns true if the key is pressed, and false if it isn't
+        /// 
+        /// @param vKey The key you want to check.
+        /// 
+        /// @return The return value is a short integer with the high order bit set if the key is down
+        /// and the low order bit set if the key was pressed after the previous call to
+        /// GetAsyncKeyState.
         public static bool GetKeyState(System.Windows.Forms.Keys vKey)
         {
             int si = (int)GetAsyncKeyState(vKey);
@@ -57,20 +64,29 @@ namespace Bio
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
+        /// "MouseWheelUp()" is a function that simulates a mouse wheel up event.
         public static void MouseWheelUp()
         {
             mouse_event(MOUSEEVENTF_WHEEL, 0, 0, 120, 0);
         }
+        /// MouseWheelDown() simulates a mouse wheel down event.
         public static void MouseWheelDown()
         {
             mouse_event(MOUSEEVENTF_WHEEL, 0, 0, -120, 0);
         }
+        /// It gets the process by name, then sets the foreground window to the process's main window
+        /// handle
+        /// 
+        /// @param process The name of the process you want to focus on.
         public static void SetFocus(string process)
         {
             Process pr = Process.GetProcessesByName(process)[0];
             SetForegroundWindow(pr.MainWindowHandle);
         }
 
+        /// It gets the title of the active window
+        /// 
+        /// @return The title of the active window.
         public static string GetActiveWindowTitle()
         {
             const int nChars = 256;
@@ -88,6 +104,7 @@ namespace Bio
     public class MouseOperations
     {
         [Flags]
+        /* Defining an enum. */
         public enum MouseEventFlags
         {
             LeftDown = 0x00000002,
@@ -135,16 +152,28 @@ namespace Bio
         {
             MouseEvent(MouseEventFlags.RightUp);
         }
+        /// It sets the cursor position to the specified coordinates
+        /// 
+        /// @param x The x coordinate of the cursor.
+        /// @param y The y coordinate of the cursor.
         public static void SetCursorPosition(int x, int y)
         {
             SetCursorPos(x, y);
         }
 
+        /// It takes a MousePoint object and sets the cursor position to the X and Y coordinates of the
+        /// MousePoint object
+        /// 
+        /// @param MousePoint A struct that contains the X and Y coordinates of the mouse.
         public static void SetCursorPosition(MousePoint point)
         {
             SetCursorPos(point.X, point.Y);
         }
 
+        /// GetCursorPosition() returns a MousePoint object that contains the current position of the
+        /// mouse cursor
+        /// 
+        /// @return A MousePoint object.
         public static MousePoint GetCursorPosition()
         {
             MousePoint currentMousePoint;
@@ -153,6 +182,9 @@ namespace Bio
             return currentMousePoint;
         }
 
+        /// It simulates a mouse click at the current cursor position
+        /// 
+        /// @param MouseEventFlags This is the type of mouse event you want to simulate.
         public static void MouseEvent(MouseEventFlags value)
         {
             MousePoint position = GetCursorPosition();

@@ -9,6 +9,7 @@ using System.Globalization;
 namespace Bio
 {
     [Serializable]
+    /* A struct that is used to store a point in 2D space. */
     public struct PointD
     {
         private static double minX = -80000;
@@ -166,6 +167,7 @@ namespace Bio
         }
     }
     [Serializable]
+    /* A struct that is used to store 3D points. */
     public struct Point3D
     {
         private static double minX = -80000;
@@ -352,6 +354,7 @@ namespace Bio
 
     }
     [Serializable]
+    /* A struct that is used to define a 3D volume. */
     public struct VolumeD
     {
         public VolumeD(Point3D loc, Point3D s)

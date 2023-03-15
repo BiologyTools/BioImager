@@ -19,6 +19,7 @@ namespace Bio
 {
     public partial class ImageView : UserControl, IDisposable
     {
+       /* Initializing the image viewer. */
         public ImageView(BioImage im)
         {
             string file = im.ID.Replace("\\", "/");
@@ -77,6 +78,7 @@ namespace Bio
                 dx.Initialize(new Configuration("BioImager", dxPanel.Width, dxPanel.Height), dxPanel.Handle);
             }
         }
+        /* Initializing the ImageView class. */
         public ImageView()
         {
             InitializeComponent();
@@ -162,6 +164,7 @@ namespace Bio
         public List<BioImage> Images = new List<BioImage>();
         SharpDX.Direct2D1.Bitmap[] dBitmaps;
         private static int selIndex = 0;
+        /* A property that is used to set the selected index of the image. */
         public int SelectedIndex
         {
             get
@@ -189,6 +192,13 @@ namespace Bio
         private double pxWmicron = 0.004;
         private double pxHmicron = 0.004;
         SizeF scale = new SizeF(1, 1);
+        /// > Sets the coordinate of the image to the specified Z, C, and T values
+        /// 
+        /// @param z the z-coordinate of the image
+        /// @param c channel
+        /// @param t time
+        /// 
+        /// @return The method is returning the value of the zBar.Value, cBar.Value, and tBar.Value.
         public void SetCoordinate(int z, int c, int t)
         {
             if (SelectedImage == null)
@@ -203,10 +213,18 @@ namespace Bio
             cBar.Value = c;
             tBar.Value = t;
         }
+        /// It returns the coordinate of the selected image
+        /// 
+        /// @return The Coordinate property of the SelectedImage object.
         public ZCT GetCoordinate()
         {
             return SelectedImage.Coordinate;
         }
+        /// This function adds an image to the list of images, and then updates the GUI to reflect the
+        /// new image
+        /// 
+        /// @param BioImage This is a class that contains the image data, and some other information
+        /// about the image.
         public void AddImage(BioImage im)
         {
             Images.Add(im);
@@ -231,7 +249,9 @@ namespace Bio
             UpdateImages();
             GoToImage(Images.Count - 1);
         }
+       /* Declaring a variable called showControls and setting it to true. */
         private bool showControls = true;
+        /* Setting the visibility of the trackBarPanel. */
         public bool ShowControls
         {
             get { return trackBarPanel.Visible; }
@@ -289,7 +309,9 @@ namespace Bio
                 UpdateView();
             }
         }
+        /* Declaring a variable called showStatus and setting it to true. */
         private bool showStatus = true;
+       /* Setting the value of the property ShowStatus. */
         public bool ShowStatus
         {
             get { return showStatus; }
@@ -353,6 +375,7 @@ namespace Bio
             Emission,
         }
         private ViewMode viewMode = ViewMode.Filtered;
+        /* Setting the view mode of the application. */
         public ViewMode Mode
         {
             get
@@ -438,6 +461,7 @@ namespace Bio
                 }
             }
         }
+        /* A property that returns the filepath. */
         public string Path
         {
             get
@@ -445,6 +469,7 @@ namespace Bio
                 return filepath;
             }
         }
+        /* A property that returns the R channel of the selected image. */
         public Channel RChannel
         {
             get
@@ -452,6 +477,7 @@ namespace Bio
                 return SelectedImage.Channels[SelectedImage.rgbChannels[0]];
             }
         }
+        /* A property that returns the G channel of the image. */
         public Channel GChannel
         {
             get
@@ -459,6 +485,7 @@ namespace Bio
                 return SelectedImage.Channels[SelectedImage.rgbChannels[1]];
             }
         }
+        /* Getting the B channel of the image. */
         public Channel BChannel
         {
             get
@@ -469,6 +496,7 @@ namespace Bio
         PointD origin = new PointD(0, 0);
         Point pyramidalOrigin = new Point(0, 0);
         bool hardwareAcceleration = true;
+        /* A property of the class PointD. */
         public PointD Origin
         {
             get { return origin; }
@@ -478,6 +506,7 @@ namespace Bio
                 update = true;
             }
         }
+       /* Setting the value of the pyramidalOrigin variable. */
         public Point PyramidalOrigin
         {
             get { return pyramidalOrigin; }
@@ -494,6 +523,8 @@ namespace Bio
                 //origin = new PointD(p.X, p.Y);
             }
         }
+        /* A property of the class ImageViewer. It is a getter and setter for the resolution of the
+        image. */
         public int Resolution
         {
             get { return resolution; }
@@ -511,6 +542,7 @@ namespace Bio
                 UpdateView();
             }
         }
+        /* A property that is used to set the scale of the object. */
         public new SizeF Scale
         {
             get
@@ -524,6 +556,7 @@ namespace Bio
                 UpdateView();
             }
         }
+        /* A property of a class. */
         public bool HardwareAcceleration
         {
             get
@@ -559,6 +592,7 @@ namespace Bio
                 }
             }
         }
+        /* A property that returns a ContextMenuStrip object. */
         public ContextMenuStrip ViewContextMenu
         {
             get
@@ -566,6 +600,10 @@ namespace Bio
                 return contextMenuStrip;
             }
         }
+        /// "If the user has selected a channel, then set the channel to the selected index, otherwise
+        /// set it to 0."
+        /// 
+        /// The above function is called when the user changes the channel selection
         public void UpdateRGBChannels()
         {
             //Buf = image.GetBufByCoord(GetCoordinate());
@@ -585,6 +623,7 @@ namespace Bio
         }
         private bool timeEnabled = false;
         private int zfps;
+       /* Setting the interval of the timer to the value of the fps. */
         public int ZFps
         {
             get
@@ -599,6 +638,7 @@ namespace Bio
             }
         }
         private int timefps;
+        /* Setting the interval of the timer to the value of the timefps variable. */
         public int TimeFps
         {
             get
@@ -613,6 +653,7 @@ namespace Bio
             }
         }
         private int cfps;
+        /* Setting the interval of the timer to the inverse of the fps. */
         public int CFps
         {
             get
@@ -626,6 +667,9 @@ namespace Bio
                 cTimer.Interval = (int)Math.Floor(1000 / f);
             }
         }
+        /// It initializes the GUI
+        /// 
+        /// @return The image is being returned.
         public void InitGUI()
         {
             if (SelectedImage == null)
@@ -673,10 +717,18 @@ namespace Bio
             UpdateRGBChannels();
             init = true;
         }
+       /// This function is called from the Unity Editor when the user changes the size of the select
+       /// box
+       /// 
+       /// @param size The size of the box that will be drawn around the ROI.
         public void UpdateSelectBoxSize(float size)
         {
             ROI.selectBoxSize = size;
         }
+        /// If hardware acceleration is enabled, render the frame. Otherwise, set a flag to update the
+        /// overlay and invalidate the overlay picture box
+        /// 
+        /// @return The return value is the value of the last expression evaluated in the method.
         public void UpdateOverlay()
         {
             if (HardwareAcceleration)
@@ -687,6 +739,9 @@ namespace Bio
             updateOverlay = true;
             overlayPictureBox.Invalidate();
         }
+        /// It updates the status bar of the image viewer
+        /// 
+        /// @return The statusLabel.Text is being returned.
         public void UpdateStatus()
         {
             if (SelectedImage == null)
@@ -719,6 +774,10 @@ namespace Bio
                 }
             }
         }
+        /// If hardware acceleration is enabled, render the frame. Otherwise, invalidate the picture
+        /// box.
+        /// 
+        /// @return The method is returning void.
         public void UpdateView()
         {
             UpdateStatus();
@@ -730,6 +789,9 @@ namespace Bio
             pictureBox.Invalidate();
             overlayPictureBox.Invalidate();
         }
+        /// It draws the images and annotations to the screen
+        /// 
+        /// @return A Bitmap
         public void RenderFrame()
         {
             if (HardwareAcceleration && dx != null)
@@ -960,6 +1022,9 @@ namespace Bio
                 return;
             }
         }
+        /// > Update the status of the application and then render the frame
+        /// 
+        /// @param refresh boolean
         public void UpdateView(bool refresh)
         {
             UpdateStatus();
@@ -974,6 +1039,10 @@ namespace Bio
                 overlayPictureBox.Invalidate();
             }
         }
+        /// It takes a list of images, and for each image, it gets the image at the current Z, C, T
+        /// coordinates, and then converts it to a bitmap
+        /// 
+        /// @return A Bitmap
         public void UpdateImages()
         {
             if (SelectedImage == null)
@@ -1086,6 +1155,9 @@ namespace Bio
             UpdateView();
         }
         Bitmap bitmap;
+        /// It takes a 16-bit image, converts it to 8-bit, and then converts it to a DirectX texture
+        /// 
+        /// @return A bitmap
         public void UpdateImage()
         {
             if (SelectedImage == null)
@@ -1177,6 +1249,13 @@ namespace Bio
             update = false;
             UpdateView();
         }
+       /// When the user selects a new channel from the dropdown menu, the program updates the image to
+       /// display the new channel
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs System.EventArgs
+       /// 
+       /// @return The index of the selected item in the ComboBox.
         private void channelBoxR_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelBoxR.SelectedIndex == -1)
@@ -1185,6 +1264,13 @@ namespace Bio
             update = true;
             UpdateView();
         }
+        /// When the user selects a new channel from the dropdown menu, the program updates the image to
+        /// reflect the new channel
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The index of the selected item in the ComboBox.
         private void channelBoxG_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelBoxG.SelectedIndex == -1)
@@ -1193,6 +1279,13 @@ namespace Bio
             update = true;
             UpdateView();
         }
+        /// When the user selects a channel from the dropdown menu, the program updates the image to
+        /// display the selected channel
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The selected index of the channelBoxB ComboBox.
         private void channelBoxB_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelBoxB.SelectedIndex == -1)
@@ -1201,6 +1294,13 @@ namespace Bio
             update = true;
             UpdateView();
         }
+        /// If the trackBarPanel is visible, hide it, set its height to 0, and set the pictureBox height
+        /// to 75. 
+        /// If the trackBarPanel is not visible, show it, set the pictureBox height to 75, and set the
+        /// trackBarPanel height to 75
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void showControlsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1226,6 +1326,10 @@ namespace Bio
             }
 
         }
+       /// If the playZToolStripMenuItem is checked, we stop the timer, otherwise we start the timer
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs The event arguments.
         private void playZToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (playZToolStripMenuItem.Checked)
@@ -1243,6 +1347,10 @@ namespace Bio
                 zTimer.Start();
             }
         }
+        /// If the stopZToolStripMenuItem is checked, we start the zTimer, otherwise we stop it
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments that are passed to the event handler.
         private void stopZToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (stopZToolStripMenuItem.Checked)
@@ -1261,6 +1369,10 @@ namespace Bio
                 zTimer.Stop();
             }
         }
+        /// If the playTimeToolStripMenu is checked, we stop the timer, otherwise we start the timer
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void playTimeToolStripMenu_Click(object sender, EventArgs e)
         {
             if (playTimeToolStripMenu.Checked)
@@ -1278,12 +1390,21 @@ namespace Bio
                 timelineTimer.Start();
             }
         }
+        /// This function stops the timer and unchecks the playTimeToolStripMenu and checks the
+        /// stopTimeToolStripMenu
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void stopTimeToolStripMenu_Click(object sender, EventArgs e)
         {
             playTimeToolStripMenu.Checked = false;
             stopTimeToolStripMenu.Checked = true;
             timelineTimer.Stop();
         }
+        /// If the play button is checked, we stop the timer, otherwise we start the timer
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void playCToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (playCToolStripMenuItem.Checked)
@@ -1301,6 +1422,11 @@ namespace Bio
                 cTimer.Start();
             }
         }
+        /// If the user clicks the stop button, then the stop button is unchecked and the play button is
+        /// checked, and the timer is stopped
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void stopCToolStripMenuItem_Click(object sender, EventArgs e)
         {
             stopCToolStripMenuItem.Checked = false;
@@ -1309,6 +1435,12 @@ namespace Bio
         }
         private string mousePoint = "";
         private string mouseColor = "";
+        /// The function is called when the user clicks on the "Play Speed" menu item
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs e
+        /// 
+        /// @return The return value is a DialogResult.
         private void playSpeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PlaySpeed sp = null;
@@ -1322,6 +1454,12 @@ namespace Bio
             cTimer.Interval = sp.CPlayspeed;
             timelineTimer.Interval = sp.TimePlayspeed;
         }
+        /// The function is called when the user clicks on the "Play Speed" menu item in the "View" menu
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The DialogResult.OK is being returned.
         private void playSpeedToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             PlaySpeed sp = null;
@@ -1335,6 +1473,13 @@ namespace Bio
             cTimer.Interval = sp.CPlayspeed;
             timelineTimer.Interval = sp.TimePlayspeed;
         }
+        /// The function is called when the user clicks on the "Play Speed" menu item. It opens a dialog
+        /// box that allows the user to change the speed at which the images are played
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs e
+        /// 
+        /// @return The DialogResult.OK is being returned.
         private void CPlaySpeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PlaySpeed sp = null;
@@ -1348,6 +1493,25 @@ namespace Bio
             cTimer.Interval = sp.CPlayspeed;
             timelineTimer.Interval = sp.TimePlayspeed;
         }
+        /// It creates a new RangeTool object, which is a form that allows the user to set the range of
+        /// the data to be displayed. 
+        /// 
+        /// The RangeTool object is created with the following parameters: 
+        /// 
+        /// - timeEnabled: a boolean that indicates whether the data has a time component. 
+        /// - Mode: a ViewMode enum that indicates whether the data is filtered or not. 
+        /// - zBar.Minimum: the minimum value of the zBar. 
+        /// - zBar.Maximum: the maximum value of the zBar. 
+        /// - tBar.Minimum: the minimum value of the tBar. 
+        /// - tBar.Maximum: the maximum value of the tBar. 
+        /// - cBar.Minimum: the minimum value of the cBar. 
+        /// - cBar.Maximum: the maximum value of the cBar. 
+        /// 
+        /// The RangeTool object is then shown to the user. 
+        /// 
+        /// If the user clicks the
+        /// 
+        /// @return A RangeTool object.
         public void GetRange()
         {
             RangeTool t;
@@ -1376,6 +1540,10 @@ namespace Bio
         {
             GetRange();
         }
+       /// It's a function that handles the mouse wheel event for the image view
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param e the mouse event
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             float dx = Scale.Width / 50;
@@ -1422,6 +1590,11 @@ namespace Bio
                             Resolution++;
                     }
         }
+        /// If the mouse wheel is scrolled up, increase the value of the trackbar by 1, if the mouse
+        /// wheel is scrolled down, decrease the value of the trackbar by 1
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param e The mouse event that was triggered
         private void ZTrackBar_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -1436,6 +1609,13 @@ namespace Bio
             }
 
         }
+        /// If the mouse wheel is scrolled up, the time trackbar value is increased by 1, and if the
+        /// mouse wheel is scrolled down, the time trackbar value is decreased by 1
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param e The mouse event that was triggered
+        /// 
+        /// @return The value of the time trackbar.
         private void TimeTrackBar_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (!timeEnabled)
@@ -1451,6 +1631,11 @@ namespace Bio
                     tBar.Value -= 1;
             }
         }
+        /// If the mouse wheel is scrolled up, increase the value of the trackbar by 1, if the mouse
+        /// wheel is scrolled down, decrease the value of the trackbar by 1
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param e The mouse event arguments.
         private void CTrackBar_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -1465,6 +1650,12 @@ namespace Bio
             }
         }
 
+        /// If the user has checked the "Play C" checkbox, and the C bar is not at its maximum value,
+        /// then increment the C bar by 1. If the C bar is at its maximum value, and the user has
+        /// checked the "Loop C" checkbox, then reset the C bar to its minimum value
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void cTimer_Tick(object sender, EventArgs e)
         {
             if (playCToolStripMenuItem.Checked)
@@ -1478,6 +1669,12 @@ namespace Bio
                 }
             }
         }
+        /// If the user has checked the "play" checkbox, then if the maximum value of the slider is
+        /// greater than the current value of the slider, then increment the slider by one. Otherwise,
+        /// if the user has checked the "loop" checkbox, then set the slider to its minimum value
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void zTimer_Tick(object sender, EventArgs e)
         {
             if (playZToolStripMenuItem.Checked)
@@ -1491,6 +1688,13 @@ namespace Bio
                 }
             }
         }
+        /// If the playTimeToolStripMenu is checked, then if the maximum value of the trackbar is
+        /// greater than or equal to the current value of the trackbar plus 1, then the value of the
+        /// trackbar is incremented by 1. Otherwise, if the loopT variable is true, then the value of
+        /// the trackbar is set to the minimum value of the trackbar.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void timer_Tick(object sender, EventArgs e)
         {
             if (playTimeToolStripMenu.Checked)
@@ -1504,6 +1708,13 @@ namespace Bio
                 }
             }
         }
+        /// When the value of the zBar is changed, the z coordinate of the selected image is changed to
+        /// the value of the zBar
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The value of the ZBar.Value is being returned.
         private void zBar_ValueChanged(object sender, EventArgs e)
         {
             if (SelectedImage == null)
@@ -1513,6 +1724,12 @@ namespace Bio
             UpdateImage();
             UpdateView();
         }
+       /// When the time bar is changed, the image's coordinate is changed to the new time value
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs e
+       /// 
+       /// @return The image is being returned.
         private void timeBar_ValueChanged(object sender, EventArgs e)
         {
             if (SelectedImage == null)
@@ -1522,6 +1739,13 @@ namespace Bio
             UpdateImage();
             UpdateView();
         }
+       /// When the value of the cBar is changed, the coordinate of the selected image is changed to the
+       /// new value of the cBar
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs System.EventArgs
+       /// 
+       /// @return The value of the slider.
         private void cBar_ValueChanged(object sender, EventArgs e)
         {
             if (SelectedImage == null)
@@ -1596,6 +1820,11 @@ namespace Bio
                 return ans;
             }
         }
+        /// This function draws the ROIs on the image
+        /// 
+        /// @param g Graphics object
+        /// 
+        /// @return A list of ROI objects.
         private void DrawOverlay(System.Drawing.Graphics g)
         {
             if (SelectedImage == null)
@@ -1774,6 +2003,10 @@ namespace Bio
                 }
             }
         }
+        /// It draws the overlay on the picturebox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param PaintEventArgs e
         private void overlayPictureBox_Paint(object sender, PaintEventArgs e)
         {
             System.Drawing.Graphics g = e.Graphics;
@@ -1796,6 +2029,11 @@ namespace Bio
         }
 
         SizeF dSize = new SizeF(1, 1);
+       /// It draws the image on the screen
+       /// 
+       /// @param g Graphics object
+       /// 
+       /// @return A Bitmap
         private void DrawView(System.Drawing.Graphics g)
         {
             if (HardwareAcceleration)
@@ -1852,17 +2090,31 @@ namespace Bio
 
         private int resolution;
         private double scaleorig = 0;
+        /// It draws the view.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param PaintEventArgs The PaintEventArgs object that contains the event data.
         private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
             update = true;
             DrawView(e.Graphics);
         }
+        /// GetScale() returns the scale of the image in the viewport.
+        /// 
+        /// @return The scale of the image.
         public double GetScale()
         {
             return ToViewSizeW(ROI.selectBoxSize / Scale.Width);
         }
 
         Point mouseD = new Point(0, 0);
+        /// The function is called when the mouse is moved over the image. It updates the mouse
+        /// position, and if the mouse is clicked, it updates the image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e.Location.X, e.Location.Y
+        /// 
+        /// @return The point in the image space.
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
@@ -1987,6 +2239,12 @@ namespace Bio
 
             pd = p;
         }
+        /// The function is called when the mouse is released
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e.Location.X, e.Location.Y
+        /// 
+        /// @return The mouse location in the picture box.
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             App.viewer = this;
@@ -2013,6 +2271,12 @@ namespace Bio
                 return;
             tools.ToolUp(p, e.Button);
         }
+        /// The function is called when the mouse is pressed down on the picturebox
+        /// 
+        /// @param sender the object that raised the event
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The mouseDownButtons is being returned.
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             App.viewer = this;
@@ -2126,6 +2390,13 @@ namespace Bio
             UpdateStatus();
             tools.ToolDown(mouseDown, e.Button);
         }
+        /// > If the user double clicks on the picture box, then the selected image is set to the image
+        /// that the user double clicked on
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e.Location.X, e.Location.Y
+        /// 
+        /// @return The return value is a PointD object.
         private void pictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (SelectedImage == null)
@@ -2137,6 +2408,12 @@ namespace Bio
             if (e.Button != MouseButtons.XButton1 && e.Button != MouseButtons.XButton2)
                 Origin = new PointD(-p.X, -p.Y);
         }
+       /// If the user has selected a ROI, then delete it
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs 
+       /// 
+       /// @return The selected ROI is being returned.
         private void deleteROIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedImage == null)
@@ -2159,6 +2436,12 @@ namespace Bio
             }
             UpdateOverlay();
         }
+        /// This function is used to set the text of the selected ROI
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The DialogResult.OK is being returned.
         private void setTextSelectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedImage == null)
@@ -2178,6 +2461,10 @@ namespace Bio
             }
         }
 
+        /// It creates a bitmap, draws the view and overlay to it, and then copies it to the clipboard
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void copyViewToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bitmap bmp = new Bitmap(pictureBox.Width, pictureBox.Height);
@@ -2190,6 +2477,7 @@ namespace Bio
         }
         List<ROI> copys = new List<ROI>();
 
+        /// It takes the selected ROIs and copies them to the clipboard
         public void CopySelection()
         {
             copys.Clear();
@@ -2204,6 +2492,8 @@ namespace Bio
             }
             Clipboard.SetText(s);
         }
+        /// We get the text from the clipboard, split it into lines, and then for each line, if it's
+        /// longer than 8 characters, we convert it to an ROI and add it to the image
         public void PasteSelection()
         {
             string[] sts = Clipboard.GetText().Split(BioImage.NewLine);
@@ -2219,16 +2509,29 @@ namespace Bio
             }
             UpdateOverlay();
         }
+        /// CopySelection() copies the selected region of the image to the clipboard
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void copyROIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CopySelection();
         }
 
+        /// PasteSelection() is a function that takes the current selection and pastes it into the
+        /// current image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event data.
         private void pasteROIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PasteSelection();
         }
 
+        /// If the ShowControls variable is true, set it to false. Otherwise, set it to true
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void hideControlsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ShowControls)
@@ -2237,6 +2540,10 @@ namespace Bio
                 ShowControls = true;
         }
 
+        /// If the ShowControls variable is true, set it to false. Otherwise, set it to true
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void showControlToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ShowControls)
@@ -2245,65 +2552,128 @@ namespace Bio
                 ShowControls = true;
         }
 
+        /// It sets the value of the ShowStatus variable to false
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void HideStatusMenuItem_Click(object sender, EventArgs e)
         {
             ShowStatus = false;
         }
+        /// When the user clicks on the RGB menu item, set the mode to RGB.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void rGBToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Mode = ViewMode.RGBImage;
         }
 
+        /// The function is called when the user clicks on the "Filtered" menu item
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void filteredToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Mode = ViewMode.Filtered;
         }
 
+/// If the user clicks on the "Raw" menu item, then set the Mode property to ViewMode.Raw
+/// 
+/// @param sender The object that raised the event.
+/// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void rawToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Mode = ViewMode.Raw;
         }
 
+        /// Convert a point from the coordinate system of the image to the coordinate system of the view
+        /// 
+        /// @param Point The point in the image that you want to convert to view space.
+        /// 
+        /// @return A PointF object.
         public PointF ToViewSpace(Point p)
         {
             PointD d = ToViewSpace(p.X, p.Y);
             return new PointF((float)d.X, (float)d.Y);
         }
+        /// Convert a point from world space to view space
+        /// 
+        /// @param PointF The point to convert
+        /// 
+        /// @return A PointD object.
         public PointF ToViewSpace(PointF p)
         {
             PointD d = ToViewSpace(p.X, p.Y);
             return new PointF((float)d.X, (float)d.Y);
         }
+        /// > Converts a point from world space to view space
+        /// 
+        /// @param PointD A class that contains an X and Y value.
+        /// 
+        /// @return A PointD object.
         public PointD ToViewSpace(PointD p)
         {
             return ToViewSpace(p.X, p.Y); ;
         }
+        /// > ToViewSpace(x, y) = (ToViewSizeW(x - (pictureBox.Width / 2)) / Scale.Width) - Origin.X;
+        /// 
+        /// @param x The x coordinate of the point to convert
+        /// @param y The y coordinate of the point to convert.
+        /// 
+        /// @return A PointD object.
         public PointD ToViewSpace(double x, double y)
         {
             double dx = (ToViewSizeW(x - (pictureBox.Width / 2)) / Scale.Width) - Origin.X;
             double dy = (ToViewSizeH(y - (pictureBox.Height / 2)) / Scale.Height) - Origin.Y;
             return new PointD(dx, dy);
         }
+        /// Convert a value in microns to a value in pixels
+        /// 
+        /// @param d the size in microns
+        /// 
+        /// @return The return value is the size of the object in pixels.
         private double ToViewSizeW(double d)
         {
             double x = (double)(d / PxWmicron);
             return x;
         }
+        /// > Convert a value in microns to a value in pixels
+        /// 
+        /// @param d the size in microns
+        /// 
+        /// @return The return value is the size of the object in pixels.
         public double ToViewSizeH(double d)
         {
             double y = (double)(d / PxHmicron);
             return y;
         }
+        /// Convert a distance in microns to a distance in pixels on the screen
+        /// 
+        /// @param d the distance in microns
+        /// 
+        /// @return The width of the image in pixels.
         public double ToViewW(double d)
         {
             double x = (double)(d / PxWmicron) / scale.Width;
             return x;
         }
+        /// > Convert a distance in microns to a distance in pixels
+        /// 
+        /// @param d the distance in microns
+        /// 
+        /// @return The return value is the y-coordinate of the point in the view.
         public double ToViewH(double d)
         {
             double y = (double)(d / PxHmicron) / scale.Height;
             return y;
         }
+        /// > It converts a point in world space to a point in screen space
+        /// 
+        /// @param x The x coordinate of the point to convert.
+        /// @param y The y coordinate of the point to transform.
+        /// 
+        /// @return A PointD object.
         public PointD ToScreenSpace(double x, double y)
         {
             if (HardwareAcceleration)
@@ -2317,15 +2687,30 @@ namespace Bio
             double fy = ToScreenScaleH(Origin.Y + y);
             return new PointD(fx, fy);
         }
+        /// > Converts a point from world space to screen space
+        /// 
+        /// @param PointD A class that contains an X and Y value.
+        /// 
+        /// @return A PointD object.
         public PointD ToScreenSpace(PointD p)
         {
             return ToScreenSpace(p.X, p.Y);
         }
+        /// Convert a point in the world coordinate system to the screen coordinate system
+        /// 
+        /// @param PointF The point you want to convert to screen space.
+        /// 
+        /// @return A PointD object.
         public PointF ToScreenSpace(PointF p)
         {
             PointD pd = ToScreenSpace(p.X, p.Y);
             return new PointF((float)pd.X, (float)pd.Y);
         }
+        /// > It takes an array of points and returns an array of points
+        /// 
+        /// @param p The point to convert
+        /// 
+        /// @return A PointF array.
         public PointF[] ToScreenSpace(PointF[] p)
         {
             PointF[] pf = new PointF[p.Length];
@@ -2335,11 +2720,22 @@ namespace Bio
             }
             return pf;
         }
+        /// > It converts a 3D point to a 2D point
+        /// 
+        /// @param Point3D 
+        /// 
+        /// @return A PointF object.
         public PointF ToScreenSpace(Point3D p)
         {
             PointD pd = ToScreenSpace(p.X, p.Y);
             return new PointF((float)pd.X, (float)pd.Y);
         }
+
+        /// ToScreenScaleW() returns the number of pixels that correspond to the given number of microns
+        /// 
+        /// @param x the x coordinate of the point to be converted
+        /// 
+        /// @return The return value is a float.
         public float ToScreenScaleW(double x)
         {
             if (HardwareAcceleration)
@@ -2348,6 +2744,11 @@ namespace Bio
             }
             return (float)(x * PxWmicron);
         }
+        /// > Convert a value in microns to a value in pixels
+        /// 
+        /// @param y the y coordinate of the point to be converted
+        /// 
+        /// @return The return value is a float.
         public float ToScreenScaleH(double y)
         {
             if (HardwareAcceleration)
@@ -2356,12 +2757,25 @@ namespace Bio
             }
             return (float)(y * PxHmicron);
         }
+        /// > Convert a point in the world coordinate system to a point in the screen coordinate system
+        /// 
+        /// @param PointD 
+        /// 
+        /// @return A PointF object.
         public PointF ToScreenScale(PointD p)
         {
             float x = ToScreenScaleW((float)p.X);
             float y = ToScreenScaleH((float)p.Y);
             return new PointF(x, y);
         }
+        /// It converts a rectangle in microns to a rectangle in pixels
+        /// 
+        /// @param x The x coordinate of the rectangle
+        /// @param y -0.0015
+        /// @param w width of the image in microns
+        /// @param h height of the rectangle
+        /// 
+        /// @return A RectangleF object.
         public RectangleF ToScreenRectF(double x, double y, double w, double h)
         {
             PointD pf;
@@ -2375,20 +2789,47 @@ namespace Bio
             pf = ToScreenSpace(x, y);
             return new RectangleF((float)pf.X, (float)pf.Y, ToScreenScaleW(w), ToScreenScaleH(h));
         }
+        /// > It takes a rectangle in the coordinate system of the stage and returns a rectangle in the
+        /// coordinate system of the picturebox
+        /// 
+        /// @param x The x coordinate of the upper-left corner of the rectangle.
+        /// @param y The y-coordinate of the upper-left corner of the rectangle.
+        /// @param w width of the rectangle
+        /// @param h height of the rectangle
+        /// 
+        /// @return A RawRectangleF object.
         public RawRectangleF ToRawRectF(double x, double y, double w, double h)
         {
             double xd = dxPanel.Width / 2;
             double yd = dxPanel.Height / 2;
             return new RawRectangleF((float)(xd - x), (float)(yd - y), (float)(xd - (x + w)), (float)(yd - (y + h)));
         }
+
+
+
+        /// > It converts a rectangle from world space to screen space
+        /// 
+        /// @param RectangleD The rectangle to convert.
+        /// 
+        /// @return A RectangleF object.
         public RectangleF ToScreenSpace(RectangleD p)
         {
             return ToScreenRectF(p.X, p.Y, p.W, p.H);
         }
+        /// > It converts a rectangle from world space to screen space
+        /// 
+        /// @param RectangleF The rectangle to convert.
+        /// 
+        /// @return A RectangleF object.
         public RectangleF ToScreenSpace(RectangleF p)
         {
             return ToScreenRectF(p.X, p.Y, p.Width, p.Height);
         }
+        /// It takes an array of RectangleD objects and returns an array of RectangleF objects
+        /// 
+        /// @param p The rectangle to convert
+        /// 
+        /// @return A RectangleF[]
         public RectangleF[] ToScreenSpace(RectangleD[] p)
         {
             RectangleF[] rs = new RectangleF[p.Length];
@@ -2398,6 +2839,11 @@ namespace Bio
             }
             return rs;
         }
+       /// It takes an array of RectangleF objects and returns an array of RectangleF objects
+        /// 
+        /// @param p The rectangle to convert
+        /// 
+        /// @return A RectangleF[]
         public RectangleF[] ToScreenSpace(RectangleF[] p)
         {
             RectangleF[] rs = new RectangleF[p.Length];
@@ -2407,6 +2853,11 @@ namespace Bio
             }
             return rs;
         }
+        /// > Convert a list of points from world space to screen space
+        /// 
+        /// @param p The point to convert
+        /// 
+        /// @return A PointF[] array of points.
         public PointF[] ToScreenSpace(PointD[] p)
         {
             PointF[] rs = new PointF[p.Length];
@@ -2417,6 +2868,11 @@ namespace Bio
             }
             return rs;
         }
+        /// ToScreenW(x) = x * PxWmicron
+        /// 
+        /// @param x the x coordinate of the point to be converted
+        /// 
+        /// @return The return value is a float.
         public float ToScreenW(double x)
         {
             if (HardwareAcceleration)
@@ -2425,6 +2881,11 @@ namespace Bio
             }
             return (float)(x * PxWmicron);
         }
+        /// > Convert a value in microns to a value in pixels
+        /// 
+        /// @param y the y coordinate of the point to be converted
+        /// 
+        /// @return The return value is a float.
         public float ToScreenH(double y)
         {
             if (HardwareAcceleration)
@@ -2433,6 +2894,13 @@ namespace Bio
             }
             return (float)(y * PxHmicron);
         }
+        /// If the user presses the "C" key while holding down the "Control" key, then the function
+        /// "CopySelection" is called
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyEventArgs The event arguments for the key press.
+        /// 
+        /// @return The return value is a PointD object.
         private void ImageView_KeyDown(object sender, KeyEventArgs e)
         {
             double moveAmount = 5 * Scale.Width;
@@ -2478,6 +2946,10 @@ namespace Bio
             }
         }
 
+        /// If the selected image is not null, set the origin to the center of the image, and set the
+        /// scale to the height of the image.
+        /// 
+        /// @return The method is returning the value of the variable "Scale"
         public void GoToImage()
         {
             if (SelectedImage == null)
@@ -2499,6 +2971,11 @@ namespace Bio
             Scale = new SizeF((float)wy, (float)wy);
             UpdateView();
         }
+        /// It takes an image index and centers the image in the viewport
+        /// 
+        /// @param i the index of the image to go to
+        /// 
+        /// @return The method is returning the value of the variable "i"
         public void GoToImage(int i)
         {
             if (Images.Count <= i)
@@ -2520,14 +2997,29 @@ namespace Bio
             Scale = new SizeF((float)wy, (float)wy);
             UpdateView();
         }
+
+        /// It opens a new form, and then it opens a new image in that form.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void goToImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GoToImage();
         }
+        /// The function is called when the user clicks on the "Go To" menu item. It sets the origin to
+        /// the point where the user clicked
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void goToToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Origin = new PointD(mouseDown.X, mouseDown.Y);
         }
+        /// > When the user clicks on the "Go to Image" menu item, the program will clear the menu
+        /// item's drop down menu and then add a menu item for each image in the Images list
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void goToImageToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
@@ -2539,6 +3031,13 @@ namespace Bio
                 item.DropDownItems.Add(it);
             }
         }
+        /// When the user clicks on an item in the dropdown menu, the function finds the index of the
+        /// image in the list of images and then calls the GoToImage function with that index
+        /// 
+        /// @param sender System.Object
+        /// @param ToolStripItemClickedEventArgs 
+        /// 
+        /// @return The filename of the image that was clicked on.
         private void goToImageToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             int i = 0;
@@ -2586,6 +3085,9 @@ namespace Bio
             update = true;
             UpdateView();
         }
+        /// Move the stage to the location of the selected image
+        /// 
+        /// @return The method is returning the value of the SelectedImage property.
         public void MoveStageToImage()
         {
             if (SelectedImage == null)
@@ -2594,17 +3096,31 @@ namespace Bio
             update = true;
             UpdateView();
         }
+        /// Move the stage to the location of the image at index i
+        /// 
+        /// @param i the index of the image in the list of images
         public void MoveStageToImage(int i)
         {
             update = true;
             Microscope.Stage.SetPosition(Images[i].Volume.Location.X, Images[i].Volume.Location.Y);
             UpdateView();
         }
+        /// It's a function that is called when the user clicks on the "Go To Stage" button in the menu
+        /// bar.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void goToStageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             update = true;
             GoToStage();
         }
+        /// It moves the stage to the image that was clicked on in the drop down menu
+        /// 
+        /// @param sender System.Windows.Forms.ToolStripMenuItem
+        /// @param ToolStripItemClickedEventArgs 
+        /// 
+        /// @return The index of the image in the list.
         private void moveStageToImageToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             int i = 0;
@@ -2619,16 +3135,29 @@ namespace Bio
             }
         }
 
+        /// Move the stage to the center of the image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void moveStageToImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MoveStageToImage();
         }
 
+        /// The function is called when the user clicks on the "Go To" menu item in the context menu.
+        /// The function sets the stage position to the position of the mouse click
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void goToToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             Microscope.Stage.SetPosition(mouseDown.X, mouseDown.Y);
         }
 
+        /// It draws the selected ROI's on the image
+        /// 
+        /// @param sender
+        /// @param EventArgs e
         private void drawToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bio.Graphics.Graphics g = Bio.Graphics.Graphics.FromImage(SelectedBuffer);
@@ -2677,6 +3206,10 @@ namespace Bio
             UpdateImage();
         }
 
+       /// It takes the selected ROI's and draws them on the image
+       /// 
+       /// @param sender
+       /// @param EventArgs e
         private void fillToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bio.Graphics.Graphics g = Bio.Graphics.Graphics.FromImage(SelectedBuffer);
@@ -2710,10 +3243,18 @@ namespace Bio
             UpdateImage();
         }
 
+       /// The scroll bars are used to move the origin of the pyramid
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs The event arguments.
         private void vScrollBar_ValueChanged(object sender, EventArgs e)
         {
             PyramidalOrigin = new Point(hScrollBar.Value, vScrollBar.Value);
         }
+        /// If the image is pyramidal, update the image and update the view
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void overlayPictureBox_Resize(object sender, EventArgs e)
         {
             if (SelectedImage.isPyramidal)
@@ -2724,6 +3265,11 @@ namespace Bio
         }
 
         Configuration conf = new Configuration();
+        /// If the panel is resized, update the width and height of the configuration object, update the
+        /// device, and update the view
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void dxPanel_SizeChanged(object sender, EventArgs e)
         {
             if (HardwareAcceleration)

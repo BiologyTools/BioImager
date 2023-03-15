@@ -140,14 +140,22 @@ namespace Bio
         private Bitmap bm;
         private System.Drawing.Graphics g;
 
+        /// This function updates the channel variable with the channel that is passed in
+        /// 
+        /// @param Channel The channel to update
         public void UpdateChannel(Channel c)
         {
             channel = c;
         }
+        /// > This function is called when the view needs to be updated
         public void UpdateView()
         {
             this.Invalidate();
         }
+        /// It draws a histogram of the image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param PaintEventArgs e
         private void HistogramControl_Paint(object sender, PaintEventArgs e)
         {
             if (graphMax == 0)
@@ -344,6 +352,10 @@ namespace Bio
             e.Graphics.DrawImage(bm, 0, 0);
         }
 
+        /// The function is called when the user clicks the mouse on the histogram control
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs 
         private void HistogramControl_MouseDown(object sender, MouseEventArgs e)
         {
             mouseX = e.X;
@@ -351,16 +363,29 @@ namespace Bio
             Invalidate();
         }
 
+        /// The function takes the mouse position and divides it by the scaling factor to get the actual
+        /// value of the mouse position
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e.X and e.Y are the mouse coordinates.
         private void HistogramControl_MouseMove(object sender, MouseEventArgs e)
         {
             mouseValX = e.X / fx;
             mouseValY = e.Y / fy;
         }
 
+        /// > When the size of the control changes, we need to re-initialize the graphics
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void HistogramControl_SizeChanged(object sender, EventArgs e)
         {
             InitGraphics();
         }
+        /// If the width or height of the control is zero, then return. Otherwise, create a new bitmap
+        /// with the width and height of the control, and create a new graphics object from the bitmap
+        /// 
+        /// @return A bitmap object.
         private void InitGraphics()
         {
             if (Width == 0 || Height == 0)
@@ -371,11 +396,20 @@ namespace Bio
             g = System.Drawing.Graphics.FromImage(bm);
         }
 
+        /// It takes the image from the picturebox and puts it on the clipboard
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void copyViewToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetImage(bm);
         }
 
+        /// When the user clicks on the "Set Max" menu item, the selected channel's range's max value is
+        /// set to the current mouse X value
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs e
         private void setMaxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.channelsTool.SelectedChannel.range[App.channelsTool.SelectedSample].Max = (int)MouseValX;
@@ -383,6 +417,11 @@ namespace Bio
             App.viewer.UpdateImage();
         }
 
+        /// When the user clicks on the "Set Min" menu item, the selected channel's range's minimum
+        /// value is set to the current mouse position
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void setMinToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.channelsTool.SelectedChannel.range[App.channelsTool.SelectedSample].Min = (int)MouseValX;
@@ -390,6 +429,10 @@ namespace Bio
             App.viewer.UpdateImage();
         }
 
+        /// It sets the maximum value of the selected channel to the current mouse position.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void setMaxAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Channel c in ImageView.SelectedImage.Channels)
@@ -401,6 +444,10 @@ namespace Bio
             }
         }
 
+        /// This function sets the minimum value of the selected channel to the current mouse position
+        /// 
+        /// @param sender
+        /// @param EventArgs e
         private void setMinAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Channel c in ImageView.SelectedImage.Channels)
@@ -411,6 +458,11 @@ namespace Bio
                 }
             }
         }
+        /// > The function takes a wavelength in nanometers and returns a color
+        /// 
+        /// @param l the wavelength of the light in nanometers
+        /// 
+        /// @return A color.
         Color SpectralColor(double l) // RGB <0,1> <- lambda l <400,700> [nm]
         {
             double t;

@@ -11,6 +11,7 @@ using System.Xml;
 
 namespace Bio
 {
+    /* It's a form that displays an XML tree */
     public partial class XMLView : Form
     {
         XmlTreeDisplay tree = null;
@@ -27,6 +28,9 @@ namespace Bio
     {
         private System.Windows.Forms.TreeView treeXml = new TreeView();
 
+        /* It's a constructor that takes a string as a parameter. It's a constructor because it has the
+        same name as the class. It's a constructor that takes a string as a parameter because it has
+        a string as a parameter. */
         public XmlTreeDisplay(string xml)
         {
             treeXml.Nodes.Clear();
@@ -49,6 +53,11 @@ namespace Bio
             treeXml.Dock = DockStyle.Fill;
         }
 
+        /// It takes an XML node and a tree node collection and adds the XML node to the tree node
+        /// collection
+        /// 
+        /// @param XmlNode The XML node to convert.
+        /// @param TreeNodeCollection The collection of nodes to which the new node is added.
         private void ConvertXmlNodeToTreeNode(XmlNode xmlNode,
           TreeNodeCollection treeNodes)
         {

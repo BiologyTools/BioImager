@@ -85,6 +85,8 @@ namespace Bio
         }
 
         public Profile CurrentProfile = new Profile("Default");
+        /* It's a class that allows you to save and load your application's settings to and from a
+        file. */
         public class Profile
         {
             public string FilePath = "";
@@ -137,6 +139,7 @@ namespace Bio
             }
 
         }
+        /* Starting the imaging application and then waiting for it to be idle. */
         public Imager()
         {
             InitializeComponent();
@@ -230,6 +233,12 @@ namespace Bio
             this.Show();
         }
 
+        /// "If the number of images in the list is greater than the number of items in the listbox, add
+        /// the difference to the listbox."
+        /// 
+        /// This is a very simple function, but it's a good example of how to add items to a listbox
+        /// 
+        /// @return The return type is void, so nothing is being returned.
         public void UpdateStatus()
         {
             //GetLiveStatus();
@@ -323,6 +332,12 @@ namespace Bio
             Microscope.SetPosition(p);
         }
 
+        /// If the user has selected an item in the listbox, remove it
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
+        /// 
+        /// @return The selected index of the listbox.
         private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (storedCoordsBox.SelectedIndex == -1)
@@ -331,6 +346,12 @@ namespace Bio
             storedCoordsBox.SelectedIndex = storedCoordsBox.Items.Count - 1;
         }
 
+        /// We check the state of the controller and update the UI accordingly
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The gamepad state.
         private void controllerJoystickUpdate_Tick(object sender, EventArgs e)
         {
             if (AppP.HasExited)
@@ -418,6 +439,14 @@ namespace Bio
             }
         }
 
+    
+        /// We check the current state of the controller and compare it to the previous state. If the
+        /// current state is different from the previous state, we send a command to the game.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs This is the event arguments that are passed to the event handler.
+        /// 
+        /// @return The current state of the controller.
         private void controllerButtonUpdate_Tick(object sender, EventArgs e)
         {
             if (AppP.HasExited)
@@ -436,6 +465,11 @@ namespace Bio
             prevState = true;
         }
 
+       /// It loops through the string and counts the number of times a digit is found
+       /// 
+       /// @param str The string to be searched.
+       /// 
+       /// @return The number of digits in the string.
         public static int DigitsInString(string str)
         {
             int count = 0;
@@ -448,6 +482,11 @@ namespace Bio
             }
             return count;
         }
+        /// If the user has checked the "Dock to App" checkbox, then we set the location of the Imager
+        /// window to be just below the imaging app window
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
         private void statusTimer_Tick(object sender, EventArgs e)
         {            
             if (dockToApp.Checked)
@@ -478,6 +517,14 @@ namespace Bio
         
         #region Labels Double Clicked
 
+        /// It opens a new form, which allows the user to select a function from a list of functions,
+        /// and then it saves the selected function to the settings file.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The mouse event arguments.
+        /// 
+        /// @return The function that is being returned is the function that is being used to control
+        /// the Y axis of the controller.
         private void YPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.Y,"YButton");
@@ -488,6 +535,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// It opens a new form, and if the user clicks OK, it saves the new function to the settings
+        /// file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return The function that is being returned is the function that is being called.
         private void BPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.B, "BButton");
@@ -498,6 +552,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks on the label, a new form is created and shown to the user. If
+        /// the user clicks OK, the function is updated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
+        /// 
+        /// @return the result of the ShowDialog() method.
         private void APressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.A, "AButton");
@@ -508,6 +569,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks the label, a new form is created and shown. If the user clicks
+        /// OK, the function is updated
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return a DialogResult.
         private void XPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.X, "XButton");
@@ -518,6 +586,12 @@ namespace Bio
             Settings.Default.Save();
         }
 
+       /// It opens a form that allows the user to select a function to be assigned to the back button
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
+       /// 
+       /// @return The function that is being returned is the function that is being called.
         private void BackPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.Back, "BackButton");
@@ -528,6 +602,12 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// It opens a new form, and if the user clicks OK, it saves the new settings
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs 
+        /// 
+        /// @return the result of the ShowDialog() method.
         private void StartPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.Start, "StartButton");
@@ -537,6 +617,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks the DPadUpLabel, a new FunctionForm is created and shown. If the
+        /// user clicks OK, the DPadUp function is set to the function the user selected
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data.
+        /// 
+        /// @return a DialogResult.OK.
         private void DPadUpLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.DPadUp, "DPadUpButton");
@@ -547,6 +634,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks the DPadRightLabel, a new FunctionForm is created and shown. If
+        /// the user clicks OK, the DPadRight function is set to the function the user selected
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data.
+        /// 
+        /// @return the value of the function that is being called.
         private void DPadRightLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.DPadRight, "DPadRightButton");
@@ -557,6 +651,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks the label, a new form is created and shown. If the user clicks
+        /// OK, the function is updated and saved
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data.
+        /// 
+        /// @return the value of the function that is being called.
         private void DPadDownLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.DPadDown, "DPadDownButton");
@@ -567,6 +668,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks the DPadLeftLabel, a new FunctionForm is created and shown. If
+        /// the user clicks OK, the function is saved to the settings file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return the value of the function that is being called.
         private void DPadLeftLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.DPadLeft, "DPadLeftButton");
@@ -577,6 +685,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// It opens a new form, and if the user clicks OK, it saves the new function to the settings
+        /// file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return the value of the function that is being called.
         private void shoulderLeftLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.LShoulder, "ShoulderLeftButton");
@@ -587,6 +702,12 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// It opens a new form, and if the user clicks OK, it saves the function to a settings file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data.
+        /// 
+        /// @return The function that is being returned is the function that is being called.
         private void shoulderRightLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.RShoulder, "ShoulderRightButton");
@@ -596,6 +717,12 @@ namespace Bio
             Settings.Default.RShoulder = ControllerFuncs.RShoulder.ToString();
             Settings.Default.Save();
         }
+/// It opens a new form, and if the user clicks OK, it saves the function to the settings file.
+/// 
+/// @param sender The object that raised the event.
+/// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
+/// 
+/// @return The function that is being returned is the function that is being called.
 
         private void r3PressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -607,6 +734,13 @@ namespace Bio
             Settings.Default.Save();
         }
 
+        /// When the user double clicks on the label, a new form is created and shown to the user. If
+        /// the user clicks OK, the settings are saved
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs e
+        /// 
+        /// @return the value of the function that is being called.
         private void l3PressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.L3, "L3");
@@ -618,6 +752,13 @@ namespace Bio
 
         #endregion
 
+        /// If the user clicks on the "Open File" menu item, then open the file associated with the
+        /// selected image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
+        /// 
+        /// @return The filename of the selected item in the listbox.
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (storedImageBox.SelectedItem == null)
@@ -629,6 +770,12 @@ namespace Bio
                 Process.Start(s.Filename);
         }
 
+        /// It opens a file dialog, loads the profile, and adds it to the listbox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The file path of the selected file.
         private void openProfileBut_Click(object sender, EventArgs e)
         {
             openProfileFileDialog.InitialDirectory = Application.StartupPath + "\\Profiles";
@@ -649,6 +796,13 @@ namespace Bio
             }
         }
 
+        /// If the selected index is not -1 and the selected item is not "Default", then set the current
+        /// profile to the selected item
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
+        /// 
+        /// @return The selected item in the listbox.
         private void profilesBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (profilesBox.SelectedIndex == -1)
@@ -658,6 +812,12 @@ namespace Bio
             CurrentProfile = (Profile)profilesBox.SelectedItem;
         }
 
+        /// It saves the current profile to a file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The file name of the profile that is being saved.
         private void saveProfileBut_Click(object sender, EventArgs e)
         {
             saveFileDialog.InitialDirectory = Application.StartupPath + "\\Profiles\\";
@@ -681,6 +841,13 @@ namespace Bio
             storedImageBox.Items.Clear();
         }
 
+        /// When the user selects an item in the listbox, the function updates the x, y, and z
+        /// coordinates of the selected item
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The selected item in the listbox.
         private void storedSnapBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (storedImageBox.SelectedItem == null)
@@ -700,6 +867,12 @@ namespace Bio
         {
 
         }
+/// If the form's border style is set to "Sizable", then set it to "None" and change the menu item's
+/// text to "Window Border Normal". Otherwise, set the form's border style to "Sizable" and change the
+/// menu item's text to "Window Border None"
+/// 
+/// @param sender The object that raised the event.
+/// @param EventArgs This is the event arguments that are passed to the event handler.
 
         private void borderToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -725,6 +898,13 @@ namespace Bio
             this.Close();
         }
 
+       /// If the user clicks on the "Open in Image View" menu item, then the program will open the
+       /// selected image in the image view
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs System.EventArgs
+       /// 
+       /// @return The selected item in the listbox.
         private void openInImageViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (storedImageBox.SelectedIndex == -1)
@@ -732,9 +912,16 @@ namespace Bio
             BioImage s = (BioImage)storedImageBox.SelectedItem;
         }
 
+/// If the user presses the S key while holding down the control key, then the program will open a
+/// dialog box to save the image
+/// 
+/// @param sender The object that raised the event.
+/// @param KeyEventArgs The event arguments for the key press.
+/// 
+/// @return The image is being saved to the file name specified in the saveImageDialog.
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.S && e.Control && mainTabControl.SelectedIndex == 3)
+            if (e.KeyCode == Keys.S && e.Control)
             {
                 if (saveImageDialog.ShowDialog() != DialogResult.OK)
                     return;
@@ -742,26 +929,51 @@ namespace Bio
             }
         }
 
+        /// When the user clicks on the copy button, the selected item in the listbox is copied to the
+        /// clipboard.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(storedImageBox.SelectedItem.ToString());
         }
 
+        /// When the user clicks the "Copy" button in the context menu, the selected item in the listbox
+        /// is copied to the clipboard.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments that are passed to the event handler.
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(storedCoordsBox.SelectedItem.ToString());
         }
 
+       /// This function is called when the user checks or unchecks the "Dock to App" checkbox.
+       /// 
+       /// @param sender The object that raised the event.
+       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void dockToApp_CheckedChanged(object sender, EventArgs e)
         {
 
         }
 
+        /// If the topMostCheckBox is checked, then the form will be topmost
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void topMostCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             this.TopMost = topMostCheckBox.Checked;
         }
 
+        /// If the button is set to be pressed, then check if the button is pressed. If it is, then
+        /// perform the function. If it's not, then do nothing. If the button is set to be released,
+        /// then check if the button is released. If it is, then perform the function. If it's not, then
+        /// do nothing
+        /// 
+        /// @param Gamepad The current state of the controller
+        /// @param Gamepad The previous state of the controller
         public void CheckGamepadButtons(Gamepad state, Gamepad prevState)
         {
             #region YBAX Keys
@@ -1098,6 +1310,11 @@ namespace Bio
 
         public static InputSimulator input = new InputSimulator();
 
+        /// It takes a function object and performs the function
+        /// 
+        /// @param Function The function to be performed
+        /// 
+        /// @return Nothing.
         public object PerformFunction(Function f)
         {
             if (f.FuncType == Function.FunctionType.Key)
@@ -1323,6 +1540,8 @@ namespace Bio
             return null;
         }
 
+        /* It's a class that contains a bunch of static variables that are used to store the functions
+        that are assigned to each button */
         public class ControllerFuncs
         {
             public static Function Y, B, A, X, DPadUp, DPadRight, DPadDown, DPadLeft, Start, Back, RShoulder, LShoulder, R3, L3;
