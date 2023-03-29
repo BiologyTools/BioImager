@@ -1387,5 +1387,12 @@ namespace Bio
         {
             App.lightTool.Show();
         }
+
+        private void savePyramidalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+            BioImage.SaveOMEPyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
+        }
     }
 }

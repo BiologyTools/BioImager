@@ -1400,7 +1400,6 @@ namespace Bio
         {
             Focus.SetFocus(d);
         }
-
        /// It returns the current focus of the z-axis.
        /// 
        /// @return The focus of the z-axis.
@@ -1467,10 +1466,10 @@ namespace Bio
                 folder = GetFolder();
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 Point3D p = GetPosition();
-                b.Volume.Location = p;
                 b.stageSizeX = p.X;
                 b.stageSizeY = p.Y;
                 b.stageSizeZ = p.Z;
+                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,b.stageSizeX,b.stageSizeY,b.stageSizeZ);
                 string file;
                 if (folder == "" || folder == null)
                     file = Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
@@ -1480,7 +1479,7 @@ namespace Bio
                 b.file = file;
                 Images.AddImage(b);
                 BioImage.SaveOME(file, b.ID);
-                Images.RemoveImage(b);
+                App.viewer.AddImage(b);
             }
             else if (Properties.Settings.Default.PMicroscope)
             {
@@ -1502,16 +1501,16 @@ namespace Bio
                 bm.Buffers.Add(bf);
                 //Set the physical size based on objective view
                 RectangleD rec = GetViewRectangle(false);
-                bm.physicalSizeX = rec.W / bm.SizeX;
-                bm.physicalSizeY = rec.H / bm.SizeY;
-                bm.physicalSizeZ = 1;
+                bm.PhysicalSizeX = rec.W / bm.SizeX;
+                bm.PhysicalSizeY = rec.H / bm.SizeY;
+                bm.PhysicalSizeZ = 1;
                 double f = Focus.GetFocus();
                 bm.bitsPerPixel = bf.BitsPerPixel;
                 bm.stageSizeX = rec.X;
                 bm.stageSizeY = rec.Y;
                 bm.stageSizeZ = f;
                 bm.UpdateCoords(1, 1, 1);
-                bm.Volume = new VolumeD(new Point3D(bm.stageSizeX, bm.stageSizeY, bm.stageSizeZ), new Point3D(bm.physicalSizeX * bm.SizeX, bm.physicalSizeY * bm.SizeY, bm.physicalSizeZ * bm.SizeZ));
+                bm.Resolutions.Add(new Resolution(w,h,px,bm.PhysicalSizeX,bm.PhysicalSizeY,bm.PhysicalSizeZ, bm.stageSizeX,bm.stageSizeY,bm.stageSizeZ));
                 for (int c = 0; c < bf.RGBChannelsCount; c++)
                 {
                     bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
@@ -1560,7 +1559,7 @@ namespace Bio
             return TakeImageStack(UpperLimit, LowerLimit, fInterVal);
         }
         static FileSystemWatcher watcher = new FileSystemWatcher();
-       /// This function is called when the user clicks the "Start" button. It gets the folder path from
+        /// This function is called when the user clicks the "Start" button. It gets the folder path from
        /// the textbox, sets the watcher's path to that folder, and enables the watcher.
         public static void Watcher()
         {
@@ -1581,7 +1580,7 @@ namespace Bio
         {
             do
             {
-                Thread.Sleep(500);
+                Thread.Sleep(50);
                 for (int i = 0; i < locked.Count; i++)
                 {
                     //We wait till the new file is no longer written into.
@@ -1593,11 +1592,6 @@ namespace Bio
                             break;
                         fi = null;
                     } while (true);
-                    currentImage = BioImage.OpenOME(locked[i], 0, false, false, 0, 0, 0, 0);
-                    if (imagingStack)
-                        bi.Buffers.AddRange(currentImage.Buffers);
-                    else
-                        images.Add(currentImage);
                 }
             } while (imagingStack);
         }
@@ -1685,14 +1679,13 @@ namespace Bio
             }
             //Set the physical size based on objective view
             RectangleD rec = GetObjectiveViewRectangle();
-            bi.physicalSizeX = rec.W / bi.SizeX;
-            bi.physicalSizeY = rec.H / bi.SizeY;
-            bi.physicalSizeZ = (UpperLimit - LowerLimit) / bi.SizeZ;
+            bi.PhysicalSizeX = rec.W / bi.SizeX;
+            bi.PhysicalSizeY = rec.H / bi.SizeY;
+            bi.PhysicalSizeZ = (UpperLimit - LowerLimit) / bi.SizeZ;
             bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
             bi.stageSizeX = rec.X;
             bi.stageSizeY = rec.Y;
             bi.stageSizeZ = UpperLimit;
-            bi.Volume = new VolumeD(new Point3D(bi.stageSizeX, bi.stageSizeY, bi.stageSizeZ), new Point3D(bi.physicalSizeX * bi.SizeX, bi.physicalSizeY * bi.SizeY, bi.physicalSizeZ * bi.SizeZ));
             BioImage.AutoThreshold(bi, false);
             if (bi.bitsPerPixel > 8)
                 bi.StackThreshold(true);
@@ -1713,7 +1706,8 @@ namespace Bio
         /// @param height The number of fields to take in the y direction
         public static void TakeTiles(int width, int height)
         {
-            bool leftright = true;
+            imagingStack = true;
+            bool leftright = false;
             if (Properties.Settings.Default.PMicroscope)
             {
                 Point3D p = Microscope.GetPosition();
@@ -1748,7 +1742,6 @@ namespace Bio
                 //First we wait till all the images are loaded
                 do
                 {
-                    Thread.Sleep(100);
                     Application.DoEvents();
                 } while (images.Count < width * height);
                 for (int i = 0; i < images.Count; i++)
@@ -1757,6 +1750,7 @@ namespace Bio
                 }
                 images.Clear();
             }
+            imagingStack = false;
         }
         /// It returns a rectangle that represents the viewable area of the current objective
         /// 

@@ -181,13 +181,17 @@ namespace Bio
         }
     }
     /* A struct that is used to store the resolution of an image. */
-    public struct Resolution
+    public class Resolution
     {
         int x;
         int y;
         PixelFormat format;
         double px;
-        double py; 
+        double py;
+        double pz;
+        double stageX;
+        double stageY;
+        double stageZ;
         public int SizeX
         {
             get { return x; }
@@ -198,11 +202,56 @@ namespace Bio
             get { return y; }
             set { y = value; }
         }
+        public double PhysicalSizeX
+        {
+            get { return px; }
+            set { px = value; }
+        }
+        public double PhysicalSizeY
+        {
+            get { return py; }
+            set { py = value; }
+        }
+        public double PhysicalSizeZ
+        {
+            get { return pz; }
+            set { pz = value; }
+        }
+        public double StageX
+        {
+            get { return stageX; }
+            set { stageX = value; }
+        }
+        public double StageY
+        {
+            get { return stageY; }
+            set { stageY = value; }
+        }
+        public double StageZ
+        {
+            get { return stageZ; }
+            set { stageZ = value; }
+        }
+        public double VolumeWidth
+        {
+            get
+            {
+                return PhysicalSizeX * SizeX;
+            }
+        }
+        public double VolumeHeight
+        {
+            get
+            {
+                return PhysicalSizeY * SizeY;
+            }
+        }
         public PixelFormat PixelFormat
         {
             get { return format; }
             set { format = value; }
         }
+        /* Calculating the size of the image in bytes. */
         public long SizeInBytes
         {
             get
@@ -220,25 +269,37 @@ namespace Bio
                 throw new NotSupportedException(format + " is not supported.");
             }
         }
-        public Resolution(int w, int h, int omePx, int bitsPerPixel, double physX, double physY)
+        public Resolution()
+        {
+
+        }
+        public Resolution(int w, int h, int omePx, int bitsPerPixel, double physX, double physY, double physZ, double stageX, double stageY, double stageZ)
         {
             x = w;
             y = h;
             format = BioImage.GetPixelFormat(omePx, bitsPerPixel);
             px = physX;
             py = physY;
+            pz = physZ;
+            this.stageX = stageX;
+            this.stageY = stageY;
+            this.stageZ = stageZ;
         }
-        public Resolution(int w, int h, PixelFormat f, double physX, double physY)
+        public Resolution(int w, int h, PixelFormat f, double physX, double physY, double physZ, double stageX, double stageY, double stageZ)
         {
             x = w;
             y = h;
             format = f;
             px = physX;
             py = physY;
+            pz = physZ;
+            this.stageX = stageX;
+            this.stageY = stageY;
+            this.stageZ = stageZ;
         }
         public override string ToString()
         {
-            return "(" + x + ", " + y + ") " + format.ToString() + " " + (SizeInBytes/1000) + " KB";
+            return "(" + x + ", " + y + ") " + format.ToString() + " " + (SizeInBytes / 1000) + " KB";
         }
     }
     public enum RGB
@@ -3253,10 +3314,10 @@ namespace Bio
         /// @param Bitmap The image to be processed
         /// 
         /// @return The image is being returned.
+        static ExtractChannel cr = new ExtractChannel(AForge.Imaging.RGB.R);
+        static ExtractChannel cb = new ExtractChannel(AForge.Imaging.RGB.B);
         public static Bitmap SwitchRedBlue(Bitmap image)
         {
-            ExtractChannel cr = new ExtractChannel(AForge.Imaging.RGB.R);
-            ExtractChannel cb = new ExtractChannel(AForge.Imaging.RGB.B);
             // apply the filter
             Bitmap rImage = cr.Apply(image);
             Bitmap bImage = cb.Apply(image);
@@ -3789,7 +3850,7 @@ namespace Bio
             return filters[name];
         }
         public static Dictionary<string, Filt> filters = new Dictionary<string, Filt>();
-       /// It takes an image, applies a filter to it, and returns the filtered image
+        /// It takes an image, applies a filter to it, and returns the filtered image
        /// 
        /// @param id the id of the image to apply the filter to
        /// @param name The name of the filter to apply.
@@ -4826,7 +4887,10 @@ namespace Bio
         public List<Channel> Channels = new List<Channel>();
         public List<Resolution> Resolutions = new List<Resolution>();
         public List<BufferInfo> Buffers = new List<BufferInfo>();
-        public VolumeD Volume;
+        public VolumeD Volume
+        {
+            get { return new VolumeD(new Point3D(stageSizeX, stageSizeY, stageSizeZ), new Point3D(SizeX * PhysicalSizeX, SizeY * PhysicalSizeY, SizeZ * PhysicalSizeZ)); }
+        }
         public List<ROI> Annotations = new List<ROI>();
         public string filename = "";
         public string script = "";
@@ -4858,7 +4922,6 @@ namespace Bio
         public long loadTimeMS = 0;
         public long loadTimeTicks = 0;
         public bool selected = false;
-        private bool ispyramidal = false;
         static SharpDX.Direct3D11.Device device;
         public static SharpDX.Direct3D11.Device Device
         {
@@ -4884,7 +4947,7 @@ namespace Bio
         }
         private int sizeZ, sizeC, sizeT;
         private Statistics statistics;
-
+        int resolution = 0;
         ImageInfo imageInfo = new ImageInfo();
         public static BioImage Copy(BioImage b, bool rois)
         {
@@ -4902,8 +4965,8 @@ namespace Bio
             {
                 bi.Channels.Add(c);
             }
-            bi.Volume = b.Volume;
             bi.Coords = b.Coords;
+            bi.Resolutions = b.Resolutions;
             bi.sizeZ = b.sizeZ;
             bi.sizeC = b.sizeC;
             bi.sizeT = b.sizeT;
@@ -4912,7 +4975,7 @@ namespace Bio
             bi.frameInterval = b.frameInterval;
             bi.littleEndian = b.littleEndian;
             bi.isGroup = b.isGroup;
-            bi.imageInfo = b.imageInfo;
+            bi.imageInfo = b.imageInfo.Copy();
             bi.bitsPerPixel = b.bitsPerPixel;
             bi.file = b.file;
             bi.filename = b.filename;
@@ -4947,7 +5010,6 @@ namespace Bio
                 }
 
             bi.Coords = b.Coords;
-            bi.Volume = b.Volume;
             bi.sizeZ = b.sizeZ;
             bi.sizeC = b.sizeC;
             bi.sizeT = b.sizeT;
@@ -4956,7 +5018,7 @@ namespace Bio
             bi.frameInterval = b.frameInterval;
             bi.littleEndian = b.littleEndian;
             bi.isGroup = b.isGroup;
-            bi.imageInfo = b.imageInfo;
+            bi.imageInfo = b.imageInfo.Copy();
             bi.bitsPerPixel = b.bitsPerPixel;
             bi.Resolutions = b.Resolutions;
             bi.Coordinate = b.Coordinate;
@@ -4978,35 +5040,48 @@ namespace Bio
                 return Buffers.Count;
             }
         }
-        public double physicalSizeX
+        public Resolution Resolution
         {
-            get { return imageInfo.PhysicalSizeX; }
+            get { return Resolutions[resolution]; }
+        }
+        public double PhysicalSizeX
+        {
+            get { return Resolution.PhysicalSizeX; }
             set { imageInfo.PhysicalSizeX = value; }
         }
-        public double physicalSizeY
+        public double PhysicalSizeY
         {
-            get { return imageInfo.PhysicalSizeY; }
+            get { return Resolution.PhysicalSizeY; }
             set { imageInfo.PhysicalSizeY = value; }
         }
-        public double physicalSizeZ
+        public double PhysicalSizeZ
         {
-            get { return imageInfo.PhysicalSizeZ; }
+            get { return Resolution.PhysicalSizeZ; }
             set { imageInfo.PhysicalSizeZ = value; }
         }
         public double stageSizeX
         {
             get { return imageInfo.StageSizeX; }
-            set { imageInfo.StageSizeX = value; }
+            set 
+            {
+                imageInfo.StageSizeX = value;
+            }
         }
         public double stageSizeY
         {
             get { return imageInfo.StageSizeY; }
-            set { imageInfo.StageSizeY = value; }
+            set 
+            { 
+                imageInfo.StageSizeY = value;
+            }
         }
         public double stageSizeZ
         {
             get { return imageInfo.StageSizeZ; }
-            set { imageInfo.StageSizeZ = value; }
+            set 
+            { 
+                imageInfo.StageSizeZ = value;
+            }
         }
 
         public int series
@@ -5086,7 +5161,7 @@ namespace Bio
                 mode = "grayscale";
                 unit = "micron";
                 finterval = b.frameInterval;
-                spacing = b.physicalSizeZ;
+                spacing = b.PhysicalSizeZ;
                 loop = false;
                 /*
                 double dmax = double.MinValue;
@@ -5271,11 +5346,10 @@ namespace Bio
         {
             get
             {
-                return ispyramidal;
-            }
-            set
-            {
-                ispyramidal = value;
+                if (Resolutions.Count > 1)
+                    return true;
+                else
+                    return false;
             }
         }
         public string file;
@@ -5844,7 +5918,7 @@ namespace Bio
                 }
             }
         }
-       /// It takes the number of Z, C, and T planes in the image and then assigns each image buffer a
+        /// It takes the number of Z, C, and T planes in the image and then assigns each image buffer a
        /// coordinate in the ZCT array
        /// 
        /// @param sz number of z-slices
@@ -5956,7 +6030,7 @@ namespace Bio
         /// @return The value of d divided by the physicalSizeX.
         public double ToImageSizeX(double d)
         {
-            return d / physicalSizeX;
+            return d / PhysicalSizeX;
         }
         /// Convert a physical distance to an image distance
         /// 
@@ -5965,16 +6039,16 @@ namespace Bio
         /// @return The image size in the Y direction.
         public double ToImageSizeY(double d)
         {
-            return d / physicalSizeY;
+            return d / PhysicalSizeY;
         }
-       /// > Convert a physical X coordinate to an image X coordinate
+        /// > Convert a physical X coordinate to an image X coordinate
        /// 
        /// @param x the x coordinate of the point in the image
        /// 
        /// @return The x-coordinate of the image space.
         public double ToImageSpaceX(double x)
         {
-            return (float)((x - stageSizeX) / physicalSizeX);
+            return (float)((x - stageSizeX) / PhysicalSizeX);
         }
         /// > Convert a Y coordinate from stage space to image space
         /// 
@@ -5983,7 +6057,7 @@ namespace Bio
         /// @return The return value is the y-coordinate of the image.
         public double ToImageSpaceY(double y)
         {
-            return (float)((y - stageSizeY) / physicalSizeY);
+            return (float)((y - stageSizeY) / PhysicalSizeY);
         }
         /// > The function takes a point in the stage coordinate system and returns a point in the image
         /// coordinate system
@@ -5994,11 +6068,11 @@ namespace Bio
         public System.Drawing.PointF ToImageSpace(PointD p)
         {
             System.Drawing.PointF pp = new System.Drawing.Point();
-            pp.X = (float)((p.X - stageSizeX) / physicalSizeX);
-            pp.Y = (float)((p.Y - stageSizeY) / physicalSizeY);
+            pp.X = (float)((p.X - stageSizeX) / PhysicalSizeX);
+            pp.Y = (float)((p.Y - stageSizeY) / PhysicalSizeY);
             return pp;
         }
-       /// It takes a list of points in physical space and returns a list of points in image space
+        /// It takes a list of points in physical space and returns a list of points in image space
        /// 
        /// @param p List of points in stage space
        /// 
@@ -6009,8 +6083,8 @@ namespace Bio
             for (int i = 0; i < p.Count; i++)
             {
                 PointD pp = new PointD();
-                pp.X = ((p[i].X - stageSizeX) / physicalSizeX);
-                pp.Y = ((p[i].Y - stageSizeY) / physicalSizeY);
+                pp.X = ((p[i].X - stageSizeX) / PhysicalSizeX);
+                pp.Y = ((p[i].Y - stageSizeY) / PhysicalSizeY);
                 ps[i] = pp;
             }
             return ps;
@@ -6027,8 +6101,8 @@ namespace Bio
             for (int i = 0; i < p.Length; i++)
             {
                 PointF pp = new PointF();
-                pp.X = (float)((p[i].X - stageSizeX) / physicalSizeX);
-                pp.Y = (float)((p[i].Y - stageSizeY) / physicalSizeY);
+                pp.X = (float)((p[i].X - stageSizeX) / PhysicalSizeX);
+                pp.Y = (float)((p[i].Y - stageSizeY) / PhysicalSizeY);
                 ps[i] = pp;
             }
             return ps;
@@ -6042,10 +6116,10 @@ namespace Bio
         {
             System.Drawing.RectangleF r = new RectangleF();
             System.Drawing.Point pp = new System.Drawing.Point();
-            r.X = (int)((p.X - stageSizeX) / physicalSizeX);
-            r.Y = (int)((p.Y - stageSizeY) / physicalSizeY);
-            r.Width = (int)(p.W / physicalSizeX);
-            r.Height = (int)(p.H / physicalSizeY);
+            r.X = (int)((p.X - stageSizeX) / PhysicalSizeX);
+            r.Y = (int)((p.Y - stageSizeY) / PhysicalSizeY);
+            r.Width = (int)(p.W / PhysicalSizeX);
+            r.Height = (int)(p.H / PhysicalSizeY);
             return r;
         }
         /// > The function takes a point in the volume space and returns a point in the stage space
@@ -6056,8 +6130,8 @@ namespace Bio
         public PointD ToStageSpace(PointD p)
         {
             PointD pp = new PointD();
-            pp.X = ((p.X * physicalSizeX) + Volume.Location.X);
-            pp.Y = ((p.Y * physicalSizeY) + Volume.Location.Y);
+            pp.X = ((p.X * PhysicalSizeX) + Volume.Location.X);
+            pp.Y = ((p.Y * PhysicalSizeY) + Volume.Location.Y);
             return pp;
         }
         /// > The function takes a point in the volume space and converts it to a point in the stage
@@ -6086,10 +6160,10 @@ namespace Bio
         public RectangleD ToStageSpace(RectangleD p)
         {
             RectangleD r = new RectangleD();
-            r.X = ((p.X * physicalSizeX) + Volume.Location.X);
-            r.Y = ((p.Y * physicalSizeY) + Volume.Location.Y);
-            r.W = (p.W * physicalSizeX);
-            r.H = (p.H * physicalSizeY);
+            r.X = ((p.X * PhysicalSizeX) + Volume.Location.X);
+            r.Y = ((p.Y * PhysicalSizeY) + Volume.Location.Y);
+            r.W = (p.W * PhysicalSizeX);
+            r.H = (p.H * PhysicalSizeY);
             return r;
         }
         /// > This function takes a rectangle in the coordinate space of the image and converts it to
@@ -6123,8 +6197,8 @@ namespace Bio
             for (int i = 0; i < p.Length; i++)
             {
                 PointD pp = new PointD();
-                pp.X = ((p[i].X * physicalSizeX) + Volume.Location.X);
-                pp.Y = ((p[i].Y * physicalSizeY) + Volume.Location.Y);
+                pp.X = ((p[i].X * PhysicalSizeX) + Volume.Location.X);
+                pp.Y = ((p[i].Y * PhysicalSizeY) + Volume.Location.Y);
                 ps[i] = pp;
             }
             return ps;
@@ -6163,7 +6237,7 @@ namespace Bio
             rgbChannels[1] = 0;
             rgbChannels[2] = 0;
         }
-       /// It takes a BioImage object, and returns a new BioImage object that is a subset of the
+        /// It takes a BioImage object, and returns a new BioImage object that is a subset of the
        /// original
        /// 
        /// @param BioImage the image to be processed
@@ -6322,7 +6396,7 @@ namespace Bio
             BioImage b2 = Images.GetImage(b2name);
             return MergeChannels(b, b2);
         }
-       /// It takes a 3D image and merges the Z-stack into a single 2D image. 
+        /// It takes a 3D image and merges the Z-stack into a single 2D image. 
        /// 
        /// The function takes a BioImage object as an argument. It then creates a new BioImage object,
        /// which is a copy of the original BioImage object, but with the Z-dimension set to 1. 
@@ -6611,7 +6685,7 @@ namespace Bio
                 return (y * stridex + x) * index;
             }
         }
-       /// > This function returns the value of a pixel at a given coordinate
+        /// > This function returns the value of a pixel at a given coordinate
        /// 
        /// @param ZCTXY a struct that contains the X, Y, Z, C, and T coordinates of the pixel.
        /// 
@@ -6635,7 +6709,7 @@ namespace Bio
                 return GetValueRGB(coord, 0);
             return 0;
         }
-       /// > Get the value of the pixel at the given coordinates in the given buffer
+        /// > Get the value of the pixel at the given coordinates in the given buffer
        /// 
        /// @param ZCTXY a struct that contains the Z, C, T, X, and Y coordinates of the pixel.
        /// @param index 0, 1, 2
@@ -6679,7 +6753,7 @@ namespace Bio
         {
             return GetValue(new ZCTXY(z, c, t, x, y));
         }
-       /// > Get the value of a pixel at a given coordinate
+        /// > Get the value of a pixel at a given coordinate
        /// 
        /// @param ZCT The ZCT coordinate of the image.
        /// @param x x coordinate of the pixel
@@ -7039,10 +7113,10 @@ namespace Bio
                             image.SetField(TiffTag.PLANARCONFIG, PlanarConfig.CONTIG);
                             image.SetField(TiffTag.PHOTOMETRIC, Photometric.MINISBLACK);
                             image.SetField(TiffTag.ROWSPERSTRIP, image.DefaultStripSize(0));
-                            if (b.physicalSizeX != -1 && b.physicalSizeY != -1)
+                            if (b.PhysicalSizeX != -1 && b.PhysicalSizeY != -1)
                             {
-                                image.SetField(TiffTag.XRESOLUTION, (b.physicalSizeX * b.SizeX) / ((b.physicalSizeX * b.SizeX) * b.physicalSizeX));
-                                image.SetField(TiffTag.YRESOLUTION, (b.physicalSizeY * b.SizeY) / ((b.physicalSizeY * b.SizeY) * b.physicalSizeY));
+                                image.SetField(TiffTag.XRESOLUTION, (b.PhysicalSizeX * b.SizeX) / ((b.PhysicalSizeX * b.SizeX) * b.PhysicalSizeX));
+                                image.SetField(TiffTag.YRESOLUTION, (b.PhysicalSizeY * b.SizeY) / ((b.PhysicalSizeY * b.SizeY) * b.PhysicalSizeY));
                                 image.SetField(TiffTag.RESOLUTIONUNIT, ResUnit.NONE);
                             }
                             else
@@ -7180,10 +7254,6 @@ namespace Bio
                             b.frameInterval = imDesc.finterval;
                         else
                             b.frameInterval = 1;
-                        if (imDesc.spacing != 0)
-                            b.physicalSizeZ = imDesc.spacing;
-                        else
-                            b.physicalSizeZ = 1;
                     }
                 }
                 int stride = 0;
@@ -7224,15 +7294,13 @@ namespace Bio
                 string unit = (string)image.GetField(TiffTag.RESOLUTIONUNIT)[0].ToString();
                 if (unit == "CENTIMETER")
                 {
+                    Resolution r;
                     if (image.GetField(TiffTag.XRESOLUTION) != null)
                     {
                         double x = image.GetField(TiffTag.XRESOLUTION)[0].ToDouble();
-                        b.physicalSizeX = (1000 / x);
-                    }
-                    if (image.GetField(TiffTag.YRESOLUTION) != null)
-                    {
                         double y = image.GetField(TiffTag.YRESOLUTION)[0].ToDouble();
-                        b.physicalSizeY = (1000 / y);
+                        r = new Resolution(SizeX, SizeY, PixelFormat, 1000 / x, 1000 / y, 1, 0, 0, 0);
+                        b.Resolutions.Add(r);
                     }
                 }
                 else
@@ -7241,12 +7309,8 @@ namespace Bio
                     if (image.GetField(TiffTag.XRESOLUTION) != null)
                     {
                         double x = image.GetField(TiffTag.XRESOLUTION)[0].ToDouble();
-                        b.physicalSizeX = (2.54 / x) / 2.54;
-                    }
-                    if (image.GetField(TiffTag.YRESOLUTION) != null)
-                    {
                         double y = image.GetField(TiffTag.YRESOLUTION)[0].ToDouble();
-                        b.physicalSizeY = (2.54 / y) / 2.54;
+                        b.Resolutions.Add(new Resolution(SizeX, SizeY, PixelFormat, (2.54 / x) / 2.54, (2.54 / y) / 2.54, 1, 0, 0, 0));
                     }
                 }
                 else
@@ -7257,12 +7321,8 @@ namespace Bio
                         if (image.GetField(TiffTag.XRESOLUTION) != null)
                         {
                             double x = image.GetField(TiffTag.XRESOLUTION)[0].ToDouble();
-                            b.physicalSizeX = (2.54 / x) / 2.54;
-                        }
-                        if (image.GetField(TiffTag.YRESOLUTION) != null)
-                        {
                             double y = image.GetField(TiffTag.YRESOLUTION)[0].ToDouble();
-                            b.physicalSizeY = (2.54 / y) / 2.54;
+                            b.Resolutions.Add(new Resolution(SizeX, SizeY, PixelFormat,x,y, 1, 0, 0, 0));
                         }
                     }
                 }
@@ -7309,6 +7369,9 @@ namespace Bio
                         {
                             string cht = sts[i].Substring(sts[i].IndexOf('{'), sts[i].Length - sts[i].IndexOf('{'));
                             b.imageInfo = JsonConvert.DeserializeObject<ImageInfo>(cht);
+                            b.Resolutions[0] = new Resolution(SizeX, SizeY, PixelFormat, b.imageInfo.PhysicalSizeX, b.imageInfo.PhysicalSizeY, b.imageInfo.PhysicalSizeZ,
+                                b.imageInfo.StageSizeX, b.imageInfo.StageSizeY, b.imageInfo.StageSizeZ);
+
                         }
                     }
                 }
@@ -7397,14 +7460,13 @@ namespace Bio
                 b.sizeZ = 1;
                 b.sizeC = 1;
                 b.sizeT = 1;
+
                 BufferInfo inf = null;
                 //We use a try block incase this is an OME file
                 try
                 {
                     Image im = Image.FromFile(file);
-                    b.physicalSizeX = 2.54 / im.HorizontalResolution;
-                    b.physicalSizeY = 2.54 / im.VerticalResolution;
-                    b.physicalSizeZ = 1;
+                    b.Resolutions.Add(new Resolution(im.Width, im.Height, im.PixelFormat, 2.54 / im.HorizontalResolution, 2.54 / im.VerticalResolution, 1, 0, 0, 0));
                     inf = new BufferInfo(file, Image.FromFile(file), new ZCT(0, 0, 0), 0);
                     Statistics.CalcStatistics(inf);
                 }
@@ -7420,15 +7482,6 @@ namespace Bio
                 b.imageInfo.Series = 0;
 
             }
-            if (b.stageSizeX == -1)
-            {
-                b.imageInfo.Series = 0;
-                b.stageSizeX = 0;
-                b.stageSizeY = 0;
-                b.stageSizeZ = 0;
-                b.physicalSizeZ = 1;
-            }
-            b.Volume = new VolumeD(new Point3D(b.stageSizeX, b.stageSizeY, b.stageSizeZ), new Point3D(b.physicalSizeX * b.SizeX, b.physicalSizeY * b.SizeY, b.physicalSizeZ * b.SizeZ));
             //We wait for histogram image statistics calculation
             do
             {
@@ -7574,11 +7627,11 @@ namespace Bio
                     omexml.setPixelsBigEndian(java.lang.Boolean.FALSE, serie);
                 else
                     omexml.setPixelsBigEndian(java.lang.Boolean.TRUE, serie);
-                ome.units.quantity.Length p1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.physicalSizeX), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length p1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeX), ome.units.UNITS.MICROMETER);
                 omexml.setPixelsPhysicalSizeX(p1, serie);
-                ome.units.quantity.Length p2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.physicalSizeY), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length p2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeY), ome.units.UNITS.MICROMETER);
                 omexml.setPixelsPhysicalSizeY(p2, serie);
-                ome.units.quantity.Length p3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.physicalSizeZ), ome.units.UNITS.MICROMETER);
+                ome.units.quantity.Length p3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeZ), ome.units.UNITS.MICROMETER);
                 omexml.setPixelsPhysicalSizeZ(p3, serie);
                 ome.units.quantity.Length s1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.X), ome.units.UNITS.MICROMETER);
                 omexml.setStageLabelX(s1, serie);
@@ -7870,6 +7923,375 @@ namespace Bio
                 
             } while (!stop);
         }
+
+        public static void SaveOMEPyramidal(BioImage[] bms, string file, string compression)
+        {
+            if (File.Exists(file))
+                File.Delete(file);
+            loci.formats.meta.IMetadata omexml = service.createOMEXMLMetadata();
+            //We need to go through the images and find the ones belonging to each resolution.
+            //As well we need to determine the dimensions of the tiles.
+            Dictionary<double, List<BioImage>> bis = new Dictionary<double, List<BioImage>>();
+            Dictionary<double, Point3D> min = new Dictionary<double, Point3D>();
+            Dictionary<double, Point3D> max = new Dictionary<double, Point3D>();
+            for (int i = 0; i < bms.Length; i++)
+            {
+                if (bis.ContainsKey(bms[i].Resolution.PhysicalSizeX))
+                {
+                    bis[bms[i].Resolution.PhysicalSizeX].Add(bms[i]);
+                    if(bms[i].stageSizeX < min[bms[i].Resolution.PhysicalSizeX].X || bms[i].stageSizeY < min[bms[i].Resolution.PhysicalSizeX].Y)
+                    {
+                        min[bms[i].Resolution.PhysicalSizeX] = bms[i].Volume.Location;
+                    }
+                    if (bms[i].stageSizeX > max[bms[i].Resolution.PhysicalSizeX].X || bms[i].stageSizeY > max[bms[i].Resolution.PhysicalSizeX].Y)
+                    {
+                        max[bms[i].Resolution.PhysicalSizeX] = bms[i].Volume.Location;
+                    }
+                }
+                else
+                {
+                    bis.Add(bms[i].Resolution.PhysicalSizeX, new List<BioImage>());
+                    min.Add(bms[i].Resolution.PhysicalSizeX, new Point3D(bms[i].stageSizeX, bms[i].stageSizeY, bms[i].stageSizeZ));
+                    max.Add(bms[i].Resolution.PhysicalSizeX, new Point3D(bms[i].stageSizeX, bms[i].stageSizeY, bms[i].stageSizeZ));
+                    bis[bms[i].Resolution.PhysicalSizeX].Add(bms[i]);
+                }
+            }
+            int s = 0;
+            foreach (double px in bis.Keys)
+            {
+                int xi = 1 + (int)Math.Ceiling((max[px].X - min[px].X) / bis[px][0].Resolution.VolumeWidth);
+                int yi = 1 + (int)Math.Ceiling((max[px].Y - min[px].Y) / bis[px][0].Resolution.VolumeHeight);
+                BioImage b = bis[px][0];
+                int serie = s;
+                // create OME-XML metadata store.
+                omexml.setImageID("Image:" + serie, serie);
+                omexml.setPixelsID("Pixels:" + serie, serie);
+                omexml.setPixelsInterleaved(java.lang.Boolean.TRUE, serie);
+                omexml.setPixelsDimensionOrder(ome.xml.model.enums.DimensionOrder.XYCZT, serie);
+                if (b.bitsPerPixel > 8)
+                    omexml.setPixelsType(ome.xml.model.enums.PixelType.UINT16, serie);
+                else
+                    omexml.setPixelsType(ome.xml.model.enums.PixelType.UINT8, serie);
+                omexml.setPixelsSizeX(new PositiveInteger(java.lang.Integer.valueOf(b.SizeX * xi)), serie);
+                omexml.setPixelsSizeY(new PositiveInteger(java.lang.Integer.valueOf(b.SizeY * yi)), serie);
+                omexml.setPixelsSizeZ(new PositiveInteger(java.lang.Integer.valueOf(b.SizeZ)), serie);
+                int samples = 1;
+                if (b.isRGB)
+                    samples = 3;
+                omexml.setPixelsSizeC(new PositiveInteger(java.lang.Integer.valueOf(b.SizeC)), serie);
+                omexml.setPixelsSizeT(new PositiveInteger(java.lang.Integer.valueOf(b.SizeT)), serie);
+                if (BitConverter.IsLittleEndian)
+                    omexml.setPixelsBigEndian(java.lang.Boolean.FALSE, serie);
+                else
+                    omexml.setPixelsBigEndian(java.lang.Boolean.TRUE, serie);
+                ome.units.quantity.Length p1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeX), ome.units.UNITS.MICROMETER);
+                omexml.setPixelsPhysicalSizeX(p1, serie);
+                ome.units.quantity.Length p2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeY), ome.units.UNITS.MICROMETER);
+                omexml.setPixelsPhysicalSizeY(p2, serie);
+                ome.units.quantity.Length p3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.PhysicalSizeZ), ome.units.UNITS.MICROMETER);
+                omexml.setPixelsPhysicalSizeZ(p3, serie);
+                ome.units.quantity.Length s1 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.X), ome.units.UNITS.MICROMETER);
+                omexml.setStageLabelX(s1, serie);
+                ome.units.quantity.Length s2 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.Y), ome.units.UNITS.MICROMETER);
+                omexml.setStageLabelY(s2, serie);
+                ome.units.quantity.Length s3 = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Volume.Location.Z), ome.units.UNITS.MICROMETER);
+                omexml.setStageLabelZ(s3, serie);
+                omexml.setStageLabelName("StageLabel:" + serie, serie);
+
+                for (int channel = 0; channel < b.Channels.Count; channel++)
+                {
+                    Channel c = b.Channels[channel];
+                    for (int r = 0; r < c.range.Length; r++)
+                    {
+                        omexml.setChannelID("Channel:" + channel + ":" + serie, serie, channel + r);
+                        omexml.setChannelSamplesPerPixel(new PositiveInteger(java.lang.Integer.valueOf(1)), serie, channel + r);
+                        if (c.LightSourceWavelength != 0)
+                        {
+                            omexml.setChannelLightSourceSettingsID("LightSourceSettings:" + channel, serie, channel + r);
+                            ome.units.quantity.Length lw = new ome.units.quantity.Length(java.lang.Double.valueOf(c.LightSourceWavelength), ome.units.UNITS.NANOMETER);
+                            omexml.setChannelLightSourceSettingsWavelength(lw, serie, channel + r);
+                            omexml.setChannelLightSourceSettingsAttenuation(PercentFraction.valueOf(c.LightSourceAttenuation), serie, channel + r);
+                        }
+                        omexml.setChannelName(c.Name, serie, channel + r);
+                        if (c.Color != null)
+                        {
+                            ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(c.Color.Value.R, c.Color.Value.G, c.Color.Value.B, c.Color.Value.A);
+                            omexml.setChannelColor(col, serie, channel + r);
+                        }
+                        if (c.Emission != 0)
+                        {
+                            ome.units.quantity.Length em = new ome.units.quantity.Length(java.lang.Double.valueOf(c.Emission), ome.units.UNITS.NANOMETER);
+                            omexml.setChannelEmissionWavelength(em, serie, channel + r);
+                            ome.units.quantity.Length ex = new ome.units.quantity.Length(java.lang.Double.valueOf(c.Excitation), ome.units.UNITS.NANOMETER);
+                            omexml.setChannelExcitationWavelength(ex, serie, channel + r);
+                        }
+                        omexml.setChannelContrastMethod(c.ContrastMethod, serie, channel + r);
+                        omexml.setChannelFluor(c.Fluor, serie, channel + r);
+                        omexml.setChannelIlluminationType(c.IlluminationType, serie, channel + r);
+
+                        if (c.LightSourceIntensity != 0)
+                        {
+                            ome.units.quantity.Power pw = new ome.units.quantity.Power(java.lang.Double.valueOf(c.LightSourceIntensity), ome.units.UNITS.VOLT);
+                            omexml.setLightEmittingDiodePower(pw, serie, channel + r);
+                            omexml.setLightEmittingDiodeID(c.DiodeName, serie, channel + r);
+                        }
+                        if (c.AcquisitionMode != null)
+                            omexml.setChannelAcquisitionMode(c.AcquisitionMode, serie, channel + r);
+                    }
+                }
+
+                int i = 0;
+                foreach (ROI an in b.Annotations)
+                {
+                    if (an.roiID == "")
+                        omexml.setROIID("ROI:" + i.ToString() + ":" + serie, i);
+                    else
+                        omexml.setROIID(an.roiID, i);
+                    omexml.setROIName(an.roiName, i);
+                    if (an.type == ROI.Type.Point)
+                    {
+                        if (an.id != "")
+                            omexml.setPointID(an.id, i, serie);
+                        else
+                            omexml.setPointID("Shape:" + i + ":" + serie, i, serie);
+                        omexml.setPointX(java.lang.Double.valueOf(b.ToImageSpaceX(an.X)), i, serie);
+                        omexml.setPointY(java.lang.Double.valueOf(b.ToImageSpaceY(an.Y)), i, serie);
+                        omexml.setPointTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setPointTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setPointTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        if (an.Text != "")
+                            omexml.setPointText(an.Text, i, serie);
+                        else
+                            omexml.setPointText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setPointFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setPointStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setPointStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setPointFillColor(colf, i, serie);
+                    }
+                    else
+                    if (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform)
+                    {
+                        if (an.id != "")
+                            omexml.setPolygonID(an.id, i, serie);
+                        else
+                            omexml.setPolygonID("Shape:" + i + ":" + serie, i, serie);
+                        omexml.setPolygonPoints(an.PointsToString(b), i, serie);
+                        omexml.setPolygonTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setPolygonTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setPolygonTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        if (an.Text != "")
+                            omexml.setPolygonText(an.Text, i, serie);
+                        else
+                            omexml.setPolygonText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setPolygonFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setPolygonStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setPolygonStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setPolygonFillColor(colf, i, serie);
+                    }
+                    else
+                    if (an.type == ROI.Type.Rectangle)
+                    {
+                        if (an.id != "")
+                            omexml.setRectangleID(an.id, i, serie);
+                        else
+                            omexml.setRectangleID("Shape:" + i + ":" + serie, i, serie);
+                        omexml.setRectangleWidth(java.lang.Double.valueOf(b.ToImageSizeX(an.W)), i, serie);
+                        omexml.setRectangleHeight(java.lang.Double.valueOf(b.ToImageSizeY(an.H)), i, serie);
+                        omexml.setRectangleX(java.lang.Double.valueOf(b.ToImageSpaceX(an.Rect.X)), i, serie);
+                        omexml.setRectangleY(java.lang.Double.valueOf(b.ToImageSpaceY(an.Rect.Y)), i, serie);
+                        omexml.setRectangleTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setRectangleTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setRectangleTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        omexml.setRectangleText(i.ToString(), i, serie);
+                        if (an.Text != "")
+                            omexml.setRectangleText(an.Text, i, serie);
+                        else
+                            omexml.setRectangleText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setRectangleFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setRectangleStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setRectangleStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setRectangleFillColor(colf, i, serie);
+                    }
+                    else
+                    if (an.type == ROI.Type.Line)
+                    {
+                        if (an.id != "")
+                            omexml.setLineID(an.id, i, serie);
+                        else
+                            omexml.setLineID("Shape:" + i + ":" + serie, i, serie);
+                        omexml.setLineX1(java.lang.Double.valueOf(b.ToImageSpaceX(an.GetPoint(0).X)), i, serie);
+                        omexml.setLineY1(java.lang.Double.valueOf(b.ToImageSpaceY(an.GetPoint(0).Y)), i, serie);
+                        omexml.setLineX2(java.lang.Double.valueOf(b.ToImageSpaceX(an.GetPoint(1).X)), i, serie);
+                        omexml.setLineY2(java.lang.Double.valueOf(b.ToImageSpaceY(an.GetPoint(1).Y)), i, serie);
+                        omexml.setLineTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setLineTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setLineTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        if (an.Text != "")
+                            omexml.setLineText(an.Text, i, serie);
+                        else
+                            omexml.setLineText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setLineFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setLineStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setLineStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setLineFillColor(colf, i, serie);
+                    }
+                    else
+                    if (an.type == ROI.Type.Ellipse)
+                    {
+
+                        if (an.id != "")
+                            omexml.setEllipseID(an.id, i, serie);
+                        else
+                            omexml.setEllipseID("Shape:" + i + ":" + serie, i, serie);
+                        //We need to change System.Drawing.Rectangle to ellipse radius;
+                        double w = (double)an.W / 2;
+                        double h = (double)an.H / 2;
+                        omexml.setEllipseRadiusX(java.lang.Double.valueOf(b.ToImageSizeX(w)), i, serie);
+                        omexml.setEllipseRadiusY(java.lang.Double.valueOf(b.ToImageSizeY(h)), i, serie);
+
+                        double x = an.Point.X + w;
+                        double y = an.Point.Y + h;
+                        omexml.setEllipseX(java.lang.Double.valueOf(b.ToImageSpaceX(x)), i, serie);
+                        omexml.setEllipseY(java.lang.Double.valueOf(b.ToImageSpaceX(y)), i, serie);
+                        omexml.setEllipseTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setEllipseTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setEllipseTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        if (an.Text != "")
+                            omexml.setEllipseText(an.Text, i, serie);
+                        else
+                            omexml.setEllipseText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setEllipseFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setEllipseStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setEllipseStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setEllipseFillColor(colf, i, serie);
+                    }
+                    else
+                    if (an.type == ROI.Type.Label)
+                    {
+                        if (an.id != "")
+                            omexml.setLabelID(an.id, i, serie);
+                        else
+                            omexml.setLabelID("Shape:" + i + ":" + serie, i, serie);
+                        omexml.setLabelX(java.lang.Double.valueOf(b.ToImageSpaceX(an.Rect.X)), i, serie);
+                        omexml.setLabelY(java.lang.Double.valueOf(b.ToImageSpaceY(an.Rect.Y)), i, serie);
+                        omexml.setLabelTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.Z)), i, serie);
+                        omexml.setLabelTheC(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.C)), i, serie);
+                        omexml.setLabelTheT(new NonNegativeInteger(java.lang.Integer.valueOf(an.coord.T)), i, serie);
+                        omexml.setLabelText(i.ToString(), i, serie);
+                        if (an.Text != "")
+                            omexml.setLabelText(an.Text, i, serie);
+                        else
+                            omexml.setLabelText(i.ToString(), i, serie);
+                        ome.units.quantity.Length fl = new ome.units.quantity.Length(java.lang.Double.valueOf(an.font.Size), ome.units.UNITS.PIXEL);
+                        omexml.setLabelFontSize(fl, i, serie);
+                        ome.xml.model.primitives.Color col = new ome.xml.model.primitives.Color(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B, an.strokeColor.A);
+                        omexml.setLabelStrokeColor(col, i, serie);
+                        ome.units.quantity.Length sw = new ome.units.quantity.Length(java.lang.Double.valueOf(an.strokeWidth), ome.units.UNITS.PIXEL);
+                        omexml.setLabelStrokeWidth(sw, i, serie);
+                        ome.xml.model.primitives.Color colf = new ome.xml.model.primitives.Color(an.fillColor.R, an.fillColor.G, an.fillColor.B, an.fillColor.A);
+                        omexml.setLabelFillColor(colf, i, serie);
+                    }
+                    i++;
+                }
+                /*
+                if (b.Buffers[0].Plane != null)
+                    for (int bu = 0; bu < b.Buffers.Count; bu++)
+                    {
+                        //Correct order of parameters.
+                        if (b.Buffers[bu].Plane.Delta != 0)
+                        {
+                            ome.units.quantity.Time t = new ome.units.quantity.Time(java.lang.Double.valueOf(b.Buffers[bu].Plane.Delta), ome.units.UNITS.MILLISECOND);
+                            omexml.setPlaneDeltaT(t, bu, serie);
+                        }
+                        if (b.Buffers[bu].Plane.Exposure != 0)
+                        {
+                            ome.units.quantity.Time et = new ome.units.quantity.Time(java.lang.Double.valueOf(b.Buffers[bu].Plane.Exposure), ome.units.UNITS.MILLISECOND);
+                            omexml.setPlaneExposureTime(et, bu, serie);
+                        }
+                        ome.units.quantity.Length lx = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.X), ome.units.UNITS.MICROMETER);
+                        ome.units.quantity.Length ly = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.Y), ome.units.UNITS.MICROMETER);
+                        ome.units.quantity.Length lz = new ome.units.quantity.Length(java.lang.Double.valueOf(b.Buffers[bu].Plane.Location.Z), ome.units.UNITS.MICROMETER);
+                        omexml.setPlanePositionX(lx, bu, serie);
+                        omexml.setPlanePositionY(ly, bu, serie);
+                        omexml.setPlanePositionZ(lz, bu, serie);
+                        omexml.setPlaneTheC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), bu, serie);
+                        omexml.setPlaneTheZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), bu, serie);
+                        omexml.setPlaneTheT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), bu, serie);
+
+                        omexml.setTiffDataPlaneCount(new NonNegativeInteger(java.lang.Integer.valueOf(1)), bu, serie);
+                        omexml.setTiffDataIFD(new NonNegativeInteger(java.lang.Integer.valueOf(bu)), bu, serie);
+                        omexml.setTiffDataFirstC(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.C)), bu, serie);
+                        omexml.setTiffDataFirstZ(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.Z)), bu, serie);
+                        omexml.setTiffDataFirstT(new NonNegativeInteger(java.lang.Integer.valueOf(b.Buffers[bu].Plane.Coordinate.T)), bu, serie);
+
+                    }
+                */
+                s++;
+            }
+            writer.setMetadataRetrieve(omexml);
+            writer.setId(file);
+            writer.setCompression(compression);
+            int xx; int yy;
+            Progress pr = new Progress(file, "Saving");
+            pr.Show();
+            s = 0;
+            foreach (double px in bis.Keys)
+            {
+                writer.setSeries(s);
+                PointD p = new PointD(max[px].X - min[px].X, max[px].Y - min[px].Y);
+                for (int i = 0; i < bis[px].Count; i++)
+                {
+                    BioImage b = bis[px][i];
+                    writer.setTileSizeX(b.SizeX);
+                    writer.setTileSizeY(b.SizeY);
+                    double dx = Math.Ceiling((bis[px][i].stageSizeX - min[px].X) / bis[px][i].Resolution.VolumeWidth);
+                    double dy = Math.Ceiling((bis[px][i].stageSizeY - min[px].Y) / bis[px][i].Resolution.VolumeHeight);
+                    for (int bu = 0; bu < b.Buffers.Count; bu++)
+                    {
+                        byte[] bt = b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian);
+                        writer.saveBytes(bu, bt, (int)dx * b.SizeX, (int)dy * b.SizeY, b.SizeX, b.SizeY);
+                        Application.DoEvents();
+                    }
+                    pr.UpdateProgressF((float)i / bis[px].Count);
+                    
+                }
+            }
+            pr.Close();
+            pr.Dispose();
+            bool stop = false;
+            do
+            {
+                try
+                {
+                    writer.close();
+                    stop = true;
+                }
+                catch (Exception e)
+                {
+                    Scripting.LogLine(e.Message);
+                }
+            } while (!stop);
+        }
         /// > This function opens an OME file and returns a BioImage object
         /// 
         /// @param file the path to the file you want to open
@@ -8093,49 +8515,49 @@ namespace Bio
                 i++;
             }
 
-            try
+            for (int r = 0; r < reader.getResolutionCount(); r++)
             {
-                bool hasPhysical = false;
-                if (b.meta.getPixelsPhysicalSizeX(b.series) != null)
+                Resolution res = new Resolution();
+                try
                 {
-                    b.physicalSizeX = b.meta.getPixelsPhysicalSizeX(b.series).value().doubleValue();
-                    hasPhysical = true;
-                }
-                else
-                    b.physicalSizeX = (96 / 2.54) / 1000;
-                if (b.meta.getPixelsPhysicalSizeY(b.series) != null)
-                {
-                    b.physicalSizeY = b.meta.getPixelsPhysicalSizeY(b.series).value().doubleValue();
-                }
-                else
-                    b.physicalSizeY = (96 / 2.54) / 1000;
-                if (b.meta.getPixelsPhysicalSizeZ(b.series) != null)
-                {
-                    b.physicalSizeZ = b.meta.getPixelsPhysicalSizeZ(b.series).value().doubleValue();
-                }
-                else
-                {
-                    b.physicalSizeZ = 1;
-                }
+                    bool hasPhysical = false;
+                    if (b.meta.getPixelsPhysicalSizeX(b.series) != null)
+                    {
+                        res.PhysicalSizeX = b.meta.getPixelsPhysicalSizeX(b.series).value().doubleValue();
+                        hasPhysical = true;
+                    }
+                    else
+                        res.PhysicalSizeX = (96 / 2.54) / 1000;
+                    if (b.meta.getPixelsPhysicalSizeY(b.series) != null)
+                    {
+                        res.PhysicalSizeY = b.meta.getPixelsPhysicalSizeY(b.series).value().doubleValue();
+                    }
+                    else
+                        res.PhysicalSizeY = (96 / 2.54) / 1000;
+                    if (b.meta.getPixelsPhysicalSizeZ(b.series) != null)
+                    {
+                        res.PhysicalSizeZ = b.meta.getPixelsPhysicalSizeZ(b.series).value().doubleValue();
+                    }
+                    else
+                    {
+                        res.PhysicalSizeZ = 1;
+                    }
                 
-                if (b.meta.getStageLabelX(b.series) != null)
-                    b.stageSizeX = b.meta.getStageLabelX(b.series).value().doubleValue();
-                if (b.meta.getStageLabelY(b.series) != null)
-                    b.stageSizeY = b.meta.getStageLabelY(b.series).value().doubleValue();
-                if (b.meta.getStageLabelZ(b.series) != null)
-                    b.stageSizeZ = b.meta.getStageLabelZ(b.series).value().doubleValue();
-                else
-                    b.stageSizeZ = 1;
+                    if (b.meta.getStageLabelX(b.series) != null)
+                        res.StageX = b.meta.getStageLabelX(b.series).value().doubleValue();
+                    if (b.meta.getStageLabelY(b.series) != null)
+                        res.StageY = b.meta.getStageLabelY(b.series).value().doubleValue();
+                    if (b.meta.getStageLabelZ(b.series) != null)
+                        res.StageZ = b.meta.getStageLabelZ(b.series).value().doubleValue();
+                    else
+                        res.StageZ = 1;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + b.PhysicalSizeX + "," + b.PhysicalSizeY + "," + b.PhysicalSizeZ + ")");
+                }
+                b.Resolutions.Add(res);
             }
-            catch (Exception e)
-            {
-                b.stageSizeX = 0;
-                b.stageSizeY = 0;
-                b.stageSizeZ = 1;
-                Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + b.physicalSizeX + "," + b.physicalSizeY + "," + b.physicalSizeZ + ")");
-            }
-
-            b.Volume = new VolumeD(new Point3D(b.stageSizeX, b.stageSizeY, b.stageSizeZ), new Point3D(b.physicalSizeX * SizeX, b.physicalSizeY * SizeY, b.physicalSizeZ * SizeZ));
 
             int rc = b.meta.getROICount();
             for (int im = 0; im < rc; im++)
@@ -8563,8 +8985,6 @@ namespace Bio
                 b.StackThreshold(false);
             if(!tile)
             Images.AddImage(b);
-
-            
             b.Loading = false;
             if (progress)
             {
@@ -8573,523 +8993,9 @@ namespace Bio
             }
             return b;
         }
-        public static BioImage OpenOMETiled(string file, int serie, int tilex, int tiley, int tileSizeX, int tileSizeY)
-        {
-            bool tile = true;
-            //We wait incase OME has not initialized yet.
-            if (!initialized)
-            do
-            {
-                Thread.Sleep(100);
-                Application.DoEvents();
-            } while (!Initialized);
-            if (file == null || file == "")
-                throw new InvalidDataException("File is empty or null");
-            BioImage b = new BioImage(file);
-            b.Loading = true;
-            b.meta = (IMetadata)((OMEXMLService)new ServiceFactory().getInstance(typeof(OMEXMLService))).createOMEXMLMetadata();
-            reader = new ImageReader();
-            reader.setMetadataStore((MetadataStore)b.meta);
-            b.isPyramidal = true;
-            string str = b.imRead.getCurrentFile();
-            if (str == null || str!=file)
-                reader.setId(file);
-            if(reader.getSeries() != serie)
-            reader.setSeries(serie);
-            int RGBChannelCount = reader.getRGBChannelCount();
-            b.bitsPerPixel = reader.getBitsPerPixel();
-            if (b.bitsPerPixel > 16)
-            {
-                MessageBox.Show("Image bit depth of " + b.bitsPerPixel + " is not supported.");
-                return null;
-            }
-            b.id = file;
-            b.file = file;
-            int SizeX, SizeY;
-            int imWidth = reader.getSizeX();
-            int imHeight = reader.getSizeY();
-            SizeX = reader.getSizeX();
-            SizeY = reader.getSizeY();
-            int SizeZ = reader.getSizeZ();
-            b.sizeC = reader.getSizeC();
-            b.sizeZ = reader.getSizeZ();
-            b.sizeT = reader.getSizeT();
-            b.littleEndian = reader.isLittleEndian();
-            b.seriesCount = reader.getSeriesCount();
-            b.imagesPerSeries = reader.getImageCount();
-            b.series = serie;
-
-            string order = reader.getDimensionOrder();
-            PixelFormat PixelFormat = GetPixelFormat(RGBChannelCount, b.bitsPerPixel);
-            int stride = 0;
-            if (RGBChannelCount == 1)
-            {
-                if (b.bitsPerPixel > 8)
-                    stride = SizeX * 2;
-                else
-                    stride = SizeX;
-            }
-            else
-            if (RGBChannelCount == 3)
-            {
-                b.sizeC = 1;
-                if (b.bitsPerPixel > 8)
-                    stride = SizeX * 2 * 3;
-                else
-                    stride = SizeX * 3;
-            }
-            else
-            {
-                b.sizeC = 1;
-                stride = SizeX * 4;
-            }
-
-            b.Coords = new int[b.SizeZ, b.SizeC, b.SizeT];
-            //Lets get the channels amd initialize them
-            int i = 0;
-            while (true)
-            {
-                Channel ch = new Channel(i, b.bitsPerPixel, 1);
-                bool def = false;
-                try
-                {
-                    if (b.meta.getChannelName(serie, i) != null)
-                        ch.Name = b.meta.getChannelName(serie, i);
-                    if (b.meta.getChannelSamplesPerPixel(serie, i) != null)
-                    {
-                        int s = b.meta.getChannelSamplesPerPixel(serie, i).getNumberValue().intValue();
-                        ch.SamplesPerPixel = s;
-                        def = true;
-                    }
-                    if (b.meta.getChannelAcquisitionMode(serie, i) != null)
-                        ch.AcquisitionMode = b.meta.getChannelAcquisitionMode(serie, i);
-                    if (b.meta.getChannelID(serie, i) != null)
-                        ch.info.ID = b.meta.getChannelID(serie, i);
-                    if (b.meta.getChannelFluor(serie, i) != null)
-                        ch.Fluor = b.meta.getChannelFluor(serie, i);
-                    if (b.meta.getChannelColor(serie, i) != null)
-                    {
-                        ome.xml.model.primitives.Color cc = b.meta.getChannelColor(serie, i);
-                        ch.Color = System.Drawing.Color.FromArgb(cc.getRed(), cc.getGreen(), cc.getBlue());
-                    }
-                    if (b.meta.getChannelIlluminationType(serie, i) != null)
-                        ch.IlluminationType = b.meta.getChannelIlluminationType(serie, i);
-                    if (b.meta.getChannelContrastMethod(serie, i) != null)
-                        ch.ContrastMethod = b.meta.getChannelContrastMethod(serie, i);
-                    if (b.meta.getChannelEmissionWavelength(serie, i) != null)
-                        ch.Emission = b.meta.getChannelEmissionWavelength(serie, i).value().intValue();
-                    if (b.meta.getChannelExcitationWavelength(serie, i) != null)
-                        ch.Excitation = b.meta.getChannelExcitationWavelength(serie, i).value().intValue();
-                    if (b.meta.getLightEmittingDiodePower(serie, i) != null)
-                        ch.LightSourceIntensity = b.meta.getLightEmittingDiodePower(serie, i).value().doubleValue();
-                    if (b.meta.getLightEmittingDiodeID(serie, i) != null)
-                        ch.DiodeName = b.meta.getLightEmittingDiodeID(serie, i);
-                    if (b.meta.getChannelLightSourceSettingsAttenuation(serie, i) != null)
-                        ch.LightSourceAttenuation = b.meta.getChannelLightSourceSettingsAttenuation(serie, i).toString();
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                if (i == 0)
-                {
-                    b.rgbChannels[0] = 0;
-                }
-                else
-                if (i == 1)
-                {
-                    b.rgbChannels[1] = 1;
-                }
-                else
-                if (i == 2)
-                {
-                    b.rgbChannels[2] = 2;
-                }
-                //If this channel is not defined we have loaded all the channels in the file.
-                if (!def)
-                    break;
-                else
-                    b.Channels.Add(ch);
-                i++;
-            }
-
-            try
-            {
-                bool hasPhysical = false;
-                if (b.meta.getPixelsPhysicalSizeX(b.series) != null)
-                {
-                    b.physicalSizeX = b.meta.getPixelsPhysicalSizeX(b.series).value().doubleValue();
-                    hasPhysical = true;
-                }
-                if (b.meta.getPixelsPhysicalSizeY(b.series) != null)
-                {
-                    b.physicalSizeY = b.meta.getPixelsPhysicalSizeY(b.series).value().doubleValue();
-                }
-                if (b.meta.getPixelsPhysicalSizeZ(b.series) != null)
-                {
-                    b.physicalSizeZ = b.meta.getPixelsPhysicalSizeZ(b.series).value().doubleValue();
-                }
-                else
-                {
-                    b.physicalSizeZ = 1;
-                }
-
-                if (b.meta.getStageLabelX(b.series) != null)
-                    b.stageSizeX = b.meta.getStageLabelX(b.series).value().doubleValue();
-                if (b.meta.getStageLabelY(b.series) != null)
-                    b.stageSizeY = b.meta.getStageLabelY(b.series).value().doubleValue();
-                if (b.meta.getStageLabelZ(b.series) != null)
-                    b.stageSizeZ = b.meta.getStageLabelZ(b.series).value().doubleValue();
-                else
-                    b.stageSizeZ = 1;
-            }
-            catch (Exception e)
-            {
-                b.stageSizeX = 0;
-                b.stageSizeY = 0;
-                b.stageSizeZ = 1;
-                Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + b.physicalSizeX + "," + b.physicalSizeY + "," + b.physicalSizeZ + ")");
-            }
-
-            b.Volume = new VolumeD(new Point3D(b.stageSizeX, b.stageSizeY, b.stageSizeZ), new Point3D(b.physicalSizeX * SizeX, b.physicalSizeY * SizeY, b.physicalSizeZ * SizeZ));
-
-            int rc = b.meta.getROICount();
-            for (int im = 0; im < rc; im++)
-            {
-                string roiID = b.meta.getROIID(im);
-                string roiName = b.meta.getROIName(im);
-                ZCT co = new ZCT(0, 0, 0);
-                int scount = 1;
-                try
-                {
-                    scount = b.meta.getShapeCount(im);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message.ToString());
-                }
-                for (int sc = 0; sc < scount; sc++)
-                {
-                    string type = b.meta.getShapeType(im, sc);
-                    ROI an = new ROI();
-                    an.roiID = roiID;
-                    an.roiName = roiName;
-                    an.shapeIndex = sc;
-                    if (type == "Point")
-                    {
-                        an.type = ROI.Type.Point;
-                        an.id = b.meta.getPointID(im, sc);
-                        double dx = b.meta.getPointX(im, sc).doubleValue();
-                        double dy = b.meta.getPointY(im, sc).doubleValue();
-                        an.AddPoint(b.ToStageSpace(new PointD(dx, dy)));
-                        an.coord = new ZCT();
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getPointTheZ(im, sc);
-                        if (nz != null)
-                            an.coord.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getPointTheC(im, sc);
-                        if (nc != null)
-                            an.coord.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getPointTheT(im, sc);
-                        if (nt != null)
-                            an.coord.T = nt.getNumberValue().intValue();
-                        an.Text = b.meta.getPointText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getPointFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getPointStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getPointStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getPointStrokeColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                    }
-                    else
-                    if (type == "Line")
-                    {
-                        an.type = ROI.Type.Line;
-                        an.id = b.meta.getLineID(im, sc);
-                        double px1 = b.meta.getLineX1(im, sc).doubleValue();
-                        double py1 = b.meta.getLineY1(im, sc).doubleValue();
-                        double px2 = b.meta.getLineX2(im, sc).doubleValue();
-                        double py2 = b.meta.getLineY2(im, sc).doubleValue();
-                        an.AddPoint(b.ToStageSpace(new PointD(px1, py1)));
-                        an.AddPoint(b.ToStageSpace(new PointD(px2, py2)));
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getLineTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getLineTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getLineTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-                        an.Text = b.meta.getLineText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getLineFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getLineStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getLineStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getLineFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                    }
-                    else
-                    if (type == "Rectangle")
-                    {
-                        an.type = ROI.Type.Rectangle;
-                        an.id = b.meta.getRectangleID(im, sc);
-                        double px = b.meta.getRectangleX(im, sc).doubleValue();
-                        double py = b.meta.getRectangleY(im, sc).doubleValue();
-                        double pw = b.meta.getRectangleWidth(im, sc).doubleValue();
-                        double ph = b.meta.getRectangleHeight(im, sc).doubleValue();
-                        an.Rect = b.ToStageSpace(new RectangleD(px, py, pw, ph));
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getRectangleTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getRectangleTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getRectangleTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-
-                        an.Text = b.meta.getRectangleText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getRectangleFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getRectangleStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getRectangleStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getRectangleFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                        ome.xml.model.enums.FillRule fr = b.meta.getRectangleFillRule(im, sc);
-                    }
-                    else
-                    if (type == "Ellipse")
-                    {
-                        an.type = ROI.Type.Ellipse;
-                        an.id = b.meta.getEllipseID(im, sc);
-                        double px = b.meta.getEllipseX(im, sc).doubleValue();
-                        double py = b.meta.getEllipseY(im, sc).doubleValue();
-                        double ew = b.meta.getEllipseRadiusX(im, sc).doubleValue();
-                        double eh = b.meta.getEllipseRadiusY(im, sc).doubleValue();
-                        //We convert the ellipse radius to System.Drawing.Rectangle
-                        double w = ew * 2;
-                        double h = eh * 2;
-                        double x = px - ew;
-                        double y = py - eh;
-                        an.Rect = b.ToStageSpace(new RectangleD(x, y, w, h));
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getEllipseTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getEllipseTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getEllipseTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-                        an.Text = b.meta.getEllipseText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getEllipseFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getEllipseStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getEllipseStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getEllipseFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                    }
-                    else
-                    if (type == "Polygon")
-                    {
-                        an.type = ROI.Type.Polygon;
-                        an.id = b.meta.getPolygonID(im, sc);
-                        an.closed = true;
-                        string pxs = b.meta.getPolygonPoints(im, sc);
-                        PointD[] pts = an.stringToPoints(pxs);
-                        pts = b.ToStageSpace(pts);
-                        if (pts.Length > 100)
-                        {
-                            an.type = ROI.Type.Freeform;
-                        }
-                        an.AddPoints(pts);
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getPolygonTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getPolygonTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getPolygonTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-                        an.Text = b.meta.getPolygonText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getPolygonFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getPolygonStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getPolygonStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getPolygonFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                    }
-                    else
-                    if (type == "Polyline")
-                    {
-                        an.type = ROI.Type.Polyline;
-                        an.id = b.meta.getPolylineID(im, sc);
-                        string pxs = b.meta.getPolylinePoints(im, sc);
-                        PointD[] pts = an.stringToPoints(pxs);
-                        for (int pi = 0; pi < pts.Length; pi++)
-                        {
-                            pts[pi] = b.ToStageSpace(pts[pi]);
-                        }
-                        an.AddPoints(an.stringToPoints(pxs));
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getPolylineTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getPolylineTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getPolylineTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-                        an.Text = b.meta.getPolylineText(im, sc);
-                        ome.units.quantity.Length fl = b.meta.getPolylineFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getPolylineStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getPolylineStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getPolylineFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                    }
-                    else
-                    if (type == "Label")
-                    {
-                        an.type = ROI.Type.Label;
-                        an.id = b.meta.getLabelID(im, sc);
-
-                        ome.xml.model.primitives.NonNegativeInteger nz = b.meta.getLabelTheZ(im, sc);
-                        if (nz != null)
-                            co.Z = nz.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nc = b.meta.getLabelTheC(im, sc);
-                        if (nc != null)
-                            co.C = nc.getNumberValue().intValue();
-                        ome.xml.model.primitives.NonNegativeInteger nt = b.meta.getLabelTheT(im, sc);
-                        if (nt != null)
-                            co.T = nt.getNumberValue().intValue();
-                        an.coord = co;
-
-                        ome.units.quantity.Length fl = b.meta.getLabelFontSize(im, sc);
-                        if (fl != null)
-                            an.font = new Font(SystemFonts.DefaultFont.FontFamily, (float)fl.value().doubleValue(), FontStyle.Regular);
-                        ome.xml.model.primitives.Color col = b.meta.getLabelStrokeColor(im, sc);
-                        if (col != null)
-                            an.strokeColor = System.Drawing.Color.FromArgb(col.getAlpha(), col.getRed(), col.getGreen(), col.getBlue());
-                        ome.units.quantity.Length fw = b.meta.getLabelStrokeWidth(im, sc);
-                        if (fw != null)
-                            an.strokeWidth = (float)fw.value().floatValue();
-                        ome.xml.model.primitives.Color colf = b.meta.getLabelFillColor(im, sc);
-                        if (colf != null)
-                            an.fillColor = System.Drawing.Color.FromArgb(colf.getAlpha(), colf.getRed(), colf.getGreen(), colf.getBlue());
-                        PointD p = new PointD(b.meta.getLabelX(im, sc).doubleValue(), b.meta.getLabelY(im, sc).doubleValue());
-                        an.AddPoint(b.ToStageSpace(p));
-                        an.Text = b.meta.getLabelText(im, sc);
-                    }
-                    if (b.Volume.Intersects(an.BoundingBox))
-                        b.Annotations.Add(an);
-                }
-            }
-
-            List<string> serFiles = new List<string>();
-            serFiles.AddRange(reader.getSeriesUsedFiles());
-
-            b.Buffers = new List<BufferInfo>();
-            // read the image data bytes
-            int pages = reader.getImageCount();
-            int z = 0;
-            int c = 0;
-            int t = 0;
-            /*
-            if(file.EndsWith(".tif"))
-            {
-                BufferInfo bf = GetTiffTile(b, new ZCT(0, 0, 0), serie, tilex, tiley, tileSizeX, tileSizeY);
-            }
-            */
-            //else
-            for (int p = 0; p < pages; p++)
-            {
-                BufferInfo bf;
-                if (tile)
-                {
-                    if (tilex < 0)
-                        tilex = 0;
-                    if (tiley < 0)
-                        tiley = 0;
-                    int sx = tileSizeX;
-                    if (tilex + tileSizeX > SizeX)
-                        sx -= (tilex + tileSizeX) - (SizeX-1);
-                    int sy = tileSizeY;
-                    if (tiley + tileSizeY > SizeY)
-                        sy -= (tiley + tileSizeY) - (SizeY-1);
-                    byte[] bytes = reader.openBytes(p, tilex, tiley, sx, sy);
-                    bf = new BufferInfo(file, sx, sy, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian);
-                    //bf.SwitchRedBlue();
-                    b.Buffers.Add(bf);
-                }
-                else
-                {
-                    byte[] bytes = reader.openBytes(p);
-                    bf = new BufferInfo(file, SizeX, SizeY, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian);
-                    b.Buffers.Add(bf);
-                }
-                //We add the buffers to thresholding image statistics calculation threads.
-                Statistics.CalcStatistics(bf);
-                Application.DoEvents();
-            }
-            
-            b.UpdateCoords(b.SizeZ, b.SizeC, b.SizeT, order);
-            AutoThreshold(b, false);
-            if (b.bitsPerPixel > 8)
-                b.StackThreshold(true);
-            else
-                b.StackThreshold(false);
-            if (!tile)
-                Images.AddImage(b);
-
-            Recorder.AddLine("Bio.BioImage.OpenOME(\"" + file + "\"," + serie + ");");
-            b.Loading = false;
-            return b;
-        }
         ImageReader imRead = new ImageReader();
+        byte[] bts;
+        int ssx, ssy;
         /// It reads a tile from a file, and returns a BufferInfo object
         /// 
         /// @param BioImage This is a class that contains the image file name, the image reader, and the
@@ -9102,23 +9008,21 @@ namespace Bio
         /// @param tileSizeY the height of the tile
         /// 
         /// @return A BufferInfo object.
-        public static BufferInfo GetTile(BioImage b, ZCT coord, int serie, int tilex, int tiley, int tileSizeX, int tileSizeY)
+        public Bitmap GetTile(ZCT coord, int serie, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {
-            if (b.imRead == null)
-                b.imRead = new ImageReader();
-            string s = b.imRead.getCurrentFile();
-            if(s == null)
-            b.imRead.setId(b.file);
-            if(b.imRead.getSeries() != serie)
-            b.imRead.setSeries(serie);
-            int SizeX = b.imRead.getSizeX();
-            int SizeY = b.imRead.getSizeY();
-            int p = b.Coords[coord.Z, coord.C, coord.T];
-            bool littleEndian = b.imRead.isLittleEndian();
-            int RGBChannelCount = b.imRead.getRGBChannelCount();
-            b.bitsPerPixel = b.imRead.getBitsPerPixel();
-            PixelFormat PixelFormat = GetPixelFormat(RGBChannelCount, b.bitsPerPixel);
-            BufferInfo bf;
+            if (imRead == null)
+                imRead = new ImageReader();
+            string s = imRead.getCurrentFile();
+            if (s == null)
+                imRead.setId(file);
+            int SizeX = imRead.getSizeX();
+            int SizeY = imRead.getSizeY();
+            int SizeZ = imRead.getSizeZ();
+            int p = Coords[coord.Z, coord.C, coord.T];
+            littleEndian = imRead.isLittleEndian();
+            int RGBChannelCount = imRead.getRGBChannelCount();
+            int bitsPerPixel = imRead.getBitsPerPixel();
+            PixelFormat PixelFormat = GetPixelFormat(RGBChannelCount, bitsPerPixel);
             if (tilex < 0)
                 tilex = 0;
             if (tiley < 0)
@@ -9137,74 +9041,146 @@ namespace Bio
                 return null;
             if (sy <= 0)
                 return null;
-            /*
-            if (b.file.EndsWith(".tif"))
+            int stride;
+            if (RGBChannelCount == 1)
             {
-                BufferInfo bff = GetTiffTile(b, coord, serie, tilex, tiley, tileSizeX, tileSizeY);
-                return bff;
+                if (bitsPerPixel > 8)
+                    stride = sx * 2;
+                else
+                    stride = sx;
             }
-            */
-            byte[] bytes = null;
-            if (b.file.EndsWith(".tif"))
+            else
+            if (RGBChannelCount == 3)
             {
-                byte[] bts;
-                Tiff tifRead = Tiff.Open(b.file, "r");
-                
-                int strplane = 0;
+                if (bitsPerPixel > 8)
+                    stride = sx * 2 * 3;
+                else
+                    stride = sx * 3;
+            }
+            else
+            {
+                stride = sx * 4;
+            }
+
+            try
+            {
+                if (meta.getStageLabelX(serie) != null)
+                    stageSizeX = meta.getStageLabelX(serie).value().doubleValue();
+                if (meta.getStageLabelY(serie) != null)
+                    stageSizeY = meta.getStageLabelY(serie).value().doubleValue();
+                if (meta.getStageLabelZ(serie) != null)
+                    stageSizeZ = meta.getStageLabelZ(serie).value().doubleValue();
+                else
+                    stageSizeZ = 1;
+            }
+            catch (Exception e)
+            {
+                stageSizeX = 0;
+                stageSizeY = 0;
+                stageSizeZ = 0;
+                Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + PhysicalSizeX + "," + PhysicalSizeY + "," + PhysicalSizeZ + ")");
+            }
+
+
+            if (imRead.getSeries() != serie || sx != ssx || sy != ssy)
+            {
+                imRead.setSeries(serie);
+                SizeX = imRead.getSizeX();
+                SizeY = imRead.getSizeY();
+                p = Coords[coord.Z, coord.C, coord.T];
+                littleEndian = imRead.isLittleEndian();
+                RGBChannelCount = imRead.getRGBChannelCount();
+                bitsPerPixel = imRead.getBitsPerPixel();
+                PixelFormat = GetPixelFormat(RGBChannelCount, bitsPerPixel);
+                if (tilex < 0)
+                    tilex = 0;
+                if (tiley < 0)
+                    tiley = 0;
+                if (tilex >= SizeX)
+                    tilex = SizeX - 1;
+                if (tiley >= SizeY)
+                    tiley = SizeY - 1;
+                sx = tileSizeX;
+                if (tilex + tileSizeX > SizeX)
+                    sx -= (tilex + tileSizeX) - (SizeX);
+                sy = tileSizeY;
+                if (tiley + tileSizeY > SizeY)
+                    sy -= (tiley + tileSizeY) - (SizeY);
                 if (RGBChannelCount == 1)
                 {
-                    if (b.bitsPerPixel > 8)
-                        strplane = sx * 2;
+                    if (bitsPerPixel > 8)
+                        stride = sx * 2;
                     else
-                        strplane = sx;
+                        stride = sx;
                 }
                 else
                 if (RGBChannelCount == 3)
                 {
-                    if (b.bitsPerPixel > 8)
-                        strplane = sx * 2;
+                    if (bitsPerPixel > 8)
+                        stride = sx * 2 * 3;
                     else
-                        strplane = sx;
+                        stride = sx * 3;
                 }
                 else
                 {
-                    strplane = sx * 4;
+                    stride = sx * 4;
                 }
-
-                bytes = b.imRead.openBytes(b.Coords[coord.Z, coord.C, coord.Z], tilex, tiley, sx, sy);
-
-                byte[] rb = new byte[strplane * sy];
-                byte[] gb = new byte[strplane * sy];
-                byte[] bb = new byte[strplane * sy];
-                BufferInfo[] bfs = new BufferInfo[3];
-                for (int i = 0; i < strplane * sy; i++)
-                {
-                    rb[i] = bytes[i + ((strplane))];
-                    gb[i] = bytes[i + ((strplane + 2))];
-                    bb[i] = bytes[i + ((strplane + 3))];
-                }
-                BufferInfo binf = null;
-                if (b.bitsPerPixel == 8)
-                {
-                    bfs[0] = new BufferInfo(b.file, sx, sy, PixelFormat.Format8bppIndexed, rb, new ZCT(0, 0, 0), p, littleEndian);
-                    bfs[1] = new BufferInfo(b.file, sx, sy, PixelFormat.Format8bppIndexed, gb, new ZCT(0, 0, 0), p, littleEndian);
-                    bfs[2] = new BufferInfo(b.file, sx, sy, PixelFormat.Format8bppIndexed, bb, new ZCT(0, 0, 0), p, littleEndian);
-                    binf = BufferInfo.RGB8To24(bfs);
-                }
-                else
-                {
-                    bfs[0] = new BufferInfo(b.file, sx, sy, PixelFormat.Format16bppGrayScale, rb, new ZCT(0, 0, 0), p, littleEndian);
-                    bfs[1] = new BufferInfo(b.file, sx, sy, PixelFormat.Format16bppGrayScale, gb, new ZCT(0, 0, 0), p, littleEndian);
-                    bfs[2] = new BufferInfo(b.file, sx, sy, PixelFormat.Format16bppGrayScale, bb, new ZCT(0, 0, 0), p, littleEndian);
-                    binf = BufferInfo.RGB16To48(bfs);
-                }
-                return binf;
+                //We update the cached tile byte buffer.
+                bts = new byte[stride * sy];
+                ssx = sx;
+                ssy = sy;
             }
-            else
-                bytes = b.imRead.openBytes(b.Coords[coord.Z, coord.C, coord.Z], tilex, tiley, sx, sy);
-            bf = new BufferInfo(b.file, sx, sy, PixelFormat, bytes, coord, p, littleEndian);
-            //bf.SwitchRedBlue();
-            return bf;
+
+            //since this is a tile we need to update the stage coordinates based on tile location
+            stageSizeX = stageSizeX + (PhysicalSizeX * tilex);
+            stageSizeY = stageSizeY + (PhysicalSizeY * tiley);
+            byte[] bytesr = imRead.openBytes(Coords[coord.Z, coord.C, coord.T], tilex, tiley, sx, sy);
+            bool interleaved = imRead.isInterleaved();
+            if (!interleaved)
+            {
+                int strplane = 0;
+                if (bitsPerPixel > 8)
+                    strplane = sx * 2;
+                else
+                    strplane = sx;
+                if (RGBChannelCount == 1)
+                {
+                    for (int y = 0; y < sy; y++)
+                    {
+                        int x = 0;
+                        int str1 = stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x] = bytesr[str2 + st];
+                            x++;
+                        }
+                    }
+                }
+                else
+                {
+                    int ind = strplane * sy;
+                    int indb = ind * 2;
+                    for (int y = 0; y < sy; y++)
+                    {
+                        int x = 0;
+                        int str1 = stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x + 2] = bytesr[str2 + st];
+                            bts[str1 + x + 1] = bytesr[ind + str2 + st];
+                            bts[str1 + x] = bytesr[indb + str2 + st];
+                            x += 3;
+                        }
+                    }
+                }
+                return BufferInfo.GetBitmap(sx, sy, stride, PixelFormat, bts);
+            }
+            Bitmap bm = BufferInfo.GetBitmap(sx, sy, stride, PixelFormat, bytesr);
+            if (interleaved && isRGB)
+                bm = BufferInfo.SwitchRedBlue(bm);
+            return bm;
         }
         /// This function sets the minimum and maximum values of the image stack to the minimum and
         /// maximum values of the image stack
@@ -9325,7 +9301,7 @@ namespace Bio
             }
             throw new NotSupportedException("Not supported pixel format.");
         }
-       /// It opens a file, checks if it's tiled, if it is, it opens the file with the highest
+        /// It opens a file, checks if it's tiled, if it is, it opens the file with the highest
        /// resolution, if it's not, it opens the file with the highest resolution
        /// 
        /// @param file The file to open.
@@ -9344,35 +9320,7 @@ namespace Bio
             BioImage[] bs = null;
             if (tile)
             {
-                bs = new BioImage[1];
-                //For tiled images the series count is the count of pyramidal resolutions for CZI.
-                //This is why some programs fail to open these files.
-                int resCount = reader.getSeriesCount();
-                //OME TIFF resolution count is the actual resolution count.
-                if (resCount == 0)
-                    resCount = reader.getResolutionCount();
-                List<Resolution> ress = new List<Resolution>();
-                for (int r = 0; r < resCount; r++)
-                {
-                    reader.setSeries(r);
-                    int i = reader.getRGBChannelCount();
-                    int w = reader.getSizeX();
-                    int h = reader.getSizeY();
-                    double px = meta.getPixelsPhysicalSizeX(r).value().doubleValue();
-                    double py = meta.getPixelsPhysicalSizeY(r).value().doubleValue();
-                    Resolution re = new Resolution(w,h,i,reader.getBitsPerPixel(),px,py);
-                    ress.Add(re);
-                }
-                int res = resCount-1;
-                if (resCount > 1)
-                {
-                    Resolutions resos = new Resolutions(ress);
-                    resos.ShowDialog();
-                    res = resos.Resolution;
-                }
-                bs[0] = OpenOME(file, res, true, true, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-                bs[0].Resolutions = ress;
-                bs[0].isPyramidal = true;
+                bs[0] = OpenOME(file, 0, true, true, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
                 return bs;
             }
             else
@@ -9395,7 +9343,7 @@ namespace Bio
             t.Name = file;
             t.Start();
         }
-       /// It opens a file asynchronously
+        /// It opens a file asynchronously
        /// 
        /// @param files The file(s) to open.
         public static void OpenAsync(string[] files)
@@ -9460,7 +9408,6 @@ namespace Bio
                 }
             }
             b.UpdateCoords(z+1, c+1, t+1);
-            b.Volume = new VolumeD(bs[0].Volume.Location, new Point3D(bs[0].SizeX * bs[0].physicalSizeX, bs[0].SizeY * bs[0].physicalSizeY, (z + 1) * bs[0].physicalSizeZ));
             return b;
         }
         /// The function takes a BioImage object, opens the file, and returns a new BioImage object

@@ -106,11 +106,12 @@ namespace Bio
             this.scriptRunnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scriptRecorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.microscopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lightToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openImageJROI = new System.Windows.Forms.OpenFileDialog();
             this.saveImageJROI = new System.Windows.Forms.SaveFileDialog();
-            this.microscopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lightToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savePyramidalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel.SuspendLayout();
             this.tabContextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -232,6 +233,7 @@ namespace Bio
             this.saveTabToolStripMenuItem,
             this.saveTabTiffToolStripMenuItem,
             this.saveSeriesToolStripMenuItem,
+            this.savePyramidalToolStripMenuItem,
             this.sepToolStripMenuItem3,
             this.imagesToStackToolStripMenuItem,
             this.newTabViewToolStripMenuItem,
@@ -707,6 +709,21 @@ namespace Bio
             this.automationToolStripMenuItem.Text = "Automation";
             this.automationToolStripMenuItem.Click += new System.EventHandler(this.automationToolStripMenuItem_Click);
             // 
+            // microscopeToolStripMenuItem
+            // 
+            this.microscopeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lightToolToolStripMenuItem});
+            this.microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
+            this.microscopeToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.microscopeToolStripMenuItem.Text = "Microscope";
+            // 
+            // lightToolToolStripMenuItem
+            // 
+            this.lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
+            this.lightToolToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.lightToolToolStripMenuItem.Text = "Light Path";
+            this.lightToolToolStripMenuItem.Click += new System.EventHandler(this.lightToolToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -726,20 +743,12 @@ namespace Bio
             this.saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             this.saveImageJROI.Title = "Save ROIs to CSV";
             // 
-            // microscopeToolStripMenuItem
+            // savePyramidalToolStripMenuItem
             // 
-            this.microscopeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lightToolToolStripMenuItem});
-            this.microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
-            this.microscopeToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
-            this.microscopeToolStripMenuItem.Text = "Microscope";
-            // 
-            // lightToolToolStripMenuItem
-            // 
-            this.lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
-            this.lightToolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.lightToolToolStripMenuItem.Text = "Light Path";
-            this.lightToolToolStripMenuItem.Click += new System.EventHandler(this.lightToolToolStripMenuItem_Click);
+            this.savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
+            this.savePyramidalToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
+            this.savePyramidalToolStripMenuItem.Click += new System.EventHandler(this.savePyramidalToolStripMenuItem_Click);
             // 
             // TabsView
             // 
@@ -850,5 +859,6 @@ namespace Bio
         private System.Windows.Forms.SaveFileDialog saveImageJROI;
         private System.Windows.Forms.ToolStripMenuItem microscopeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lightToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem savePyramidalToolStripMenuItem;
     }
 }

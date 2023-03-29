@@ -14,6 +14,8 @@ using Bio.Graphics;
 using Pen = System.Drawing.Pen;
 using System.Threading;
 using SharpDX.Mathematics.Interop;
+using SharpDX.Direct2D1.Effects;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Bio
 {
@@ -1087,7 +1089,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        BufferInfo bf = new BufferInfo(SelectedImage.file,SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height),c,index);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1100,7 +1102,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1113,7 +1115,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1126,7 +1128,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1178,7 +1180,7 @@ namespace Bio
                 if (SelectedImage.isPyramidal)
                 {
                     ZCT c = GetCoordinate();
-                    BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                    BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                     bitmap = (Bitmap)bf.ImageRGB;
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1191,7 +1193,7 @@ namespace Bio
                 if (SelectedImage.isPyramidal)
                 {
                     ZCT c = GetCoordinate();
-                    BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                    BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                     bitmap = (Bitmap)bf.ImageRGB;
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1204,7 +1206,7 @@ namespace Bio
                 if (SelectedImage.isPyramidal)
                 {
                     ZCT c = GetCoordinate();
-                    BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                    BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                     bitmap = (Bitmap)bf.ImageRGB;
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1217,7 +1219,7 @@ namespace Bio
                 if (SelectedImage.isPyramidal)
                 {
                     ZCT c = GetCoordinate();
-                    BufferInfo bf = BioImage.GetTile(SelectedImage, c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                    BufferInfo bf = new BufferInfo(SelectedImage.file, SelectedImage.GetTile(c, resolution, PyramidalOrigin.X, PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height), c, index);
                     bitmap = (Bitmap)bf.ImageRGB;
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                     SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1249,13 +1251,13 @@ namespace Bio
             update = false;
             UpdateView();
         }
-       /// When the user selects a new channel from the dropdown menu, the program updates the image to
-       /// display the new channel
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs System.EventArgs
-       /// 
-       /// @return The index of the selected item in the ComboBox.
+        /// When the user selects a new channel from the dropdown menu, the program updates the image to
+        /// display the new channel
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The index of the selected item in the ComboBox.
         private void channelBoxR_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (channelBoxR.SelectedIndex == -1)
@@ -1577,18 +1579,22 @@ namespace Bio
                 if (zBar.Value - 1 >= zBar.Minimum)
                     zBar.Value -= 1;
             }
-            if (SelectedImage != null)
-                if (Ctrl && SelectedImage.isPyramidal)
-                    if (e.Delta > 0)
-                    {
-                        if (resolution - 1 > 0)
-                            Resolution--;
-                    }
-                    else
-                    {
-                        if (resolution + 1 < SelectedImage.Resolutions.Count)
-                            Resolution++;
-                    }
+            if (SelectedImage == null)
+                return;
+            else
+            {
+                if (Ctrl)
+                if (e.Delta > 0)
+                {
+                    if (resolution - 1 > 0)
+                        Resolution--;
+                }
+                else
+                {
+                    if (resolution + 1 < SelectedImage.Resolutions.Count)
+                        Resolution++;
+                }
+            }
         }
         /// If the mouse wheel is scrolled up, increase the value of the trackbar by 1, if the mouse
         /// wheel is scrolled down, decrease the value of the trackbar by 1
@@ -2066,16 +2072,15 @@ namespace Bio
                 double h = ToViewH(pictureBox.Height);
                 RectangleF rg = new RectangleF((float)((-Origin.X) - (w / 2)), (float)((-Origin.Y) - (h / 2)), (float)(w), (float)(h));
                 RectangleF rec = new RectangleF((float)im.Volume.Location.X, (float)im.Volume.Location.Y, (float)im.Volume.Width, (float)im.Volume.Height);
-                if (rg.IntersectsWith(rec))
-                    if (SelectedImage.isPyramidal)
-                    {
-                        g.ResetTransform();
-                        g.DrawImage(Bitmaps[i], 0, 0, Bitmaps[i].Width, Bitmaps[i].Height);
-                    }
-                    else
-                    {
-                        g.DrawImage(Bitmaps[i], r.X, r.Y, r.Width, r.Height);
-                    }
+                if (SelectedImage.isPyramidal)
+                {
+                    g.ResetTransform();
+                    g.DrawImage(Bitmaps[i], 0, 0, Bitmaps[i].Width, Bitmaps[i].Height);
+                }
+                else if (rg.IntersectsWith(rec))
+                { 
+                    g.DrawImage(Bitmaps[i], r.X, r.Y, r.Width, r.Height);
+                }
                 if (i == SelectedIndex && !SelectedImage.isPyramidal)
                 {
                     rf[0] = r;
@@ -2578,7 +2583,7 @@ namespace Bio
             Mode = ViewMode.Filtered;
         }
 
-/// If the user clicks on the "Raw" menu item, then set the Mode property to ViewMode.Raw
+        /// If the user clicks on the "Raw" menu item, then set the Mode property to ViewMode.Raw
 /// 
 /// @param sender The object that raised the event.
 /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
