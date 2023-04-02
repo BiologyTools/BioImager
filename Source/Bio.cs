@@ -266,7 +266,7 @@ namespace Bio
                     return (long)y * (long)x * 4;
                 else if (format == PixelFormat.Format48bppRgb || format == PixelFormat.Format48bppRgb)
                     return (long)y * (long)x * 6;
-                throw new NotSupportedException(format + " is not supported.");
+                return 0;
             }
         }
         public Resolution()
@@ -3236,25 +3236,138 @@ namespace Bio
                 SwitchRedBlue();
             Plane = plane;
         }
-        public BufferInfo(string file, int w, int h, PixelFormat px, byte[] bts, ZCT coord, int index, bool littleEndian)
+        /* Creating a new BufferInfo object. */
+        public BufferInfo(string file, int w, int h, PixelFormat px, byte[] byts, ZCT coord, int index, bool littleEndian)
         {
             ID = CreateID(file, index);
             SizeX = w;
             SizeY = h;
             pixelFormat = px;
             Coordinate = coord;
-            Bytes = bts;
+            Bytes = byts;
+            if (!littleEndian)
+            {
+                Array.Reverse(Bytes);
+                RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
             if (isRGB)
                 SwitchRedBlue();
         }
-        public BufferInfo(string file, int w, int h, PixelFormat px, byte[] bts, ZCT coord, int index, bool littleEndian, Plane plane)
+        /* Creating a new BufferInfo object. */
+        public BufferInfo(string file, int w, int h, PixelFormat px, byte[] byts, ZCT coord, int index, bool littleEndian, bool interleaved)
         {
             ID = CreateID(file, index);
             SizeX = w;
             SizeY = h;
             pixelFormat = px;
             Coordinate = coord;
-            Bytes = bts;
+            Bytes = byts;
+            if (!interleaved)
+            {
+                byte[] bts = new byte[Length];
+                int strplane = 0;
+                if (BitsPerPixel > 8)
+                    strplane = w * 2;
+                else
+                    strplane = w;
+                if (RGBChannelsCount == 1)
+                {
+                    for (int y = 0; y < h; y++)
+                    {
+                        int x = 0;
+                        int str1 = Stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x] = bytes[str2 + st];
+                            x++;
+                        }
+                    }
+                }
+                else
+                {
+                    int ind = strplane * h;
+                    int indb = ind * 2;
+                    for (int y = 0; y < h; y++)
+                    {
+                        int x = 0;
+                        int str1 = Stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x + 2] = bytes[str2 + st];
+                            bts[str1 + x + 1] = bytes[ind + str2 + st];
+                            bts[str1 + x] = bytes[indb + str2 + st];
+                            x += 3;
+                        }
+                    }
+                }
+                bytes = bts;
+            }
+            if (!littleEndian)
+            {
+                Array.Reverse(Bytes);
+                RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
+            if (isRGB)
+                SwitchRedBlue();
+        }
+        /* Creating a new BufferInfo object. */
+        public BufferInfo(string file, int w, int h, PixelFormat px, byte[] byts, ZCT coord, int index, bool littleEndian, bool interleaved, Plane plane)
+        {
+            ID = CreateID(file, index);
+            SizeX = w;
+            SizeY = h;
+            pixelFormat = px;
+            Coordinate = coord;
+            Bytes = byts;
+            if (!interleaved)
+            {
+                byte[] bts = new byte[Length];
+                int strplane = 0;
+                if (BitsPerPixel > 8)
+                    strplane = w * 2;
+                else
+                    strplane = w;
+                if (RGBChannelsCount == 1)
+                {
+                    for (int y = 0; y < h; y++)
+                    {
+                        int x = 0;
+                        int str1 = Stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x] = bytes[str2 + st];
+                            x++;
+                        }
+                    }
+                }
+                else
+                {
+                    int ind = strplane * h;
+                    int indb = ind * 2;
+                    for (int y = 0; y < h; y++)
+                    {
+                        int x = 0;
+                        int str1 = Stride * y;
+                        int str2 = strplane * y;
+                        for (int st = 0; st < strplane; st++)
+                        {
+                            bts[str1 + x + 2] = bytes[str2 + st];
+                            bts[str1 + x + 1] = bytes[ind + str2 + st];
+                            bts[str1 + x] = bytes[indb + str2 + st];
+                            x += 3;
+                        }
+                    }
+                }
+                bytes = bts;
+            }
+            if (!littleEndian)
+            {
+                Array.Reverse(Bytes);
+                RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
             if (isRGB)
                 SwitchRedBlue();
             Plane = plane;
@@ -7226,7 +7339,6 @@ namespace Bio
                 b.littleEndian = image.IsBigEndian();
                 int RGBChannelCount = image.GetField(TiffTag.SAMPLESPERPIXEL)[0].ToInt();
                 string desc = "";
-
                 FieldValue[] f = image.GetField(TiffTag.IMAGEDESCRIPTION);
                 ImageJDesc imDesc = new ImageJDesc();
                 b.sizeC = 1;
@@ -7401,14 +7513,14 @@ namespace Bio
                 int pages = image.NumberOfDirectories() / b.seriesCount;
                 //int stride = image.ScanlineSize();
                 int str = image.ScanlineSize();
-                bool planes = false;
+                bool interleaved = false;
                 //If calculated stride and image scanline size is not the same it means the image is written in planes
                 if (stride != str)
-                    planes = true;
+                    interleaved = true;
                 for (int p = series * pages; p < (series + 1) * pages; p++)
                 {
                     image.SetDirectory((short)p);
-                    if (planes)
+                    if (interleaved)
                     {
                         BufferInfo[] bfs = new BufferInfo[3];
                         for (int pl = 0; pl < 3; pl++)
@@ -7420,9 +7532,9 @@ namespace Bio
                                 offset += str;
                             }
                             if (b.bitsPerPixel > 8)
-                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format16bppGrayScale, bytes, new ZCT(0, 0, 0), p, b.littleEndian);
+                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format16bppGrayScale, bytes, new ZCT(0, 0, 0), p, b.littleEndian, interleaved);
                             else
-                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format8bppIndexed, bytes, new ZCT(0, 0, 0), p, b.littleEndian);
+                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format8bppIndexed, bytes, new ZCT(0, 0, 0), p, b.littleEndian, interleaved);
                         }
                         BufferInfo bf;
                         if (b.bitsPerPixel > 8)
@@ -7542,6 +7654,8 @@ namespace Bio
         /// @return A boolean value.
         public static bool isOME(string file)
         {
+            if (file.EndsWith(".ome.tif") || file.EndsWith(".OME.TIF"))
+                return true;
             if (file.EndsWith(".tif") || file.EndsWith(".TIF") || file.EndsWith("tiff") || file.EndsWith("TIFF"))
             {
                 Tiff image = Tiff.Open(file, "r");
@@ -7975,9 +8089,6 @@ namespace Bio
                 omexml.setPixelsSizeX(new PositiveInteger(java.lang.Integer.valueOf(b.SizeX * xi)), serie);
                 omexml.setPixelsSizeY(new PositiveInteger(java.lang.Integer.valueOf(b.SizeY * yi)), serie);
                 omexml.setPixelsSizeZ(new PositiveInteger(java.lang.Integer.valueOf(b.SizeZ)), serie);
-                int samples = 1;
-                if (b.isRGB)
-                    samples = 3;
                 omexml.setPixelsSizeC(new PositiveInteger(java.lang.Integer.valueOf(b.SizeC)), serie);
                 omexml.setPixelsSizeT(new PositiveInteger(java.lang.Integer.valueOf(b.SizeT)), serie);
                 if (BitConverter.IsLittleEndian)
@@ -8422,6 +8533,13 @@ namespace Bio
             b.series = serie;
             string order = reader.getDimensionOrder();
             PixelFormat PixelFormat = GetPixelFormat(RGBChannelCount, b.bitsPerPixel);
+            ome.xml.model.enums.PixelType ppx = b.meta.getPixelsType(serie);
+            if (ppx == ome.xml.model.enums.PixelType.UINT8 && RGBChannelCount == 3)
+            {
+                PixelFormat = PixelFormat.Format24bppRgb;
+                b.bitsPerPixel = 8;
+            }
+
             int stride = 0;
             if (RGBChannelCount == 1)
             {
@@ -8518,46 +8636,52 @@ namespace Bio
             for (int r = 0; r < reader.getResolutionCount(); r++)
             {
                 Resolution res = new Resolution();
+                reader.setSeries(r);
                 try
                 {
+                    int rgbc = reader.getRGBChannelCount();
+                    int bps = reader.getBitsPerPixel();
+                    PixelFormat px = GetPixelFormat(RGBChannelCount, b.bitsPerPixel);
                     bool hasPhysical = false;
-                    if (b.meta.getPixelsPhysicalSizeX(b.series) != null)
+                    if (b.meta.getPixelsPhysicalSizeX(r) != null)
                     {
-                        res.PhysicalSizeX = b.meta.getPixelsPhysicalSizeX(b.series).value().doubleValue();
+                        res.PhysicalSizeX = b.meta.getPixelsPhysicalSizeX(r).value().doubleValue();
                         hasPhysical = true;
                     }
                     else
                         res.PhysicalSizeX = (96 / 2.54) / 1000;
-                    if (b.meta.getPixelsPhysicalSizeY(b.series) != null)
+                    if (b.meta.getPixelsPhysicalSizeY(r) != null)
                     {
-                        res.PhysicalSizeY = b.meta.getPixelsPhysicalSizeY(b.series).value().doubleValue();
+                        res.PhysicalSizeY = b.meta.getPixelsPhysicalSizeY(r).value().doubleValue();
                     }
                     else
                         res.PhysicalSizeY = (96 / 2.54) / 1000;
-                    if (b.meta.getPixelsPhysicalSizeZ(b.series) != null)
+                    if (b.meta.getPixelsPhysicalSizeZ(r) != null)
                     {
-                        res.PhysicalSizeZ = b.meta.getPixelsPhysicalSizeZ(b.series).value().doubleValue();
+                        res.PhysicalSizeZ = b.meta.getPixelsPhysicalSizeZ(r).value().doubleValue();
                     }
                     else
                     {
                         res.PhysicalSizeZ = 1;
                     }
-                
-                    if (b.meta.getStageLabelX(b.series) != null)
-                        res.StageX = b.meta.getStageLabelX(b.series).value().doubleValue();
-                    if (b.meta.getStageLabelY(b.series) != null)
-                        res.StageY = b.meta.getStageLabelY(b.series).value().doubleValue();
-                    if (b.meta.getStageLabelZ(b.series) != null)
-                        res.StageZ = b.meta.getStageLabelZ(b.series).value().doubleValue();
+                    res.SizeX = b.meta.getPixelsSizeX(r).getNumberValue().intValue();
+                    res.SizeY = b.meta.getPixelsSizeY(r).getNumberValue().intValue();
+                    if (b.meta.getStageLabelX(r) != null)
+                        res.StageX = b.meta.getStageLabelX(r).value().doubleValue();
+                    if (b.meta.getStageLabelY(r) != null)
+                        res.StageY = b.meta.getStageLabelY(r).value().doubleValue();
+                    if (b.meta.getStageLabelZ(r) != null)
+                        res.StageZ = b.meta.getStageLabelZ(r).value().doubleValue();
                     else
                         res.StageZ = 1;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + b.PhysicalSizeX + "," + b.PhysicalSizeY + "," + b.PhysicalSizeZ + ")");
+                    Console.WriteLine("No Stage Coordinates. PhysicalSize:(" + res.PhysicalSizeX + "," + res.PhysicalSizeY + "," + res.PhysicalSizeZ + ")");
                 }
                 b.Resolutions.Add(res);
             }
+            reader.setSeries(serie);
 
             int rc = b.meta.getROICount();
             for (int im = 0; im < rc; im++)
@@ -8833,114 +8957,45 @@ namespace Bio
                     b.Annotations.Add(an);
                 }
             }
-
-            List<string> serFiles = new List<string>();
-            serFiles.AddRange(reader.getSeriesUsedFiles());
-
             b.Buffers = new List<BufferInfo>();
             // read the image data bytes
             int pages = reader.getImageCount();
             int z = 0;
             int c = 0;
             int t = 0;
-            if (file.EndsWith("ome.tif"))
+            bool inter = reader.isInterleaved();
+            for (int p = 0; p < pages; p++)
             {
-                //We can read this file faster without Bioformats.
-                reader.close();
-                Tiff image = Tiff.Open(file, "r");
-                pages = image.NumberOfDirectories() / b.seriesCount;
-                //int stride = image.ScanlineSize();
-                int str = image.ScanlineSize();
-                
-                bool planes = false;
-                //If calculated stride and image scanline size is not the same it means the image is written in planes
-                if (stride != str)
-                    planes = true;
-                for (int p = serie * pages; p < (serie + 1) * pages; p++)
+                BufferInfo bf;
+                if (tile)
                 {
-                    image.SetDirectory((short)p);
-                    if (planes)
-                    {
-                        BufferInfo[] bfs = new BufferInfo[3];
-                        for (int pl = 0; pl < 3; pl++)
-                        {
-                            byte[] bytes = new byte[str * SizeY];
-                            for (int im = 0, offset = 0; im < SizeY; im++)
-                            {
-                                image.ReadScanline(bytes, offset, im, (short)pl);
-                                offset += str;
-                            }
-                            if (b.bitsPerPixel > 8)
-                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format16bppGrayScale, bytes, new ZCT(0, 0, 0), p, b.littleEndian);
-                            else
-                                bfs[pl] = new BufferInfo(file, SizeX, SizeY, PixelFormat.Format8bppIndexed, bytes, new ZCT(0, 0, 0), p, b.littleEndian);
-                        }
-                        BufferInfo bf;
-                        if (b.bitsPerPixel > 8)
-                            bf = BufferInfo.RGB16To48(bfs);
-                        else
-                            bf = BufferInfo.RGB8To24(bfs);
-                        bf.SwitchRedBlue();
-                        Statistics.CalcStatistics(bf);
-                        b.Buffers.Add(bf);
-                    }
-                    else
-                    {
-                        byte[] bytes = new byte[stride * SizeY];
-                        for (int im = 0, offset = 0; im < SizeY; im++)
-                        {
-                            image.ReadScanline(bytes, offset, im, 0);
-                            offset += stride;
-                        }
-                        BufferInfo inf = new BufferInfo(file, SizeX, SizeY, PixelFormat, bytes, new ZCT(0, 0, 0), p, b.littleEndian);
-                        if (inf.PixelFormat == PixelFormat.Format48bppRgb)
-                            inf.SwitchRedBlue();
-                        b.Buffers.Add(inf);
-                        Statistics.CalcStatistics(inf);
-                    }
-                    float prog = (float)p / ((float)(serie + 1) * pages);
-                    if(progress)
-                    pr.UpdateProgressF(prog);
-                    Application.DoEvents();
+                    if (tilex < 0)
+                        tilex = 0;
+                    if (tiley < 0)
+                        tiley = 0;
+                    int sx = tileSizeX;
+                    if (tilex + tileSizeX > SizeX)
+                        sx -= (tilex + tileSizeX) - SizeX;
+                    int sy = tileSizeY;
+                    if (tiley + tileSizeY > SizeY)
+                        sy -= (tiley + tileSizeY) - SizeY;
+                    byte[] bytes = reader.openBytes(p, tilex, tiley, sx, sy);
+                    bf = new BufferInfo(file, sx, sy, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian, inter);
+                    //bf.SwitchRedBlue();
+                    b.Buffers.Add(bf);
                 }
-                image.Close();
-            }
-            else
-            {
-                for (int p = 0; p < pages; p++)
+                else
                 {
-                    BufferInfo bf;
-                    if (tile)
-                    {
-                        if (tilex < 0)
-                            tilex = 0;
-                        if (tiley < 0)
-                            tiley = 0;
-                        int sx = tileSizeX;
-                        if (tilex + tileSizeX > SizeX)
-                            sx -= (tilex + tileSizeX) - SizeX;
-                        int sy = tileSizeY;
-                        if (tiley + tileSizeY > SizeY)
-                            sy -= (tiley + tileSizeY) - SizeY;
-                        byte[] bytes = reader.openBytes(p, tilex, tiley, sx, sy);
-                        bf = new BufferInfo(file, sx, sy, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian);
-                        //bf.SwitchRedBlue();
-                        b.Buffers.Add(bf);
-                    }
-                    else
-                    {
-                        byte[] bytes = reader.openBytes(p);
-                        bf = new BufferInfo(file, SizeX, SizeY, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian);
-                        b.Buffers.Add(bf);
-                    }
-                    //We add the buffers to thresholding image statistics calculation threads.
-                    Statistics.CalcStatistics(bf);
-                    if(progress)
-                    pr.UpdateProgressF(((float)p / (float)pages));
-                    Application.DoEvents();
+                    byte[] bytes = reader.openBytes(p);
+                    bf = new BufferInfo(file, SizeX, SizeY, PixelFormat, bytes, new ZCT(z, c, t), p, b.littleEndian, inter);
+                    b.Buffers.Add(bf);
                 }
+                //We add the buffers to thresholding image statistics calculation threads.
+                Statistics.CalcStatistics(bf);
+                if(progress)
+                pr.UpdateProgressF(((float)p / (float)pages));
+                Application.DoEvents();
             }
-
             int pls = b.meta.getPlaneCount(serie);
             if (pls == b.Buffers.Count)
             for (int bi = 0; bi < b.Buffers.Count; bi++)
@@ -8970,6 +9025,7 @@ namespace Bio
             }
 
             b.UpdateCoords(b.SizeZ, b.SizeC, b.SizeT, order);
+
             reader.close();
             //We wait for threshold image statistics calculation
             do
@@ -9521,7 +9577,7 @@ namespace Bio
         public const char NewLine = '\n';
         public const string columns = "ROIID,ROINAME,TYPE,ID,SHAPEINDEX,TEXT,S,C,Z,T,X,Y,W,H,POINTS,STROKECOLOR,STROKECOLORW,FILLCOLOR,FONTSIZE\n";
 
-/// > Open the file, get the image description, and return it
+        /// > Open the file, get the image description, and return it
 /// 
 /// @param file The path to the file you want to open.
 /// 

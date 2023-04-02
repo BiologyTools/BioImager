@@ -1392,6 +1392,7 @@ namespace Bio
         {
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
                 return;
+            
             BioImage.SaveOMEPyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
         }
     }
