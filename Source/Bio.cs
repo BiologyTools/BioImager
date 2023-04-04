@@ -6830,7 +6830,11 @@ namespace Bio
        /// @return A ushort value.
         public ushort GetValueRGB(ZCTXY coord, int index)
         {
-            int ind = Coords[coord.Z, coord.C, coord.T];
+            int ind = 0;
+            if (isRGB)
+                ind = Coords[coord.Z, 0, coord.T];
+            else
+                ind = Coords[coord.Z, index, coord.T];
             ColorS c = Buffers[ind].GetPixel(coord.X, coord.Y);
             if (index == 0)
                 return c.R;
