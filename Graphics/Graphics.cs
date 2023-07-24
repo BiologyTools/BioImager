@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Imaging;
-
-namespace Bio.Graphics
+﻿namespace Bio.Graphics
 {
     public struct Pen : IDisposable
     {
@@ -39,7 +31,7 @@ namespace Bio.Graphics
         {
             Graphics g = new Graphics();
             g.buf = b;
-            g.pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue),1,b.BitsPerPixel);
+            g.pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue), 1, b.BitsPerPixel);
             return g;
         }
         public void DrawLine(int x, int y, int x2, int y2)
@@ -124,7 +116,7 @@ namespace Bio.Graphics
             {
                 for (int y = r.Y; y < r.Height + r.Y; y++)
                 {
-                    buf.SetPixel(x,y, col);
+                    buf.SetPixel(x, y, col);
                 }
             }
         }
@@ -170,7 +162,7 @@ namespace Bio.Graphics
                 {
                     x = (int)(radiusx * System.Math.Cos(angle) + radiusx + r.X);
                     y = (int)(radiusy * System.Math.Sin(angle) + radiusy + r.Y);
-                    buf.SetPixel(x+i, y+i, pen.color);
+                    buf.SetPixel(x + i, y + i, pen.color);
                 }
             }
         }
@@ -182,7 +174,7 @@ namespace Bio.Graphics
         {
             if (w <= 1 && w <= 1)
             {
-                buf.SetPixel((int)xx,(int)yy, c);
+                buf.SetPixel((int)xx, (int)yy, c);
                 return;
             }
             double radiusx = w / 2;
@@ -193,9 +185,9 @@ namespace Bio.Graphics
                 double angle = a * System.Math.PI / 180;
                 x = (int)(radiusx * System.Math.Cos(angle) + radiusx + xx);
                 y = (int)(radiusy * System.Math.Sin(angle) + radiusy + yy);
-                double angle2 = (a+180) * System.Math.PI / 180;
+                double angle2 = (a + 180) * System.Math.PI / 180;
                 int x2 = (int)(radiusx * System.Math.Cos(angle2) + radiusx + xx);
-                DrawScanline(x,x2,y,c);
+                DrawScanline(x, x2, y, c);
             }
         }
         public void FillEllipse(RectangleF r, ColorS c)
@@ -214,7 +206,7 @@ namespace Bio.Graphics
             bf.Bytes = new byte[buf.Bytes.Length];
 
             DrawPolygon(pfs, bf, pen.color);
-            
+
             filler = new QueueLinearFloodFiller(filler);
             filler.FillColor = pen.color;
             filler.Tolerance = new ColorS(0, 0, 0);
@@ -238,7 +230,7 @@ namespace Bio.Graphics
             {
                 for (int y = 0; y < bf.SizeY; y++)
                 {
-                    if(bf.GetPixel(x,y) == pen.color)
+                    if (bf.GetPixel(x, y) == pen.color)
                     {
                         buf.SetPixel(x, y, pen.color);
                     }
@@ -258,7 +250,7 @@ namespace Bio.Graphics
             for (int i = 0; i < polygon.Length; j = i++) c ^= polygon[i].Y > y ^ polygon[j].Y > y && x < (polygon[j].X - polygon[i].X) * (y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X;
             return c;
         }
-        
+
         public void FillPolygon(PointF[] pfs, Rectangle r, ColorS c)
         {
             pen.color = c;

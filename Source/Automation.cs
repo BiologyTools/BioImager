@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Automation;
+﻿using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Definitions;
+using FlaUI.Core.Identifiers;
+using FlaUI.UIA3;
 using Gma.System.MouseKeyHook;
-using System.Threading;
 using System.Diagnostics;
 using WindowsInput;
-using WindowsInput.Native;
-using System.Drawing;
 
 namespace Bio
 {
@@ -20,6 +13,7 @@ namespace Bio
         public static InputSimulator input;
         public static Dictionary<string, Recording> Recordings = new Dictionary<string, Recording>();
         public static Dictionary<string, Recording> Properties = new Dictionary<string, Recording>();
+        public static UIA3Automation automation = new UIA3Automation();
         /* It's a class that represents an action that can be performed on an automation element */
         public class Action
         {
@@ -126,9 +120,9 @@ namespace Bio
                 type = t;
                 key = e;
                 AutomationElement el = Element;
-                name = el.Current.Name;
-                automationID = el.Current.AutomationId;
-                className = el.Current.ClassName;
+                name = el.Name;
+                automationID = el.AutomationId;
+                className = el.ClassName;
                 Process p = Process.GetProcessById(proc);
                 ProcessName = p.ProcessName;
                 title = Win32.GetActiveWindowTitle();
@@ -138,9 +132,9 @@ namespace Bio
                 type = t;
                 keyPress = e;
                 AutomationElement el = Element;
-                name = el.Current.Name;
-                automationID = el.Current.AutomationId;
-                className = el.Current.ClassName;
+                name = el.Name;
+                automationID = el.AutomationId;
+                className = el.ClassName;
                 Process p = Process.GetProcessById(proc);
                 ProcessName = p.ProcessName;
                 title = Win32.GetActiveWindowTitle();
@@ -150,11 +144,11 @@ namespace Bio
                 type = t;
                 mouse = e;
                 AutomationElement el = Element;
-                name = el.Current.Name;
-                automationID = el.Current.AutomationId;
-                className = el.Current.ClassName;
+                name = el.Name;
+                automationID = el.AutomationId;
+                className = el.ClassName;
                 mouseButton = e.Button;
-                point = new Point((int)(e.Location.X - el.Current.BoundingRectangle.X), (int)(e.Location.Y - el.Current.BoundingRectangle.Y));
+                point = new Point((int)(e.Location.X - el.BoundingRectangle.X), (int)(e.Location.Y - el.BoundingRectangle.Y));
                 Process p = Process.GetProcessById(proc);
                 title = p.MainWindowTitle;
                 ProcessName = p.ProcessName;
@@ -218,7 +212,7 @@ namespace Bio
                 AutomationElement el = AutomationHelpers.GetElementByProcess(ProcessName, Title, AutomationID, Name, ClassName, Index);
                 if (type == Type.mousedown)
                 {
-                    Cursor.Position = new Point((int)el.Current.BoundingRectangle.X + Point.X, (int)el.Current.BoundingRectangle.Y + Point.Y);
+                    Cursor.Position = new Point((int)el.BoundingRectangle.X + Point.X, (int)el.BoundingRectangle.Y + Point.Y);
                     if (mouse.Button == MouseButtons.Left)
                         MouseOperations.LeftClick();
 
@@ -227,7 +221,7 @@ namespace Bio
                 }
                 else if (type == Type.mouseup)
                 {
-                    Cursor.Position = new Point((int)el.Current.BoundingRectangle.X + Point.X, (int)el.Current.BoundingRectangle.Y + Point.Y);
+                    Cursor.Position = new Point((int)el.BoundingRectangle.X + Point.X, (int)el.BoundingRectangle.Y + Point.Y);
                     if (mouse.Button == MouseButtons.Left)
                         MouseOperations.LeftClick();
                     if (mouse.Button == MouseButtons.Right)
@@ -329,7 +323,7 @@ namespace Bio
                 Action la = list.Last();
                 AutomationElement ae = AutomationHelpers.GetElementByProcess(la.ProcessName, la.Title, la.AutomationID, la.Name, la.ClassName, la.Index);
                 if (la.Value == Action.ValueType.Name)
-                    return ae.Current.Name;
+                    return ae.Name;
                 else if (la.Value == Action.ValueType.SelectionPattern)
                     return AutomationHelpers.GetSelection(ae);
                 else if (la.Value == Action.ValueType.TextPattern)
@@ -392,7 +386,7 @@ namespace Bio
             {
                 try
                 {
-                    return AutomationElement.FromPoint(new System.Windows.Point(Cursor.Position.X, Cursor.Position.Y));
+                    return automation.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
                 }
                 catch (Exception)
                 {
@@ -482,7 +476,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.mousedown, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.mousedown, el.Properties.ProcessId, e));
         }
        /// If the user is recording, then get the current element and add a new action to the list of
        /// actions
@@ -499,7 +493,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.mouseup, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.mouseup, el.Properties.ProcessId, e));
         }
         /// If the mouse wheel is being used, and the mouse is over a window, then add the action to the
         /// list of actions
@@ -517,9 +511,9 @@ namespace Bio
             if (el == null)
                 return;
             if (e.Delta > 0)
-                rec.List.Add(new Action(Action.Type.wheelup, el.Current.ProcessId, e));
+                rec.List.Add(new Action(Action.Type.wheelup, el.Properties.ProcessId, e));
             else
-                rec.List.Add(new Action(Action.Type.wheeldown, el.Current.ProcessId, e));
+                rec.List.Add(new Action(Action.Type.wheeldown, el.Properties.ProcessId, e));
         }
        /// If the mouse is moving, and we're recording, and we have an element, then add a mousemove
        /// action to the list of actions
@@ -538,7 +532,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.mousemove, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.mousemove, el.Properties.ProcessId, e));
 
         }
         /// If the user is recording, and the element is not null, then add a new action to the list of
@@ -556,7 +550,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.keypress, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.keypress, el.Properties.ProcessId, e));
         }
         /// If the user is recording, and the user has selected an element, then add a new action to the
         /// list of actions
@@ -573,7 +567,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.keyup, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.keyup, el.Properties.ProcessId, e));
         }
         /// If the user is recording, and the user presses a key, then add a new action to the list of
         /// actions
@@ -590,7 +584,7 @@ namespace Bio
             AutomationElement el = Element;
             if (el == null)
                 return;
-            rec.List.Add(new Action(Action.Type.keydown, el.Current.ProcessId, e));
+            rec.List.Add(new Action(Action.Type.keydown, el.Properties.ProcessId, e));
         }
 
         /* It's a class that helps you automate windows applications */
@@ -603,9 +597,7 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                AutomationElementCollection collection = parent.FindAll(TreeScope.Children, Condition.TrueCondition);
-
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Children, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>(collection.Cast<AutomationElement>());
@@ -626,7 +618,7 @@ namespace Bio
                 }
                 try
                 {
-                    AutomationElementCollection collection = parent.FindAll(TreeScope.Subtree, Condition.TrueCondition);
+                    AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                     if (collection != null)
                     {
                         List<AutomationElement> result = new List<AutomationElement>(collection.Cast<AutomationElement>());
@@ -638,7 +630,7 @@ namespace Bio
                         return null;
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     return null;
                 }
@@ -650,15 +642,13 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                AutomationElementCollection collection = parent.FindAll(TreeScope.Subtree, Condition.TrueCondition);
-
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>();
                     foreach (AutomationElement item in collection)
                     {
-                        if (item.Current.Name == name)
+                        if (item.Name == name)
                         {
                             result.Add(item);
                         }
@@ -678,15 +668,13 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                AutomationElementCollection collection = parent.FindAll(TreeScope.Subtree, Condition.TrueCondition);
-
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>();
                     foreach (AutomationElement item in collection)
                     {
-                        if (item.Current.AutomationId == id)
+                        if (item.AutomationId == id)
                         {
                             result.Add(item);
                         }
@@ -706,15 +694,13 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                AutomationElementCollection collection = parent.FindAll(TreeScope.Subtree, Condition.TrueCondition);
-
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>();
                     foreach (AutomationElement item in collection)
                     {
-                        if (item.Current.ClassName == name)
+                        if (item.ClassName == name)
                         {
                             result.Add(item);
                         }
@@ -733,15 +719,15 @@ namespace Bio
                 string ti = title;
                 if (ti == "")
                     ti = procs[0].MainWindowTitle;
-                AutomationElement root = AutomationElement.RootElement;
-                AutomationElementCollection prs = root.FindAll(TreeScope.Children, Condition.TrueCondition);
+                AutomationElement root = automation.GetDesktop();
+                AutomationElement[] prs = automation.GetDesktop().FindAll(TreeScope.Children, FlaUI.Core.Conditions.TrueCondition.Default);
                 AutomationElement window = null;
                 List<AutomationElement> ats = new List<AutomationElement>();
                 foreach (AutomationElement item in prs)
                 {
                     try
                     {
-                        if (item.Current.Name.Contains(ti))
+                        if (item.Name.Contains(ti))
                         {
                             window = item;
                         }
@@ -754,14 +740,14 @@ namespace Bio
                 }
                 if (window == null)
                     throw new ArgumentException("Window " + title + " not found.");
-                AutomationElementCollection items = window.FindAll(TreeScope.Subtree, Condition.TrueCondition);
+                AutomationElement[] items = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 List<AutomationElement> result = new List<AutomationElement>();
                 foreach (AutomationElement item in items)
                 {
                     try
                     {
-                        int[] r = item.GetRuntimeId();
-                        if (item.Current.ClassName == classname && item.Current.AutomationId == id && item.Current.Name == name)
+                        int[] r = item.Properties.RuntimeId;
+                        if (item.ClassName == classname && item.AutomationId == id && item.Name == name)
                         {
                             result.Add(item);
                         }
@@ -770,7 +756,7 @@ namespace Bio
                     {
 
                     }
-                        
+
                 }
                 if (index == -1)
                     return result[0];
@@ -783,15 +769,14 @@ namespace Bio
                 string ti = title;
                 if (ti == "")
                     ti = procs[0].MainWindowTitle;
-                AutomationElement root = AutomationElement.RootElement;
-                AutomationElementCollection prs = root.FindAll(TreeScope.Children, Condition.TrueCondition);
+                AutomationElement[] prs = automation.GetDesktop().FindAll(TreeScope.Children, FlaUI.Core.Conditions.TrueCondition.Default);
                 AutomationElement window = null;
                 List<AutomationElement> ats = new List<AutomationElement>();
                 foreach (AutomationElement item in prs)
                 {
                     try
                     {
-                        if (item.Current.Name.Contains(title))
+                        if (item.Name.Contains(title))
                         {
                             window = item;
                         }
@@ -804,10 +789,10 @@ namespace Bio
                 }
                 if (window == null)
                     return 0;
-                AutomationElementCollection items = null;
+                AutomationElement[] items = null;
                 try
                 {
-                    items = window.FindAll(TreeScope.Subtree, Condition.TrueCondition);
+                    items = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 }
                 catch (Exception)
                 {
@@ -815,26 +800,26 @@ namespace Bio
                 }
                 List<AutomationElement> result = new List<AutomationElement>();
                 int index = 0;
-                if(items != null)
-                foreach (AutomationElement item in items)
-                {
-                    try
+                if (items != null)
+                    foreach (AutomationElement item in items)
                     {
-                        int[] r = item.GetRuntimeId();
-                        if (item.Current.ClassName == classname && item.Current.AutomationId == id && item.Current.Name == name)
+                        try
                         {
-                            result.Add(item);
+                            int[] r = item.Properties.RuntimeId;
+                            if (item.ClassName == classname && item.AutomationId == id && item.Name == name)
+                            {
+                                result.Add(item);
+                            }
+                            if (item.BoundingRectangle.IntersectsWith(new Rectangle(p.X, p.Y, 1, 1)) && result.Count > 0)
+                            {
+                                index = result.Count - 1;
+                            }
                         }
-                        if (item.Current.BoundingRectangle.IntersectsWith(new System.Windows.Rect(p.X, p.Y, 1, 1)) && result.Count > 0)
+                        catch (Exception)
                         {
-                            index = result.Count-1;
-                        }
-                    }
-                    catch (Exception)
-                    {
 
+                        }
                     }
-                }
                 return index;
             }
             public static int[] StringToRuntimeID(string s)
@@ -849,16 +834,14 @@ namespace Bio
             }
             public static List<AutomationElement> GetElement(string id, string name)
             {
-                AutomationElement parent = AutomationElement.RootElement;
-
-                AutomationElementCollection collection = parent.FindAll(TreeScope.Subtree, Condition.TrueCondition);
-
+                AutomationElement parent = automation.GetDesktop();
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>();
                     foreach (AutomationElement item in collection)
                     {
-                        if (item.Current.AutomationId == id && item.Current.Name == name)
+                        if (item.AutomationId == id && item.Name == name)
                         {
                             result.Add(item);
                         }
@@ -878,13 +861,13 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-                AutomationElementCollection collection = parent.FindAll(scope, Condition.TrueCondition);
+                AutomationElement[] collection = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 if (collection != null)
                 {
                     List<AutomationElement> result = new List<AutomationElement>();
                     foreach (AutomationElement item in collection)
                     {
-                        if (item.Current.LocalizedControlType == type)
+                        if (item.Properties.LocalizedControlType == type)
                         {
                             result.Add(item);
                         }
@@ -897,27 +880,14 @@ namespace Bio
                     return null;
                 }
             }
-            public static List<AutomationElement> GetRawChildren(AutomationElement parent)
+            public static AutomationElement[] GetRawChildren(AutomationElement parent)
             {
                 if (parent == null)
                 {
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                List<AutomationElement> result = new List<AutomationElement>();
-
-                // the predefined tree walker wich iterates through controls
-                TreeWalker tw = TreeWalker.RawViewWalker;
-                AutomationElement child = tw.GetFirstChild(parent);
-
-                while (child != null)
-                {
-                    result.Add(child);
-                    child = tw.GetNextSibling(child);
-                }
-
-                return result;
+                return parent.FindAll(TreeScope.Children, FlaUI.Core.Conditions.TrueCondition.Default);
             }
             public static List<AutomationElement> GetRawAutomationID(AutomationElement parent, string auto)
             {
@@ -926,28 +896,16 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                List<AutomationElement> all = new List<AutomationElement>();
-                List<AutomationElement> result = new List<AutomationElement>();
-
-                // the predefined tree walker wich iterates through controls
-                TreeWalker tw = TreeWalker.RawViewWalker;
-                AutomationElement child = tw.GetFirstChild(parent);
-
-                while (child != null)
-                {
-                    all.Add(child);
-                    child = tw.GetNextSibling(child);
-                }
+                List<AutomationElement> ress = new List<AutomationElement>();
+                AutomationElement[] all = parent.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 foreach (AutomationElement item in all)
                 {
-                    if (item.Current.AutomationId == auto)
+                    if (item.AutomationId == auto)
                     {
-                        result.Add(item);
+                        ress.Add(item);
                     }
                 }
-
-                return result;
+                return ress;
             }
             public static List<AutomationElement> GetRawLocalizedControlType(AutomationElement parent, string auto)
             {
@@ -956,81 +914,49 @@ namespace Bio
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                List<AutomationElement> all = new List<AutomationElement>();
-                List<AutomationElement> result = new List<AutomationElement>();
-
-                // the predefined tree walker wich iterates through controls
-                TreeWalker tw = TreeWalker.RawViewWalker;
-                AutomationElement child = tw.GetFirstChild(parent);
-
-                while (child != null)
-                {
-                    all.Add(child);
-                    child = tw.GetNextSibling(child);
-                }
+                List<AutomationElement> ress = new List<AutomationElement>();
+                AutomationElement[] all = parent.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 foreach (AutomationElement item in all)
                 {
-                    if (item.Current.LocalizedControlType == auto)
+                    if (item.Properties.LocalizedControlType == auto)
                     {
-                        result.Add(item);
+                        ress.Add(item);
                     }
                 }
-
-                return result;
+                return ress;
             }
-            public static List<AutomationElement> GetRaw(AutomationElement parent)
+            public static AutomationElement[] GetRaw(AutomationElement parent)
             {
                 if (parent == null)
                 {
                     // null parameter
                     throw new ArgumentException();
                 }
-
-                List<AutomationElement> result = new List<AutomationElement>();
-
-                // the predefined tree walker wich iterates through controls
-                TreeWalker tw = TreeWalker.RawViewWalker;
-                AutomationElement child = tw.GetFirstChild(parent);
-
-                while (child != null)
-                {
-                    result.Add(child);
-                    child = tw.GetNextSibling(child);
-                }
-
-                return result;
+                List<AutomationElement> ress = new List<AutomationElement>();
+                return parent.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
             }
             public static string GetValue(AutomationElement control)
             {
-                object patternProvider;
-                if (control.TryGetCurrentPattern(ValuePattern.Pattern, out patternProvider))
+                if(control.ControlType == ControlType.Edit)
                 {
-                    ValuePattern valuePatternProvider = patternProvider as ValuePattern;
-                    return valuePatternProvider.Current.Value;
+                    FlaUI.Core.AutomationElements.TextBox tb = control.AsTextBox();
+                    return tb.Text;
                 }
-                return null;
+                else if(control.ControlType == ControlType.Text)
+                {
+                    return control.AsLabel().Text;
+                }
+                return control.Name;
             }
             public static string GetSelection(AutomationElement control)
             {
                 object patternProvider;
-                if (control.TryGetCurrentPattern(SelectionPattern.Pattern, out patternProvider))
-                {
-                    SelectionPattern selPatternProvider = patternProvider as SelectionPattern;
-                    AutomationElement[] sel = selPatternProvider.Current.GetSelection();
-                    return sel[0].Current.Name;
-                }
-                return null;
+                FlaUI.Core.AutomationElements.ListBox lb = control.AsListBox();
+                return lb.SelectedItem.Name;
             }
             public static string GetText(AutomationElement control)
             {
-                object patternProvider;
-                if (control.TryGetCurrentPattern(TextPattern.Pattern, out patternProvider))
-                {
-                    TextPattern textPatternProvider = patternProvider as TextPattern;
-                    return textPatternProvider.DocumentRange.GetText(-1).TrimEnd('\r');
-                }
-                return null;
+                return control.AsLabel().Text;
             }
             public static void SetValue(AutomationElement targetControl, string value)
             {
@@ -1038,11 +964,9 @@ namespace Bio
                 if (value == null)
                     throw new ArgumentNullException(
                         "String parameter must not be null.");
-
                 if (targetControl == null)
                     throw new ArgumentNullException(
                         "AutomationElement parameter must not be null");
-
                 // A series of basic checks prior to attempting an insertion.
                 //
                 // Check #1: Is control enabled?
@@ -1050,49 +974,12 @@ namespace Bio
                 // is to filter using 
                 // PropertyCondition(AutomationElement.IsEnabledProperty, true) 
                 // and exclude all read-only text controls from the collection.
-                if (!targetControl.Current.IsEnabled)
+                if (!targetControl.IsEnabled)
                 {
                     throw new InvalidOperationException(
                         "The control is not enabled.\n\n");
                 }
-
-                // Check #2: Are there styles that prohibit us 
-                //           from sending text to this control?
-                if (!targetControl.Current.IsKeyboardFocusable)
-                {
-                    throw new InvalidOperationException(
-                        "The control is not focusable.\n\n");
-                }
-
-                // Once you have an instance of an AutomationElement,  
-                // check if it supports the ValuePattern pattern.
-                object valuePattern = null;
-
-                if (!targetControl.TryGetCurrentPattern(
-                    ValuePattern.Pattern, out valuePattern))
-                {
-                    // Elements that support TextPattern 
-                    // do not support ValuePattern and TextPattern
-                    // does not support setting the text of 
-                    // multi-line edit or document controls.
-                    // For this reason, text input must be simulated.
-                }
-                // Control supports the ValuePattern pattern so we can 
-                // use the SetValue method to insert content.
-                else
-                {
-                    if (((ValuePattern)valuePattern).Current.IsReadOnly)
-                    {
-                        throw new InvalidOperationException(
-                            "The control is read-only.");
-                    }
-                    else
-                    {
-                        ((ValuePattern)valuePattern).SetValue(value);
-                        //We send enter key to update the value now that the text field has been set.
-                        input.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                    }
-                }
+                targetControl.AsTextBox().Text = value;
             }
             public static int GetCount(AutomationElement parent)
             {
@@ -1102,15 +989,7 @@ namespace Bio
                     throw new ArgumentException();
                 }
                 int i = 0;
-                // the predefined tree walker wich iterates through controls
-                TreeWalker tw = TreeWalker.RawViewWalker;
-                AutomationElement child = tw.GetFirstChild(parent);
-                while (child != null)
-                {
-                    child = tw.GetNextSibling(child);
-                    i++;
-                }
-                return i;
+                return parent.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default).Length;
             }
             public static bool GetToggle(AutomationElement element)
             {
@@ -1118,20 +997,16 @@ namespace Bio
                 {
                     return false;
                 }
-
-                Object objPattern;
-                TogglePattern togPattern;
-                if (true == element.TryGetCurrentPattern(TogglePattern.Pattern, out objPattern))
-                {
-                    togPattern = objPattern as TogglePattern;
-                    return togPattern.Current.ToggleState == ToggleState.On;
-                }
-                return false;
+                ToggleButton tb = element.AsToggleButton();
+                if (tb.TogglePattern.ToggleState.ValueOrDefault.HasFlag(ToggleState.On))
+                    return true;
+                else
+                    return false;
             }
             public static Bitmap GetImage(AutomationElement el)
             {
                 System.Drawing.Graphics g;
-                System.Windows.Rect r = el.Current.BoundingRectangle;
+                Rectangle r = el.BoundingRectangle;
                 Bitmap b = new Bitmap((int)r.Width, (int)r.Height);
                 g = System.Drawing.Graphics.FromImage(b);
                 g.CopyFromScreen(new Point((int)r.X,(int)r.Y), new Point(0, 0),new Size(b.Width,b.Height));

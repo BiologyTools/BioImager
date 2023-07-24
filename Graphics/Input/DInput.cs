@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-
-namespace Bio.Graphics
+﻿namespace Bio
 {
     public class DInput                 // 31 lines
     {
@@ -13,7 +9,7 @@ namespace Bio.Graphics
         internal void Initialize()
         {
             foreach (Keys key in Enum.GetValues(typeof(Keys)))
-                InputKeys[(Keys)key] = false;   
+                InputKeys[(Keys)key] = false;
         }
         internal bool IsKeyDown(Keys key)
         {

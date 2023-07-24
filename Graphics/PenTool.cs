@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Bio.Graphics
+﻿namespace Bio.Graphics
 {
     public partial class PenTool : Form
     {
-        private Pen pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue), 1,16);
+        private Pen pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue), 1, 16);
         public Pen Pen
         {
             get
@@ -27,7 +18,7 @@ namespace Bio.Graphics
         public void UpdateGUI()
         {
             pen.color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
-            colorPanel.BackColor = ColorS.ToColor(pen.color,pen.bitsPerPixel);
+            colorPanel.BackColor = ColorS.ToColor(pen.color, pen.bitsPerPixel);
             if (rBar.Value != redBox.Value)
                 redBox.Value = rBar.Value;
             if (gBar.Value != greenBox.Value)

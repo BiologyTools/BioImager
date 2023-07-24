@@ -1,11 +1,8 @@
-using System;
-using System.Drawing;
-
-namespace Bio.Graphics
+namespace Bio
 {
     /// <summary>A queue of FloodFillRanges.</summary>
 	public class FloodFillRangeQueue
-	{
+    {
         FloodFillRange[] array;
         int size;
         int head;
@@ -18,10 +15,10 @@ namespace Bio.Graphics
             get { return size; }
         }
 
-		public FloodFillRangeQueue():this(10000)
-		{
+        public FloodFillRangeQueue() : this(10000)
+        {
 
-		}
+        }
 
         public FloodFillRangeQueue(int initialSize)
         {
@@ -31,29 +28,29 @@ namespace Bio.Graphics
         }
 
         /// <summary>Gets the <see cref="FloodFillRange"/> at the beginning of the queue.</summary>
-        public FloodFillRange First 
-		{
-			get { return array[head]; }
-		}
+        public FloodFillRange First
+        {
+            get { return array[head]; }
+        }
 
         /// <summary>Adds a <see cref="FloodFillRange"/> to the end of the queue.</summary>
-        public void Enqueue(ref FloodFillRange r) 
-		{
-			if (size+head == array.Length) 
-			{
+        public void Enqueue(ref FloodFillRange r)
+        {
+            if (size + head == array.Length)
+            {
                 FloodFillRange[] newArray = new FloodFillRange[2 * array.Length];
                 Array.Copy(array, head, newArray, 0, size);
-				array = newArray;
+                array = newArray;
                 head = 0;
-			}
-            array[head+(size++)] = r;
-		}
+            }
+            array[head + (size++)] = r;
+        }
 
         /// <summary>Removes and returns the <see cref="FloodFillRange"/> at the beginning of the queue.</summary>
-        public FloodFillRange Dequeue() 
-		{
+        public FloodFillRange Dequeue()
+        {
             FloodFillRange range = new FloodFillRange();
-            if (size>0)
+            if (size > 0)
             {
                 range = array[head];
                 array[head] = new FloodFillRange();
@@ -61,15 +58,15 @@ namespace Bio.Graphics
                 size--;//update size to exclude dequeued item
             }
             return range;
-		}
+        }
 
         /// <summary>Remove all FloodFillRanges from the queue.</summary>
-		/*public void Clear() 
+        /*public void Clear() 
 		{
 			if (size > 0)
 				Array.Clear(array, 0, size);
 			size = 0;
 		}*/
 
-	}
+    }
 }

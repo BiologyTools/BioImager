@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace Bio.Graphics
+﻿namespace Bio
 {
     public class DSystemConfiguration                   // 52 lines
     {
@@ -42,11 +40,10 @@ namespace Bio.Graphics
         // Static Constructor
         static DSystemConfiguration()
         {
-            VerticalSyncEnabled = false;
+            VerticalSyncEnabled = true;
             ScreenDepth = 1000.0f;
-            ScreenNear = 0.1f;
+            ScreenNear = -0.1f;
             BorderStyle = FormBorderStyle.None;
-
             ShaderFilePath = Application.StartupPath + @"\Graphics\Shaders\";
         }
     }

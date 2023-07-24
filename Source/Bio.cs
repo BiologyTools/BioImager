@@ -21,7 +21,14 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.Serialization;
 using System.Text;
-
+using Bitmap = System.Drawing.Bitmap;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using BitmapData = System.Drawing.Imaging.BitmapData;
+using Rectangle = System.Drawing.Rectangle;
+using RotateFlipType = System.Drawing.RotateFlipType;
+using ImageLockMode = System.Drawing.Imaging.ImageLockMode;
+using RectangleF = System.Drawing.RectangleF;
+using PointF = System.Drawing.PointF;
 namespace Bio
 {
     public static class Images
@@ -803,7 +810,7 @@ namespace Bio
                 }
             }
         }
-        public Size TextSize
+        public System.Drawing.Size TextSize
         {
             get
             {
@@ -1008,7 +1015,7 @@ namespace Bio
             {
                 if (text != "")
                 {
-                    Size s = TextSize;
+                    System.Drawing.Size s = TextSize;
                     BoundingBox = new RectangleD(Points[0].X, Points[0].Y, s.Width, s.Height);
                 }
             }

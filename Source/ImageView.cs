@@ -14,8 +14,6 @@ using Bio.Graphics;
 using Pen = System.Drawing.Pen;
 using System.Threading;
 using SharpDX.Mathematics.Interop;
-using SharpDX.Direct2D1.Effects;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Bio
 {
@@ -1843,11 +1841,11 @@ namespace Bio
                 return;
             }
             SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
-            Pen pen = null;
-            Pen red = null;
-            Pen green = null;
-            Pen mag = null;
-            Pen blue = null;
+            System.Drawing.Pen pen = null;
+            System.Drawing.Pen red = null;
+            System.Drawing.Pen green = null;
+            System.Drawing.Pen mag = null;
+            System.Drawing.Pen blue = null;
             Brush b = null;
             bool bounds = showBounds;
             bool labels = showText;
@@ -1868,11 +1866,11 @@ namespace Bio
                     else if (zBar.Value != an.coord.Z || cBar.Value != an.coord.C || tBar.Value != an.coord.T)
                         continue;
                     float w = Math.Abs(Scale.Width);
-                    pen = new Pen(an.strokeColor, (float)an.strokeWidth / w);
-                    red = new Pen(Brushes.Red, (float)an.strokeWidth / w);
-                    mag = new Pen(Brushes.Magenta, (float)an.strokeWidth / w);
-                    green = new Pen(Brushes.Green, (float)an.strokeWidth / w);
-                    blue = new Pen(Brushes.Blue, (float)an.strokeWidth / w);
+                    pen = new System.Drawing.Pen(an.strokeColor, (float)an.strokeWidth / w);
+                    red = new System.Drawing.Pen(Brushes.Red, (float)an.strokeWidth / w);
+                    mag = new System.Drawing.Pen(Brushes.Magenta, (float)an.strokeWidth / w);
+                    green = new System.Drawing.Pen(Brushes.Green, (float)an.strokeWidth / w);
+                    blue = new System.Drawing.Pen(Brushes.Blue, (float)an.strokeWidth / w);
                     Font fo = new Font(an.font.FontFamily, (float)(an.strokeWidth / w) * an.font.Size);
                     if (an.selected)
                     {
@@ -2024,7 +2022,7 @@ namespace Bio
             TabsView.graphics = g;
             if ((Tools.currentTool.type == Tools.Tool.Type.rectSel && down) || (Tools.currentTool.type == Tools.Tool.Type.magic && down))
             {
-                Pen mag = new Pen(Brushes.Magenta, (float)1 / Scale.Width);
+                System.Drawing.Pen mag = new System.Drawing.Pen(Brushes.Magenta, (float)1 / Scale.Width);
                 RectangleF[] fs = new RectangleF[1];
                 fs[0] = Tools.GetTool(Tools.Tool.Type.rectSel).RectangleF;
                 g.DrawRectangles(mag, ToScreenSpace(fs));
@@ -2056,12 +2054,12 @@ namespace Bio
             g.FillRectangle(Brushes.LightGray, ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY));
             RectangleF[] rfs = new RectangleF[1] { Microscope.GetViewRectangle(false).ToRectangleF() };
             rfs[0] = ToScreenRectF(rfs[0].X, rfs[0].Y, rfs[0].Width, rfs[0].Height);
-            Pen red = new Pen(Brushes.Red, 1 / Scale.Width);
+            System.Drawing.Pen red = new System.Drawing.Pen(Brushes.Red, 1 / Scale.Width);
             g.DrawRectangles(red, rfs);
             if (Bitmaps.Count == 0)
                 return;
             RectangleF[] rf = new RectangleF[1];
-            Pen blue = new Pen(Brushes.Blue, 1 / Scale.Width);
+            System.Drawing.Pen blue = new System.Drawing.Pen(Brushes.Blue, 1 / Scale.Width);
             int i = 0;
             foreach (BioImage im in Images)
             {

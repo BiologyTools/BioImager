@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-
-namespace Bio.Graphics
+namespace Bio
 {
     /// <summary>
     /// Implements the QueueLinear flood fill algorithm using array-based pixel manipulation.
@@ -30,14 +25,14 @@ namespace Bio.Graphics
             //***Prepare for fill.
             PrepareForFloodFill(pt);
 
-            ranges = new FloodFillRangeQueue(((bitmapWidth+bitmapHeight)/2)*5);//new Queue<FloodFillRange>();
+            ranges = new FloodFillRangeQueue(((bitmapWidth + bitmapHeight) / 2) * 5);//new Queue<FloodFillRange>();
 
             //***Get starting color.
             int x = pt.X; int y = pt.Y;
             int idx = CoordsToByteIndex(ref x, ref y);
             startColor = bitmap.GetPixel(pt.X, pt.Y);
-            
-            bool[] pixelsChecked=this.pixelsChecked;
+
+            bool[] pixelsChecked = this.pixelsChecked;
 
             //***Do first call to floodfill.
             LinearFill(ref x, ref y);
@@ -48,10 +43,10 @@ namespace Bio.Graphics
                 //**Get Next Range Off the Queue
                 FloodFillRange range = ranges.Dequeue();
 
-	            //**Check Above and Below Each Pixel in the Floodfill Range
+                //**Check Above and Below Each Pixel in the Floodfill Range
                 int downPxIdx = (bitmapWidth * (range.Y + 1)) + range.StartX;//CoordsToPixelIndex(lFillLoc,y+1);
                 int upPxIdx = (bitmapWidth * (range.Y - 1)) + range.StartX;//CoordsToPixelIndex(lFillLoc, y - 1);
-                int upY=range.Y - 1;//so we can pass the y coord by ref
+                int upY = range.Y - 1;//so we can pass the y coord by ref
                 int downY = range.Y + 1;
                 int tempIdx;
                 for (int i = range.StartX; i <= range.EndX; i++)
@@ -61,7 +56,7 @@ namespace Bio.Graphics
                     tempIdx = CoordsToByteIndex(ref i, ref upY);
                     if (range.Y > 0 && (!pixelsChecked[upPxIdx]) && CheckPixel(ref tempIdx))
                         LinearFill(ref i, ref upY);
-                    
+
                     //*Start Fill Downwards
                     //if we're not below the bottom of the bitmap and the pixel below this one is within the color tolerance
                     tempIdx = CoordsToByteIndex(ref i, ref downY);
@@ -70,30 +65,30 @@ namespace Bio.Graphics
                     downPxIdx++;
                     upPxIdx++;
                 }
-                
+
             }
 
             watch.Stop();
         }
 
-       /// <summary>
-       /// Finds the furthermost left and right boundaries of the fill area
-       /// on a given y coordinate, starting from a given x coordinate, filling as it goes.
-       /// Adds the resulting horizontal range to the queue of floodfill ranges,
-       /// to be processed in the main loop.
-       /// </summary>
-       /// <param name="x">The x coordinate to start from.</param>
-       /// <param name="y">The y coordinate to check at.</param>
-       void LinearFill(ref int x, ref int y)
+        /// <summary>
+        /// Finds the furthermost left and right boundaries of the fill area
+        /// on a given y coordinate, starting from a given x coordinate, filling as it goes.
+        /// Adds the resulting horizontal range to the queue of floodfill ranges,
+        /// to be processed in the main loop.
+        /// </summary>
+        /// <param name="x">The x coordinate to start from.</param>
+        /// <param name="y">The y coordinate to check at.</param>
+        void LinearFill(ref int x, ref int y)
         {
 
             //cache some bitmap and fill info in local variables for a little extra speed
-           
-           byte[] bitmapBits=this.bitmapBits;
-           bool[] pixelsChecked=this.pixelsChecked;
-           byte[] byteFillColor= this.byteFillColor.GetBytes(pixelFormat);
-           int bitmapPixelFormatSize=this.bitmapPixelFormatSize;
-           int bitmapWidth=this.bitmapWidth;
+
+            byte[] bitmapBits = this.bitmapBits;
+            bool[] pixelsChecked = this.pixelsChecked;
+            byte[] byteFillColor = this.byteFillColor.GetBytes(pixelFormat);
+            int bitmapPixelFormatSize = this.bitmapPixelFormatSize;
+            int bitmapWidth = this.bitmapWidth;
             byte[] bt = new byte[6];
             //***Find Left Edge of Color Area
             int lFillLoc = x; //the location to check/fill on the left
@@ -200,9 +195,9 @@ namespace Bio.Graphics
             }
             rFillLoc--;
 
-           //add range to queue
-           FloodFillRange r = new FloodFillRange(lFillLoc, rFillLoc, y);
-           ranges.Enqueue(ref r);
+            //add range to queue
+            FloodFillRange r = new FloodFillRange(lFillLoc, rFillLoc, y);
+            ranges.Enqueue(ref r);
         }
 
         ///<summary>Sees if a pixel is within the color tolerance range.</summary>
@@ -225,15 +220,15 @@ namespace Bio.Graphics
             if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
             {
                 return (bitmapBits[px] >= (startColor.R - tolerance.R)) && bitmapBits[px] <= (startColor.R + tolerance.R) &&
-                    (bitmapBits[px+1] >= (startColor.G - tolerance.G)) && bitmapBits[px+1] <= (startColor.G + tolerance.G) &&
-                    (bitmapBits[px+2] >= (startColor.B - tolerance.B)) && bitmapBits[px+2] <= (startColor.B + tolerance.B);
+                    (bitmapBits[px + 1] >= (startColor.G - tolerance.G)) && bitmapBits[px + 1] <= (startColor.G + tolerance.G) &&
+                    (bitmapBits[px + 2] >= (startColor.B - tolerance.B)) && bitmapBits[px + 2] <= (startColor.B + tolerance.B);
             }
             else
             if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb || bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
             {
-                return (bitmapBits[px+3] >= (startColor.R - tolerance.R)) && bitmapBits[px+3] <= (startColor.R + tolerance.R) &&
-                    (bitmapBits[px+2] >= (startColor.G - tolerance.G)) && bitmapBits[px+2] <= (startColor.G + tolerance.G) &&
-                    (bitmapBits[px+1] >= (startColor.B - tolerance.B)) && bitmapBits[px+1] <= (startColor.B + tolerance.B);
+                return (bitmapBits[px + 3] >= (startColor.R - tolerance.R)) && bitmapBits[px + 3] <= (startColor.R + tolerance.R) &&
+                    (bitmapBits[px + 2] >= (startColor.G - tolerance.G)) && bitmapBits[px + 2] <= (startColor.G + tolerance.G) &&
+                    (bitmapBits[px + 1] >= (startColor.B - tolerance.B)) && bitmapBits[px + 1] <= (startColor.B + tolerance.B);
             }
             else
             if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
@@ -286,7 +281,7 @@ namespace Bio.Graphics
 
         public FloodFillRange(int startX, int endX, int y)
         {
-            StartX=startX;
+            StartX = startX;
             EndX = endX;
             Y = y;
         }
