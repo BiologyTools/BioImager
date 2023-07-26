@@ -45,15 +45,6 @@ namespace Bio
                     //We initialize with default values.
                     UpdateObjectives();
                 }
-                obj1Name.Text = list[0].Name;
-                obj2Name.Text = list[1].Name;
-                obj3Name.Text = list[2].Name;
-                obj4Name.Text = list[3].Name;
-                obj5Name.Text = list[4].Name;
-                obj6Name.Text = list[5].Name;
-                if (Microscope.Objectives.List.Count == 7)
-                    obj7Name.Text = list[6].Name;
-
                 objectiveA1Box.Value = (decimal)list[0].AcquisitionExposure;
                 objectiveA2Box.Value = (decimal)list[1].AcquisitionExposure;
                 objectiveA3Box.Value = (decimal)list[2].AcquisitionExposure;

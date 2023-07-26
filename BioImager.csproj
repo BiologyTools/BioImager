@@ -13,14 +13,36 @@
     <PackageIcon>banner.jpeg</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Microscopy;Biology;</PackageTags>
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+    <Description>A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="bioformats_package.dll" />
+    <None Remove="MicroscopeConsole\MicroscopeConsole.exe" />
+    <None Remove="MicroscopeConsole\MicroscopeConsole.exe.config" />
+    <None Remove="MicroscopeConsole\MicroscopeConsole.pdb" />
+    <None Remove="MicroscopeConsole\Newtonsoft.Json.dll" />
+    <None Remove="MicroscopeConsole\Newtonsoft.Json.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="bioformats_package.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicroscopeConsole\MicroscopeConsole.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicroscopeConsole\MicroscopeConsole.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicroscopeConsole\MicroscopeConsole.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicroscopeConsole\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicroscopeConsole\Newtonsoft.Json.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -42,7 +64,13 @@
     <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
     <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
     <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\RepoErik\MicroscopeConsole\MicroscopeConsole\MicroscopeConsole\MicroscopeConsole.csproj" />
   </ItemGroup>
 
   <ItemGroup>

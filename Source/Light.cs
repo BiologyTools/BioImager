@@ -104,6 +104,8 @@ namespace Bio.Source
         private void lightBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LightSource l = (LightSource)lightBox.SelectedItem;
+            if (l == null)
+                return;
             int i = (int)l.GetPosition();
             if (i != -1)
                 trackBar.Value = i;
