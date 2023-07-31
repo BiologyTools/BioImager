@@ -2,6 +2,8 @@
 
 A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss® & all devices supported by [python-microscope.](https://github.com/python-microscope) If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging & supports XInput game controllers to move stage, take images, run ImageJ macros on images or Bio C# scripts. Also check out the wiki for [library usage.](https://github.com/BiologyTools/Bio/wiki/Library-Usage) or check out the [documentation.](https://biologytools.github.io/Documentation/BioImager-2.1.0/index.html)
 
+![Nuget](https://img.shields.io/nuget/v/BioImager) ![Nuget](https://img.shields.io/nuget/dt/BioImager) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8187849.svg)](https://doi.org/10.5281/zenodo.8187849)
+
 ## Sample Microscope Script
 ```
 //If the GUI Recording for setting folder is set, we can set the microscope storage folder.
@@ -79,19 +81,13 @@ Microscope.TakeTiles(4,4);
 -  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample) [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
 
 ## Sample Tool Script
-
+```
 //css_reference Bio.dll;
-
 using System;
-
 using System.Windows.Forms;
-
 using System.Drawing;
-
 using Bio;
-
 using System.Threading;
-
 public class Loader
 {
 
@@ -135,5 +131,5 @@ public class Loader
 		return "OK";
 	}
 }
-
+```
 
