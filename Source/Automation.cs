@@ -3,6 +3,7 @@ using FlaUI.Core.Definitions;
 using FlaUI.Core.Identifiers;
 using FlaUI.UIA3;
 using Gma.System.MouseKeyHook;
+using org.checkerframework.common.returnsreceiver.qual;
 using System.Diagnostics;
 using WindowsInput;
 
@@ -424,20 +425,22 @@ namespace Bio
         public static void StopRecording()
         {
             recording=false;
-            rec.Name = "Recording" + (Recordings.Count + 1);
+            rec.Name = recname;
             Recordings.Add(rec.Name,rec);
         }
+        public static string recname;
         /// > Start recording the properties of the current object
-        public static void StartPropertyRecording()
+        public static void StartPropertyRecording(string name)
         {
             recording = true;
+            recname = name;
             rec = new Recording();
+            rec.Name = recname;
         }
         /// Stop recording the property and add it to the list of properties
         public static void StopPropertyRecording()
         {
             recording = false;
-            rec.Name = "Property" + (Properties.Count+1);
             Properties.Add(rec.Name,rec);
         }
         /// It takes a string as an argument, and returns an object

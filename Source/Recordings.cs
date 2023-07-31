@@ -42,7 +42,6 @@ namespace Bio
                     {
                         TreeNode tn = new TreeNode();
                         tn.Text = item.ToString();
-
                         Node no = new Node(item, tn, Node.Type.action);
                         no.recording = rec;
                         tn.Tag = no;
@@ -358,7 +357,7 @@ namespace Bio
             if (ti.ShowDialog() != DialogResult.OK)
                 return;
             propRecStatusLabel.Text = "Property Recording: Started";
-            Automation.StartPropertyRecording();
+            Automation.StartPropertyRecording(ti.TextValue);
         }
 
         private void stopPropBut_Click(object sender, EventArgs e)
