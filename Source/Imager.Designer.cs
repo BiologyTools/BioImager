@@ -29,1528 +29,1483 @@ namespace Bio
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Imager));
-            this.statusTimer = new System.Windows.Forms.Timer(this.components);
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label22 = new System.Windows.Forms.Label();
-            this.RJoystickStageMoveAmountBox = new System.Windows.Forms.NumericUpDown();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.triggerFocusBox = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.LJoystickStageMoveAmountBox = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.deadzoneBox = new System.Windows.Forms.NumericUpDown();
-            this.controllerJoystickUpdate = new System.Windows.Forms.Timer(this.components);
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.LJoystickLabel = new System.Windows.Forms.Label();
-            this.RJoystickLabel = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.leftTriggerLabel = new System.Windows.Forms.Label();
-            this.rightTriggerLabel = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.YPressedLabel = new System.Windows.Forms.Label();
-            this.BPressedLabel = new System.Windows.Forms.Label();
-            this.APressedLabel = new System.Windows.Forms.Label();
-            this.XPressedLabel = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.DPadLeftLabel = new System.Windows.Forms.Label();
-            this.DPadDownLabel = new System.Windows.Forms.Label();
-            this.DPadRightLabel = new System.Windows.Forms.Label();
-            this.DPadUpLabel = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.shoulderRightLabel = new System.Windows.Forms.Label();
-            this.shoulderLeftLabel = new System.Windows.Forms.Label();
-            this.BackPressedLabel = new System.Windows.Forms.Label();
-            this.StartPressedLabel = new System.Windows.Forms.Label();
-            this.storedCoordsBox = new System.Windows.Forms.ListBox();
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.goToToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.snapContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.goToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInImageViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label20 = new System.Windows.Forms.Label();
-            this.addCoordBut = new System.Windows.Forms.Button();
-            this.label21 = new System.Windows.Forms.Label();
-            this.lastCoordDistanceLabel = new System.Windows.Forms.Label();
-            this.lastSelectedCoordsLabel = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.clearBut = new System.Windows.Forms.Button();
-            this.label25 = new System.Windows.Forms.Label();
-            this.l3PressedLabel = new System.Windows.Forms.Label();
-            this.r3PressedLabel = new System.Windows.Forms.Label();
-            this.lastSelectedSnapDistanceLabel = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.lastSnapDistanceLabel = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.storedImageBox = new System.Windows.Forms.ListBox();
-            this.controllerButtonUpdate = new System.Windows.Forms.Timer(this.components);
-            this.topMostCheckBox = new System.Windows.Forms.CheckBox();
-            this.mainTabControl = new System.Windows.Forms.TabControl();
-            this.ImagingTab = new System.Windows.Forms.TabPage();
-            this.dockToApp = new System.Windows.Forms.CheckBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.goToLocBox = new System.Windows.Forms.Button();
-            this.label35 = new System.Windows.Forms.Label();
-            this.zCoordBox = new System.Windows.Forms.NumericUpDown();
-            this.label34 = new System.Windows.Forms.Label();
-            this.yCoordBox = new System.Windows.Forms.NumericUpDown();
-            this.label32 = new System.Windows.Forms.Label();
-            this.xCoordBox = new System.Windows.Forms.NumericUpDown();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.clearImagesBut = new System.Windows.Forms.Button();
-            this.SettingsTab = new System.Windows.Forms.TabPage();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.slicesPerSlideBox = new System.Windows.Forms.NumericUpDown();
-            this.label30 = new System.Windows.Forms.Label();
-            this.sliceIncrementBox = new System.Windows.Forms.NumericUpDown();
-            this.label31 = new System.Windows.Forms.Label();
-            this.imagesPerSliceBox = new System.Windows.Forms.NumericUpDown();
-            this.openProfileBut = new System.Windows.Forms.Button();
-            this.saveProfileBut = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.profilesBox = new System.Windows.Forms.ComboBox();
-            this.tabContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.undockToWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openProfileFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.openSnapsFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.openExeFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.mainWinContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.hideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.borderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.openImagesDialog = new System.Windows.Forms.OpenFileDialog();
-            this.saveImageDialog = new System.Windows.Forms.SaveFileDialog();
-            this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RJoystickStageMoveAmountBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.triggerFocusBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LJoystickStageMoveAmountBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBox)).BeginInit();
-            this.contextMenuStrip2.SuspendLayout();
-            this.snapContextMenuStrip.SuspendLayout();
-            this.mainTabControl.SuspendLayout();
-            this.ImagingTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zCoordBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.yCoordBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xCoordBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
-            this.SettingsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.slicesPerSlideBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliceIncrementBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imagesPerSliceBox)).BeginInit();
-            this.tabContextMenu.SuspendLayout();
-            this.mainWinContextMenuStrip.SuspendLayout();
-            this.SuspendLayout();
+            statusTimer = new System.Windows.Forms.Timer(components);
+            statusStrip = new StatusStrip();
+            statusLabel = new ToolStripStatusLabel();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            label22 = new Label();
+            RJoystickStageMoveAmountBox = new NumericUpDown();
+            label24 = new Label();
+            label15 = new Label();
+            triggerFocusBox = new NumericUpDown();
+            label14 = new Label();
+            label11 = new Label();
+            LJoystickStageMoveAmountBox = new NumericUpDown();
+            label10 = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            deadzoneBox = new NumericUpDown();
+            controllerJoystickUpdate = new System.Windows.Forms.Timer(components);
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            LJoystickLabel = new Label();
+            RJoystickLabel = new Label();
+            label9 = new Label();
+            leftTriggerLabel = new Label();
+            rightTriggerLabel = new Label();
+            label12 = new Label();
+            YPressedLabel = new Label();
+            BPressedLabel = new Label();
+            APressedLabel = new Label();
+            XPressedLabel = new Label();
+            label17 = new Label();
+            DPadLeftLabel = new Label();
+            DPadDownLabel = new Label();
+            DPadRightLabel = new Label();
+            DPadUpLabel = new Label();
+            label13 = new Label();
+            shoulderRightLabel = new Label();
+            shoulderLeftLabel = new Label();
+            BackPressedLabel = new Label();
+            StartPressedLabel = new Label();
+            storedCoordsBox = new ListBox();
+            contextMenuStrip2 = new ContextMenuStrip(components);
+            goToToolStripMenuItem1 = new ToolStripMenuItem();
+            deleteToolStripMenuItem1 = new ToolStripMenuItem();
+            clearToolStripMenuItem1 = new ToolStripMenuItem();
+            copyToolStripMenuItem = new ToolStripMenuItem();
+            snapContextMenuStrip = new ContextMenuStrip(components);
+            goToToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
+            clearToolStripMenuItem = new ToolStripMenuItem();
+            copyToolStripMenuItem1 = new ToolStripMenuItem();
+            openFileToolStripMenuItem = new ToolStripMenuItem();
+            openInImageViewToolStripMenuItem = new ToolStripMenuItem();
+            label20 = new Label();
+            addCoordBut = new Button();
+            label21 = new Label();
+            lastCoordDistanceLabel = new Label();
+            lastSelectedCoordsLabel = new Label();
+            label23 = new Label();
+            clearBut = new Button();
+            label25 = new Label();
+            l3PressedLabel = new Label();
+            r3PressedLabel = new Label();
+            lastSelectedSnapDistanceLabel = new Label();
+            label27 = new Label();
+            lastSnapDistanceLabel = new Label();
+            label29 = new Label();
+            storedImageBox = new ListBox();
+            controllerButtonUpdate = new System.Windows.Forms.Timer(components);
+            topMostCheckBox = new CheckBox();
+            mainTabControl = new TabControl();
+            ImagingTab = new TabPage();
+            dockToApp = new CheckBox();
+            label26 = new Label();
+            goToLocBox = new Button();
+            label35 = new Label();
+            zCoordBox = new NumericUpDown();
+            label34 = new Label();
+            yCoordBox = new NumericUpDown();
+            label32 = new Label();
+            xCoordBox = new NumericUpDown();
+            splitContainer = new SplitContainer();
+            clearImagesBut = new Button();
+            SettingsTab = new TabPage();
+            label36 = new Label();
+            label3 = new Label();
+            slicesPerSlideBox = new NumericUpDown();
+            label30 = new Label();
+            sliceIncrementBox = new NumericUpDown();
+            label31 = new Label();
+            imagesPerSliceBox = new NumericUpDown();
+            openProfileBut = new Button();
+            saveProfileBut = new Button();
+            label1 = new Label();
+            profilesBox = new ComboBox();
+            tabContextMenu = new ContextMenuStrip(components);
+            undockToWindowToolStripMenuItem = new ToolStripMenuItem();
+            openProfileFileDialog = new OpenFileDialog();
+            saveFileDialog = new SaveFileDialog();
+            openSnapsFileDialog = new OpenFileDialog();
+            openExeFileDialog = new OpenFileDialog();
+            mainWinContextMenuStrip = new ContextMenuStrip(components);
+            hideToolStripMenuItem = new ToolStripMenuItem();
+            closeToolStripMenuItem = new ToolStripMenuItem();
+            borderToolStripMenuItem = new ToolStripMenuItem();
+            toolTip = new ToolTip(components);
+            openImagesDialog = new OpenFileDialog();
+            saveImageDialog = new SaveFileDialog();
+            statusStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)RJoystickStageMoveAmountBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)triggerFocusBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)LJoystickStageMoveAmountBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)deadzoneBox).BeginInit();
+            contextMenuStrip2.SuspendLayout();
+            snapContextMenuStrip.SuspendLayout();
+            mainTabControl.SuspendLayout();
+            ImagingTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)zCoordBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)yCoordBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)xCoordBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
+            splitContainer.Panel1.SuspendLayout();
+            splitContainer.Panel2.SuspendLayout();
+            splitContainer.SuspendLayout();
+            SettingsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)slicesPerSlideBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)sliceIncrementBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)imagesPerSliceBox).BeginInit();
+            tabContextMenu.SuspendLayout();
+            mainWinContextMenuStrip.SuspendLayout();
+            SuspendLayout();
             // 
             // statusTimer
             // 
-            this.statusTimer.Interval = 1000;
-            this.statusTimer.Tick += new System.EventHandler(this.statusTimer_Tick);
+            statusTimer.Interval = 1000;
+            statusTimer.Tick += statusTimer_Tick;
             // 
             // statusStrip
             // 
-            this.statusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel,
-            this.toolStripStatusLabel2,
-            this.toolStripStatusLabel1});
-            this.statusStrip.Location = new System.Drawing.Point(0, 480);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(287, 22);
-            this.statusStrip.TabIndex = 7;
-            this.statusStrip.Text = "statusStrip1";
+            statusStrip.BackColor = Color.FromArgb(49, 91, 138);
+            statusStrip.Items.AddRange(new ToolStripItem[] { statusLabel, toolStripStatusLabel2, toolStripStatusLabel1 });
+            statusStrip.Location = new Point(0, 559);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Padding = new Padding(1, 0, 16, 0);
+            statusStrip.Size = new Size(335, 22);
+            statusStrip.TabIndex = 7;
+            statusStrip.Text = "statusStrip1";
+            statusStrip.Click += ImagingTab_Click;
             // 
             // statusLabel
             // 
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 17);
+            statusLabel.Name = "statusLabel";
+            statusLabel.Size = new Size(0, 17);
             // 
             // toolStripStatusLabel2
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(0, 17);
             // 
             // toolStripStatusLabel1
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(0, 17);
             // 
             // label22
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(217, 387);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(21, 13);
-            this.label22.TabIndex = 28;
-            this.label22.Text = "μm";
+            label22.AutoSize = true;
+            label22.Location = new Point(253, 447);
+            label22.Margin = new Padding(4, 0, 4, 0);
+            label22.Name = "label22";
+            label22.Size = new Size(25, 15);
+            label22.TabIndex = 28;
+            label22.Text = "μm";
             // 
             // RJoystickStageMoveAmountBox
             // 
-            this.RJoystickStageMoveAmountBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.RJoystickStageMoveAmountBox.DecimalPlaces = 5;
-            this.RJoystickStageMoveAmountBox.ForeColor = System.Drawing.Color.White;
-            this.RJoystickStageMoveAmountBox.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.RJoystickStageMoveAmountBox.InterceptArrowKeys = false;
-            this.RJoystickStageMoveAmountBox.Location = new System.Drawing.Point(128, 385);
-            this.RJoystickStageMoveAmountBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.RJoystickStageMoveAmountBox.Name = "RJoystickStageMoveAmountBox";
-            this.RJoystickStageMoveAmountBox.Size = new System.Drawing.Size(83, 20);
-            this.RJoystickStageMoveAmountBox.TabIndex = 27;
-            this.toolTip.SetToolTip(this.RJoystickStageMoveAmountBox, "This will override the move amount set in objectives. If objective is changed thi" +
-        "s will revert to the value set for the objective.");
-            this.RJoystickStageMoveAmountBox.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            RJoystickStageMoveAmountBox.BackColor = Color.FromArgb(49, 91, 138);
+            RJoystickStageMoveAmountBox.DecimalPlaces = 5;
+            RJoystickStageMoveAmountBox.ForeColor = Color.White;
+            RJoystickStageMoveAmountBox.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            RJoystickStageMoveAmountBox.InterceptArrowKeys = false;
+            RJoystickStageMoveAmountBox.Location = new Point(149, 444);
+            RJoystickStageMoveAmountBox.Margin = new Padding(4, 3, 4, 3);
+            RJoystickStageMoveAmountBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            RJoystickStageMoveAmountBox.Name = "RJoystickStageMoveAmountBox";
+            RJoystickStageMoveAmountBox.Size = new Size(97, 23);
+            RJoystickStageMoveAmountBox.TabIndex = 27;
+            toolTip.SetToolTip(RJoystickStageMoveAmountBox, "This will override the move amount set in objectives. If objective is changed this will revert to the value set for the objective.");
+            RJoystickStageMoveAmountBox.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // label24
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(125, 366);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(73, 13);
-            this.label24.TabIndex = 26;
-            this.label24.Text = "Right Joystick";
+            label24.AutoSize = true;
+            label24.Location = new Point(146, 422);
+            label24.Margin = new Padding(4, 0, 4, 0);
+            label24.Name = "label24";
+            label24.Size = new Size(79, 15);
+            label24.TabIndex = 26;
+            label24.Text = "Right Joystick";
             // 
             // label15
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(92, 426);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(21, 13);
-            this.label15.TabIndex = 21;
-            this.label15.Text = "μm";
+            label15.AutoSize = true;
+            label15.Location = new Point(107, 492);
+            label15.Margin = new Padding(4, 0, 4, 0);
+            label15.Name = "label15";
+            label15.Size = new Size(25, 15);
+            label15.TabIndex = 21;
+            label15.Text = "μm";
             // 
             // triggerFocusBox
             // 
-            this.triggerFocusBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.triggerFocusBox.DecimalPlaces = 5;
-            this.triggerFocusBox.ForeColor = System.Drawing.Color.White;
-            this.triggerFocusBox.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.triggerFocusBox.InterceptArrowKeys = false;
-            this.triggerFocusBox.Location = new System.Drawing.Point(6, 423);
-            this.triggerFocusBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.triggerFocusBox.Name = "triggerFocusBox";
-            this.triggerFocusBox.Size = new System.Drawing.Size(83, 20);
-            this.triggerFocusBox.TabIndex = 20;
-            this.toolTip.SetToolTip(this.triggerFocusBox, "This will override the move amount set in objectives. If objective is changed thi" +
-        "s will revert to the value set for the objective.");
-            this.triggerFocusBox.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
+            triggerFocusBox.BackColor = Color.FromArgb(49, 91, 138);
+            triggerFocusBox.DecimalPlaces = 5;
+            triggerFocusBox.ForeColor = Color.White;
+            triggerFocusBox.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            triggerFocusBox.InterceptArrowKeys = false;
+            triggerFocusBox.Location = new Point(7, 488);
+            triggerFocusBox.Margin = new Padding(4, 3, 4, 3);
+            triggerFocusBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            triggerFocusBox.Name = "triggerFocusBox";
+            triggerFocusBox.Size = new Size(97, 23);
+            triggerFocusBox.TabIndex = 20;
+            toolTip.SetToolTip(triggerFocusBox, "This will override the move amount set in objectives. If objective is changed this will revert to the value set for the objective.");
+            triggerFocusBox.Value = new decimal(new int[] { 1, 0, 0, 196608 });
             // 
             // label14
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(3, 408);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 13);
-            this.label14.TabIndex = 19;
-            this.label14.Text = "Trigger Focus";
+            label14.AutoSize = true;
+            label14.Location = new Point(4, 471);
+            label14.Margin = new Padding(4, 0, 4, 0);
+            label14.Name = "label14";
+            label14.Size = new Size(77, 15);
+            label14.TabIndex = 19;
+            label14.Text = "Trigger Focus";
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(92, 387);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(21, 13);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "μm";
+            label11.AutoSize = true;
+            label11.Location = new Point(107, 447);
+            label11.Margin = new Padding(4, 0, 4, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(25, 15);
+            label11.TabIndex = 18;
+            label11.Text = "μm";
             // 
             // LJoystickStageMoveAmountBox
             // 
-            this.LJoystickStageMoveAmountBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.LJoystickStageMoveAmountBox.DecimalPlaces = 5;
-            this.LJoystickStageMoveAmountBox.ForeColor = System.Drawing.Color.White;
-            this.LJoystickStageMoveAmountBox.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.LJoystickStageMoveAmountBox.InterceptArrowKeys = false;
-            this.LJoystickStageMoveAmountBox.Location = new System.Drawing.Point(6, 385);
-            this.LJoystickStageMoveAmountBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.LJoystickStageMoveAmountBox.Name = "LJoystickStageMoveAmountBox";
-            this.LJoystickStageMoveAmountBox.Size = new System.Drawing.Size(83, 20);
-            this.LJoystickStageMoveAmountBox.TabIndex = 17;
-            this.toolTip.SetToolTip(this.LJoystickStageMoveAmountBox, "This will override the move amount set in objectives. If objective is changed thi" +
-        "s will revert to the value set for the objective.");
-            this.LJoystickStageMoveAmountBox.Value = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
+            LJoystickStageMoveAmountBox.BackColor = Color.FromArgb(49, 91, 138);
+            LJoystickStageMoveAmountBox.DecimalPlaces = 5;
+            LJoystickStageMoveAmountBox.ForeColor = Color.White;
+            LJoystickStageMoveAmountBox.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            LJoystickStageMoveAmountBox.InterceptArrowKeys = false;
+            LJoystickStageMoveAmountBox.Location = new Point(7, 444);
+            LJoystickStageMoveAmountBox.Margin = new Padding(4, 3, 4, 3);
+            LJoystickStageMoveAmountBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            LJoystickStageMoveAmountBox.Name = "LJoystickStageMoveAmountBox";
+            LJoystickStageMoveAmountBox.Size = new Size(97, 23);
+            LJoystickStageMoveAmountBox.TabIndex = 17;
+            toolTip.SetToolTip(LJoystickStageMoveAmountBox, "This will override the move amount set in objectives. If objective is changed this will revert to the value set for the objective.");
+            LJoystickStageMoveAmountBox.Value = new decimal(new int[] { 40, 0, 0, 0 });
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 366);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(66, 13);
-            this.label10.TabIndex = 16;
-            this.label10.Text = "Left Joystick";
+            label10.AutoSize = true;
+            label10.Location = new Point(4, 422);
+            label10.Margin = new Padding(4, 0, 4, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(71, 15);
+            label10.TabIndex = 16;
+            label10.Text = "Left Joystick";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(-1, 289);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(0, 13);
-            this.label5.TabIndex = 15;
+            label5.AutoSize = true;
+            label5.Location = new Point(-1, 333);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(0, 15);
+            label5.TabIndex = 15;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(126, 408);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 13);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Deadzone";
+            label4.AutoSize = true;
+            label4.Location = new Point(147, 471);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(59, 15);
+            label4.TabIndex = 14;
+            label4.Text = "Deadzone";
             // 
             // deadzoneBox
             // 
-            this.deadzoneBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.deadzoneBox.ForeColor = System.Drawing.Color.White;
-            this.deadzoneBox.InterceptArrowKeys = false;
-            this.deadzoneBox.Location = new System.Drawing.Point(129, 424);
-            this.deadzoneBox.Name = "deadzoneBox";
-            this.deadzoneBox.Size = new System.Drawing.Size(83, 20);
-            this.deadzoneBox.TabIndex = 13;
-            this.deadzoneBox.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.deadzoneBox.ValueChanged += new System.EventHandler(this.deadzoneBox_ValueChanged);
+            deadzoneBox.BackColor = Color.FromArgb(49, 91, 138);
+            deadzoneBox.ForeColor = Color.White;
+            deadzoneBox.InterceptArrowKeys = false;
+            deadzoneBox.Location = new Point(150, 489);
+            deadzoneBox.Margin = new Padding(4, 3, 4, 3);
+            deadzoneBox.Name = "deadzoneBox";
+            deadzoneBox.Size = new Size(97, 23);
+            deadzoneBox.TabIndex = 13;
+            deadzoneBox.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            deadzoneBox.ValueChanged += deadzoneBox_ValueChanged;
             // 
             // controllerJoystickUpdate
             // 
-            this.controllerJoystickUpdate.Tick += new System.EventHandler(this.controllerJoystickUpdate_Tick);
+            controllerJoystickUpdate.Tick += controllerJoystickUpdate_Tick;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(2, 27);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(92, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Left Joystick %";
+            label6.AutoSize = true;
+            label6.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label6.Location = new Point(2, 31);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(92, 13);
+            label6.TabIndex = 10;
+            label6.Text = "Left Joystick %";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(102, 27);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(100, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Right Joystick %";
+            label7.AutoSize = true;
+            label7.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label7.Location = new Point(119, 31);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(100, 13);
+            label7.TabIndex = 11;
+            label7.Text = "Right Joystick %";
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(101, 158);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(94, 13);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "Right Trigger %";
+            label8.AutoSize = true;
+            label8.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(118, 182);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(94, 13);
+            label8.TabIndex = 12;
+            label8.Text = "Right Trigger %";
             // 
             // LJoystickLabel
             // 
-            this.LJoystickLabel.AutoSize = true;
-            this.LJoystickLabel.Location = new System.Drawing.Point(2, 49);
-            this.LJoystickLabel.Name = "LJoystickLabel";
-            this.LJoystickLabel.Size = new System.Drawing.Size(24, 13);
-            this.LJoystickLabel.TabIndex = 13;
-            this.LJoystickLabel.Text = "X,Y";
+            LJoystickLabel.AutoSize = true;
+            LJoystickLabel.Location = new Point(2, 57);
+            LJoystickLabel.Margin = new Padding(4, 0, 4, 0);
+            LJoystickLabel.Name = "LJoystickLabel";
+            LJoystickLabel.Size = new Size(24, 15);
+            LJoystickLabel.TabIndex = 13;
+            LJoystickLabel.Text = "X,Y";
             // 
             // RJoystickLabel
             // 
-            this.RJoystickLabel.AutoSize = true;
-            this.RJoystickLabel.Location = new System.Drawing.Point(102, 49);
-            this.RJoystickLabel.Name = "RJoystickLabel";
-            this.RJoystickLabel.Size = new System.Drawing.Size(24, 13);
-            this.RJoystickLabel.TabIndex = 14;
-            this.RJoystickLabel.Text = "X,Y";
+            RJoystickLabel.AutoSize = true;
+            RJoystickLabel.Location = new Point(119, 57);
+            RJoystickLabel.Margin = new Padding(4, 0, 4, 0);
+            RJoystickLabel.Name = "RJoystickLabel";
+            RJoystickLabel.Size = new Size(24, 15);
+            RJoystickLabel.TabIndex = 14;
+            RJoystickLabel.Text = "X,Y";
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(2, 158);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(86, 13);
-            this.label9.TabIndex = 15;
-            this.label9.Text = "Left Trigger %";
+            label9.AutoSize = true;
+            label9.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label9.Location = new Point(2, 182);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(86, 13);
+            label9.TabIndex = 15;
+            label9.Text = "Left Trigger %";
             // 
             // leftTriggerLabel
             // 
-            this.leftTriggerLabel.AutoSize = true;
-            this.leftTriggerLabel.Location = new System.Drawing.Point(7, 179);
-            this.leftTriggerLabel.Name = "leftTriggerLabel";
-            this.leftTriggerLabel.Size = new System.Drawing.Size(0, 13);
-            this.leftTriggerLabel.TabIndex = 16;
+            leftTriggerLabel.AutoSize = true;
+            leftTriggerLabel.Location = new Point(8, 207);
+            leftTriggerLabel.Margin = new Padding(4, 0, 4, 0);
+            leftTriggerLabel.Name = "leftTriggerLabel";
+            leftTriggerLabel.Size = new Size(0, 15);
+            leftTriggerLabel.TabIndex = 16;
             // 
             // rightTriggerLabel
             // 
-            this.rightTriggerLabel.AutoSize = true;
-            this.rightTriggerLabel.Location = new System.Drawing.Point(108, 180);
-            this.rightTriggerLabel.Name = "rightTriggerLabel";
-            this.rightTriggerLabel.Size = new System.Drawing.Size(0, 13);
-            this.rightTriggerLabel.TabIndex = 17;
+            rightTriggerLabel.AutoSize = true;
+            rightTriggerLabel.Location = new Point(126, 208);
+            rightTriggerLabel.Margin = new Padding(4, 0, 4, 0);
+            rightTriggerLabel.Name = "rightTriggerLabel";
+            rightTriggerLabel.Size = new Size(0, 15);
+            rightTriggerLabel.TabIndex = 17;
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(2, 69);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 13);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "Buttons";
+            label12.AutoSize = true;
+            label12.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label12.Location = new Point(2, 80);
+            label12.Margin = new Padding(4, 0, 4, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(50, 13);
+            label12.TabIndex = 18;
+            label12.Text = "Buttons";
             // 
             // YPressedLabel
             // 
-            this.YPressedLabel.AutoSize = true;
-            this.YPressedLabel.Location = new System.Drawing.Point(2, 87);
-            this.YPressedLabel.Name = "YPressedLabel";
-            this.YPressedLabel.Size = new System.Drawing.Size(75, 13);
-            this.YPressedLabel.TabIndex = 19;
-            this.YPressedLabel.Text = "Y: not pressed";
-            this.toolTip.SetToolTip(this.YPressedLabel, "Double click to change button function.");
-            this.YPressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.YPressedLabel_MouseDoubleClick);
+            YPressedLabel.AutoSize = true;
+            YPressedLabel.Location = new Point(2, 100);
+            YPressedLabel.Margin = new Padding(4, 0, 4, 0);
+            YPressedLabel.Name = "YPressedLabel";
+            YPressedLabel.Size = new Size(81, 15);
+            YPressedLabel.TabIndex = 19;
+            YPressedLabel.Text = "Y: not pressed";
+            toolTip.SetToolTip(YPressedLabel, "Double click to change button function.");
+            YPressedLabel.MouseDoubleClick += YPressedLabel_MouseDoubleClick;
             // 
             // BPressedLabel
             // 
-            this.BPressedLabel.AutoSize = true;
-            this.BPressedLabel.Location = new System.Drawing.Point(2, 103);
-            this.BPressedLabel.Name = "BPressedLabel";
-            this.BPressedLabel.Size = new System.Drawing.Size(75, 13);
-            this.BPressedLabel.TabIndex = 20;
-            this.BPressedLabel.Text = "B: not pressed";
-            this.toolTip.SetToolTip(this.BPressedLabel, "Double click to change button function.");
-            this.BPressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.BPressedLabel_MouseDoubleClick);
+            BPressedLabel.AutoSize = true;
+            BPressedLabel.Location = new Point(2, 119);
+            BPressedLabel.Margin = new Padding(4, 0, 4, 0);
+            BPressedLabel.Name = "BPressedLabel";
+            BPressedLabel.Size = new Size(81, 15);
+            BPressedLabel.TabIndex = 20;
+            BPressedLabel.Text = "B: not pressed";
+            toolTip.SetToolTip(BPressedLabel, "Double click to change button function.");
+            BPressedLabel.MouseDoubleClick += BPressedLabel_MouseDoubleClick;
             // 
             // APressedLabel
             // 
-            this.APressedLabel.AutoSize = true;
-            this.APressedLabel.Location = new System.Drawing.Point(2, 119);
-            this.APressedLabel.Name = "APressedLabel";
-            this.APressedLabel.Size = new System.Drawing.Size(75, 13);
-            this.APressedLabel.TabIndex = 21;
-            this.APressedLabel.Text = "A: not pressed";
-            this.toolTip.SetToolTip(this.APressedLabel, "Double click to change button function.");
-            this.APressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.APressedLabel_MouseDoubleClick);
+            APressedLabel.AutoSize = true;
+            APressedLabel.Location = new Point(2, 137);
+            APressedLabel.Margin = new Padding(4, 0, 4, 0);
+            APressedLabel.Name = "APressedLabel";
+            APressedLabel.Size = new Size(82, 15);
+            APressedLabel.TabIndex = 21;
+            APressedLabel.Text = "A: not pressed";
+            toolTip.SetToolTip(APressedLabel, "Double click to change button function.");
+            APressedLabel.MouseDoubleClick += APressedLabel_MouseDoubleClick;
             // 
             // XPressedLabel
             // 
-            this.XPressedLabel.AutoSize = true;
-            this.XPressedLabel.Location = new System.Drawing.Point(2, 135);
-            this.XPressedLabel.Name = "XPressedLabel";
-            this.XPressedLabel.Size = new System.Drawing.Size(75, 13);
-            this.XPressedLabel.TabIndex = 22;
-            this.XPressedLabel.Text = "X: not pressed";
-            this.toolTip.SetToolTip(this.XPressedLabel, "Double click to change button function.");
-            this.XPressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.XPressedLabel_MouseDoubleClick);
+            XPressedLabel.AutoSize = true;
+            XPressedLabel.Location = new Point(2, 156);
+            XPressedLabel.Margin = new Padding(4, 0, 4, 0);
+            XPressedLabel.Name = "XPressedLabel";
+            XPressedLabel.Size = new Size(81, 15);
+            XPressedLabel.TabIndex = 22;
+            XPressedLabel.Text = "X: not pressed";
+            toolTip.SetToolTip(XPressedLabel, "Double click to change button function.");
+            XPressedLabel.MouseDoubleClick += XPressedLabel_MouseDoubleClick;
             // 
             // label17
             // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(101, 67);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(38, 13);
-            this.label17.TabIndex = 23;
-            this.label17.Text = "DPad";
+            label17.AutoSize = true;
+            label17.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label17.Location = new Point(118, 77);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(38, 13);
+            label17.TabIndex = 23;
+            label17.Text = "DPad";
             // 
             // DPadLeftLabel
             // 
-            this.DPadLeftLabel.AutoSize = true;
-            this.DPadLeftLabel.Location = new System.Drawing.Point(100, 135);
-            this.DPadLeftLabel.Name = "DPadLeftLabel";
-            this.DPadLeftLabel.Size = new System.Drawing.Size(86, 13);
-            this.DPadLeftLabel.TabIndex = 27;
-            this.DPadLeftLabel.Text = "Left: not pressed";
-            this.toolTip.SetToolTip(this.DPadLeftLabel, "Double click to change button function.");
-            this.DPadLeftLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DPadLeftLabel_MouseDoubleClick);
+            DPadLeftLabel.AutoSize = true;
+            DPadLeftLabel.Location = new Point(117, 156);
+            DPadLeftLabel.Margin = new Padding(4, 0, 4, 0);
+            DPadLeftLabel.Name = "DPadLeftLabel";
+            DPadLeftLabel.Size = new Size(94, 15);
+            DPadLeftLabel.TabIndex = 27;
+            DPadLeftLabel.Text = "Left: not pressed";
+            toolTip.SetToolTip(DPadLeftLabel, "Double click to change button function.");
+            DPadLeftLabel.MouseDoubleClick += DPadLeftLabel_MouseDoubleClick;
             // 
             // DPadDownLabel
             // 
-            this.DPadDownLabel.AutoSize = true;
-            this.DPadDownLabel.Location = new System.Drawing.Point(100, 119);
-            this.DPadDownLabel.Name = "DPadDownLabel";
-            this.DPadDownLabel.Size = new System.Drawing.Size(96, 13);
-            this.DPadDownLabel.TabIndex = 26;
-            this.DPadDownLabel.Text = "Down: not pressed";
-            this.toolTip.SetToolTip(this.DPadDownLabel, "Double click to change button function.");
-            this.DPadDownLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DPadDownLabel_MouseDoubleClick);
+            DPadDownLabel.AutoSize = true;
+            DPadDownLabel.Location = new Point(117, 137);
+            DPadDownLabel.Margin = new Padding(4, 0, 4, 0);
+            DPadDownLabel.Name = "DPadDownLabel";
+            DPadDownLabel.Size = new Size(105, 15);
+            DPadDownLabel.TabIndex = 26;
+            DPadDownLabel.Text = "Down: not pressed";
+            toolTip.SetToolTip(DPadDownLabel, "Double click to change button function.");
+            DPadDownLabel.MouseDoubleClick += DPadDownLabel_MouseDoubleClick;
             // 
             // DPadRightLabel
             // 
-            this.DPadRightLabel.AutoSize = true;
-            this.DPadRightLabel.Location = new System.Drawing.Point(100, 103);
-            this.DPadRightLabel.Name = "DPadRightLabel";
-            this.DPadRightLabel.Size = new System.Drawing.Size(93, 13);
-            this.DPadRightLabel.TabIndex = 25;
-            this.DPadRightLabel.Text = "Right: not pressed";
-            this.toolTip.SetToolTip(this.DPadRightLabel, "Double click to change button function.");
-            this.DPadRightLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DPadRightLabel_MouseDoubleClick);
+            DPadRightLabel.AutoSize = true;
+            DPadRightLabel.Location = new Point(117, 119);
+            DPadRightLabel.Margin = new Padding(4, 0, 4, 0);
+            DPadRightLabel.Name = "DPadRightLabel";
+            DPadRightLabel.Size = new Size(102, 15);
+            DPadRightLabel.TabIndex = 25;
+            DPadRightLabel.Text = "Right: not pressed";
+            toolTip.SetToolTip(DPadRightLabel, "Double click to change button function.");
+            DPadRightLabel.MouseDoubleClick += DPadRightLabel_MouseDoubleClick;
             // 
             // DPadUpLabel
             // 
-            this.DPadUpLabel.AutoSize = true;
-            this.DPadUpLabel.Location = new System.Drawing.Point(100, 87);
-            this.DPadUpLabel.Name = "DPadUpLabel";
-            this.DPadUpLabel.Size = new System.Drawing.Size(82, 13);
-            this.DPadUpLabel.TabIndex = 24;
-            this.DPadUpLabel.Text = "Up: not pressed";
-            this.toolTip.SetToolTip(this.DPadUpLabel, "Double click to change button function.");
-            this.DPadUpLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DPadUpLabel_MouseDoubleClick);
+            DPadUpLabel.AutoSize = true;
+            DPadUpLabel.Location = new Point(117, 100);
+            DPadUpLabel.Margin = new Padding(4, 0, 4, 0);
+            DPadUpLabel.Name = "DPadUpLabel";
+            DPadUpLabel.Size = new Size(89, 15);
+            DPadUpLabel.TabIndex = 24;
+            DPadUpLabel.Text = "Up: not pressed";
+            toolTip.SetToolTip(DPadUpLabel, "Double click to change button function.");
+            DPadUpLabel.MouseDoubleClick += DPadUpLabel_MouseDoubleClick;
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(5, 198);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(63, 13);
-            this.label13.TabIndex = 28;
-            this.label13.Text = "Shoulders";
+            label13.AutoSize = true;
+            label13.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label13.Location = new Point(6, 228);
+            label13.Margin = new Padding(4, 0, 4, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(63, 13);
+            label13.TabIndex = 28;
+            label13.Text = "Shoulders";
             // 
             // shoulderRightLabel
             // 
-            this.shoulderRightLabel.AutoSize = true;
-            this.shoulderRightLabel.Location = new System.Drawing.Point(5, 234);
-            this.shoulderRightLabel.Name = "shoulderRightLabel";
-            this.shoulderRightLabel.Size = new System.Drawing.Size(93, 13);
-            this.shoulderRightLabel.TabIndex = 30;
-            this.shoulderRightLabel.Text = "Right: not pressed";
-            this.toolTip.SetToolTip(this.shoulderRightLabel, "Double click to change button function.");
-            this.shoulderRightLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.shoulderRightLabel_MouseDoubleClick);
+            shoulderRightLabel.AutoSize = true;
+            shoulderRightLabel.Location = new Point(6, 270);
+            shoulderRightLabel.Margin = new Padding(4, 0, 4, 0);
+            shoulderRightLabel.Name = "shoulderRightLabel";
+            shoulderRightLabel.Size = new Size(102, 15);
+            shoulderRightLabel.TabIndex = 30;
+            shoulderRightLabel.Text = "Right: not pressed";
+            toolTip.SetToolTip(shoulderRightLabel, "Double click to change button function.");
+            shoulderRightLabel.MouseDoubleClick += shoulderRightLabel_MouseDoubleClick;
             // 
             // shoulderLeftLabel
             // 
-            this.shoulderLeftLabel.AutoSize = true;
-            this.shoulderLeftLabel.Location = new System.Drawing.Point(5, 218);
-            this.shoulderLeftLabel.Name = "shoulderLeftLabel";
-            this.shoulderLeftLabel.Size = new System.Drawing.Size(86, 13);
-            this.shoulderLeftLabel.TabIndex = 29;
-            this.shoulderLeftLabel.Text = "Left: not pressed";
-            this.toolTip.SetToolTip(this.shoulderLeftLabel, "Double click to change button function.");
-            this.shoulderLeftLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.shoulderLeftLabel_MouseDoubleClick);
+            shoulderLeftLabel.AutoSize = true;
+            shoulderLeftLabel.Location = new Point(6, 252);
+            shoulderLeftLabel.Margin = new Padding(4, 0, 4, 0);
+            shoulderLeftLabel.Name = "shoulderLeftLabel";
+            shoulderLeftLabel.Size = new Size(94, 15);
+            shoulderLeftLabel.TabIndex = 29;
+            shoulderLeftLabel.Text = "Left: not pressed";
+            toolTip.SetToolTip(shoulderLeftLabel, "Double click to change button function.");
+            shoulderLeftLabel.MouseDoubleClick += shoulderLeftLabel_MouseDoubleClick;
             // 
             // BackPressedLabel
             // 
-            this.BackPressedLabel.AutoSize = true;
-            this.BackPressedLabel.Location = new System.Drawing.Point(103, 200);
-            this.BackPressedLabel.Name = "BackPressedLabel";
-            this.BackPressedLabel.Size = new System.Drawing.Size(93, 13);
-            this.BackPressedLabel.TabIndex = 31;
-            this.BackPressedLabel.Text = "Back: not pressed";
-            this.toolTip.SetToolTip(this.BackPressedLabel, "Double click to change button function.");
-            this.BackPressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.BackPressedLabel_MouseDoubleClick);
+            BackPressedLabel.AutoSize = true;
+            BackPressedLabel.Location = new Point(120, 231);
+            BackPressedLabel.Margin = new Padding(4, 0, 4, 0);
+            BackPressedLabel.Name = "BackPressedLabel";
+            BackPressedLabel.Size = new Size(99, 15);
+            BackPressedLabel.TabIndex = 31;
+            BackPressedLabel.Text = "Back: not pressed";
+            toolTip.SetToolTip(BackPressedLabel, "Double click to change button function.");
+            BackPressedLabel.MouseDoubleClick += BackPressedLabel_MouseDoubleClick;
             // 
             // StartPressedLabel
             // 
-            this.StartPressedLabel.AutoSize = true;
-            this.StartPressedLabel.Location = new System.Drawing.Point(103, 215);
-            this.StartPressedLabel.Name = "StartPressedLabel";
-            this.StartPressedLabel.Size = new System.Drawing.Size(90, 13);
-            this.StartPressedLabel.TabIndex = 32;
-            this.StartPressedLabel.Text = "Start: not pressed";
-            this.toolTip.SetToolTip(this.StartPressedLabel, "Double click to change button function.");
-            this.StartPressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.StartPressedLabel_MouseDoubleClick);
+            StartPressedLabel.AutoSize = true;
+            StartPressedLabel.Location = new Point(120, 248);
+            StartPressedLabel.Margin = new Padding(4, 0, 4, 0);
+            StartPressedLabel.Name = "StartPressedLabel";
+            StartPressedLabel.Size = new Size(98, 15);
+            StartPressedLabel.TabIndex = 32;
+            StartPressedLabel.Text = "Start: not pressed";
+            toolTip.SetToolTip(StartPressedLabel, "Double click to change button function.");
+            StartPressedLabel.MouseDoubleClick += StartPressedLabel_MouseDoubleClick;
             // 
             // storedCoordsBox
             // 
-            this.storedCoordsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.storedCoordsBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.storedCoordsBox.ContextMenuStrip = this.contextMenuStrip2;
-            this.storedCoordsBox.ForeColor = System.Drawing.Color.White;
-            this.storedCoordsBox.FormattingEnabled = true;
-            this.storedCoordsBox.Location = new System.Drawing.Point(5, 4);
-            this.storedCoordsBox.Name = "storedCoordsBox";
-            this.storedCoordsBox.Size = new System.Drawing.Size(124, 225);
-            this.storedCoordsBox.TabIndex = 33;
-            this.storedCoordsBox.SelectedIndexChanged += new System.EventHandler(this.storedCoordsBox_SelectedIndexChanged);
+            storedCoordsBox.BackColor = Color.FromArgb(49, 91, 138);
+            storedCoordsBox.ContextMenuStrip = contextMenuStrip2;
+            storedCoordsBox.Dock = DockStyle.Fill;
+            storedCoordsBox.ForeColor = Color.White;
+            storedCoordsBox.FormattingEnabled = true;
+            storedCoordsBox.ItemHeight = 15;
+            storedCoordsBox.Location = new Point(0, 0);
+            storedCoordsBox.Margin = new Padding(4, 3, 4, 3);
+            storedCoordsBox.Name = "storedCoordsBox";
+            storedCoordsBox.Size = new Size(151, 272);
+            storedCoordsBox.TabIndex = 33;
+            storedCoordsBox.SelectedIndexChanged += storedCoordsBox_SelectedIndexChanged;
             // 
             // contextMenuStrip2
             // 
-            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.goToToolStripMenuItem1,
-            this.deleteToolStripMenuItem1,
-            this.clearToolStripMenuItem1,
-            this.copyToolStripMenuItem});
-            this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(108, 92);
+            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { goToToolStripMenuItem1, deleteToolStripMenuItem1, clearToolStripMenuItem1, copyToolStripMenuItem });
+            contextMenuStrip2.Name = "contextMenuStrip2";
+            contextMenuStrip2.Size = new Size(108, 92);
             // 
             // goToToolStripMenuItem1
             // 
-            this.goToToolStripMenuItem1.Name = "goToToolStripMenuItem1";
-            this.goToToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
-            this.goToToolStripMenuItem1.Text = "Go To";
-            this.goToToolStripMenuItem1.Click += new System.EventHandler(this.goToToolStripMenuItem1_Click);
+            goToToolStripMenuItem1.Name = "goToToolStripMenuItem1";
+            goToToolStripMenuItem1.Size = new Size(107, 22);
+            goToToolStripMenuItem1.Text = "Go To";
+            goToToolStripMenuItem1.Click += goToToolStripMenuItem1_Click;
             // 
             // deleteToolStripMenuItem1
             // 
-            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
-            this.deleteToolStripMenuItem1.Text = "Delete";
-            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
+            deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            deleteToolStripMenuItem1.Size = new Size(107, 22);
+            deleteToolStripMenuItem1.Text = "Delete";
+            deleteToolStripMenuItem1.Click += deleteToolStripMenuItem1_Click;
             // 
             // clearToolStripMenuItem1
             // 
-            this.clearToolStripMenuItem1.Name = "clearToolStripMenuItem1";
-            this.clearToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
-            this.clearToolStripMenuItem1.Text = "Clear";
-            this.clearToolStripMenuItem1.Click += new System.EventHandler(this.clearToolStripMenuItem1_Click);
+            clearToolStripMenuItem1.Name = "clearToolStripMenuItem1";
+            clearToolStripMenuItem1.Size = new Size(107, 22);
+            clearToolStripMenuItem1.Text = "Clear";
+            clearToolStripMenuItem1.Click += clearToolStripMenuItem1_Click;
             // 
             // copyToolStripMenuItem
             // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            copyToolStripMenuItem.Size = new Size(107, 22);
+            copyToolStripMenuItem.Text = "Copy";
+            copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
             // 
             // snapContextMenuStrip
             // 
-            this.snapContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.goToToolStripMenuItem,
-            this.deleteToolStripMenuItem,
-            this.clearToolStripMenuItem,
-            this.copyToolStripMenuItem1,
-            this.openFileToolStripMenuItem,
-            this.openInImageViewToolStripMenuItem});
-            this.snapContextMenuStrip.Name = "contextMenuStrip1";
-            this.snapContextMenuStrip.Size = new System.Drawing.Size(243, 136);
+            snapContextMenuStrip.Items.AddRange(new ToolStripItem[] { goToToolStripMenuItem, deleteToolStripMenuItem, clearToolStripMenuItem, copyToolStripMenuItem1, openFileToolStripMenuItem, openInImageViewToolStripMenuItem });
+            snapContextMenuStrip.Name = "contextMenuStrip1";
+            snapContextMenuStrip.Size = new Size(243, 136);
             // 
             // goToToolStripMenuItem
             // 
-            this.goToToolStripMenuItem.Name = "goToToolStripMenuItem";
-            this.goToToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.goToToolStripMenuItem.Text = "Go To";
-            this.goToToolStripMenuItem.Click += new System.EventHandler(this.goToToolStripMenuItem_Click);
+            goToToolStripMenuItem.Name = "goToToolStripMenuItem";
+            goToToolStripMenuItem.Size = new Size(242, 22);
+            goToToolStripMenuItem.Text = "Go To";
+            goToToolStripMenuItem.Click += goToToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
             // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(242, 22);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // clearToolStripMenuItem
             // 
-            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.clearToolStripMenuItem.Text = "Clear";
-            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            clearToolStripMenuItem.Size = new Size(242, 22);
+            clearToolStripMenuItem.Text = "Clear";
+            clearToolStripMenuItem.Click += clearToolStripMenuItem_Click;
             // 
             // copyToolStripMenuItem1
             // 
-            this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
-            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(242, 22);
-            this.copyToolStripMenuItem1.Text = "Copy";
-            this.copyToolStripMenuItem1.Click += new System.EventHandler(this.copyToolStripMenuItem1_Click);
+            copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
+            copyToolStripMenuItem1.Size = new Size(242, 22);
+            copyToolStripMenuItem1.Text = "Copy";
+            copyToolStripMenuItem1.Click += copyToolStripMenuItem1_Click;
             // 
             // openFileToolStripMenuItem
             // 
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.openFileToolStripMenuItem.Text = "Open Image in Default Program";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            openFileToolStripMenuItem.Size = new Size(242, 22);
+            openFileToolStripMenuItem.Text = "Open Image in Default Program";
+            openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
             // openInImageViewToolStripMenuItem
             // 
-            this.openInImageViewToolStripMenuItem.Name = "openInImageViewToolStripMenuItem";
-            this.openInImageViewToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.openInImageViewToolStripMenuItem.Text = "Open in Image View";
-            this.openInImageViewToolStripMenuItem.Click += new System.EventHandler(this.openInImageViewToolStripMenuItem_Click);
+            openInImageViewToolStripMenuItem.Name = "openInImageViewToolStripMenuItem";
+            openInImageViewToolStripMenuItem.Size = new Size(242, 22);
+            openInImageViewToolStripMenuItem.Text = "Open in Image View";
+            openInImageViewToolStripMenuItem.Click += openInImageViewToolStripMenuItem_Click;
             // 
             // label20
             // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(4, 142);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(97, 13);
-            this.label20.TabIndex = 34;
-            this.label20.Text = "Stored Coordinates";
+            label20.AutoSize = true;
+            label20.ForeColor = Color.White;
+            label20.Location = new Point(5, 164);
+            label20.Margin = new Padding(4, 0, 4, 0);
+            label20.Name = "label20";
+            label20.Size = new Size(108, 15);
+            label20.TabIndex = 34;
+            label20.Text = "Stored Coordinates";
             // 
             // addCoordBut
             // 
-            this.addCoordBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.addCoordBut.ForeColor = System.Drawing.Color.White;
-            this.addCoordBut.Location = new System.Drawing.Point(5, 158);
-            this.addCoordBut.Name = "addCoordBut";
-            this.addCoordBut.Size = new System.Drawing.Size(48, 23);
-            this.addCoordBut.TabIndex = 35;
-            this.addCoordBut.Text = "Add";
-            this.addCoordBut.UseVisualStyleBackColor = false;
-            this.addCoordBut.Click += new System.EventHandler(this.addCoordBut_Click);
+            addCoordBut.BackColor = Color.FromArgb(49, 91, 138);
+            addCoordBut.ForeColor = Color.White;
+            addCoordBut.Location = new Point(6, 182);
+            addCoordBut.Margin = new Padding(4, 3, 4, 3);
+            addCoordBut.Name = "addCoordBut";
+            addCoordBut.Size = new Size(56, 27);
+            addCoordBut.TabIndex = 35;
+            addCoordBut.Text = "Add";
+            addCoordBut.UseVisualStyleBackColor = false;
+            addCoordBut.Click += addCoordBut_Click;
             // 
             // label21
             // 
-            this.label21.AutoSize = true;
-            this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(6, 45);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(179, 13);
-            this.label21.TabIndex = 36;
-            this.label21.Text = "Distance from last stored coordinate.";
+            label21.AutoSize = true;
+            label21.ForeColor = Color.White;
+            label21.Location = new Point(7, 52);
+            label21.Margin = new Padding(4, 0, 4, 0);
+            label21.Name = "label21";
+            label21.Size = new Size(201, 15);
+            label21.TabIndex = 36;
+            label21.Text = "Distance from last stored coordinate.";
             // 
             // lastCoordDistanceLabel
             // 
-            this.lastCoordDistanceLabel.AutoSize = true;
-            this.lastCoordDistanceLabel.ForeColor = System.Drawing.Color.White;
-            this.lastCoordDistanceLabel.Location = new System.Drawing.Point(13, 66);
-            this.lastCoordDistanceLabel.Name = "lastCoordDistanceLabel";
-            this.lastCoordDistanceLabel.Size = new System.Drawing.Size(0, 13);
-            this.lastCoordDistanceLabel.TabIndex = 37;
+            lastCoordDistanceLabel.AutoSize = true;
+            lastCoordDistanceLabel.ForeColor = Color.White;
+            lastCoordDistanceLabel.Location = new Point(15, 76);
+            lastCoordDistanceLabel.Margin = new Padding(4, 0, 4, 0);
+            lastCoordDistanceLabel.Name = "lastCoordDistanceLabel";
+            lastCoordDistanceLabel.Size = new Size(0, 15);
+            lastCoordDistanceLabel.TabIndex = 37;
             // 
             // lastSelectedCoordsLabel
             // 
-            this.lastSelectedCoordsLabel.AutoSize = true;
-            this.lastSelectedCoordsLabel.ForeColor = System.Drawing.Color.White;
-            this.lastSelectedCoordsLabel.Location = new System.Drawing.Point(13, 27);
-            this.lastSelectedCoordsLabel.Name = "lastSelectedCoordsLabel";
-            this.lastSelectedCoordsLabel.Size = new System.Drawing.Size(0, 13);
-            this.lastSelectedCoordsLabel.TabIndex = 39;
+            lastSelectedCoordsLabel.AutoSize = true;
+            lastSelectedCoordsLabel.ForeColor = Color.White;
+            lastSelectedCoordsLabel.Location = new Point(15, 31);
+            lastSelectedCoordsLabel.Margin = new Padding(4, 0, 4, 0);
+            lastSelectedCoordsLabel.Name = "lastSelectedCoordsLabel";
+            lastSelectedCoordsLabel.Size = new Size(0, 15);
+            lastSelectedCoordsLabel.TabIndex = 39;
             // 
             // label23
             // 
-            this.label23.AutoSize = true;
-            this.label23.ForeColor = System.Drawing.Color.White;
-            this.label23.Location = new System.Drawing.Point(5, 6);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(171, 13);
-            this.label23.TabIndex = 38;
-            this.label23.Text = "Distance from selected coordinate.";
+            label23.AutoSize = true;
+            label23.ForeColor = Color.White;
+            label23.Location = new Point(6, 7);
+            label23.Margin = new Padding(4, 0, 4, 0);
+            label23.Name = "label23";
+            label23.Size = new Size(190, 15);
+            label23.TabIndex = 38;
+            label23.Text = "Distance from selected coordinate.";
             // 
             // clearBut
             // 
-            this.clearBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.clearBut.ForeColor = System.Drawing.Color.White;
-            this.clearBut.Location = new System.Drawing.Point(53, 158);
-            this.clearBut.Name = "clearBut";
-            this.clearBut.Size = new System.Drawing.Size(48, 23);
-            this.clearBut.TabIndex = 40;
-            this.clearBut.Text = "Clear";
-            this.clearBut.UseVisualStyleBackColor = false;
-            this.clearBut.Click += new System.EventHandler(this.clearBut_Click);
+            clearBut.BackColor = Color.FromArgb(49, 91, 138);
+            clearBut.ForeColor = Color.White;
+            clearBut.Location = new Point(62, 182);
+            clearBut.Margin = new Padding(4, 3, 4, 3);
+            clearBut.Name = "clearBut";
+            clearBut.Size = new Size(56, 27);
+            clearBut.TabIndex = 40;
+            clearBut.Text = "Clear";
+            clearBut.UseVisualStyleBackColor = false;
+            clearBut.Click += clearBut_Click;
             // 
             // label25
             // 
-            this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(102, 234);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(66, 13);
-            this.label25.TabIndex = 41;
-            this.label25.Text = "R3 and L3";
+            label25.AutoSize = true;
+            label25.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label25.Location = new Point(119, 270);
+            label25.Margin = new Padding(4, 0, 4, 0);
+            label25.Name = "label25";
+            label25.Size = new Size(66, 13);
+            label25.TabIndex = 41;
+            label25.Text = "R3 and L3";
             // 
             // l3PressedLabel
             // 
-            this.l3PressedLabel.AutoSize = true;
-            this.l3PressedLabel.Location = new System.Drawing.Point(103, 268);
-            this.l3PressedLabel.Name = "l3PressedLabel";
-            this.l3PressedLabel.Size = new System.Drawing.Size(80, 13);
-            this.l3PressedLabel.TabIndex = 43;
-            this.l3PressedLabel.Text = "L3: not pressed";
-            this.toolTip.SetToolTip(this.l3PressedLabel, "Double click to change button function.");
-            this.l3PressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.l3PressedLabel_MouseDoubleClick);
+            l3PressedLabel.AutoSize = true;
+            l3PressedLabel.Location = new Point(120, 309);
+            l3PressedLabel.Margin = new Padding(4, 0, 4, 0);
+            l3PressedLabel.Name = "l3PressedLabel";
+            l3PressedLabel.Size = new Size(86, 15);
+            l3PressedLabel.TabIndex = 43;
+            l3PressedLabel.Text = "L3: not pressed";
+            toolTip.SetToolTip(l3PressedLabel, "Double click to change button function.");
+            l3PressedLabel.MouseDoubleClick += l3PressedLabel_MouseDoubleClick;
             // 
             // r3PressedLabel
             // 
-            this.r3PressedLabel.AutoSize = true;
-            this.r3PressedLabel.Location = new System.Drawing.Point(103, 252);
-            this.r3PressedLabel.Name = "r3PressedLabel";
-            this.r3PressedLabel.Size = new System.Drawing.Size(82, 13);
-            this.r3PressedLabel.TabIndex = 42;
-            this.r3PressedLabel.Text = "R3: not pressed";
-            this.toolTip.SetToolTip(this.r3PressedLabel, "Double click to change button function.");
-            this.r3PressedLabel.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.r3PressedLabel_MouseDoubleClick);
+            r3PressedLabel.AutoSize = true;
+            r3PressedLabel.Location = new Point(120, 291);
+            r3PressedLabel.Margin = new Padding(4, 0, 4, 0);
+            r3PressedLabel.Name = "r3PressedLabel";
+            r3PressedLabel.Size = new Size(87, 15);
+            r3PressedLabel.TabIndex = 42;
+            r3PressedLabel.Text = "R3: not pressed";
+            toolTip.SetToolTip(r3PressedLabel, "Double click to change button function.");
+            r3PressedLabel.MouseDoubleClick += r3PressedLabel_MouseDoubleClick;
             // 
             // lastSelectedSnapDistanceLabel
             // 
-            this.lastSelectedSnapDistanceLabel.AutoSize = true;
-            this.lastSelectedSnapDistanceLabel.ForeColor = System.Drawing.Color.White;
-            this.lastSelectedSnapDistanceLabel.Location = new System.Drawing.Point(13, 100);
-            this.lastSelectedSnapDistanceLabel.Name = "lastSelectedSnapDistanceLabel";
-            this.lastSelectedSnapDistanceLabel.Size = new System.Drawing.Size(0, 13);
-            this.lastSelectedSnapDistanceLabel.TabIndex = 49;
+            lastSelectedSnapDistanceLabel.AutoSize = true;
+            lastSelectedSnapDistanceLabel.ForeColor = Color.White;
+            lastSelectedSnapDistanceLabel.Location = new Point(15, 115);
+            lastSelectedSnapDistanceLabel.Margin = new Padding(4, 0, 4, 0);
+            lastSelectedSnapDistanceLabel.Name = "lastSelectedSnapDistanceLabel";
+            lastSelectedSnapDistanceLabel.Size = new Size(0, 15);
+            lastSelectedSnapDistanceLabel.TabIndex = 49;
             // 
             // label27
             // 
-            this.label27.AutoSize = true;
-            this.label27.ForeColor = System.Drawing.Color.White;
-            this.label27.Location = new System.Drawing.Point(6, 79);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(149, 13);
-            this.label27.TabIndex = 48;
-            this.label27.Text = "Distance from selected image.";
+            label27.AutoSize = true;
+            label27.ForeColor = Color.White;
+            label27.Location = new Point(7, 91);
+            label27.Margin = new Padding(4, 0, 4, 0);
+            label27.Name = "label27";
+            label27.Size = new Size(166, 15);
+            label27.TabIndex = 48;
+            label27.Text = "Distance from selected image.";
             // 
             // lastSnapDistanceLabel
             // 
-            this.lastSnapDistanceLabel.AutoSize = true;
-            this.lastSnapDistanceLabel.ForeColor = System.Drawing.Color.White;
-            this.lastSnapDistanceLabel.Location = new System.Drawing.Point(196, 121);
-            this.lastSnapDistanceLabel.Name = "lastSnapDistanceLabel";
-            this.lastSnapDistanceLabel.Size = new System.Drawing.Size(0, 13);
-            this.lastSnapDistanceLabel.TabIndex = 47;
+            lastSnapDistanceLabel.AutoSize = true;
+            lastSnapDistanceLabel.ForeColor = Color.White;
+            lastSnapDistanceLabel.Location = new Point(229, 140);
+            lastSnapDistanceLabel.Margin = new Padding(4, 0, 4, 0);
+            lastSnapDistanceLabel.Name = "lastSnapDistanceLabel";
+            lastSnapDistanceLabel.Size = new Size(0, 15);
+            lastSnapDistanceLabel.TabIndex = 47;
             // 
             // label29
             // 
-            this.label29.AutoSize = true;
-            this.label29.ForeColor = System.Drawing.Color.White;
-            this.label29.Location = new System.Drawing.Point(6, 118);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(157, 13);
-            this.label29.TabIndex = 46;
-            this.label29.Text = "Distance from last stored image.";
+            label29.AutoSize = true;
+            label29.ForeColor = Color.White;
+            label29.Location = new Point(7, 136);
+            label29.Margin = new Padding(4, 0, 4, 0);
+            label29.Name = "label29";
+            label29.Size = new Size(177, 15);
+            label29.TabIndex = 46;
+            label29.Text = "Distance from last stored image.";
             // 
             // storedImageBox
             // 
-            this.storedImageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.storedImageBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.storedImageBox.ContextMenuStrip = this.snapContextMenuStrip;
-            this.storedImageBox.ForeColor = System.Drawing.Color.White;
-            this.storedImageBox.FormattingEnabled = true;
-            this.storedImageBox.Location = new System.Drawing.Point(3, 4);
-            this.storedImageBox.Name = "storedImageBox";
-            this.storedImageBox.Size = new System.Drawing.Size(131, 225);
-            this.storedImageBox.TabIndex = 45;
-            this.storedImageBox.SelectedIndexChanged += new System.EventHandler(this.storedSnapBox_SelectedIndexChanged);
+            storedImageBox.BackColor = Color.FromArgb(49, 91, 138);
+            storedImageBox.ContextMenuStrip = snapContextMenuStrip;
+            storedImageBox.Dock = DockStyle.Fill;
+            storedImageBox.ForeColor = Color.White;
+            storedImageBox.FormattingEnabled = true;
+            storedImageBox.ItemHeight = 15;
+            storedImageBox.Location = new Point(0, 0);
+            storedImageBox.Margin = new Padding(4, 3, 4, 3);
+            storedImageBox.Name = "storedImageBox";
+            storedImageBox.Size = new Size(160, 272);
+            storedImageBox.TabIndex = 45;
+            storedImageBox.SelectedIndexChanged += storedSnapBox_SelectedIndexChanged;
             // 
             // controllerButtonUpdate
             // 
-            this.controllerButtonUpdate.Interval = 250;
-            this.controllerButtonUpdate.Tick += new System.EventHandler(this.controllerButtonUpdate_Tick);
+            controllerButtonUpdate.Interval = 250;
+            controllerButtonUpdate.Tick += controllerButtonUpdate_Tick;
             // 
             // topMostCheckBox
             // 
-            this.topMostCheckBox.AutoSize = true;
-            this.topMostCheckBox.Checked = true;
-            this.topMostCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.topMostCheckBox.ForeColor = System.Drawing.Color.White;
-            this.topMostCheckBox.Location = new System.Drawing.Point(186, 6);
-            this.topMostCheckBox.Name = "topMostCheckBox";
-            this.topMostCheckBox.Size = new System.Drawing.Size(71, 17);
-            this.topMostCheckBox.TabIndex = 60;
-            this.topMostCheckBox.Text = "Top Most";
-            this.topMostCheckBox.UseVisualStyleBackColor = true;
-            this.topMostCheckBox.CheckedChanged += new System.EventHandler(this.topMostCheckBox_CheckedChanged);
+            topMostCheckBox.AutoSize = true;
+            topMostCheckBox.Checked = true;
+            topMostCheckBox.CheckState = CheckState.Checked;
+            topMostCheckBox.ForeColor = Color.White;
+            topMostCheckBox.Location = new Point(217, 7);
+            topMostCheckBox.Margin = new Padding(4, 3, 4, 3);
+            topMostCheckBox.Name = "topMostCheckBox";
+            topMostCheckBox.Size = new Size(75, 19);
+            topMostCheckBox.TabIndex = 60;
+            topMostCheckBox.Text = "Top Most";
+            topMostCheckBox.UseVisualStyleBackColor = true;
+            topMostCheckBox.CheckedChanged += topMostCheckBox_CheckedChanged;
             // 
             // mainTabControl
             // 
-            this.mainTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.mainTabControl.Controls.Add(this.ImagingTab);
-            this.mainTabControl.Controls.Add(this.SettingsTab);
-            this.mainTabControl.HotTrack = true;
-            this.mainTabControl.Location = new System.Drawing.Point(3, 2);
-            this.mainTabControl.Name = "mainTabControl";
-            this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(284, 475);
-            this.mainTabControl.TabIndex = 62;
+            mainTabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            mainTabControl.Controls.Add(ImagingTab);
+            mainTabControl.Controls.Add(SettingsTab);
+            mainTabControl.HotTrack = true;
+            mainTabControl.Location = new Point(4, 2);
+            mainTabControl.Margin = new Padding(4, 3, 4, 3);
+            mainTabControl.Name = "mainTabControl";
+            mainTabControl.SelectedIndex = 0;
+            mainTabControl.Size = new Size(331, 550);
+            mainTabControl.TabIndex = 62;
             // 
             // ImagingTab
             // 
-            this.ImagingTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ImagingTab.Controls.Add(this.dockToApp);
-            this.ImagingTab.Controls.Add(this.label26);
-            this.ImagingTab.Controls.Add(this.goToLocBox);
-            this.ImagingTab.Controls.Add(this.label35);
-            this.ImagingTab.Controls.Add(this.zCoordBox);
-            this.ImagingTab.Controls.Add(this.label34);
-            this.ImagingTab.Controls.Add(this.yCoordBox);
-            this.ImagingTab.Controls.Add(this.label32);
-            this.ImagingTab.Controls.Add(this.xCoordBox);
-            this.ImagingTab.Controls.Add(this.splitContainer);
-            this.ImagingTab.Controls.Add(this.clearImagesBut);
-            this.ImagingTab.Controls.Add(this.label20);
-            this.ImagingTab.Controls.Add(this.addCoordBut);
-            this.ImagingTab.Controls.Add(this.topMostCheckBox);
-            this.ImagingTab.Controls.Add(this.label21);
-            this.ImagingTab.Controls.Add(this.lastSelectedSnapDistanceLabel);
-            this.ImagingTab.Controls.Add(this.lastCoordDistanceLabel);
-            this.ImagingTab.Controls.Add(this.label27);
-            this.ImagingTab.Controls.Add(this.label23);
-            this.ImagingTab.Controls.Add(this.lastSnapDistanceLabel);
-            this.ImagingTab.Controls.Add(this.lastSelectedCoordsLabel);
-            this.ImagingTab.Controls.Add(this.label29);
-            this.ImagingTab.Controls.Add(this.clearBut);
-            this.ImagingTab.Location = new System.Drawing.Point(4, 22);
-            this.ImagingTab.Name = "ImagingTab";
-            this.ImagingTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ImagingTab.Size = new System.Drawing.Size(276, 449);
-            this.ImagingTab.TabIndex = 0;
-            this.ImagingTab.Text = "Imaging";
+            ImagingTab.BackColor = Color.FromArgb(95, 122, 156);
+            ImagingTab.Controls.Add(dockToApp);
+            ImagingTab.Controls.Add(label26);
+            ImagingTab.Controls.Add(goToLocBox);
+            ImagingTab.Controls.Add(label35);
+            ImagingTab.Controls.Add(zCoordBox);
+            ImagingTab.Controls.Add(label34);
+            ImagingTab.Controls.Add(yCoordBox);
+            ImagingTab.Controls.Add(label32);
+            ImagingTab.Controls.Add(xCoordBox);
+            ImagingTab.Controls.Add(splitContainer);
+            ImagingTab.Controls.Add(clearImagesBut);
+            ImagingTab.Controls.Add(label20);
+            ImagingTab.Controls.Add(addCoordBut);
+            ImagingTab.Controls.Add(topMostCheckBox);
+            ImagingTab.Controls.Add(label21);
+            ImagingTab.Controls.Add(lastSelectedSnapDistanceLabel);
+            ImagingTab.Controls.Add(lastCoordDistanceLabel);
+            ImagingTab.Controls.Add(label27);
+            ImagingTab.Controls.Add(label23);
+            ImagingTab.Controls.Add(lastSnapDistanceLabel);
+            ImagingTab.Controls.Add(lastSelectedCoordsLabel);
+            ImagingTab.Controls.Add(label29);
+            ImagingTab.Controls.Add(clearBut);
+            ImagingTab.Location = new Point(4, 24);
+            ImagingTab.Margin = new Padding(4, 3, 4, 3);
+            ImagingTab.Name = "ImagingTab";
+            ImagingTab.Padding = new Padding(4, 3, 4, 3);
+            ImagingTab.Size = new Size(323, 522);
+            ImagingTab.TabIndex = 0;
+            ImagingTab.Text = "Imaging";
+            ImagingTab.Click += ImagingTab_Click;
             // 
             // dockToApp
             // 
-            this.dockToApp.AutoSize = true;
-            this.dockToApp.Checked = true;
-            this.dockToApp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dockToApp.Location = new System.Drawing.Point(186, 29);
-            this.dockToApp.Name = "dockToApp";
-            this.dockToApp.Size = new System.Drawing.Size(90, 17);
-            this.dockToApp.TabIndex = 71;
-            this.dockToApp.Text = "Dock To App";
-            this.dockToApp.UseVisualStyleBackColor = true;
-            this.dockToApp.CheckedChanged += new System.EventHandler(this.dockToApp_CheckedChanged);
+            dockToApp.AutoSize = true;
+            dockToApp.Checked = true;
+            dockToApp.CheckState = CheckState.Checked;
+            dockToApp.Location = new Point(217, 33);
+            dockToApp.Margin = new Padding(4, 3, 4, 3);
+            dockToApp.Name = "dockToApp";
+            dockToApp.Size = new Size(93, 19);
+            dockToApp.TabIndex = 71;
+            dockToApp.Text = "Dock To App";
+            dockToApp.UseVisualStyleBackColor = true;
+            dockToApp.CheckedChanged += dockToApp_CheckedChanged;
             // 
             // label26
             // 
-            this.label26.AutoSize = true;
-            this.label26.ForeColor = System.Drawing.Color.White;
-            this.label26.Location = new System.Drawing.Point(134, 142);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(75, 13);
-            this.label26.TabIndex = 71;
-            this.label26.Text = "Stored Images";
+            label26.AutoSize = true;
+            label26.ForeColor = Color.White;
+            label26.Location = new Point(156, 164);
+            label26.Margin = new Padding(4, 0, 4, 0);
+            label26.Name = "label26";
+            label26.Size = new Size(82, 15);
+            label26.TabIndex = 71;
+            label26.Text = "Stored Images";
             // 
             // goToLocBox
             // 
-            this.goToLocBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.goToLocBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.goToLocBox.ForeColor = System.Drawing.Color.White;
-            this.goToLocBox.Location = new System.Drawing.Point(243, 422);
-            this.goToLocBox.Name = "goToLocBox";
-            this.goToLocBox.Size = new System.Drawing.Size(33, 23);
-            this.goToLocBox.TabIndex = 70;
-            this.goToLocBox.Text = "Go";
-            this.goToLocBox.UseVisualStyleBackColor = false;
-            this.goToLocBox.Click += new System.EventHandler(this.goToLocBox_Click);
+            goToLocBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            goToLocBox.BackColor = Color.FromArgb(49, 91, 138);
+            goToLocBox.ForeColor = Color.White;
+            goToLocBox.Location = new Point(284, 493);
+            goToLocBox.Margin = new Padding(4, 3, 4, 3);
+            goToLocBox.Name = "goToLocBox";
+            goToLocBox.Size = new Size(38, 27);
+            goToLocBox.TabIndex = 70;
+            goToLocBox.Text = "Go";
+            goToLocBox.UseVisualStyleBackColor = false;
+            goToLocBox.Click += goToLocBox_Click;
             // 
             // label35
             // 
-            this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label35.AutoSize = true;
-            this.label35.ForeColor = System.Drawing.Color.White;
-            this.label35.Location = new System.Drawing.Point(164, 427);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(14, 13);
-            this.label35.TabIndex = 69;
-            this.label35.Text = "Z";
+            label35.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label35.AutoSize = true;
+            label35.ForeColor = Color.White;
+            label35.Location = new Point(191, 499);
+            label35.Margin = new Padding(4, 0, 4, 0);
+            label35.Name = "label35";
+            label35.Size = new Size(14, 15);
+            label35.TabIndex = 69;
+            label35.Text = "Z";
             // 
             // zCoordBox
             // 
-            this.zCoordBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.zCoordBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.zCoordBox.DecimalPlaces = 5;
-            this.zCoordBox.ForeColor = System.Drawing.Color.White;
-            this.zCoordBox.InterceptArrowKeys = false;
-            this.zCoordBox.Location = new System.Drawing.Point(178, 424);
-            this.zCoordBox.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.zCoordBox.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.zCoordBox.Name = "zCoordBox";
-            this.zCoordBox.Size = new System.Drawing.Size(64, 20);
-            this.zCoordBox.TabIndex = 68;
+            zCoordBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            zCoordBox.BackColor = Color.FromArgb(49, 91, 138);
+            zCoordBox.DecimalPlaces = 5;
+            zCoordBox.ForeColor = Color.White;
+            zCoordBox.InterceptArrowKeys = false;
+            zCoordBox.Location = new Point(208, 495);
+            zCoordBox.Margin = new Padding(4, 3, 4, 3);
+            zCoordBox.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
+            zCoordBox.Minimum = new decimal(new int[] { 10000000, 0, 0, int.MinValue });
+            zCoordBox.Name = "zCoordBox";
+            zCoordBox.Size = new Size(75, 23);
+            zCoordBox.TabIndex = 68;
             // 
             // label34
             // 
-            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label34.AutoSize = true;
-            this.label34.ForeColor = System.Drawing.Color.White;
-            this.label34.Location = new System.Drawing.Point(83, 427);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(14, 13);
-            this.label34.TabIndex = 67;
-            this.label34.Text = "Y";
+            label34.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label34.AutoSize = true;
+            label34.ForeColor = Color.White;
+            label34.Location = new Point(97, 499);
+            label34.Margin = new Padding(4, 0, 4, 0);
+            label34.Name = "label34";
+            label34.Size = new Size(14, 15);
+            label34.TabIndex = 67;
+            label34.Text = "Y";
             // 
             // yCoordBox
             // 
-            this.yCoordBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.yCoordBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.yCoordBox.DecimalPlaces = 5;
-            this.yCoordBox.ForeColor = System.Drawing.Color.White;
-            this.yCoordBox.InterceptArrowKeys = false;
-            this.yCoordBox.Location = new System.Drawing.Point(97, 424);
-            this.yCoordBox.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.yCoordBox.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.yCoordBox.Name = "yCoordBox";
-            this.yCoordBox.Size = new System.Drawing.Size(64, 20);
-            this.yCoordBox.TabIndex = 66;
+            yCoordBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            yCoordBox.BackColor = Color.FromArgb(49, 91, 138);
+            yCoordBox.DecimalPlaces = 5;
+            yCoordBox.ForeColor = Color.White;
+            yCoordBox.InterceptArrowKeys = false;
+            yCoordBox.Location = new Point(113, 495);
+            yCoordBox.Margin = new Padding(4, 3, 4, 3);
+            yCoordBox.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
+            yCoordBox.Minimum = new decimal(new int[] { 10000000, 0, 0, int.MinValue });
+            yCoordBox.Name = "yCoordBox";
+            yCoordBox.Size = new Size(75, 23);
+            yCoordBox.TabIndex = 66;
             // 
             // label32
             // 
-            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label32.AutoSize = true;
-            this.label32.ForeColor = System.Drawing.Color.White;
-            this.label32.Location = new System.Drawing.Point(2, 427);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(14, 13);
-            this.label32.TabIndex = 65;
-            this.label32.Text = "X";
+            label32.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label32.AutoSize = true;
+            label32.ForeColor = Color.White;
+            label32.Location = new Point(2, 499);
+            label32.Margin = new Padding(4, 0, 4, 0);
+            label32.Name = "label32";
+            label32.Size = new Size(14, 15);
+            label32.TabIndex = 65;
+            label32.Text = "X";
             // 
             // xCoordBox
             // 
-            this.xCoordBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.xCoordBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.xCoordBox.DecimalPlaces = 5;
-            this.xCoordBox.ForeColor = System.Drawing.Color.White;
-            this.xCoordBox.InterceptArrowKeys = false;
-            this.xCoordBox.Location = new System.Drawing.Point(17, 424);
-            this.xCoordBox.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.xCoordBox.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.xCoordBox.Name = "xCoordBox";
-            this.xCoordBox.Size = new System.Drawing.Size(64, 20);
-            this.xCoordBox.TabIndex = 64;
+            xCoordBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            xCoordBox.BackColor = Color.FromArgb(49, 91, 138);
+            xCoordBox.DecimalPlaces = 5;
+            xCoordBox.ForeColor = Color.White;
+            xCoordBox.InterceptArrowKeys = false;
+            xCoordBox.Location = new Point(20, 495);
+            xCoordBox.Margin = new Padding(4, 3, 4, 3);
+            xCoordBox.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
+            xCoordBox.Minimum = new decimal(new int[] { 10000000, 0, 0, int.MinValue });
+            xCoordBox.Name = "xCoordBox";
+            xCoordBox.Size = new Size(75, 23);
+            xCoordBox.TabIndex = 64;
             // 
             // splitContainer
             // 
-            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(0, 183);
-            this.splitContainer.Name = "splitContainer";
+            splitContainer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            splitContainer.Location = new Point(3, 215);
+            splitContainer.Margin = new Padding(4, 3, 4, 3);
+            splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.storedCoordsBox);
+            splitContainer.Panel1.Controls.Add(storedCoordsBox);
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.storedImageBox);
-            this.splitContainer.Size = new System.Drawing.Size(271, 233);
-            this.splitContainer.SplitterDistance = 130;
-            this.splitContainer.TabIndex = 63;
+            splitContainer.Panel2.Controls.Add(storedImageBox);
+            splitContainer.Size = new Size(316, 272);
+            splitContainer.SplitterDistance = 151;
+            splitContainer.SplitterWidth = 5;
+            splitContainer.TabIndex = 63;
             // 
             // clearImagesBut
             // 
-            this.clearImagesBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearImagesBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.clearImagesBut.ForeColor = System.Drawing.Color.White;
-            this.clearImagesBut.Location = new System.Drawing.Point(137, 158);
-            this.clearImagesBut.Name = "clearImagesBut";
-            this.clearImagesBut.Size = new System.Drawing.Size(52, 23);
-            this.clearImagesBut.TabIndex = 62;
-            this.clearImagesBut.Text = "Clear";
-            this.clearImagesBut.UseVisualStyleBackColor = false;
-            this.clearImagesBut.Click += new System.EventHandler(this.clearSnapsBut_Click);
+            clearImagesBut.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            clearImagesBut.BackColor = Color.FromArgb(49, 91, 138);
+            clearImagesBut.ForeColor = Color.White;
+            clearImagesBut.Location = new Point(160, 182);
+            clearImagesBut.Margin = new Padding(4, 3, 4, 3);
+            clearImagesBut.Name = "clearImagesBut";
+            clearImagesBut.Size = new Size(61, 27);
+            clearImagesBut.TabIndex = 62;
+            clearImagesBut.Text = "Clear";
+            clearImagesBut.UseVisualStyleBackColor = false;
+            clearImagesBut.Click += clearSnapsBut_Click;
             // 
             // SettingsTab
             // 
-            this.SettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.SettingsTab.Controls.Add(this.label36);
-            this.SettingsTab.Controls.Add(this.label22);
-            this.SettingsTab.Controls.Add(this.RJoystickStageMoveAmountBox);
-            this.SettingsTab.Controls.Add(this.label24);
-            this.SettingsTab.Controls.Add(this.label15);
-            this.SettingsTab.Controls.Add(this.label3);
-            this.SettingsTab.Controls.Add(this.triggerFocusBox);
-            this.SettingsTab.Controls.Add(this.label14);
-            this.SettingsTab.Controls.Add(this.slicesPerSlideBox);
-            this.SettingsTab.Controls.Add(this.label30);
-            this.SettingsTab.Controls.Add(this.sliceIncrementBox);
-            this.SettingsTab.Controls.Add(this.label31);
-            this.SettingsTab.Controls.Add(this.imagesPerSliceBox);
-            this.SettingsTab.Controls.Add(this.openProfileBut);
-            this.SettingsTab.Controls.Add(this.saveProfileBut);
-            this.SettingsTab.Controls.Add(this.label11);
-            this.SettingsTab.Controls.Add(this.label1);
-            this.SettingsTab.Controls.Add(this.LJoystickStageMoveAmountBox);
-            this.SettingsTab.Controls.Add(this.label10);
-            this.SettingsTab.Controls.Add(this.profilesBox);
-            this.SettingsTab.Controls.Add(this.label6);
-            this.SettingsTab.Controls.Add(this.label5);
-            this.SettingsTab.Controls.Add(this.label7);
-            this.SettingsTab.Controls.Add(this.label4);
-            this.SettingsTab.Controls.Add(this.label8);
-            this.SettingsTab.Controls.Add(this.deadzoneBox);
-            this.SettingsTab.Controls.Add(this.LJoystickLabel);
-            this.SettingsTab.Controls.Add(this.RJoystickLabel);
-            this.SettingsTab.Controls.Add(this.label9);
-            this.SettingsTab.Controls.Add(this.leftTriggerLabel);
-            this.SettingsTab.Controls.Add(this.rightTriggerLabel);
-            this.SettingsTab.Controls.Add(this.label12);
-            this.SettingsTab.Controls.Add(this.YPressedLabel);
-            this.SettingsTab.Controls.Add(this.BPressedLabel);
-            this.SettingsTab.Controls.Add(this.APressedLabel);
-            this.SettingsTab.Controls.Add(this.XPressedLabel);
-            this.SettingsTab.Controls.Add(this.label17);
-            this.SettingsTab.Controls.Add(this.DPadUpLabel);
-            this.SettingsTab.Controls.Add(this.DPadRightLabel);
-            this.SettingsTab.Controls.Add(this.l3PressedLabel);
-            this.SettingsTab.Controls.Add(this.DPadDownLabel);
-            this.SettingsTab.Controls.Add(this.r3PressedLabel);
-            this.SettingsTab.Controls.Add(this.DPadLeftLabel);
-            this.SettingsTab.Controls.Add(this.label25);
-            this.SettingsTab.Controls.Add(this.label13);
-            this.SettingsTab.Controls.Add(this.shoulderLeftLabel);
-            this.SettingsTab.Controls.Add(this.shoulderRightLabel);
-            this.SettingsTab.Controls.Add(this.BackPressedLabel);
-            this.SettingsTab.Controls.Add(this.StartPressedLabel);
-            this.SettingsTab.Location = new System.Drawing.Point(4, 22);
-            this.SettingsTab.Name = "SettingsTab";
-            this.SettingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.SettingsTab.Size = new System.Drawing.Size(276, 449);
-            this.SettingsTab.TabIndex = 1;
-            this.SettingsTab.Text = "Controller Settings";
-            this.toolTip.SetToolTip(this.SettingsTab, "Double click to change button function.");
+            SettingsTab.BackColor = Color.FromArgb(95, 122, 156);
+            SettingsTab.Controls.Add(label36);
+            SettingsTab.Controls.Add(label22);
+            SettingsTab.Controls.Add(RJoystickStageMoveAmountBox);
+            SettingsTab.Controls.Add(label24);
+            SettingsTab.Controls.Add(label15);
+            SettingsTab.Controls.Add(label3);
+            SettingsTab.Controls.Add(triggerFocusBox);
+            SettingsTab.Controls.Add(label14);
+            SettingsTab.Controls.Add(slicesPerSlideBox);
+            SettingsTab.Controls.Add(label30);
+            SettingsTab.Controls.Add(sliceIncrementBox);
+            SettingsTab.Controls.Add(label31);
+            SettingsTab.Controls.Add(imagesPerSliceBox);
+            SettingsTab.Controls.Add(openProfileBut);
+            SettingsTab.Controls.Add(saveProfileBut);
+            SettingsTab.Controls.Add(label11);
+            SettingsTab.Controls.Add(label1);
+            SettingsTab.Controls.Add(LJoystickStageMoveAmountBox);
+            SettingsTab.Controls.Add(label10);
+            SettingsTab.Controls.Add(profilesBox);
+            SettingsTab.Controls.Add(label6);
+            SettingsTab.Controls.Add(label5);
+            SettingsTab.Controls.Add(label7);
+            SettingsTab.Controls.Add(label4);
+            SettingsTab.Controls.Add(label8);
+            SettingsTab.Controls.Add(deadzoneBox);
+            SettingsTab.Controls.Add(LJoystickLabel);
+            SettingsTab.Controls.Add(RJoystickLabel);
+            SettingsTab.Controls.Add(label9);
+            SettingsTab.Controls.Add(leftTriggerLabel);
+            SettingsTab.Controls.Add(rightTriggerLabel);
+            SettingsTab.Controls.Add(label12);
+            SettingsTab.Controls.Add(YPressedLabel);
+            SettingsTab.Controls.Add(BPressedLabel);
+            SettingsTab.Controls.Add(APressedLabel);
+            SettingsTab.Controls.Add(XPressedLabel);
+            SettingsTab.Controls.Add(label17);
+            SettingsTab.Controls.Add(DPadUpLabel);
+            SettingsTab.Controls.Add(DPadRightLabel);
+            SettingsTab.Controls.Add(l3PressedLabel);
+            SettingsTab.Controls.Add(DPadDownLabel);
+            SettingsTab.Controls.Add(r3PressedLabel);
+            SettingsTab.Controls.Add(DPadLeftLabel);
+            SettingsTab.Controls.Add(label25);
+            SettingsTab.Controls.Add(label13);
+            SettingsTab.Controls.Add(shoulderLeftLabel);
+            SettingsTab.Controls.Add(shoulderRightLabel);
+            SettingsTab.Controls.Add(BackPressedLabel);
+            SettingsTab.Controls.Add(StartPressedLabel);
+            SettingsTab.Location = new Point(4, 24);
+            SettingsTab.Margin = new Padding(4, 3, 4, 3);
+            SettingsTab.Name = "SettingsTab";
+            SettingsTab.Padding = new Padding(4, 3, 4, 3);
+            SettingsTab.Size = new Size(323, 522);
+            SettingsTab.TabIndex = 1;
+            SettingsTab.Text = "Controller Settings";
+            toolTip.SetToolTip(SettingsTab, "Double click to change button function.");
             // 
             // label36
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(3, 7);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(197, 13);
-            this.label36.TabIndex = 72;
-            this.label36.Text = "Double click label to set button function.";
+            label36.AutoSize = true;
+            label36.Location = new Point(4, 8);
+            label36.Margin = new Padding(4, 0, 4, 0);
+            label36.Name = "label36";
+            label36.Size = new Size(222, 15);
+            label36.TabIndex = 72;
+            label36.Text = "Double click label to set button function.";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 343);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 13);
-            this.label3.TabIndex = 69;
-            this.label3.Text = "Slices per slide";
+            label3.AutoSize = true;
+            label3.Location = new Point(12, 396);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(83, 15);
+            label3.TabIndex = 69;
+            label3.Text = "Slices per slide";
             // 
             // slicesPerSlideBox
             // 
-            this.slicesPerSlideBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.slicesPerSlideBox.ForeColor = System.Drawing.Color.White;
-            this.slicesPerSlideBox.InterceptArrowKeys = false;
-            this.slicesPerSlideBox.Location = new System.Drawing.Point(88, 340);
-            this.slicesPerSlideBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.slicesPerSlideBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.slicesPerSlideBox.Name = "slicesPerSlideBox";
-            this.slicesPerSlideBox.Size = new System.Drawing.Size(48, 20);
-            this.slicesPerSlideBox.TabIndex = 68;
-            this.slicesPerSlideBox.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
+            slicesPerSlideBox.BackColor = Color.FromArgb(49, 91, 138);
+            slicesPerSlideBox.ForeColor = Color.White;
+            slicesPerSlideBox.InterceptArrowKeys = false;
+            slicesPerSlideBox.Location = new Point(103, 392);
+            slicesPerSlideBox.Margin = new Padding(4, 3, 4, 3);
+            slicesPerSlideBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            slicesPerSlideBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            slicesPerSlideBox.Name = "slicesPerSlideBox";
+            slicesPerSlideBox.Size = new Size(56, 23);
+            slicesPerSlideBox.TabIndex = 68;
+            slicesPerSlideBox.Value = new decimal(new int[] { 6, 0, 0, 0 });
             // 
             // label30
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(142, 318);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(79, 13);
-            this.label30.TabIndex = 67;
-            this.label30.Text = "Slice increment";
+            label30.AutoSize = true;
+            label30.Location = new Point(166, 367);
+            label30.Margin = new Padding(4, 0, 4, 0);
+            label30.Name = "label30";
+            label30.Size = new Size(88, 15);
+            label30.TabIndex = 67;
+            label30.Text = "Slice increment";
             // 
             // sliceIncrementBox
             // 
-            this.sliceIncrementBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.sliceIncrementBox.ForeColor = System.Drawing.Color.White;
-            this.sliceIncrementBox.InterceptArrowKeys = false;
-            this.sliceIncrementBox.Location = new System.Drawing.Point(145, 340);
-            this.sliceIncrementBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.sliceIncrementBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.sliceIncrementBox.Name = "sliceIncrementBox";
-            this.sliceIncrementBox.Size = new System.Drawing.Size(48, 20);
-            this.sliceIncrementBox.TabIndex = 66;
-            this.sliceIncrementBox.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
+            sliceIncrementBox.BackColor = Color.FromArgb(49, 91, 138);
+            sliceIncrementBox.ForeColor = Color.White;
+            sliceIncrementBox.InterceptArrowKeys = false;
+            sliceIncrementBox.Location = new Point(169, 392);
+            sliceIncrementBox.Margin = new Padding(4, 3, 4, 3);
+            sliceIncrementBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            sliceIncrementBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            sliceIncrementBox.Name = "sliceIncrementBox";
+            sliceIncrementBox.Size = new Size(56, 23);
+            sliceIncrementBox.TabIndex = 66;
+            sliceIncrementBox.Value = new decimal(new int[] { 4, 0, 0, 0 });
             // 
             // label31
             // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(5, 318);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(83, 13);
-            this.label31.TabIndex = 65;
-            this.label31.Text = "Images per slice";
+            label31.AutoSize = true;
+            label31.Location = new Point(6, 367);
+            label31.Margin = new Padding(4, 0, 4, 0);
+            label31.Name = "label31";
+            label31.Size = new Size(91, 15);
+            label31.TabIndex = 65;
+            label31.Text = "Images per slice";
             // 
             // imagesPerSliceBox
             // 
-            this.imagesPerSliceBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.imagesPerSliceBox.ForeColor = System.Drawing.Color.White;
-            this.imagesPerSliceBox.InterceptArrowKeys = false;
-            this.imagesPerSliceBox.Location = new System.Drawing.Point(88, 316);
-            this.imagesPerSliceBox.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.imagesPerSliceBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.imagesPerSliceBox.Name = "imagesPerSliceBox";
-            this.imagesPerSliceBox.Size = new System.Drawing.Size(48, 20);
-            this.imagesPerSliceBox.TabIndex = 64;
-            this.imagesPerSliceBox.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
+            imagesPerSliceBox.BackColor = Color.FromArgb(49, 91, 138);
+            imagesPerSliceBox.ForeColor = Color.White;
+            imagesPerSliceBox.InterceptArrowKeys = false;
+            imagesPerSliceBox.Location = new Point(103, 365);
+            imagesPerSliceBox.Margin = new Padding(4, 3, 4, 3);
+            imagesPerSliceBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            imagesPerSliceBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            imagesPerSliceBox.Name = "imagesPerSliceBox";
+            imagesPerSliceBox.Size = new Size(56, 23);
+            imagesPerSliceBox.TabIndex = 64;
+            imagesPerSliceBox.Value = new decimal(new int[] { 3, 0, 0, 0 });
             // 
             // openProfileBut
             // 
-            this.openProfileBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.openProfileBut.ForeColor = System.Drawing.Color.White;
-            this.openProfileBut.Location = new System.Drawing.Point(189, 289);
-            this.openProfileBut.Name = "openProfileBut";
-            this.openProfileBut.Size = new System.Drawing.Size(48, 21);
-            this.openProfileBut.TabIndex = 63;
-            this.openProfileBut.Text = "Open";
-            this.openProfileBut.UseVisualStyleBackColor = false;
-            this.openProfileBut.Click += new System.EventHandler(this.openProfileBut_Click);
+            openProfileBut.BackColor = Color.FromArgb(49, 91, 138);
+            openProfileBut.ForeColor = Color.White;
+            openProfileBut.Location = new Point(220, 333);
+            openProfileBut.Margin = new Padding(4, 3, 4, 3);
+            openProfileBut.Name = "openProfileBut";
+            openProfileBut.Size = new Size(56, 24);
+            openProfileBut.TabIndex = 63;
+            openProfileBut.Text = "Open";
+            openProfileBut.UseVisualStyleBackColor = false;
+            openProfileBut.Click += openProfileBut_Click;
             // 
             // saveProfileBut
             // 
-            this.saveProfileBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.saveProfileBut.ForeColor = System.Drawing.Color.White;
-            this.saveProfileBut.Location = new System.Drawing.Point(140, 289);
-            this.saveProfileBut.Name = "saveProfileBut";
-            this.saveProfileBut.Size = new System.Drawing.Size(48, 21);
-            this.saveProfileBut.TabIndex = 62;
-            this.saveProfileBut.Text = "Save";
-            this.saveProfileBut.UseVisualStyleBackColor = false;
-            this.saveProfileBut.Click += new System.EventHandler(this.saveProfileBut_Click);
+            saveProfileBut.BackColor = Color.FromArgb(49, 91, 138);
+            saveProfileBut.ForeColor = Color.White;
+            saveProfileBut.Location = new Point(163, 333);
+            saveProfileBut.Margin = new Padding(4, 3, 4, 3);
+            saveProfileBut.Name = "saveProfileBut";
+            saveProfileBut.Size = new Size(56, 24);
+            saveProfileBut.TabIndex = 62;
+            saveProfileBut.Text = "Save";
+            saveProfileBut.UseVisualStyleBackColor = false;
+            saveProfileBut.Click += saveProfileBut_Click;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(7, 268);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 61;
-            this.label1.Text = "User Profile";
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(8, 309);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(73, 13);
+            label1.TabIndex = 61;
+            label1.Text = "User Profile";
             // 
             // profilesBox
             // 
-            this.profilesBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.profilesBox.ForeColor = System.Drawing.Color.White;
-            this.profilesBox.FormattingEnabled = true;
-            this.profilesBox.Location = new System.Drawing.Point(10, 289);
-            this.profilesBox.Name = "profilesBox";
-            this.profilesBox.Size = new System.Drawing.Size(124, 21);
-            this.profilesBox.TabIndex = 60;
-            this.profilesBox.Text = "Default";
-            this.profilesBox.SelectedIndexChanged += new System.EventHandler(this.profilesBox_SelectedIndexChanged);
+            profilesBox.BackColor = Color.FromArgb(49, 91, 138);
+            profilesBox.ForeColor = Color.White;
+            profilesBox.FormattingEnabled = true;
+            profilesBox.Location = new Point(12, 333);
+            profilesBox.Margin = new Padding(4, 3, 4, 3);
+            profilesBox.Name = "profilesBox";
+            profilesBox.Size = new Size(144, 23);
+            profilesBox.TabIndex = 60;
+            profilesBox.Text = "Default";
+            profilesBox.SelectedIndexChanged += profilesBox_SelectedIndexChanged;
             // 
             // tabContextMenu
             // 
-            this.tabContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.undockToWindowToolStripMenuItem});
-            this.tabContextMenu.Name = "tabContextMenu";
-            this.tabContextMenu.Size = new System.Drawing.Size(189, 26);
-            this.tabContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabContextMenu_Opening);
+            tabContextMenu.Items.AddRange(new ToolStripItem[] { undockToWindowToolStripMenuItem });
+            tabContextMenu.Name = "tabContextMenu";
+            tabContextMenu.Size = new Size(189, 26);
+            tabContextMenu.Opening += tabContextMenu_Opening;
             // 
             // undockToWindowToolStripMenuItem
             // 
-            this.undockToWindowToolStripMenuItem.Name = "undockToWindowToolStripMenuItem";
-            this.undockToWindowToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.undockToWindowToolStripMenuItem.Text = "Open In Tool Window";
+            undockToWindowToolStripMenuItem.Name = "undockToWindowToolStripMenuItem";
+            undockToWindowToolStripMenuItem.Size = new Size(188, 22);
+            undockToWindowToolStripMenuItem.Text = "Open In Tool Window";
             // 
             // saveFileDialog
             // 
-            this.saveFileDialog.DefaultExt = "profile";
-            this.saveFileDialog.Filter = "Profile File (.profile)|*.profile";
+            saveFileDialog.DefaultExt = "profile";
+            saveFileDialog.Filter = "Profile File (.profile)|*.profile";
             // 
             // openSnapsFileDialog
             // 
-            this.openSnapsFileDialog.Filter = "Image Files|*.czi;*.tif;*.tiff;*.csv";
-            this.openSnapsFileDialog.Multiselect = true;
-            this.openSnapsFileDialog.SupportMultiDottedExtensions = true;
-            this.openSnapsFileDialog.Title = "Open Image File";
+            openSnapsFileDialog.Filter = "Image Files|*.czi;*.tif;*.tiff;*.csv";
+            openSnapsFileDialog.Multiselect = true;
+            openSnapsFileDialog.SupportMultiDottedExtensions = true;
+            openSnapsFileDialog.Title = "Open Image File";
             // 
             // openExeFileDialog
             // 
-            this.openExeFileDialog.Filter = "Executable files (*.exe)|*.exe";
+            openExeFileDialog.Filter = "Executable files (*.exe)|*.exe";
             // 
             // mainWinContextMenuStrip
             // 
-            this.mainWinContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hideToolStripMenuItem,
-            this.closeToolStripMenuItem,
-            this.borderToolStripMenuItem});
-            this.mainWinContextMenuStrip.Name = "mainWinContextMenuStrip";
-            this.mainWinContextMenuStrip.Size = new System.Drawing.Size(189, 70);
+            mainWinContextMenuStrip.Items.AddRange(new ToolStripItem[] { hideToolStripMenuItem, closeToolStripMenuItem, borderToolStripMenuItem });
+            mainWinContextMenuStrip.Name = "mainWinContextMenuStrip";
+            mainWinContextMenuStrip.Size = new Size(189, 70);
             // 
             // hideToolStripMenuItem
             // 
-            this.hideToolStripMenuItem.Name = "hideToolStripMenuItem";
-            this.hideToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.hideToolStripMenuItem.Text = "Minimize";
-            this.hideToolStripMenuItem.Click += new System.EventHandler(this.hideToolStripMenuItem_Click);
+            hideToolStripMenuItem.Name = "hideToolStripMenuItem";
+            hideToolStripMenuItem.Size = new Size(188, 22);
+            hideToolStripMenuItem.Text = "Minimize";
+            hideToolStripMenuItem.Click += hideToolStripMenuItem_Click;
             // 
             // closeToolStripMenuItem
             // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(188, 22);
+            closeToolStripMenuItem.Text = "Close";
+            closeToolStripMenuItem.Click += closeToolStripMenuItem_Click;
             // 
             // borderToolStripMenuItem
             // 
-            this.borderToolStripMenuItem.Name = "borderToolStripMenuItem";
-            this.borderToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.borderToolStripMenuItem.Text = "Window Border None";
-            this.borderToolStripMenuItem.Click += new System.EventHandler(this.borderToolStripMenuItem_Click);
+            borderToolStripMenuItem.Name = "borderToolStripMenuItem";
+            borderToolStripMenuItem.Size = new Size(188, 22);
+            borderToolStripMenuItem.Text = "Window Border None";
+            borderToolStripMenuItem.Click += borderToolStripMenuItem_Click;
             // 
             // openImagesDialog
             // 
-            this.openImagesDialog.Filter = "Image Files|*.czi;*.tif;*.tiff;";
-            this.openImagesDialog.SupportMultiDottedExtensions = true;
-            this.openImagesDialog.Title = "Open Image File";
+            openImagesDialog.Filter = "Image Files|*.czi;*.tif;*.tiff;";
+            openImagesDialog.SupportMultiDottedExtensions = true;
+            openImagesDialog.Title = "Open Image File";
             // 
             // saveImageDialog
             // 
-            this.saveImageDialog.DefaultExt = "tif";
-            this.saveImageDialog.SupportMultiDottedExtensions = true;
+            saveImageDialog.DefaultExt = "tif";
+            saveImageDialog.SupportMultiDottedExtensions = true;
             // 
             // Imager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.ClientSize = new System.Drawing.Size(287, 502);
-            this.ContextMenuStrip = this.mainWinContextMenuStrip;
-            this.Controls.Add(this.mainTabControl);
-            this.Controls.Add(this.statusStrip);
-            this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.KeyPreview = true;
-            this.Name = "Imager";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Imager";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RJoystickStageMoveAmountBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.triggerFocusBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LJoystickStageMoveAmountBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBox)).EndInit();
-            this.contextMenuStrip2.ResumeLayout(false);
-            this.snapContextMenuStrip.ResumeLayout(false);
-            this.mainTabControl.ResumeLayout(false);
-            this.ImagingTab.ResumeLayout(false);
-            this.ImagingTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zCoordBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.yCoordBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xCoordBox)).EndInit();
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
-            this.SettingsTab.ResumeLayout(false);
-            this.SettingsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.slicesPerSlideBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliceIncrementBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imagesPerSliceBox)).EndInit();
-            this.tabContextMenu.ResumeLayout(false);
-            this.mainWinContextMenuStrip.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(49, 91, 138);
+            ClientSize = new Size(335, 581);
+            ContextMenuStrip = mainWinContextMenuStrip;
+            Controls.Add(mainTabControl);
+            Controls.Add(statusStrip);
+            ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "Imager";
+            StartPosition = FormStartPosition.Manual;
+            Text = "Imager";
+            FormClosing += MainForm_FormClosing;
+            KeyDown += MainForm_KeyDown;
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)RJoystickStageMoveAmountBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)triggerFocusBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)LJoystickStageMoveAmountBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)deadzoneBox).EndInit();
+            contextMenuStrip2.ResumeLayout(false);
+            snapContextMenuStrip.ResumeLayout(false);
+            mainTabControl.ResumeLayout(false);
+            ImagingTab.ResumeLayout(false);
+            ImagingTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)zCoordBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)yCoordBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)xCoordBox).EndInit();
+            splitContainer.Panel1.ResumeLayout(false);
+            splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
+            splitContainer.ResumeLayout(false);
+            SettingsTab.ResumeLayout(false);
+            SettingsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)slicesPerSlideBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)sliceIncrementBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)imagesPerSliceBox).EndInit();
+            tabContextMenu.ResumeLayout(false);
+            mainWinContextMenuStrip.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
         private System.Windows.Forms.Timer statusTimer;
-        private System.Windows.Forms.StatusStrip statusStrip;
+        private StatusStrip statusStrip;
         private System.Windows.Forms.Timer controllerJoystickUpdate;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown deadzoneBox;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label LJoystickLabel;
-        private System.Windows.Forms.Label RJoystickLabel;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label leftTriggerLabel;
-        private System.Windows.Forms.Label rightTriggerLabel;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown LJoystickStageMoveAmountBox;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label YPressedLabel;
-        private System.Windows.Forms.Label BPressedLabel;
-        private System.Windows.Forms.Label APressedLabel;
-        private System.Windows.Forms.Label XPressedLabel;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label DPadLeftLabel;
-        private System.Windows.Forms.Label DPadDownLabel;
-        private System.Windows.Forms.Label DPadRightLabel;
-        private System.Windows.Forms.Label DPadUpLabel;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label shoulderRightLabel;
-        private System.Windows.Forms.Label shoulderLeftLabel;
-        private System.Windows.Forms.Label BackPressedLabel;
-        private System.Windows.Forms.Label StartPressedLabel;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.NumericUpDown triggerFocusBox;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ListBox storedCoordsBox;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Button addCoordBut;
-        private System.Windows.Forms.ContextMenuStrip snapContextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label lastCoordDistanceLabel;
-        private System.Windows.Forms.Label lastSelectedCoordsLabel;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.NumericUpDown RJoystickStageMoveAmountBox;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Button clearBut;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label l3PressedLabel;
-        private System.Windows.Forms.Label r3PressedLabel;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.Label lastSelectedSnapDistanceLabel;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label lastSnapDistanceLabel;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.ListBox storedImageBox;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private Label label5;
+        private Label label4;
+        private NumericUpDown deadzoneBox;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private Label LJoystickLabel;
+        private Label RJoystickLabel;
+        private Label label9;
+        private Label leftTriggerLabel;
+        private Label rightTriggerLabel;
+        private Label label11;
+        private NumericUpDown LJoystickStageMoveAmountBox;
+        private Label label10;
+        private Label label12;
+        private Label YPressedLabel;
+        private Label BPressedLabel;
+        private Label APressedLabel;
+        private Label XPressedLabel;
+        private Label label17;
+        private Label DPadLeftLabel;
+        private Label DPadDownLabel;
+        private Label DPadRightLabel;
+        private Label DPadUpLabel;
+        private Label label13;
+        private Label shoulderRightLabel;
+        private Label shoulderLeftLabel;
+        private Label BackPressedLabel;
+        private Label StartPressedLabel;
+        private Label label15;
+        private NumericUpDown triggerFocusBox;
+        private Label label14;
+        private ListBox storedCoordsBox;
+        private Label label20;
+        private Button addCoordBut;
+        private ContextMenuStrip snapContextMenuStrip;
+        private ToolStripMenuItem goToToolStripMenuItem;
+        private ToolStripMenuItem deleteToolStripMenuItem;
+        private Label label21;
+        private Label lastCoordDistanceLabel;
+        private Label lastSelectedCoordsLabel;
+        private Label label23;
+        private Label label22;
+        private NumericUpDown RJoystickStageMoveAmountBox;
+        private Label label24;
+        private Button clearBut;
+        private Label label25;
+        private Label l3PressedLabel;
+        private Label r3PressedLabel;
+        private ToolStripStatusLabel statusLabel;
+        private ToolStripStatusLabel toolStripStatusLabel2;
+        private Label lastSelectedSnapDistanceLabel;
+        private Label label27;
+        private Label lastSnapDistanceLabel;
+        private Label label29;
+        private ListBox storedImageBox;
+        private ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer controllerButtonUpdate;
-        private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem1;
-        private System.Windows.Forms.CheckBox topMostCheckBox;
-        private System.Windows.Forms.TabControl mainTabControl;
-        private System.Windows.Forms.TabPage ImagingTab;
-        private System.Windows.Forms.TabPage SettingsTab;
-        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
-        private System.Windows.Forms.Button openProfileBut;
-        private System.Windows.Forms.Button saveProfileBut;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox profilesBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown slicesPerSlideBox;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.NumericUpDown sliceIncrementBox;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.NumericUpDown imagesPerSliceBox;
-        private System.Windows.Forms.OpenFileDialog openProfileFileDialog;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.Button clearImagesBut;
-        private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.NumericUpDown xCoordBox;
-        private System.Windows.Forms.Button goToLocBox;
-        private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.NumericUpDown zCoordBox;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.NumericUpDown yCoordBox;
-        private System.Windows.Forms.OpenFileDialog openSnapsFileDialog;
-        private System.Windows.Forms.CheckBox dockToApp;
-        private System.Windows.Forms.ContextMenuStrip tabContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem undockToWindowToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openExeFileDialog;
-        private System.Windows.Forms.ContextMenuStrip mainWinContextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem hideToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem borderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.OpenFileDialog openImagesDialog;
-        private System.Windows.Forms.ToolStripMenuItem openInImageViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem1;
-        private System.Windows.Forms.SaveFileDialog saveImageDialog;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.Label label26;
+        private ToolStripMenuItem goToToolStripMenuItem1;
+        private ToolStripMenuItem deleteToolStripMenuItem1;
+        private ContextMenuStrip contextMenuStrip2;
+        private ToolStripMenuItem clearToolStripMenuItem;
+        private ToolStripMenuItem clearToolStripMenuItem1;
+        private CheckBox topMostCheckBox;
+        private TabControl mainTabControl;
+        private TabPage ImagingTab;
+        private TabPage SettingsTab;
+        private ToolStripMenuItem openFileToolStripMenuItem;
+        private Button openProfileBut;
+        private Button saveProfileBut;
+        private Label label1;
+        private ComboBox profilesBox;
+        private Label label3;
+        private NumericUpDown slicesPerSlideBox;
+        private Label label30;
+        private NumericUpDown sliceIncrementBox;
+        private Label label31;
+        private NumericUpDown imagesPerSliceBox;
+        private OpenFileDialog openProfileFileDialog;
+        private SaveFileDialog saveFileDialog;
+        private Button clearImagesBut;
+        private SplitContainer splitContainer;
+        private Label label32;
+        private NumericUpDown xCoordBox;
+        private Button goToLocBox;
+        private Label label35;
+        private NumericUpDown zCoordBox;
+        private Label label34;
+        private NumericUpDown yCoordBox;
+        private OpenFileDialog openSnapsFileDialog;
+        private CheckBox dockToApp;
+        private ContextMenuStrip tabContextMenu;
+        private ToolStripMenuItem undockToWindowToolStripMenuItem;
+        private OpenFileDialog openExeFileDialog;
+        private ContextMenuStrip mainWinContextMenuStrip;
+        private ToolStripMenuItem hideToolStripMenuItem;
+        private ToolStripMenuItem borderToolStripMenuItem;
+        private ToolStripMenuItem closeToolStripMenuItem;
+        private ToolTip toolTip;
+        private OpenFileDialog openImagesDialog;
+        private ToolStripMenuItem openInImageViewToolStripMenuItem;
+        private ToolStripMenuItem copyToolStripMenuItem;
+        private ToolStripMenuItem copyToolStripMenuItem1;
+        private SaveFileDialog saveImageDialog;
+        private Label label36;
+        private Label label26;
     }
 }
 

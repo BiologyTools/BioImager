@@ -14,7 +14,13 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
-    <Description>A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
+    <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
+    <Version>3.0.0</Version>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Fixed issue with Zeiss®microscopes.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -91,6 +97,10 @@
     </None>
     <None Update="Graphics\Shaders\color-vs.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
     <None Update="README.md">
       <Pack>True</Pack>

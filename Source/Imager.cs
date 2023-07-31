@@ -25,7 +25,7 @@ namespace Bio
     {
         private static Process AppP = null;
         public static IntPtr apph;
-        private Point mainWinDefLocation = new Point(1473,509);
+        private Point mainWinDefLocation = new Point(1473, 509);
         public static string AppPath = "";
         public static List<BioImage> StoredImages = new List<BioImage>();
         public Controller controller;
@@ -98,7 +98,7 @@ namespace Bio
                     string s = currentProperty.Name + "=" + Settings.Default[currentProperty.Name].ToString();
                     sts.Add(s);
                 }
-                File.WriteAllLines(path,sts.ToArray());
+                File.WriteAllLines(path, sts.ToArray());
             }
 
             public Profile(string path)
@@ -151,7 +151,7 @@ namespace Bio
             AppPath = Settings.Default.AppPath;
             if (!File.Exists(AppPath))
             {
-                MessageBox.Show("Error!","Imaging appplication not found. Please locate the executable.");
+                MessageBox.Show("Error!", "Imaging appplication not found. Please locate the executable.");
                 //path is not default. Let the user find it.
                 if (openExeFileDialog.ShowDialog() != DialogResult.OK)
                     this.Close();
@@ -159,7 +159,7 @@ namespace Bio
             }
             string pn = Path.GetFileNameWithoutExtension(AppPath);
             Process[] prs = Process.GetProcessesByName(pn);
-            if(prs.Length==0)
+            if (prs.Length == 0)
             {
                 AppP = Process.Start(AppPath);
             }
@@ -175,7 +175,7 @@ namespace Bio
             {
             }
             statusTimer.Start();
-           
+
             for (UserIndex i = UserIndex.One; i <= UserIndex.Four; i++)
             {
                 controller = new Controller(i);
@@ -193,7 +193,7 @@ namespace Bio
 
             controllerButtonUpdate.Start();
 
-            
+
             if (!Directory.Exists(Application.StartupPath + "\\Profiles"))
                 Directory.CreateDirectory(Application.StartupPath + "\\Profiles");
             string[] sts = Directory.GetFiles(Application.StartupPath + "\\Profiles");
@@ -246,13 +246,13 @@ namespace Bio
             double f = Microscope.GetFocus();
             Point3D point = new Point3D(p.X, p.Y, f);
             statusLabel.Text = "Stage: " + p.X + " , " + p.Y + " Focus: " + f;
-            if(StoredImages.Count > storedImageBox.Items.Count)
+            if (StoredImages.Count > storedImageBox.Items.Count)
             {
                 int dif = StoredImages.Count - storedImageBox.Items.Count;
                 for (int i = 0; i < dif; i++)
                 {
                     int index = (StoredImages.Count - 1) + dif;
-                    storedImageBox.Items.Add(StoredImages[index-1]);
+                    storedImageBox.Items.Add(StoredImages[index - 1]);
                 }
             }
         }
@@ -263,16 +263,16 @@ namespace Bio
             storedCoordsBox.Items.Add(p3);
             storedCoordsBox.SelectedIndex = storedCoordsBox.Items.Count - 1;
         }
- 
+
         public static bool? liveStatus = null;
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(App.viewer != null)
-            Properties.Settings.Default.Origin = App.viewer.Origin.ToString();
+            if (App.viewer != null)
+                Properties.Settings.Default.Origin = App.viewer.Origin.ToString();
             Settings.Default.PreviousProfile = CurrentProfile.FilePath;
             Settings.Default.Save();
-            if(CurrentProfile.FilePath!="Default")
-            CurrentProfile.Save(CurrentProfile.FilePath);
+            if (CurrentProfile.FilePath != "Default")
+                CurrentProfile.Save(CurrentProfile.FilePath);
         }
         private void deadzoneBox_ValueChanged(object sender, EventArgs e)
         {
@@ -305,7 +305,7 @@ namespace Bio
             if (storedImageBox.SelectedIndex == -1)
                 return;
             storedImageBox.Items.RemoveAt(storedImageBox.SelectedIndex);
-            storedImageBox.SelectedIndex = storedImageBox.Items.Count-1;
+            storedImageBox.SelectedIndex = storedImageBox.Items.Count - 1;
         }
 
         private void clearBut_Click(object sender, EventArgs e)
@@ -361,10 +361,10 @@ namespace Bio
                 return;
 
             gamepad = controller.GetState().Gamepad;
-            
+
             //we set the triggers to be percent
-            leftTrigger  = ((float)(gamepad.LeftTrigger)/255)*100;
-            rightTrigger = ((float)(gamepad.RightTrigger)/255)*100;
+            leftTrigger = ((float)(gamepad.LeftTrigger) / 255) * 100;
+            rightTrigger = ((float)(gamepad.RightTrigger) / 255) * 100;
 
             #region//TRIGGERS
             if (rightTrigger > 0)
@@ -410,9 +410,9 @@ namespace Bio
 
             leftTriggerLabel.Text = leftTrigger.ToString();
             rightTriggerLabel.Text = rightTrigger.ToString();
-            
+
             //We update distance labels
-            if(storedCoordsBox.Items.Count>0 && storedCoordsBox.SelectedIndex!=-1)
+            if (storedCoordsBox.Items.Count > 0 && storedCoordsBox.SelectedIndex != -1)
             {
                 Point3D p0 = (Point3D)storedCoordsBox.Items[storedCoordsBox.Items.Count - 1];
                 Point3D p1 = Microscope.GetPosition();
@@ -437,7 +437,7 @@ namespace Bio
             }
         }
 
-    
+
         /// We check the current state of the controller and compare it to the previous state. If the
         /// current state is different from the previous state, we send a command to the game.
         /// 
@@ -453,7 +453,7 @@ namespace Bio
             //Here we check buttons etc. which will have a lower refresh rate to ensure that we do not repeat commands
             if (!connected)
                 return;
-            
+
             gamepad = controller.GetState().Gamepad;
 
             if (prevState)
@@ -463,11 +463,11 @@ namespace Bio
             prevState = true;
         }
 
-       /// It loops through the string and counts the number of times a digit is found
-       /// 
-       /// @param str The string to be searched.
-       /// 
-       /// @return The number of digits in the string.
+        /// It loops through the string and counts the number of times a digit is found
+        /// 
+        /// @param str The string to be searched.
+        /// 
+        /// @return The number of digits in the string.
         public static int DigitsInString(string str)
         {
             int count = 0;
@@ -486,33 +486,33 @@ namespace Bio
         /// @param sender The object that raised the event.
         /// @param EventArgs 
         private void statusTimer_Tick(object sender, EventArgs e)
-        {            
+        {
             if (dockToApp.Checked)
             {
                 //We set window location based on imaging app location.
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
-                Point pp = new Point((r.Right) - this.Width,(r.Bottom) - this.Height - 30);
+                Point pp = new Point((r.Right) - this.Width, (r.Bottom) - this.Height - 30);
                 this.Location = pp;
             }
             string s = Win32.GetActiveWindowTitle();
             statusLabel.Text = Microscope.GetPosition().ToString();
             if (s != null)
-            if (s.Contains(Settings.Default.AppName))
-            {
-                if (dockToApp.Checked)
-                    Show();
-                else
+                if (s.Contains(Settings.Default.AppName))
                 {
-                    if (!s.Contains("Imager"))
+                    if (dockToApp.Checked)
+                        Show();
+                    else
                     {
-                        if (dockToApp.Checked)
-                            Hide();
+                        if (!s.Contains("Imager"))
+                        {
+                            if (dockToApp.Checked)
+                                Hide();
+                        }
                     }
                 }
-            }
         }
-        
+
         #region Labels Double Clicked
 
         /// It opens a new form, which allows the user to select a function from a list of functions,
@@ -525,7 +525,7 @@ namespace Bio
         /// the Y axis of the controller.
         private void YPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            FunctionForm form = new FunctionForm(ControllerFuncs.Y,"YButton");
+            FunctionForm form = new FunctionForm(ControllerFuncs.Y, "YButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.Y = form.Func;
@@ -584,12 +584,12 @@ namespace Bio
             Settings.Default.Save();
         }
 
-       /// It opens a form that allows the user to select a function to be assigned to the back button
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
-       /// 
-       /// @return The function that is being returned is the function that is being called.
+        /// It opens a form that allows the user to select a function to be assigned to the back button
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
+        /// 
+        /// @return The function that is being returned is the function that is being called.
         private void BackPressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             FunctionForm form = new FunctionForm(ControllerFuncs.Back, "BackButton");
@@ -715,12 +715,12 @@ namespace Bio
             Settings.Default.RShoulder = ControllerFuncs.RShoulder.ToString();
             Settings.Default.Save();
         }
-/// It opens a new form, and if the user clicks OK, it saves the function to the settings file.
-/// 
-/// @param sender The object that raised the event.
-/// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
-/// 
-/// @return The function that is being returned is the function that is being called.
+        /// It opens a new form, and if the user clicks OK, it saves the function to the settings file.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event arguments for the MouseDoubleClick event.
+        /// 
+        /// @return The function that is being returned is the function that is being called.
 
         private void r3PressedLabel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -822,13 +822,13 @@ namespace Bio
             if (profilesBox.Text != "")
                 saveFileDialog.FileName = profilesBox.Text;
 
-            if(profilesBox.SelectedItem != null)
-            if (profilesBox.SelectedItem.ToString() == "Default" || profilesBox.Text == "Default")
-            {
-                MessageBox.Show("You are saving the default profile, are you sure you want to do this?", "NOTICE!");
-                Settings.Default.Save();
-                return;
-            }
+            if (profilesBox.SelectedItem != null)
+                if (profilesBox.SelectedItem.ToString() == "Default" || profilesBox.Text == "Default")
+                {
+                    MessageBox.Show("You are saving the default profile, are you sure you want to do this?", "NOTICE!");
+                    Settings.Default.Save();
+                    return;
+                }
             if (saveFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             CurrentProfile.Save(saveFileDialog.FileName);
@@ -865,16 +865,16 @@ namespace Bio
         {
 
         }
-/// If the form's border style is set to "Sizable", then set it to "None" and change the menu item's
-/// text to "Window Border Normal". Otherwise, set the form's border style to "Sizable" and change the
-/// menu item's text to "Window Border None"
-/// 
-/// @param sender The object that raised the event.
-/// @param EventArgs This is the event arguments that are passed to the event handler.
+        /// If the form's border style is set to "Sizable", then set it to "None" and change the menu item's
+        /// text to "Window Border Normal". Otherwise, set the form's border style to "Sizable" and change the
+        /// menu item's text to "Window Border None"
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs This is the event arguments that are passed to the event handler.
 
         private void borderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(this.FormBorderStyle == FormBorderStyle.Sizable)
+            if (this.FormBorderStyle == FormBorderStyle.Sizable)
             {
                 this.FormBorderStyle = FormBorderStyle.None;
                 borderToolStripMenuItem.Text = "Window Border Normal";
@@ -896,13 +896,13 @@ namespace Bio
             this.Close();
         }
 
-       /// If the user clicks on the "Open in Image View" menu item, then the program will open the
-       /// selected image in the image view
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs System.EventArgs
-       /// 
-       /// @return The selected item in the listbox.
+        /// If the user clicks on the "Open in Image View" menu item, then the program will open the
+        /// selected image in the image view
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
+        /// 
+        /// @return The selected item in the listbox.
         private void openInImageViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (storedImageBox.SelectedIndex == -1)
@@ -910,13 +910,13 @@ namespace Bio
             BioImage s = (BioImage)storedImageBox.SelectedItem;
         }
 
-/// If the user presses the S key while holding down the control key, then the program will open a
-/// dialog box to save the image
-/// 
-/// @param sender The object that raised the event.
-/// @param KeyEventArgs The event arguments for the key press.
-/// 
-/// @return The image is being saved to the file name specified in the saveImageDialog.
+        /// If the user presses the S key while holding down the control key, then the program will open a
+        /// dialog box to save the image
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyEventArgs The event arguments for the key press.
+        /// 
+        /// @return The image is being saved to the file name specified in the saveImageDialog.
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.S && e.Control)
@@ -947,10 +947,10 @@ namespace Bio
             Clipboard.SetText(storedCoordsBox.SelectedItem.ToString());
         }
 
-       /// This function is called when the user checks or unchecks the "Dock to App" checkbox.
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// This function is called when the user checks or unchecks the "Dock to App" checkbox.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void dockToApp_CheckedChanged(object sender, EventArgs e)
         {
 
@@ -1436,7 +1436,7 @@ namespace Bio
                 }
                 return null;
             }
-            if(f.FuncType == Function.FunctionType.Script)
+            if (f.FuncType == Function.FunctionType.Script)
             {
                 Scripting.RunScript(f.File);
             }
@@ -1444,9 +1444,9 @@ namespace Bio
             {
                 ImageJ.RunMacro(f.File, "");
             }
-            if(f.FuncType == Function.FunctionType.Microscope)
+            if (f.FuncType == Function.FunctionType.Microscope)
             {
-                if(f.Microscope == "StageUp")
+                if (f.Microscope == "StageUp")
                 {
                     Microscope.MoveUp(f.Value);
                 }
@@ -1516,7 +1516,7 @@ namespace Bio
                     Microscope.TLShutter.SetPosition((int)f.Value);
                 }
             }
-            if(f.FuncType == Function.FunctionType.Property)
+            if (f.FuncType == Function.FunctionType.Property)
             {
                 if (f.Name.StartsWith("Get"))
                 {
@@ -1528,7 +1528,7 @@ namespace Bio
                     Automation.Recording r = (Automation.Recording)Automation.Properties[Path.GetFileNameWithoutExtension(f.File)];
                     r.Set(f.Value.ToString());
                 }
-                
+
             }
             if (f.FuncType == Function.FunctionType.Recording)
             {
@@ -1566,6 +1566,10 @@ namespace Bio
             }
         }
 
+        private void ImagingTab_Click(object sender, EventArgs e)
+        {
+            statusLabel.Text = Microscope.GetPosition().ToString();
+        }
     }
 
 }

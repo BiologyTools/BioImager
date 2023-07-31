@@ -3275,7 +3275,7 @@ namespace Bio
         /// @param EventArgs The event arguments.
         private void dxPanel_SizeChanged(object sender, EventArgs e)
         {
-            if (HardwareAcceleration)
+            if (HardwareAcceleration && dx!=null)
             {
                 conf.Width = dxPanel.Width;
                 conf.Height = dxPanel.Height;

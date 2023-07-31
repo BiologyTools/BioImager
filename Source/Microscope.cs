@@ -553,6 +553,8 @@ namespace Bio
         {
             Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
                     (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetHXPShutter, null));
+            if (com.doubles == null)
+                return 0;
             return (short)com.doubles[0];
         }
 

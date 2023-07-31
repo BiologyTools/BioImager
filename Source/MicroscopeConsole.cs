@@ -105,6 +105,7 @@ namespace Bio
                 string er = console.StandardError.ReadToEnd();
                 string o = console.StandardOutput.ReadToEnd();
                 Console.WriteLine(er);
+                console = null;
                 return new Command();
             }
             else

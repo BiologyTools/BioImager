@@ -33,7 +33,7 @@ namespace Bio
         {
             get
             {
-                return folderBox.Text; 
+                return folderBox.Text;
             }
             set
             {
@@ -159,19 +159,19 @@ namespace Bio
                 this.Location = pp;
                 string s = Win32.GetActiveWindowTitle();
                 if (s != null)
-                if (s.Contains(Properties.Settings.Default.AppName))
-                {
-                    if (dockBox.Checked)
-                        Show();
-                    else
+                    if (s.Contains(Properties.Settings.Default.AppName))
                     {
-                        if (!s.Contains("Imager"))
+                        if (dockBox.Checked)
+                            Show();
+                        else
                         {
-                            if (dockBox.Checked)
-                                Hide();
+                            if (!s.Contains("Imager"))
+                            {
+                                if (dockBox.Checked)
+                                    Hide();
+                            }
                         }
                     }
-                }
             }
 
         }
@@ -183,21 +183,24 @@ namespace Bio
         private void dockBox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.DockMicro = dockBox.Checked;
+#if DEBUG
+            this.Location = new Point(0, 0);
+#endif
         }
 
-       /// This function sets the upper limit of the focus range to the current focus position
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs e
+        /// This function sets the upper limit of the focus range to the current focus position
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
         private void setUpperBut_Click(object sender, EventArgs e)
         {
             upperLimBox.Value = (decimal)Microscope.Focus.GetFocus(true);
         }
 
-       /// This function sets the lower limit of the focus range to the current focus position
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs System.EventArgs
+        /// This function sets the lower limit of the focus range to the current focus position
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
         private void setLowerBut_Click(object sender, EventArgs e)
         {
             lowerLimBox.Value = (decimal)Microscope.Focus.GetFocus(true);
@@ -252,10 +255,10 @@ namespace Bio
             Microscope.LowerLimit = (double)lowerLimBox.Value;
         }
 
-       /// When the text in the textbox changes, the text is saved to the settings file
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// When the text in the textbox changes, the text is saved to the settings file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void nameBox_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ImageName = nameBox.Text;
@@ -278,19 +281,19 @@ namespace Bio
             Microscope.TakeTiles(im.SizeX, im.SizeY);
         }
 
-       /// The user clicks a button, a dialog box opens, the user selects a folder, the folder path is
-       /// saved in a text box, the folder path is saved in a class, and the folder path is saved in the
-       /// application settings
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs System.EventArgs
+        /// The user clicks a button, a dialog box opens, the user selects a folder, the folder path is
+        /// saved in a text box, the folder path is saved in a class, and the folder path is saved in the
+        /// application settings
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs System.EventArgs
         private void setFolderBut_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fs = new FolderBrowserDialog();
             fs.Description = "Select Imaging Folder";
             if (fs.ShowDialog() != DialogResult.OK)
             {
-                fs.Dispose();               
+                fs.Dispose();
             }
             else
             {
@@ -301,16 +304,16 @@ namespace Bio
             }
         }
 
-       /// When the value of the moveXBox changes, the viewSize of the microscope is changed to the
-       /// value of the moveXBox
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The event arguments.
+        /// When the value of the moveXBox changes, the viewSize of the microscope is changed to the
+        /// value of the moveXBox
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void moveXBox_ValueChanged(object sender, EventArgs e)
         {
             Microscope.viewSize = new PointD((double)moveXBox.Value, (double)moveYBox.Value);
-            if(App.viewer!=null)
-            App.viewer.UpdateView();
+            if (App.viewer != null)
+                App.viewer.UpdateView();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -330,9 +333,14 @@ namespace Bio
                 App.viewer.UpdateView();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void goUpperBut_Click(object sender, EventArgs e)
         {
+            Microscope.SetFocus((double)upperLimBox.Value);
+        }
 
+        private void goLowerBut_Click(object sender, EventArgs e)
+        {
+            Microscope.SetFocus((double)lowerLimBox.Value);
         }
     }
 }
