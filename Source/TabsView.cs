@@ -1395,5 +1395,14 @@ namespace Bio
             
             BioImage.SaveOMEPyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
         }
+
+        private void findFocusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ImageView.SelectedImage == null) return;
+            ZCT co = SelectedViewer.GetCoordinate();
+            int f = BioImage.FindFocus(ImageView.SelectedImage, co.C, co.T);
+            ZCT z = ImageView.SelectedImage.Buffers[f].Coordinate;
+            SelectedViewer.SetCoordinate(z.Z, z.C, z.T);
+        }
     }
 }

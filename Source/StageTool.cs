@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlaUI.Core.AutomationElements;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -142,7 +143,6 @@ namespace Bio
             BioImage bm = Microscope.TakeImageStack();
             App.viewer.AddImage(bm);
         }
-        private Point p;
         /// If the dockBox checkbox is checked, then we set the window location based on the imaging app
         /// location
         /// 
@@ -316,11 +316,6 @@ namespace Bio
                 App.viewer.UpdateView();
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         /// When the user changes the value of the moveYBox, the viewSize of the microscope is changed
         /// to the new value
         /// 
@@ -341,6 +336,38 @@ namespace Bio
         private void goLowerBut_Click(object sender, EventArgs e)
         {
             Microscope.SetFocus((double)lowerLimBox.Value);
+        }
+
+        private void viewBut_Click(object sender, EventArgs e)
+        {
+            if(!Automation.Properties.ContainsKey("LiveView"))
+            {
+                MessageBox.Show("'LiveView' GUI Property not set. Go to automation tab and create a property corresponding to the live view GUI element.");
+                return;
+            }
+            Rectangle re = Automation.Properties["LiveView"].GetBounds();
+            Microscope.SetFocus((double)upperLimBox.Value);
+            long max = long.MinValue;
+            double ud = (double)upperLimBox.Value;
+            for (double i = 0; i < (double)upperLimBox.Value; i+=(double)focusInterval.Value)
+            {
+                Microscope.SetFocus((double)i);
+                System.Drawing.Graphics g;
+                Bitmap b = new Bitmap((int)re.Width, (int)re.Height);
+                g = System.Drawing.Graphics.FromImage(b);
+                g.CopyFromScreen(new Point((int)re.X, (int)re.Y), new Point(0, 0), new Size(re.Width, re.Height));
+                Clipboard.SetImage(b);
+                BufferInfo bf = new BufferInfo("", (Image)b, new ZCT(), 0);
+                long d = BioImage.CalculateFocusQuality(bf);
+                if (max < d)
+                {
+                    max = d;
+                    ud = (double)i;
+                }
+                g.Dispose();
+                b.Dispose();
+            }
+            Microscope.SetFocus(ud);
         }
     }
 }

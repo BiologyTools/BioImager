@@ -145,8 +145,15 @@ namespace Bio
                 mouse = e;
                 AutomationElement el = Element;
                 name = el.Name;
-                automationID = el.AutomationId;
-                className = el.ClassName;
+                try
+                {
+                    automationID = el.AutomationId;
+                }
+                catch (Exception)
+                {
+                }
+                
+                className = el.Properties.LocalizedControlType.Value.ToString();
                 mouseButton = e.Button;
                 point = new Point((int)(e.Location.X - el.BoundingRectangle.X), (int)(e.Location.Y - el.BoundingRectangle.Y));
                 Process p = Process.GetProcessById(proc);
@@ -334,6 +341,18 @@ namespace Bio
                     return AutomationHelpers.GetToggle(ae);
                 else
                     return AutomationHelpers.GetImage(ae);
+            }
+            public Bitmap GetImage()
+            {
+                Action la = list.Last();
+                AutomationElement ae = AutomationHelpers.GetElementByProcess(la.ProcessName, la.Title, la.AutomationID, la.Name, la.ClassName, la.Index);
+                return AutomationHelpers.GetImage(ae);
+            }
+            public Rectangle GetBounds()
+            {
+                Action la = list.Last();
+                AutomationElement ae = AutomationHelpers.GetElementByProcess(la.ProcessName, la.Title, la.AutomationID, la.Name, la.ClassName, la.Index);
+                return ae.BoundingRectangle;
             }
             public void Set(string val)
             {
@@ -740,14 +759,13 @@ namespace Bio
                 }
                 if (window == null)
                     throw new ArgumentException("Window " + title + " not found.");
-                AutomationElement[] items = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
+                AutomationElement[] items = window.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 List<AutomationElement> result = new List<AutomationElement>();
                 foreach (AutomationElement item in items)
                 {
                     try
                     {
-                        int[] r = item.Properties.RuntimeId;
-                        if (item.ClassName == classname && item.AutomationId == id && item.Name == name)
+                        if (item.Properties.LocalizedControlType == classname && item.Name == name)
                         {
                             result.Add(item);
                         }
@@ -792,14 +810,16 @@ namespace Bio
                 AutomationElement[] items = null;
                 try
                 {
-                    items = automation.GetDesktop().FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
+                    items = window.FindAll(TreeScope.Subtree, FlaUI.Core.Conditions.TrueCondition.Default);
                 }
                 catch (Exception)
                 {
 
                 }
                 List<AutomationElement> result = new List<AutomationElement>();
+                
                 int index = 0;
+                /*
                 if (items != null)
                     foreach (AutomationElement item in items)
                     {
@@ -820,6 +840,7 @@ namespace Bio
 
                         }
                     }
+                */
                 return index;
             }
             public static int[] StringToRuntimeID(string s)
@@ -1009,7 +1030,7 @@ namespace Bio
                 Rectangle r = el.BoundingRectangle;
                 Bitmap b = new Bitmap((int)r.Width, (int)r.Height);
                 g = System.Drawing.Graphics.FromImage(b);
-                g.CopyFromScreen(new Point((int)r.X,(int)r.Y), new Point(0, 0),new Size(b.Width,b.Height));
+                g.CopyFromScreen(new Point((int)r.X,(int)r.Y), new Point(0, 0),new Size(r.Width,r.Height));
                 return b;
             }
 

@@ -30,10 +30,6 @@ namespace Bio
         public void InitElements()
         {
             view.Nodes.Clear();
-            for (int i = 0; i < Automation.Recordings.Count; i++)
-            {
-
-            }
             foreach (Automation.Recording rec in Automation.Recordings.Values)
             {
                 TreeNode tr = new TreeNode();
@@ -46,8 +42,8 @@ namespace Bio
                     {
                         TreeNode tn = new TreeNode();
                         tn.Text = item.ToString();
-                        
-                        Node no = new Node(item, tn,Node.Type.action);
+
+                        Node no = new Node(item, tn, Node.Type.action);
                         no.recording = rec;
                         tn.Tag = no;
                         tr.Nodes.Add(tn);
@@ -144,7 +140,7 @@ namespace Bio
             }
 
             public TreeNode node;
-            public Node(Automation.Action el,TreeNode n,Type t)
+            public Node(Automation.Action el, TreeNode n, Type t)
             {
                 action = el;
                 node = n;
@@ -162,7 +158,7 @@ namespace Bio
             }
             public override string ToString()
             {
-                return action.Name + ", " + action.AutomationID + ", " + action.ClassName.ToString() + ", " + action.ActionType; 
+                return action.Name + ", " + action.AutomationID + ", " + action.ClassName.ToString() + ", " + action.ActionType;
             }
         }
 
@@ -172,7 +168,7 @@ namespace Bio
             rec.Run();
             Recorder.AddLine("Recordings.Perform(" + rec.Name + ");");
         }
-        public static object GetProperty(Automation.Action.ValueType automation,string pro)
+        public static object GetProperty(Automation.Action.ValueType automation, string pro)
         {
             Automation.Recording rec = null;
             if (Automation.Properties.ContainsKey(pro))
@@ -185,7 +181,7 @@ namespace Bio
 
         private void view_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            
+
         }
 
         private void startBut_Click(object sender, EventArgs e)
@@ -219,13 +215,13 @@ namespace Bio
                 return;
             Node n = (Node)view.SelectedNode.Tag;
             if (n.type == Node.Type.action)
-                return;;
+                return; ;
             n.recording.Run();
         }
 
         private void view_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            
+
         }
 
         private void Elements_FormClosing(object sender, FormClosingEventArgs e)
@@ -274,7 +270,7 @@ namespace Bio
             }
             string s = Path.GetFileNameWithoutExtension(savePropDialog.FileName);
             n.Name = s;
-            
+
             string j = JsonConvert.SerializeObject(n.List, Formatting.None);
             File.WriteAllText(file, j);
             InitElements();
@@ -302,11 +298,11 @@ namespace Bio
                     MouseButtons mb = (MouseButtons)int.Parse(ar[i].ElementAt(2).First.ToString());
                     string ps = ar[i].ElementAt(3).First.ToString();
                     string xs = ps.Substring(0, ps.IndexOf(','));
-                    string ys = ps.Substring(ps.IndexOf(',')+1, ps.Length - (ps.IndexOf(',')+1));
+                    string ys = ps.Substring(ps.IndexOf(',') + 1, ps.Length - (ps.IndexOf(',') + 1));
                     int ind = int.Parse(ar[i].ElementAt(9).First.ToString());
-                    System.Drawing.Point po = new Point(int.Parse(xs),int.Parse(ys));
+                    System.Drawing.Point po = new Point(int.Parse(xs), int.Parse(ys));
                     MouseEventArgs mo = new MouseEventArgs(mb, 1, po.X, po.Y, 0);
-                    Automation.Action ac = new Automation.Action(t, ar[i].ElementAt(7).First.ToString(), ar[i].ElementAt(8).First.ToString(), ind, ar[i].ElementAt(4).First.ToString(), ar[i].ElementAt(5).First.ToString(), ar[i].ElementAt(6).First.ToString(),mo);
+                    Automation.Action ac = new Automation.Action(t, ar[i].ElementAt(7).First.ToString(), ar[i].ElementAt(8).First.ToString(), ind, ar[i].ElementAt(4).First.ToString(), ar[i].ElementAt(5).First.ToString(), ar[i].ElementAt(6).First.ToString(), mo);
                     rec.List.Add(ac);
                 }
             }
@@ -315,13 +311,13 @@ namespace Bio
         public void OpenRecording(string file)
         {
             Automation.Recording rec = OpenRec(file);
-            Automation.Recordings.Add(rec.Name,rec);
+            Automation.Recordings.Add(rec.Name, rec);
             InitElements();
         }
         public void OpenProperty(string file)
         {
             Automation.Recording rec = OpenRec(file);
-            Automation.Properties.Add(rec.Name,rec);
+            Automation.Properties.Add(rec.Name, rec);
             InitElements();
         }
 
@@ -336,7 +332,7 @@ namespace Bio
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Node n = (Node)view.SelectedNode.Tag;
-            if(n.type == Node.Type.recording)
+            if (n.type == Node.Type.recording)
             {
                 Automation.Recordings.Remove(n.recording.Name);
                 File.Delete(n.recording.File);
@@ -440,8 +436,8 @@ namespace Bio
             if (n.type == Node.Type.recording)
             {
                 Automation.Properties.Remove(n.recording.Name);
-                if(n.recording.File!=null)
-                File.Delete(n.recording.File);
+                if (n.recording.File != null)
+                    File.Delete(n.recording.File);
                 InitElements();
             }
             else if (n.type == Node.Type.action)
@@ -451,7 +447,7 @@ namespace Bio
             }
         }
 
-        
+
         private void propView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (propView.SelectedNode == null)
@@ -541,6 +537,16 @@ namespace Bio
             if (n.type == Node.Type.recording)
                 return;
             n.action.Value = (Automation.Action.ValueType)propBox.SelectedItem;
+        }
+
+        private void topMostBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.TopMost = topMostBox.Checked;
+        }
+
+        private void startPropBut_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -60,6 +60,7 @@ namespace Bio
             this.saveTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveTabTiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savePyramidalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sepToolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.imagesToStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newTabViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,7 +112,7 @@ namespace Bio
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openImageJROI = new System.Windows.Forms.OpenFileDialog();
             this.saveImageJROI = new System.Windows.Forms.SaveFileDialog();
-            this.savePyramidalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findFocusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel.SuspendLayout();
             this.tabContextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -135,8 +136,9 @@ namespace Bio
             this.panel.Controls.Add(this.tabControl);
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.Location = new System.Drawing.Point(0, 24);
+            this.panel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(663, 419);
+            this.panel.Size = new System.Drawing.Size(774, 487);
             this.panel.TabIndex = 1;
             // 
             // tabControl
@@ -144,9 +146,10 @@ namespace Bio
             this.tabControl.ContextMenuStrip = this.tabContextMenuStrip;
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(663, 419);
+            this.tabControl.Size = new System.Drawing.Size(774, 487);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -336,6 +339,13 @@ namespace Bio
             this.saveSeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveSeriesToolStripMenuItem.Text = "Save Series";
             this.saveSeriesToolStripMenuItem.Click += new System.EventHandler(this.saveSeriesToolStripMenuItem_Click);
+            // 
+            // savePyramidalToolStripMenuItem
+            // 
+            this.savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
+            this.savePyramidalToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
+            this.savePyramidalToolStripMenuItem.Click += new System.EventHandler(this.savePyramidalToolStripMenuItem_Click);
             // 
             // sepToolStripMenuItem3
             // 
@@ -554,7 +564,8 @@ namespace Bio
             this.stackToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stackToolsToolStripMenuItem1,
             this.duplicateToolStripMenuItem,
-            this.rotateToolStripMenuItem});
+            this.rotateToolStripMenuItem,
+            this.findFocusToolStripMenuItem});
             this.stackToolsToolStripMenuItem.Name = "stackToolsToolStripMenuItem";
             this.stackToolsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.stackToolsToolStripMenuItem.Text = "Stacks";
@@ -562,21 +573,21 @@ namespace Bio
             // stackToolsToolStripMenuItem1
             // 
             this.stackToolsToolStripMenuItem1.Name = "stackToolsToolStripMenuItem1";
-            this.stackToolsToolStripMenuItem1.Size = new System.Drawing.Size(130, 22);
+            this.stackToolsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.stackToolsToolStripMenuItem1.Text = "Stack Tool";
             this.stackToolsToolStripMenuItem1.Click += new System.EventHandler(this.stackToolsToolStripMenuItem_Click);
             // 
             // duplicateToolStripMenuItem
             // 
             this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.duplicateToolStripMenuItem.Text = "Duplicate";
             this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
             // rotateToolStripMenuItem
             // 
             this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
-            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rotateToolStripMenuItem.Text = "Rotate Flip";
             this.rotateToolStripMenuItem.DropDownOpening += new System.EventHandler(this.rotateToolStripMenuItem_DropDownOpening);
             this.rotateToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.rotateToolStripMenuItem_DropDownItemClicked);
@@ -598,7 +609,8 @@ namespace Bio
             this.aboutToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(663, 24);
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.menuStrip.Size = new System.Drawing.Size(774, 24);
             this.menuStrip.TabIndex = 0;
             // 
             // formatToolStripMenuItem
@@ -743,25 +755,26 @@ namespace Bio
             this.saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             this.saveImageJROI.Title = "Save ROIs to CSV";
             // 
-            // savePyramidalToolStripMenuItem
+            // findFocusToolStripMenuItem
             // 
-            this.savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
-            this.savePyramidalToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
-            this.savePyramidalToolStripMenuItem.Click += new System.EventHandler(this.savePyramidalToolStripMenuItem_Click);
+            this.findFocusToolStripMenuItem.Name = "findFocusToolStripMenuItem";
+            this.findFocusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findFocusToolStripMenuItem.Text = "Find Focus";
+            this.findFocusToolStripMenuItem.Click += new System.EventHandler(this.findFocusToolStripMenuItem_Click);
             // 
             // TabsView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(77)))), ((int)(((byte)(98)))));
-            this.ClientSize = new System.Drawing.Size(663, 443);
+            this.ClientSize = new System.Drawing.Size(774, 511);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip;
-            this.MinimumSize = new System.Drawing.Size(200, 64);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MinimumSize = new System.Drawing.Size(231, 68);
             this.Name = "TabsView";
             this.Text = "BioImager";
             this.Activated += new System.EventHandler(this.ImageViewer_Activated);
@@ -860,5 +873,6 @@ namespace Bio
         private System.Windows.Forms.ToolStripMenuItem microscopeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lightToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem savePyramidalToolStripMenuItem;
+        private ToolStripMenuItem findFocusToolStripMenuItem;
     }
 }

@@ -36,6 +36,7 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startBut = new System.Windows.Forms.Button();
             this.stopBut = new System.Windows.Forms.Button();
             this.recordStatusLabel = new System.Windows.Forms.Label();
@@ -66,7 +67,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.propBox = new System.Windows.Forms.ComboBox();
             this.setPropBut = new System.Windows.Forms.Button();
-            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.topMostBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.propMenuStrip.SuspendLayout();
@@ -84,9 +85,10 @@
             this.view.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.view.ContextMenuStrip = this.contextMenuStrip;
             this.view.ForeColor = System.Drawing.Color.White;
-            this.view.Location = new System.Drawing.Point(3, 18);
+            this.view.Location = new System.Drawing.Point(4, 21);
+            this.view.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.view.Name = "view";
-            this.view.Size = new System.Drawing.Size(366, 122);
+            this.view.Size = new System.Drawing.Size(426, 141);
             this.view.TabIndex = 3;
             this.view.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.view_BeforeExpand);
             this.view.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.view_AfterSelect);
@@ -100,44 +102,52 @@
             this.moveDownToolStripMenuItem,
             this.renameToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(139, 114);
             // 
             // performToolStripMenuItem
             // 
             this.performToolStripMenuItem.Name = "performToolStripMenuItem";
-            this.performToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.performToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.performToolStripMenuItem.Text = "Perform";
             this.performToolStripMenuItem.Click += new System.EventHandler(this.performToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // moveUpToolStripMenuItem
             // 
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.moveUpToolStripMenuItem.Text = "Move Up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpToolStripMenuItem_Click);
             // 
             // moveDownToolStripMenuItem
             // 
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownToolStripMenuItem_Click);
+            // 
+            // renameToolStripMenuItem
+            // 
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.renameToolStripMenuItem.Text = "Rename";
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
             // 
             // startBut
             // 
             this.startBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.startBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.startBut.ForeColor = System.Drawing.Color.White;
-            this.startBut.Location = new System.Drawing.Point(81, 159);
+            this.startBut.Location = new System.Drawing.Point(94, 184);
+            this.startBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.startBut.Name = "startBut";
-            this.startBut.Size = new System.Drawing.Size(75, 23);
+            this.startBut.Size = new System.Drawing.Size(88, 27);
             this.startBut.TabIndex = 5;
             this.startBut.Text = "Start";
             this.startBut.UseVisualStyleBackColor = false;
@@ -148,9 +158,10 @@
             this.stopBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stopBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.stopBut.ForeColor = System.Drawing.Color.White;
-            this.stopBut.Location = new System.Drawing.Point(3, 159);
+            this.stopBut.Location = new System.Drawing.Point(4, 184);
+            this.stopBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.stopBut.Name = "stopBut";
-            this.stopBut.Size = new System.Drawing.Size(75, 23);
+            this.stopBut.Size = new System.Drawing.Size(88, 27);
             this.stopBut.TabIndex = 6;
             this.stopBut.Text = "Stop";
             this.stopBut.UseVisualStyleBackColor = false;
@@ -161,9 +172,10 @@
             this.recordStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.recordStatusLabel.AutoSize = true;
             this.recordStatusLabel.ForeColor = System.Drawing.Color.White;
-            this.recordStatusLabel.Location = new System.Drawing.Point(3, 143);
+            this.recordStatusLabel.Location = new System.Drawing.Point(4, 166);
+            this.recordStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.recordStatusLabel.Name = "recordStatusLabel";
-            this.recordStatusLabel.Size = new System.Drawing.Size(102, 13);
+            this.recordStatusLabel.Size = new System.Drawing.Size(111, 15);
             this.recordStatusLabel.TabIndex = 7;
             this.recordStatusLabel.Text = "Recording: Stopped";
             // 
@@ -172,9 +184,10 @@
             this.playBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.playBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.playBut.ForeColor = System.Drawing.Color.White;
-            this.playBut.Location = new System.Drawing.Point(158, 159);
+            this.playBut.Location = new System.Drawing.Point(184, 184);
+            this.playBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.playBut.Name = "playBut";
-            this.playBut.Size = new System.Drawing.Size(105, 23);
+            this.playBut.Size = new System.Drawing.Size(122, 27);
             this.playBut.TabIndex = 8;
             this.playBut.Text = "Run Selected";
             this.playBut.UseVisualStyleBackColor = false;
@@ -184,9 +197,10 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Location = new System.Drawing.Point(4, 3);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 13);
+            this.label1.Size = new System.Drawing.Size(66, 15);
             this.label1.TabIndex = 9;
             this.label1.Text = "Recordings";
             // 
@@ -200,7 +214,8 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(369, 24);
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.menuStrip.Size = new System.Drawing.Size(430, 24);
             this.menuStrip.TabIndex = 13;
             // 
             // fileToolStripMenuItem
@@ -250,9 +265,10 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(3, 3);
+            this.label2.Location = new System.Drawing.Point(4, 3);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 13);
+            this.label2.Size = new System.Drawing.Size(60, 15);
             this.label2.TabIndex = 15;
             this.label2.Text = "Properties";
             // 
@@ -264,9 +280,10 @@
             this.propView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.propView.ContextMenuStrip = this.propMenuStrip;
             this.propView.ForeColor = System.Drawing.Color.White;
-            this.propView.Location = new System.Drawing.Point(0, 19);
+            this.propView.Location = new System.Drawing.Point(0, 22);
+            this.propView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.propView.Name = "propView";
-            this.propView.Size = new System.Drawing.Size(369, 187);
+            this.propView.Size = new System.Drawing.Size(430, 217);
             this.propView.TabIndex = 14;
             this.propView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.propView_AfterSelect);
             // 
@@ -313,9 +330,10 @@
             this.propRecStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.propRecStatusLabel.AutoSize = true;
             this.propRecStatusLabel.ForeColor = System.Drawing.Color.White;
-            this.propRecStatusLabel.Location = new System.Drawing.Point(0, 211);
+            this.propRecStatusLabel.Location = new System.Drawing.Point(0, 245);
+            this.propRecStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.propRecStatusLabel.Name = "propRecStatusLabel";
-            this.propRecStatusLabel.Size = new System.Drawing.Size(144, 13);
+            this.propRecStatusLabel.Size = new System.Drawing.Size(159, 15);
             this.propRecStatusLabel.TabIndex = 18;
             this.propRecStatusLabel.Text = "Property Recording: Stopped";
             // 
@@ -324,9 +342,10 @@
             this.stopPropBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stopPropBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.stopPropBut.ForeColor = System.Drawing.Color.White;
-            this.stopPropBut.Location = new System.Drawing.Point(3, 229);
+            this.stopPropBut.Location = new System.Drawing.Point(4, 266);
+            this.stopPropBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.stopPropBut.Name = "stopPropBut";
-            this.stopPropBut.Size = new System.Drawing.Size(75, 23);
+            this.stopPropBut.Size = new System.Drawing.Size(88, 27);
             this.stopPropBut.TabIndex = 17;
             this.stopPropBut.Text = "Stop";
             this.stopPropBut.UseVisualStyleBackColor = false;
@@ -337,9 +356,10 @@
             this.startPropBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.startPropBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.startPropBut.ForeColor = System.Drawing.Color.White;
-            this.startPropBut.Location = new System.Drawing.Point(81, 229);
+            this.startPropBut.Location = new System.Drawing.Point(94, 266);
+            this.startPropBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.startPropBut.Name = "startPropBut";
-            this.startPropBut.Size = new System.Drawing.Size(75, 23);
+            this.startPropBut.Size = new System.Drawing.Size(88, 27);
             this.startPropBut.TabIndex = 16;
             this.startPropBut.Text = "Start";
             this.startPropBut.UseVisualStyleBackColor = false;
@@ -350,9 +370,10 @@
             this.getPropBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.getPropBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.getPropBut.ForeColor = System.Drawing.Color.White;
-            this.getPropBut.Location = new System.Drawing.Point(158, 229);
+            this.getPropBut.Location = new System.Drawing.Point(184, 266);
+            this.getPropBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.getPropBut.Name = "getPropBut";
-            this.getPropBut.Size = new System.Drawing.Size(101, 23);
+            this.getPropBut.Size = new System.Drawing.Size(118, 27);
             this.getPropBut.TabIndex = 19;
             this.getPropBut.Text = "Get Property";
             this.getPropBut.UseVisualStyleBackColor = false;
@@ -371,6 +392,7 @@
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.Location = new System.Drawing.Point(0, 24);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -385,6 +407,7 @@
             // 
             // splitContainer.Panel2
             // 
+            this.splitContainer.Panel2.Controls.Add(this.topMostBox);
             this.splitContainer.Panel2.Controls.Add(this.label3);
             this.splitContainer.Panel2.Controls.Add(this.propBox);
             this.splitContainer.Panel2.Controls.Add(this.setPropBut);
@@ -395,8 +418,9 @@
             this.splitContainer.Panel2.Controls.Add(this.stopPropBut);
             this.splitContainer.Panel2.Controls.Add(this.propRecStatusLabel);
             this.splitContainer.Panel2.ForeColor = System.Drawing.Color.White;
-            this.splitContainer.Size = new System.Drawing.Size(369, 477);
-            this.splitContainer.SplitterDistance = 186;
+            this.splitContainer.Size = new System.Drawing.Size(430, 554);
+            this.splitContainer.SplitterDistance = 216;
+            this.splitContainer.SplitterWidth = 5;
             this.splitContainer.TabIndex = 21;
             // 
             // label3
@@ -404,9 +428,10 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(3, 260);
+            this.label3.Location = new System.Drawing.Point(4, 302);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(76, 13);
+            this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 22;
             this.label3.Text = "Property Type:";
             // 
@@ -416,9 +441,10 @@
             this.propBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.propBox.ForeColor = System.Drawing.Color.White;
             this.propBox.FormattingEnabled = true;
-            this.propBox.Location = new System.Drawing.Point(81, 257);
+            this.propBox.Location = new System.Drawing.Point(94, 299);
+            this.propBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.propBox.Name = "propBox";
-            this.propBox.Size = new System.Drawing.Size(105, 21);
+            this.propBox.Size = new System.Drawing.Size(122, 23);
             this.propBox.TabIndex = 21;
             this.propBox.SelectedIndexChanged += new System.EventHandler(this.propBox_SelectedIndexChanged);
             // 
@@ -427,31 +453,37 @@
             this.setPropBut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.setPropBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.setPropBut.ForeColor = System.Drawing.Color.White;
-            this.setPropBut.Location = new System.Drawing.Point(261, 229);
+            this.setPropBut.Location = new System.Drawing.Point(304, 266);
+            this.setPropBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.setPropBut.Name = "setPropBut";
-            this.setPropBut.Size = new System.Drawing.Size(105, 23);
+            this.setPropBut.Size = new System.Drawing.Size(122, 27);
             this.setPropBut.TabIndex = 20;
             this.setPropBut.Text = "Set Property";
             this.setPropBut.UseVisualStyleBackColor = false;
             this.setPropBut.Click += new System.EventHandler(this.setPropBut_Click);
             // 
-            // renameToolStripMenuItem
+            // topMostBox
             // 
-            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.renameToolStripMenuItem.Text = "Rename";
-            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
+            this.topMostBox.AutoSize = true;
+            this.topMostBox.Location = new System.Drawing.Point(223, 301);
+            this.topMostBox.Name = "topMostBox";
+            this.topMostBox.Size = new System.Drawing.Size(75, 19);
+            this.topMostBox.TabIndex = 23;
+            this.topMostBox.Text = "Top Most";
+            this.topMostBox.UseVisualStyleBackColor = true;
+            this.topMostBox.CheckedChanged += new System.EventHandler(this.topMostBox_CheckedChanged);
             // 
             // Recordings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.ClientSize = new System.Drawing.Size(369, 501);
+            this.ClientSize = new System.Drawing.Size(430, 578);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Recordings";
             this.Text = "GUI Recordings & Properties";
             this.TopMost = true;
@@ -510,5 +542,6 @@
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+        private CheckBox topMostBox;
     }
 }
