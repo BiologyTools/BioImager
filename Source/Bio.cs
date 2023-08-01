@@ -7695,6 +7695,7 @@ namespace Bio
             ImageReader reader = new ImageReader();
             var meta = (IMetadata)((OMEXMLService)new ServiceFactory().getInstance(typeof(OMEXMLService))).createOMEXMLMetadata();
             reader.setMetadataStore((MetadataStore)meta);
+            file = file.Replace("\\","/");
             reader.setId(file);
             bool ser = false;
             if (reader.getSeriesCount() > 1)
@@ -8014,6 +8015,7 @@ namespace Bio
                 
             }
             writer.setMetadataRetrieve(omexml);
+            f = f.Replace("\\", "/");
             writer.setId(f);
             for (int i = 0; i < files.Length; i++)
             {
@@ -8369,6 +8371,7 @@ namespace Bio
                 s++;
             }
             writer.setMetadataRetrieve(omexml);
+            file = file.Replace("\\", "/");
             writer.setId(file);
             writer.setCompression(compression);
             int xx; int yy;
@@ -8517,6 +8520,7 @@ namespace Bio
             b.meta = (IMetadata)((OMEXMLService)new ServiceFactory().getInstance(typeof(OMEXMLService))).createOMEXMLMetadata();
             reader = new ImageReader();
             reader.setMetadataStore((MetadataStore)b.meta);
+            file = file.Replace("\\", "/");
             reader.setId(file);
             reader.setSeries(serie);
             int RGBChannelCount = reader.getRGBChannelCount();
@@ -9078,6 +9082,7 @@ namespace Bio
             if (imRead == null)
                 imRead = new ImageReader();
             string s = imRead.getCurrentFile();
+            file = file.Replace("\\", "/");
             if (s == null)
                 imRead.setId(file);
             int SizeX = imRead.getSizeX();
@@ -9377,6 +9382,7 @@ namespace Bio
             reader = new ImageReader();
             var meta = (IMetadata)((OMEXMLService)new ServiceFactory().getInstance(typeof(OMEXMLService))).createOMEXMLMetadata();
             reader.setMetadataStore((MetadataStore)meta);
+            file = file.Replace("\\", "/");
             reader.setId(file);
             bool tile = false;
             if (reader.getOptimalTileWidth() != reader.getSizeX())
@@ -9617,6 +9623,7 @@ namespace Bio
             ImageReader imageReader = new ImageReader();
             imageReader.setMetadataStore(meta);
             // initialize file
+            file = file.Replace("\\", "/");
             imageReader.setId(file);
             int imageCount = imageReader.getImageCount();
             int seriesCount = imageReader.getSeriesCount();
