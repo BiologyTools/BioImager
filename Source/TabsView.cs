@@ -65,7 +65,7 @@ namespace Bio
             if (arg.Length == 0)
                 return;
             else
-            {             
+            {
                 for (int i = 0; i < arg.Length; i++)
                 {
                     if (arg[i].EndsWith(".cs"))
@@ -73,7 +73,7 @@ namespace Bio
                         App.runner.RunScriptFile(arg[0]);
                         return;
                     }
-                    if(arg[i].EndsWith(".ijm"))
+                    if (arg[i].EndsWith(".ijm"))
                     {
                         ImageJ.RunMacro(arg[i], "");
                         return;
@@ -101,7 +101,7 @@ namespace Bio
             ImageView v = new ImageView(b);
             v.Dock = DockStyle.Fill;
             t.Controls.Add(v);
-            if(Width < b.SizeX || Height < b.SizeY)
+            if (Width < b.SizeX || Height < b.SizeY)
             {
                 Width = b.SizeX;
                 Height = b.SizeY + 190;
@@ -122,16 +122,16 @@ namespace Bio
             init = true;
         }
 
-       /// If the image is pyramidal, add 42 to the width and 206 to the height. Otherwise, add 20 to
-       /// the width and 180 to the height
-       /// 
-       /// @return The size of the image.
+        /// If the image is pyramidal, add 42 to the width and 206 to the height. Otherwise, add 20 to
+        /// the width and 180 to the height
+        /// 
+        /// @return The size of the image.
         public void ResizeView()
         {
             if (Image == null)
                 return;
             System.Drawing.Size s;
-            if(SelectedImage.isPyramidal)
+            if (SelectedImage.isPyramidal)
                 s = new System.Drawing.Size(ImageView.SelectedImage.Resolutions[ImageView.Resolution].SizeX + 42, ImageView.SelectedImage.Resolutions[ImageView.Resolution].SizeY + 206);
             else
                 s = new System.Drawing.Size(ImageView.SelectedImage.SizeX + 20, ImageView.SelectedImage.SizeY + 180);
@@ -147,20 +147,20 @@ namespace Bio
             }
         }
 
-       /* A property that returns the selected image from the image viewer. */
+        /* A property that returns the selected image from the image viewer. */
         public BioImage Image
         {
-            get 
+            get
             {
                 if (Viewer == null)
                     return null;
                 if (ImageView.SelectedImage == null)
                     return null;
-                return ImageView.SelectedImage; 
+                return ImageView.SelectedImage;
             }
         }
 
-       /* A property of the ImageView class. */
+        /* A property of the ImageView class. */
         public ImageView ImageView
         {
             get
@@ -169,7 +169,7 @@ namespace Bio
             }
         }
 
-/* A property that returns the number of tabs in the tab control. */
+        /* A property that returns the number of tabs in the tab control. */
         public int TabCount
         {
             get
@@ -224,13 +224,13 @@ namespace Bio
             string s = "";
             for (int i = 0; i < App.recent.Count; i++)
             {
-                 s += "$"+App.recent[i];
+                s += "$" + App.recent[i];
             }
             Properties.Settings.Default["Recent"] = s;
             Properties.Settings.Default.Save();
         }
 
-       /// It loads the recent files from the settings file and adds them to the recent files list.
+        /// It loads the recent files from the settings file and adds them to the recent files list.
         private void LoadProperties()
         {
             App.recent.Clear();
@@ -238,15 +238,15 @@ namespace Bio
             string[] sts = s.Split('$');
             foreach (string item in sts)
             {
-                if(item!="")
+                if (item != "")
                     App.recent.Add(item);
             }
         }
 
-       /// This function removes the selected image from the list of images
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The event arguments.
+        /// This function removes the selected image from the list of images
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.Viewer != null)
@@ -255,12 +255,12 @@ namespace Bio
             }
         }
 
-       /// If the user selects a file to save to, then save the image to that file
-       /// 
-       /// @param sender System.Object
-       /// @param EventArgs 
-       /// 
-       /// @return The image is being returned.
+        /// If the user selects a file to save to, then save the image to that file
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs 
+        /// 
+        /// @return The image is being returned.
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Image == null)
@@ -280,7 +280,7 @@ namespace Bio
         /// @param PreviewKeyDownEventArgs The event data.
         private void ImageViewer_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if(e.KeyCode == Keys.S && e.Control)
+            if (e.KeyCode == Keys.S && e.Control)
             {
                 saveToolStripMenuItem.PerformClick();
             }
@@ -291,10 +291,10 @@ namespace Bio
             }
         }
 
-       /// It shows the toolbox when the user clicks on the toolbox menu item
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// It shows the toolbox when the user clicks on the toolbox menu item
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void toolboxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.tools.Show();
@@ -365,13 +365,13 @@ namespace Bio
             //App.Image = SelectedImage;
         }
 
-       /// If the user clicks on the Channels Tool menu item, then if the Channels Tool window is not
-       /// open, open it
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The event arguments.
-       /// 
-       /// @return The image that is selected in the ImageView.
+        /// If the user clicks on the Channels Tool menu item, then if the Channels Tool window is not
+        /// open, open it
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
+        /// 
+        /// @return The image that is selected in the ImageView.
         private void channelsToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ImageView.SelectedImage == null)
@@ -399,13 +399,13 @@ namespace Bio
             Viewer.UpdateStatus();
         }
 
-       /// If the Viewer is not null, set the Viewer's mode to filtered, uncheck the other modes, and
-       /// update the status
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs e
-       /// 
-       /// @return The image is being returned.
+        /// If the Viewer is not null, set the Viewer's mode to filtered, uncheck the other modes, and
+        /// update the status
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs e
+        /// 
+        /// @return The image is being returned.
         private void filteredToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Viewer == null)
@@ -417,13 +417,13 @@ namespace Bio
             Viewer.UpdateStatus();
         }
 
-       /// If the Viewer is not null, set the Viewer's mode to Raw, uncheck the other menu items, and
-       /// update the status
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs 
-       /// 
-       /// @return The image is being returned.
+        /// If the Viewer is not null, set the Viewer's mode to Raw, uncheck the other menu items, and
+        /// update the status
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs 
+        /// 
+        /// @return The image is being returned.
         private void rawToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Viewer == null)
@@ -453,7 +453,7 @@ namespace Bio
                 ImageView.SelectedImage.StackThreshold(false);
         }
 
-        
+
         /// It updates the view mode of the image.
         /// 
         /// @param v The view mode that the user has selected.
@@ -463,7 +463,7 @@ namespace Bio
                 rGBToolStripMenuItem.Checked = true;
             if (v == ImageView.ViewMode.Filtered)
                 filteredToolStripMenuItem.Checked = true;
-            if(v == ImageView.ViewMode.Raw)
+            if (v == ImageView.ViewMode.Raw)
                 rawToolStripMenuItem.Checked = true;
         }
 
@@ -511,7 +511,7 @@ namespace Bio
                 return;
             foreach (string file in saveOMEFileDialog.FileNames)
             {
-                BioImage.SaveOME(file,Image.ID);
+                BioImage.SaveOME(file, Image.ID);
             }
         }
 
@@ -559,10 +559,10 @@ namespace Bio
             Image.To16Bit();
         }
 
-       /// It opens a new form called "filters" when the user clicks on the "Filters" menu item
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// It opens a new form called "filters" when the user clicks on the "Filters" menu item
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void filtersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             filters = new Filter();
@@ -605,10 +605,10 @@ namespace Bio
             Viewer.UpdateImages();
         }
 
-       /// It converts the image to 48 bit color
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The event arguments.
+        /// It converts the image to 48 bit color
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void to48BitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Image.To48Bit();
@@ -731,10 +731,10 @@ namespace Bio
             App.runner.Show();
         }
 
-       /// It opens the script recorder window
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// It opens the script recorder window
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
         private void scriptRecorderToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             App.recorder.Show();
@@ -864,13 +864,13 @@ namespace Bio
             App.viewer.GoToImage();
             SaveProperties();
         }
-       /// If the user presses a key, and the key is one of the arrow keys, then move the microscope in
-       /// the direction of the arrow key
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param KeyEventArgs e
-       /// 
-       /// @return The return value is a string.
+        /// If the user presses a key, and the key is one of the arrow keys, then move the microscope in
+        /// the direction of the arrow key
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param KeyEventArgs e
+        /// 
+        /// @return The return value is a string.
         private void TabsView_KeyDown(object sender, KeyEventArgs e)
         {
             if (Viewer == null)
@@ -1024,7 +1024,7 @@ namespace Bio
                     AddTab(BioImage.OpenOME(openFilesDialog.FileNames[0]));
                 }
                 else
-                App.viewer.AddImage(BioImage.OpenOME(openFilesDialog.FileNames[i]));
+                    App.viewer.AddImage(BioImage.OpenOME(openFilesDialog.FileNames[i]));
             }
             App.viewer.GoToImage();
         }
@@ -1050,13 +1050,13 @@ namespace Bio
             App.viewer.GoToImage();
         }
 
-       /// If the user selects a file to save to, and the images are not 8 or 16 bit, ask the user if
-       /// they want to convert them to 8 or 16 bit, and if they do, convert them and save them
-       /// 
-       /// @param sender System.Object
-       /// @param EventArgs e
-       /// 
-       /// @return The return value is a string array of the image IDs.
+        /// If the user selects a file to save to, and the images are not 8 or 16 bit, ask the user if
+        /// they want to convert them to 8 or 16 bit, and if they do, convert them and save them
+        /// 
+        /// @param sender System.Object
+        /// @param EventArgs e
+        /// 
+        /// @return The return value is a string array of the image IDs.
         private void saveTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
@@ -1073,11 +1073,11 @@ namespace Bio
             if (convert)
             {
                 string mes;
-                if(ImageView.SelectedImage.bitsPerPixel > 8)
+                if (ImageView.SelectedImage.bitsPerPixel > 8)
                     mes = "Saving Series as OME only supports 8 bit & 16 bit images. Convert 16 bit?";
                 else
                     mes = "Saving Series as OME only supports 8 bit & 16 bit images. Convert 8 bit?";
-                if (MessageBox.Show(this, mes,"Convert to supported format?", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (MessageBox.Show(this, mes, "Convert to supported format?", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     foreach (BioImage b in ImageView.Images)
                     {
@@ -1090,7 +1090,7 @@ namespace Bio
                 else
                     return;
             }
-            
+
             string[] sts = new string[App.viewer.Images.Count];
             for (int i = 0; i < sts.Length; i++)
             {
@@ -1139,7 +1139,7 @@ namespace Bio
                         AddTab(bms[i]);
                     }
                     else
-                    App.viewer.AddImage(bms[i]);
+                        App.viewer.AddImage(bms[i]);
                 }
             }
             App.viewer.GoToImage();
@@ -1153,9 +1153,9 @@ namespace Bio
         /// and provides a value to use for events that do not include event data.
         private void TabsView_Load(object sender, EventArgs e)
         {
-            if(App.viewer != null)
-            App.viewer.GoToImage();
-            
+            if (App.viewer != null)
+                App.viewer.GoToImage();
+
             Function.Initialize();
         }
 
@@ -1225,10 +1225,10 @@ namespace Bio
             Viewer.UpdateStatus();
         }
 
-       /// It opens the console window when the user clicks on the console menu item
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
+        /// It opens the console window when the user clicks on the console menu item
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.console.Show();
@@ -1275,7 +1275,7 @@ namespace Bio
             runToolStripMenuItem.DropDownItems.Clear();
             foreach (var item in Function.Functions)
             {
-                runToolStripMenuItem.DropDownItems.Add(item.Value.Name,null, DropDownItemClicked);
+                runToolStripMenuItem.DropDownItems.Add(item.Value.Name, null, DropDownItemClicked);
             }
         }
 
@@ -1297,11 +1297,11 @@ namespace Bio
             XMLView v = new XMLView(BioImage.OpenXML(ImageView.SelectedImage.file));
             v.Show();
         }
-       /// When the user clicks on the menu item, the viewer's hardware acceleration is set to the value
-       /// of the menu item's checked property, and the viewer is updated.
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The event arguments.
+        /// When the user clicks on the menu item, the viewer's hardware acceleration is set to the value
+        /// of the menu item's checked property, and the viewer is updated.
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The event arguments.
         private void dToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Viewer.HardwareAcceleration = dToolStripMenuItem.Checked;
@@ -1392,7 +1392,7 @@ namespace Bio
         {
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
                 return;
-            
+
             BioImage.SaveOMEPyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
         }
 
@@ -1403,6 +1403,21 @@ namespace Bio
             int f = BioImage.FindFocus(ImageView.SelectedImage, co.C, co.T);
             ZCT z = ImageView.SelectedImage.Buffers[f].Coordinate;
             SelectedViewer.SetCoordinate(z.Z, z.C, z.T);
+        }
+
+        private void setupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.setup.Show();
+        }
+
+        private void imagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.imager.Show();
+        }
+
+        private void stageToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.stage.Show();
         }
     }
 }

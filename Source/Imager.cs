@@ -273,6 +273,8 @@ namespace Bio
             Settings.Default.Save();
             if (CurrentProfile.FilePath != "Default")
                 CurrentProfile.Save(CurrentProfile.FilePath);
+            e.Cancel = true;
+            this.Hide();
         }
         private void deadzoneBox_ValueChanged(object sender, EventArgs e)
         {

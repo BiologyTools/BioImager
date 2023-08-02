@@ -340,7 +340,7 @@ namespace Bio
 
         private void viewBut_Click(object sender, EventArgs e)
         {
-            if(!Automation.Properties.ContainsKey("LiveView"))
+            if (!Automation.Properties.ContainsKey("LiveView"))
             {
                 MessageBox.Show("'LiveView' GUI Property not set. Go to automation tab and create a property corresponding to the live view GUI element.");
                 return;
@@ -349,7 +349,7 @@ namespace Bio
             Microscope.SetFocus((double)upperLimBox.Value);
             long max = long.MinValue;
             double ud = (double)upperLimBox.Value;
-            for (double i = 0; i < (double)upperLimBox.Value; i+=(double)focusInterval.Value)
+            for (double i = 0; i < (double)upperLimBox.Value; i += (double)focusInterval.Value)
             {
                 Microscope.SetFocus((double)i);
                 System.Drawing.Graphics g;
@@ -368,6 +368,12 @@ namespace Bio
                 b.Dispose();
             }
             Microscope.SetFocus(ud);
+        }
+
+        private void StageTool_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
         }
     }
 }

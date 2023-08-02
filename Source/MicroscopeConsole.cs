@@ -13,6 +13,7 @@ namespace Bio
 {
     public static class MicroscopeConsole
     {
+        public static bool synchronous = true;
         public static Process console = null;
         [Serializable]
         public struct Command
@@ -112,6 +113,22 @@ namespace Bio
             {
                 string arg = JsonConvert.SerializeObject(c);
                 console.StandardInput.WriteLine("Command:" + arg);
+                if (synchronous)
+                {
+                    //Now we need to wait till the command is finished.
+                    do
+                    {
+                        if (console.HasExited)
+                            break;
+                        string st = console.StandardOutput.ReadLine();
+                        if (st != null)
+                            if (st.Length > 0)
+                            {
+                                return JsonConvert.DeserializeObject<Command>(st);
+                            }
+                        Application.DoEvents();
+                    } while (true);
+                }
                 return new Command();
             }
         }

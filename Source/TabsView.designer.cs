@@ -29,850 +29,805 @@ namespace Bio
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TabsView));
-            this.openFilesDialog = new System.Windows.Forms.OpenFileDialog();
-            this.saveOMEFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.panel = new System.Windows.Forms.Panel();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveOMEToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.saveCSVFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.openCSVFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.saveTiffFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openOMESeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sepToolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.addImagesToTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addImagesOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sepToolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveOMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveTabTiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveSeriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.savePyramidalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sepToolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.imagesToStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newTabViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nodeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sizeModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rGBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filteredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.emissionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._3dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sepToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
-            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolboxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rOIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rOIManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportROIsOfFolderOfImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importImageJROIToSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportImageJROIFromSelectedImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.channelsToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoThresholdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.channelsToolToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.switchRedBlueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stackToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stackToolsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.formatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bit8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bit16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.to24BitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.to36BitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.to48BitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filtersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createFunctionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.consoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scriptRunnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scriptRecorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.automationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.microscopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lightToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openImageJROI = new System.Windows.Forms.OpenFileDialog();
-            this.saveImageJROI = new System.Windows.Forms.SaveFileDialog();
-            this.findFocusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel.SuspendLayout();
-            this.tabContextMenuStrip.SuspendLayout();
-            this.menuStrip.SuspendLayout();
-            this.SuspendLayout();
+            openFilesDialog = new OpenFileDialog();
+            saveOMEFileDialog = new SaveFileDialog();
+            panel = new Panel();
+            tabControl = new TabControl();
+            tabContextMenuStrip = new ContextMenuStrip(components);
+            closeToolStripMenuItem = new ToolStripMenuItem();
+            reloadToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem1 = new ToolStripMenuItem();
+            saveOMEToolStripMenuItem1 = new ToolStripMenuItem();
+            toWindowToolStripMenuItem = new ToolStripMenuItem();
+            folderBrowserDialog = new FolderBrowserDialog();
+            saveCSVFileDialog = new SaveFileDialog();
+            openCSVFileDialog = new OpenFileDialog();
+            saveTiffFileDialog = new SaveFileDialog();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            openRecentToolStripMenuItem = new ToolStripMenuItem();
+            openOMEToolStripMenuItem = new ToolStripMenuItem();
+            openOMESeriesToolStripMenuItem = new ToolStripMenuItem();
+            openSeriesToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem1 = new ToolStripSeparator();
+            addImagesToTabToolStripMenuItem = new ToolStripMenuItem();
+            addImagesOMEToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem2 = new ToolStripSeparator();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            saveOMEToolStripMenuItem = new ToolStripMenuItem();
+            saveTabToolStripMenuItem = new ToolStripMenuItem();
+            saveTabTiffToolStripMenuItem = new ToolStripMenuItem();
+            saveSeriesToolStripMenuItem = new ToolStripMenuItem();
+            savePyramidalToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem3 = new ToolStripSeparator();
+            imagesToStackToolStripMenuItem = new ToolStripMenuItem();
+            newTabViewToolStripMenuItem = new ToolStripMenuItem();
+            nodeViewToolStripMenuItem = new ToolStripMenuItem();
+            clearRecentToolStripMenuItem = new ToolStripMenuItem();
+            sizeModeToolStripMenuItem = new ToolStripMenuItem();
+            rGBToolStripMenuItem = new ToolStripMenuItem();
+            filteredToolStripMenuItem = new ToolStripMenuItem();
+            rawToolStripMenuItem = new ToolStripMenuItem();
+            emissionToolStripMenuItem = new ToolStripMenuItem();
+            _3dToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem = new ToolStripSeparator();
+            dToolStripMenuItem = new ToolStripMenuItem();
+            xMLToolStripMenuItem = new ToolStripMenuItem();
+            toolboxToolStripMenuItem = new ToolStripMenuItem();
+            setToolToolStripMenuItem = new ToolStripMenuItem();
+            rOIToolStripMenuItem = new ToolStripMenuItem();
+            rOIManagerToolStripMenuItem = new ToolStripMenuItem();
+            exportCSVToolStripMenuItem = new ToolStripMenuItem();
+            importCSVToolStripMenuItem = new ToolStripMenuItem();
+            exportROIsOfFolderOfImagesToolStripMenuItem = new ToolStripMenuItem();
+            importImageJROIToSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            exportImageJROIFromSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            channelsToolToolStripMenuItem = new ToolStripMenuItem();
+            autoThresholdToolStripMenuItem = new ToolStripMenuItem();
+            channelsToolToolStripMenuItem1 = new ToolStripMenuItem();
+            switchRedBlueToolStripMenuItem = new ToolStripMenuItem();
+            stackToolsToolStripMenuItem = new ToolStripMenuItem();
+            stackToolsToolStripMenuItem1 = new ToolStripMenuItem();
+            duplicateToolStripMenuItem = new ToolStripMenuItem();
+            rotateToolStripMenuItem = new ToolStripMenuItem();
+            findFocusToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip = new MenuStrip();
+            formatToolStripMenuItem = new ToolStripMenuItem();
+            bit8ToolStripMenuItem = new ToolStripMenuItem();
+            bit16ToolStripMenuItem = new ToolStripMenuItem();
+            to24BitToolStripMenuItem = new ToolStripMenuItem();
+            to36BitToolStripMenuItem = new ToolStripMenuItem();
+            to48BitToolStripMenuItem = new ToolStripMenuItem();
+            filtersToolStripMenuItem = new ToolStripMenuItem();
+            scriptToolStripMenuItem = new ToolStripMenuItem();
+            runToolStripMenuItem = new ToolStripMenuItem();
+            createFunctionToolStripMenuItem = new ToolStripMenuItem();
+            consoleToolStripMenuItem = new ToolStripMenuItem();
+            scriptRunnerToolStripMenuItem = new ToolStripMenuItem();
+            scriptRecorderToolStripMenuItem = new ToolStripMenuItem();
+            automationToolStripMenuItem = new ToolStripMenuItem();
+            microscopeToolStripMenuItem = new ToolStripMenuItem();
+            lightToolToolStripMenuItem = new ToolStripMenuItem();
+            setupToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            openImageJROI = new OpenFileDialog();
+            saveImageJROI = new SaveFileDialog();
+            imagerToolStripMenuItem = new ToolStripMenuItem();
+            stageToolToolStripMenuItem = new ToolStripMenuItem();
+            panel.SuspendLayout();
+            tabContextMenuStrip.SuspendLayout();
+            menuStrip.SuspendLayout();
+            SuspendLayout();
             // 
             // openFilesDialog
             // 
-            this.openFilesDialog.Multiselect = true;
-            this.openFilesDialog.Title = "Open Images";
+            openFilesDialog.Multiselect = true;
+            openFilesDialog.Title = "Open Images";
             // 
             // saveOMEFileDialog
             // 
-            this.saveOMEFileDialog.DefaultExt = "ome.tif";
-            this.saveOMEFileDialog.Filter = "OME TIFF Files (*.ome.tif)|*.ome.tif|All files (*.*)|*.*";
-            this.saveOMEFileDialog.SupportMultiDottedExtensions = true;
-            this.saveOMEFileDialog.Title = "Save Image";
+            saveOMEFileDialog.DefaultExt = "ome.tif";
+            saveOMEFileDialog.Filter = "OME TIFF Files (*.ome.tif)|*.ome.tif|All files (*.*)|*.*";
+            saveOMEFileDialog.SupportMultiDottedExtensions = true;
+            saveOMEFileDialog.Title = "Save Image";
             // 
             // panel
             // 
-            this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
-            this.panel.Controls.Add(this.tabControl);
-            this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel.Location = new System.Drawing.Point(0, 24);
-            this.panel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(774, 487);
-            this.panel.TabIndex = 1;
+            panel.BackColor = Color.FromArgb(95, 122, 156);
+            panel.Controls.Add(tabControl);
+            panel.Dock = DockStyle.Fill;
+            panel.Location = new Point(0, 24);
+            panel.Margin = new Padding(4, 3, 4, 3);
+            panel.Name = "panel";
+            panel.Size = new Size(774, 487);
+            panel.TabIndex = 1;
             // 
             // tabControl
             // 
-            this.tabControl.ContextMenuStrip = this.tabContextMenuStrip;
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(774, 487);
-            this.tabControl.TabIndex = 0;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
+            tabControl.ContextMenuStrip = tabContextMenuStrip;
+            tabControl.Dock = DockStyle.Fill;
+            tabControl.Location = new Point(0, 0);
+            tabControl.Margin = new Padding(4, 3, 4, 3);
+            tabControl.Name = "tabControl";
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new Size(774, 487);
+            tabControl.TabIndex = 0;
+            tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
             // 
             // tabContextMenuStrip
             // 
-            this.tabContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem,
-            this.reloadToolStripMenuItem,
-            this.saveToolStripMenuItem1,
-            this.saveOMEToolStripMenuItem1,
-            this.toWindowToolStripMenuItem});
-            this.tabContextMenuStrip.Name = "tabContextMenuStrip";
-            this.tabContextMenuStrip.Size = new System.Drawing.Size(165, 114);
+            tabContextMenuStrip.Items.AddRange(new ToolStripItem[] { closeToolStripMenuItem, reloadToolStripMenuItem, saveToolStripMenuItem1, saveOMEToolStripMenuItem1, toWindowToolStripMenuItem });
+            tabContextMenuStrip.Name = "tabContextMenuStrip";
+            tabContextMenuStrip.Size = new Size(165, 114);
             // 
             // closeToolStripMenuItem
             // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click_1);
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(164, 22);
+            closeToolStripMenuItem.Text = "Close";
+            closeToolStripMenuItem.Click += closeToolStripMenuItem_Click_1;
             // 
             // reloadToolStripMenuItem
             // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.reloadToolStripMenuItem.Text = "Reload";
-            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            reloadToolStripMenuItem.Size = new Size(164, 22);
+            reloadToolStripMenuItem.Text = "Reload";
+            reloadToolStripMenuItem.Click += reloadToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem1
             // 
-            this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
-            this.saveToolStripMenuItem1.Text = "Save";
-            this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
+            saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
+            saveToolStripMenuItem1.Size = new Size(164, 22);
+            saveToolStripMenuItem1.Text = "Save";
+            saveToolStripMenuItem1.Click += saveToolStripMenuItem1_Click;
             // 
             // saveOMEToolStripMenuItem1
             // 
-            this.saveOMEToolStripMenuItem1.Name = "saveOMEToolStripMenuItem1";
-            this.saveOMEToolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
-            this.saveOMEToolStripMenuItem1.Text = "Save OME";
-            this.saveOMEToolStripMenuItem1.Click += new System.EventHandler(this.saveOMEToolStripMenuItem1_Click);
+            saveOMEToolStripMenuItem1.Name = "saveOMEToolStripMenuItem1";
+            saveOMEToolStripMenuItem1.Size = new Size(164, 22);
+            saveOMEToolStripMenuItem1.Text = "Save OME";
+            saveOMEToolStripMenuItem1.Click += saveOMEToolStripMenuItem1_Click;
             // 
             // toWindowToolStripMenuItem
             // 
-            this.toWindowToolStripMenuItem.Name = "toWindowToolStripMenuItem";
-            this.toWindowToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.toWindowToolStripMenuItem.Text = "Open as Window";
-            this.toWindowToolStripMenuItem.Click += new System.EventHandler(this.toWindowToolStripMenuItem_Click);
+            toWindowToolStripMenuItem.Name = "toWindowToolStripMenuItem";
+            toWindowToolStripMenuItem.Size = new Size(164, 22);
+            toWindowToolStripMenuItem.Text = "Open as Window";
+            toWindowToolStripMenuItem.Click += toWindowToolStripMenuItem_Click;
             // 
             // saveCSVFileDialog
             // 
-            this.saveCSVFileDialog.DefaultExt = "csv";
-            this.saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
-            this.saveCSVFileDialog.Title = "Save ROIs to CSV";
+            saveCSVFileDialog.DefaultExt = "csv";
+            saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveCSVFileDialog.Title = "Save ROIs to CSV";
             // 
             // openCSVFileDialog
             // 
-            this.openCSVFileDialog.DefaultExt = "csv";
-            this.openCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
-            this.openCSVFileDialog.Title = "Import ROI from CSV";
+            openCSVFileDialog.DefaultExt = "csv";
+            openCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
+            openCSVFileDialog.Title = "Import ROI from CSV";
             // 
             // saveTiffFileDialog
             // 
-            this.saveTiffFileDialog.DefaultExt = "tif";
-            this.saveTiffFileDialog.Filter = "TIFF Files (*.tif)|*.tif | PNG Files (*.png)|*.png | BMP Files (*.bmp)|*.bmp | JP" +
-    "G Files (*.jpg)|*.jpg | Gif Files (*.gif)|*.gif";
-            this.saveTiffFileDialog.SupportMultiDottedExtensions = true;
-            this.saveTiffFileDialog.Title = "Save Image";
+            saveTiffFileDialog.DefaultExt = "tif";
+            saveTiffFileDialog.Filter = "TIFF Files (*.tif)|*.tif | PNG Files (*.png)|*.png | BMP Files (*.bmp)|*.bmp | JPG Files (*.jpg)|*.jpg | Gif Files (*.gif)|*.gif";
+            saveTiffFileDialog.SupportMultiDottedExtensions = true;
+            saveTiffFileDialog.Title = "Save Image";
             // 
             // fileToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.openRecentToolStripMenuItem,
-            this.openOMEToolStripMenuItem,
-            this.openOMESeriesToolStripMenuItem,
-            this.openSeriesToolStripMenuItem,
-            this.sepToolStripMenuItem1,
-            this.addImagesToTabToolStripMenuItem,
-            this.addImagesOMEToolStripMenuItem,
-            this.sepToolStripMenuItem2,
-            this.saveToolStripMenuItem,
-            this.saveOMEToolStripMenuItem,
-            this.saveTabToolStripMenuItem,
-            this.saveTabTiffToolStripMenuItem,
-            this.saveSeriesToolStripMenuItem,
-            this.savePyramidalToolStripMenuItem,
-            this.sepToolStripMenuItem3,
-            this.imagesToStackToolStripMenuItem,
-            this.newTabViewToolStripMenuItem,
-            this.nodeViewToolStripMenuItem,
-            this.clearRecentToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRecentToolStripMenuItem, openOMEToolStripMenuItem, openOMESeriesToolStripMenuItem, openSeriesToolStripMenuItem, sepToolStripMenuItem1, addImagesToTabToolStripMenuItem, addImagesOMEToolStripMenuItem, sepToolStripMenuItem2, saveToolStripMenuItem, saveOMEToolStripMenuItem, saveTabToolStripMenuItem, saveTabTiffToolStripMenuItem, saveSeriesToolStripMenuItem, savePyramidalToolStripMenuItem, sepToolStripMenuItem3, imagesToStackToolStripMenuItem, newTabViewToolStripMenuItem, nodeViewToolStripMenuItem, clearRecentToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openToolStripMenuItem.Text = "Open Images";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(202, 22);
+            openToolStripMenuItem.Text = "Open Images";
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // openRecentToolStripMenuItem
             // 
-            this.openRecentToolStripMenuItem.Name = "openRecentToolStripMenuItem";
-            this.openRecentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openRecentToolStripMenuItem.Text = "Open Recent";
-            this.openRecentToolStripMenuItem.DropDownOpening += new System.EventHandler(this.openRecentToolStripMenuItem_DropDownOpening);
+            openRecentToolStripMenuItem.Name = "openRecentToolStripMenuItem";
+            openRecentToolStripMenuItem.Size = new Size(202, 22);
+            openRecentToolStripMenuItem.Text = "Open Recent";
+            openRecentToolStripMenuItem.DropDownOpening += openRecentToolStripMenuItem_DropDownOpening;
             // 
             // openOMEToolStripMenuItem
             // 
-            this.openOMEToolStripMenuItem.Name = "openOMEToolStripMenuItem";
-            this.openOMEToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openOMEToolStripMenuItem.Text = "Open OME Images";
-            this.openOMEToolStripMenuItem.Click += new System.EventHandler(this.openOMEToolStripMenuItem_Click_1);
+            openOMEToolStripMenuItem.Name = "openOMEToolStripMenuItem";
+            openOMEToolStripMenuItem.Size = new Size(202, 22);
+            openOMEToolStripMenuItem.Text = "Open OME Images";
+            openOMEToolStripMenuItem.Click += openOMEToolStripMenuItem_Click_1;
             // 
             // openOMESeriesToolStripMenuItem
             // 
-            this.openOMESeriesToolStripMenuItem.Name = "openOMESeriesToolStripMenuItem";
-            this.openOMESeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openOMESeriesToolStripMenuItem.Text = "Open OME Series";
-            this.openOMESeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click);
+            openOMESeriesToolStripMenuItem.Name = "openOMESeriesToolStripMenuItem";
+            openOMESeriesToolStripMenuItem.Size = new Size(202, 22);
+            openOMESeriesToolStripMenuItem.Text = "Open OME Series";
+            openOMESeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click;
             // 
             // openSeriesToolStripMenuItem
             // 
-            this.openSeriesToolStripMenuItem.Name = "openSeriesToolStripMenuItem";
-            this.openSeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openSeriesToolStripMenuItem.Text = "Open Series";
-            this.openSeriesToolStripMenuItem.Click += new System.EventHandler(this.openSeriesToolStripMenuItem_Click_1);
+            openSeriesToolStripMenuItem.Name = "openSeriesToolStripMenuItem";
+            openSeriesToolStripMenuItem.Size = new Size(202, 22);
+            openSeriesToolStripMenuItem.Text = "Open Series";
+            openSeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click_1;
             // 
             // sepToolStripMenuItem1
             // 
-            this.sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
-            this.sepToolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
+            sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
+            sepToolStripMenuItem1.Size = new Size(199, 6);
             // 
             // addImagesToTabToolStripMenuItem
             // 
-            this.addImagesToTabToolStripMenuItem.Name = "addImagesToTabToolStripMenuItem";
-            this.addImagesToTabToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.addImagesToTabToolStripMenuItem.Text = "Add Images To Tab";
-            this.addImagesToTabToolStripMenuItem.Click += new System.EventHandler(this.addImagesToTabToolStripMenuItem_Click);
+            addImagesToTabToolStripMenuItem.Name = "addImagesToTabToolStripMenuItem";
+            addImagesToTabToolStripMenuItem.Size = new Size(202, 22);
+            addImagesToTabToolStripMenuItem.Text = "Add Images To Tab";
+            addImagesToTabToolStripMenuItem.Click += addImagesToTabToolStripMenuItem_Click;
             // 
             // addImagesOMEToolStripMenuItem
             // 
-            this.addImagesOMEToolStripMenuItem.Name = "addImagesOMEToolStripMenuItem";
-            this.addImagesOMEToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.addImagesOMEToolStripMenuItem.Text = "Add OME Images To Tab";
-            this.addImagesOMEToolStripMenuItem.Click += new System.EventHandler(this.addImagesOMEToolStripMenuItem_Click);
+            addImagesOMEToolStripMenuItem.Name = "addImagesOMEToolStripMenuItem";
+            addImagesOMEToolStripMenuItem.Size = new Size(202, 22);
+            addImagesOMEToolStripMenuItem.Text = "Add OME Images To Tab";
+            addImagesOMEToolStripMenuItem.Click += addImagesOMEToolStripMenuItem_Click;
             // 
             // sepToolStripMenuItem2
             // 
-            this.sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
-            this.sepToolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
+            sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
+            sepToolStripMenuItem2.Size = new Size(199, 6);
             // 
             // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveToolStripMenuItem.Text = "Save Selected Tiff";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(202, 22);
+            saveToolStripMenuItem.Text = "Save Selected Tiff";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveOMEToolStripMenuItem
             // 
-            this.saveOMEToolStripMenuItem.Name = "saveOMEToolStripMenuItem";
-            this.saveOMEToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveOMEToolStripMenuItem.Text = "Save Selected OME";
-            this.saveOMEToolStripMenuItem.Click += new System.EventHandler(this.saveOMEToolStripMenuItem_Click);
+            saveOMEToolStripMenuItem.Name = "saveOMEToolStripMenuItem";
+            saveOMEToolStripMenuItem.Size = new Size(202, 22);
+            saveOMEToolStripMenuItem.Text = "Save Selected OME";
+            saveOMEToolStripMenuItem.Click += saveOMEToolStripMenuItem_Click;
             // 
             // saveTabToolStripMenuItem
             // 
-            this.saveTabToolStripMenuItem.Name = "saveTabToolStripMenuItem";
-            this.saveTabToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveTabToolStripMenuItem.Text = "Save Tab OME";
-            this.saveTabToolStripMenuItem.Click += new System.EventHandler(this.saveTabToolStripMenuItem_Click);
+            saveTabToolStripMenuItem.Name = "saveTabToolStripMenuItem";
+            saveTabToolStripMenuItem.Size = new Size(202, 22);
+            saveTabToolStripMenuItem.Text = "Save Tab OME";
+            saveTabToolStripMenuItem.Click += saveTabToolStripMenuItem_Click;
             // 
             // saveTabTiffToolStripMenuItem
             // 
-            this.saveTabTiffToolStripMenuItem.Name = "saveTabTiffToolStripMenuItem";
-            this.saveTabTiffToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
-            this.saveTabTiffToolStripMenuItem.Click += new System.EventHandler(this.saveTabTiffToolStripMenuItem_Click);
+            saveTabTiffToolStripMenuItem.Name = "saveTabTiffToolStripMenuItem";
+            saveTabTiffToolStripMenuItem.Size = new Size(202, 22);
+            saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
+            saveTabTiffToolStripMenuItem.Click += saveTabTiffToolStripMenuItem_Click;
             // 
             // saveSeriesToolStripMenuItem
             // 
-            this.saveSeriesToolStripMenuItem.Name = "saveSeriesToolStripMenuItem";
-            this.saveSeriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveSeriesToolStripMenuItem.Text = "Save Series";
-            this.saveSeriesToolStripMenuItem.Click += new System.EventHandler(this.saveSeriesToolStripMenuItem_Click);
+            saveSeriesToolStripMenuItem.Name = "saveSeriesToolStripMenuItem";
+            saveSeriesToolStripMenuItem.Size = new Size(202, 22);
+            saveSeriesToolStripMenuItem.Text = "Save Series";
+            saveSeriesToolStripMenuItem.Click += saveSeriesToolStripMenuItem_Click;
             // 
             // savePyramidalToolStripMenuItem
             // 
-            this.savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
-            this.savePyramidalToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
-            this.savePyramidalToolStripMenuItem.Click += new System.EventHandler(this.savePyramidalToolStripMenuItem_Click);
+            savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
+            savePyramidalToolStripMenuItem.Size = new Size(202, 22);
+            savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
+            savePyramidalToolStripMenuItem.Click += savePyramidalToolStripMenuItem_Click;
             // 
             // sepToolStripMenuItem3
             // 
-            this.sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
-            this.sepToolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
+            sepToolStripMenuItem3.Size = new Size(199, 6);
             // 
             // imagesToStackToolStripMenuItem
             // 
-            this.imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
-            this.imagesToStackToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.imagesToStackToolStripMenuItem.Text = "Images To Stack";
-            this.imagesToStackToolStripMenuItem.Click += new System.EventHandler(this.imagesToStackToolStripMenuItem_Click);
+            imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
+            imagesToStackToolStripMenuItem.Size = new Size(202, 22);
+            imagesToStackToolStripMenuItem.Text = "Images To Stack";
+            imagesToStackToolStripMenuItem.Click += imagesToStackToolStripMenuItem_Click;
             // 
             // newTabViewToolStripMenuItem
             // 
-            this.newTabViewToolStripMenuItem.Name = "newTabViewToolStripMenuItem";
-            this.newTabViewToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.newTabViewToolStripMenuItem.Text = "New Process";
-            this.newTabViewToolStripMenuItem.Click += new System.EventHandler(this.newTabViewToolStripMenuItem_Click);
+            newTabViewToolStripMenuItem.Name = "newTabViewToolStripMenuItem";
+            newTabViewToolStripMenuItem.Size = new Size(202, 22);
+            newTabViewToolStripMenuItem.Text = "New Process";
+            newTabViewToolStripMenuItem.Click += newTabViewToolStripMenuItem_Click;
             // 
             // nodeViewToolStripMenuItem
             // 
-            this.nodeViewToolStripMenuItem.Name = "nodeViewToolStripMenuItem";
-            this.nodeViewToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.nodeViewToolStripMenuItem.Text = "Node View";
-            this.nodeViewToolStripMenuItem.Click += new System.EventHandler(this.nodeViewToolStripMenuItem_Click);
+            nodeViewToolStripMenuItem.Name = "nodeViewToolStripMenuItem";
+            nodeViewToolStripMenuItem.Size = new Size(202, 22);
+            nodeViewToolStripMenuItem.Text = "Node View";
+            nodeViewToolStripMenuItem.Click += nodeViewToolStripMenuItem_Click;
             // 
             // clearRecentToolStripMenuItem
             // 
-            this.clearRecentToolStripMenuItem.Name = "clearRecentToolStripMenuItem";
-            this.clearRecentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.clearRecentToolStripMenuItem.Text = "Clear Recent";
-            this.clearRecentToolStripMenuItem.Click += new System.EventHandler(this.clearRecentToolStripMenuItem_Click);
+            clearRecentToolStripMenuItem.Name = "clearRecentToolStripMenuItem";
+            clearRecentToolStripMenuItem.Size = new Size(202, 22);
+            clearRecentToolStripMenuItem.Text = "Clear Recent";
+            clearRecentToolStripMenuItem.Click += clearRecentToolStripMenuItem_Click;
             // 
             // sizeModeToolStripMenuItem
             // 
-            this.sizeModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rGBToolStripMenuItem,
-            this.filteredToolStripMenuItem,
-            this.rawToolStripMenuItem,
-            this.emissionToolStripMenuItem,
-            this._3dToolStripMenuItem,
-            this.sepToolStripMenuItem,
-            this.dToolStripMenuItem,
-            this.xMLToolStripMenuItem});
-            this.sizeModeToolStripMenuItem.Name = "sizeModeToolStripMenuItem";
-            this.sizeModeToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.sizeModeToolStripMenuItem.Text = "View";
+            sizeModeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rGBToolStripMenuItem, filteredToolStripMenuItem, rawToolStripMenuItem, emissionToolStripMenuItem, _3dToolStripMenuItem, sepToolStripMenuItem, dToolStripMenuItem, xMLToolStripMenuItem });
+            sizeModeToolStripMenuItem.Name = "sizeModeToolStripMenuItem";
+            sizeModeToolStripMenuItem.Size = new Size(44, 20);
+            sizeModeToolStripMenuItem.Text = "View";
             // 
             // rGBToolStripMenuItem
             // 
-            this.rGBToolStripMenuItem.CheckOnClick = true;
-            this.rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
-            this.rGBToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.rGBToolStripMenuItem.Text = "RGB";
-            this.rGBToolStripMenuItem.Click += new System.EventHandler(this.rGBToolStripMenuItem_Click);
+            rGBToolStripMenuItem.CheckOnClick = true;
+            rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
+            rGBToolStripMenuItem.Size = new Size(194, 22);
+            rGBToolStripMenuItem.Text = "RGB";
+            rGBToolStripMenuItem.Click += rGBToolStripMenuItem_Click;
             // 
             // filteredToolStripMenuItem
             // 
-            this.filteredToolStripMenuItem.Checked = true;
-            this.filteredToolStripMenuItem.CheckOnClick = true;
-            this.filteredToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
-            this.filteredToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.filteredToolStripMenuItem.Text = "Filtered";
-            this.filteredToolStripMenuItem.Click += new System.EventHandler(this.filteredToolStripMenuItem_Click);
+            filteredToolStripMenuItem.Checked = true;
+            filteredToolStripMenuItem.CheckOnClick = true;
+            filteredToolStripMenuItem.CheckState = CheckState.Checked;
+            filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
+            filteredToolStripMenuItem.Size = new Size(194, 22);
+            filteredToolStripMenuItem.Text = "Filtered";
+            filteredToolStripMenuItem.Click += filteredToolStripMenuItem_Click;
             // 
             // rawToolStripMenuItem
             // 
-            this.rawToolStripMenuItem.CheckOnClick = true;
-            this.rawToolStripMenuItem.Name = "rawToolStripMenuItem";
-            this.rawToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.rawToolStripMenuItem.Text = "Raw";
-            this.rawToolStripMenuItem.Click += new System.EventHandler(this.rawToolStripMenuItem_Click);
+            rawToolStripMenuItem.CheckOnClick = true;
+            rawToolStripMenuItem.Name = "rawToolStripMenuItem";
+            rawToolStripMenuItem.Size = new Size(194, 22);
+            rawToolStripMenuItem.Text = "Raw";
+            rawToolStripMenuItem.Click += rawToolStripMenuItem_Click;
             // 
             // emissionToolStripMenuItem
             // 
-            this.emissionToolStripMenuItem.Name = "emissionToolStripMenuItem";
-            this.emissionToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.emissionToolStripMenuItem.Text = "Emission";
-            this.emissionToolStripMenuItem.Click += new System.EventHandler(this.emissionToolStripMenuItem_Click);
+            emissionToolStripMenuItem.Name = "emissionToolStripMenuItem";
+            emissionToolStripMenuItem.Size = new Size(194, 22);
+            emissionToolStripMenuItem.Text = "Emission";
+            emissionToolStripMenuItem.Click += emissionToolStripMenuItem_Click;
             // 
             // _3dToolStripMenuItem
             // 
-            this._3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
-            this._3dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this._3dToolStripMenuItem.Text = "3D";
-            this._3dToolStripMenuItem.Click += new System.EventHandler(this._3dToolStripMenuItem_Click);
+            _3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
+            _3dToolStripMenuItem.Size = new Size(194, 22);
+            _3dToolStripMenuItem.Text = "3D";
+            _3dToolStripMenuItem.Click += _3dToolStripMenuItem_Click;
             // 
             // sepToolStripMenuItem
             // 
-            this.sepToolStripMenuItem.Name = "sepToolStripMenuItem";
-            this.sepToolStripMenuItem.Size = new System.Drawing.Size(191, 6);
+            sepToolStripMenuItem.Name = "sepToolStripMenuItem";
+            sepToolStripMenuItem.Size = new Size(191, 6);
             // 
             // dToolStripMenuItem
             // 
-            this.dToolStripMenuItem.Checked = true;
-            this.dToolStripMenuItem.CheckOnClick = true;
-            this.dToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
-            this.dToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.dToolStripMenuItem.Text = "Hardware Acceleration";
-            this.dToolStripMenuItem.Click += new System.EventHandler(this.dToolStripMenuItem_Click);
+            dToolStripMenuItem.Checked = true;
+            dToolStripMenuItem.CheckOnClick = true;
+            dToolStripMenuItem.CheckState = CheckState.Checked;
+            dToolStripMenuItem.Name = "dToolStripMenuItem";
+            dToolStripMenuItem.Size = new Size(194, 22);
+            dToolStripMenuItem.Text = "Hardware Acceleration";
+            dToolStripMenuItem.Click += dToolStripMenuItem_Click;
             // 
             // xMLToolStripMenuItem
             // 
-            this.xMLToolStripMenuItem.Name = "xMLToolStripMenuItem";
-            this.xMLToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.xMLToolStripMenuItem.Text = "XML";
-            this.xMLToolStripMenuItem.Click += new System.EventHandler(this.xMLToolStripMenuItem_Click);
+            xMLToolStripMenuItem.Name = "xMLToolStripMenuItem";
+            xMLToolStripMenuItem.Size = new Size(194, 22);
+            xMLToolStripMenuItem.Text = "XML";
+            xMLToolStripMenuItem.Click += xMLToolStripMenuItem_Click;
             // 
             // toolboxToolStripMenuItem
             // 
-            this.toolboxToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setToolToolStripMenuItem});
-            this.toolboxToolStripMenuItem.Name = "toolboxToolStripMenuItem";
-            this.toolboxToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.toolboxToolStripMenuItem.Text = "Tools";
-            this.toolboxToolStripMenuItem.Click += new System.EventHandler(this.toolboxToolStripMenuItem_Click);
+            toolboxToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setToolToolStripMenuItem });
+            toolboxToolStripMenuItem.Name = "toolboxToolStripMenuItem";
+            toolboxToolStripMenuItem.Size = new Size(46, 20);
+            toolboxToolStripMenuItem.Text = "Tools";
+            toolboxToolStripMenuItem.Click += toolboxToolStripMenuItem_Click;
             // 
             // setToolToolStripMenuItem
             // 
-            this.setToolToolStripMenuItem.Name = "setToolToolStripMenuItem";
-            this.setToolToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-            this.setToolToolStripMenuItem.Text = "Set Tool";
-            this.setToolToolStripMenuItem.Click += new System.EventHandler(this.setToolToolStripMenuItem_Click);
+            setToolToolStripMenuItem.Name = "setToolToolStripMenuItem";
+            setToolToolStripMenuItem.Size = new Size(115, 22);
+            setToolToolStripMenuItem.Text = "Set Tool";
+            setToolToolStripMenuItem.Click += setToolToolStripMenuItem_Click;
             // 
             // rOIToolStripMenuItem
             // 
-            this.rOIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rOIManagerToolStripMenuItem,
-            this.exportCSVToolStripMenuItem,
-            this.importCSVToolStripMenuItem,
-            this.exportROIsOfFolderOfImagesToolStripMenuItem,
-            this.importImageJROIToSelectedImageToolStripMenuItem,
-            this.exportImageJROIFromSelectedImageToolStripMenuItem});
-            this.rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
-            this.rOIToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
-            this.rOIToolStripMenuItem.Text = "ROI";
+            rOIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rOIManagerToolStripMenuItem, exportCSVToolStripMenuItem, importCSVToolStripMenuItem, exportROIsOfFolderOfImagesToolStripMenuItem, importImageJROIToSelectedImageToolStripMenuItem, exportImageJROIFromSelectedImageToolStripMenuItem });
+            rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
+            rOIToolStripMenuItem.Size = new Size(38, 20);
+            rOIToolStripMenuItem.Text = "ROI";
             // 
             // rOIManagerToolStripMenuItem
             // 
-            this.rOIManagerToolStripMenuItem.Name = "rOIManagerToolStripMenuItem";
-            this.rOIManagerToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.rOIManagerToolStripMenuItem.Text = "ROI Manager";
-            this.rOIManagerToolStripMenuItem.Click += new System.EventHandler(this.rOIManagerToolStripMenuItem_Click);
+            rOIManagerToolStripMenuItem.Name = "rOIManagerToolStripMenuItem";
+            rOIManagerToolStripMenuItem.Size = new Size(282, 22);
+            rOIManagerToolStripMenuItem.Text = "ROI Manager";
+            rOIManagerToolStripMenuItem.Click += rOIManagerToolStripMenuItem_Click;
             // 
             // exportCSVToolStripMenuItem
             // 
-            this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.exportCSVToolStripMenuItem.Text = "Export ROI\'s to CSV";
-            this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_Click);
+            exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
+            exportCSVToolStripMenuItem.Size = new Size(282, 22);
+            exportCSVToolStripMenuItem.Text = "Export ROI's to CSV";
+            exportCSVToolStripMenuItem.Click += exportCSVToolStripMenuItem_Click;
             // 
             // importCSVToolStripMenuItem
             // 
-            this.importCSVToolStripMenuItem.Name = "importCSVToolStripMenuItem";
-            this.importCSVToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.importCSVToolStripMenuItem.Text = "Import ROI\'s from CSV";
-            this.importCSVToolStripMenuItem.Click += new System.EventHandler(this.importCSVToolStripMenuItem_Click);
+            importCSVToolStripMenuItem.Name = "importCSVToolStripMenuItem";
+            importCSVToolStripMenuItem.Size = new Size(282, 22);
+            importCSVToolStripMenuItem.Text = "Import ROI's from CSV";
+            importCSVToolStripMenuItem.Click += importCSVToolStripMenuItem_Click;
             // 
             // exportROIsOfFolderOfImagesToolStripMenuItem
             // 
-            this.exportROIsOfFolderOfImagesToolStripMenuItem.Name = "exportROIsOfFolderOfImagesToolStripMenuItem";
-            this.exportROIsOfFolderOfImagesToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI\'s of Folder of Images";
-            this.exportROIsOfFolderOfImagesToolStripMenuItem.Click += new System.EventHandler(this.exportROIsOfFolderOfImagesToolStripMenuItem_Click);
+            exportROIsOfFolderOfImagesToolStripMenuItem.Name = "exportROIsOfFolderOfImagesToolStripMenuItem";
+            exportROIsOfFolderOfImagesToolStripMenuItem.Size = new Size(282, 22);
+            exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI's of Folder of Images";
+            exportROIsOfFolderOfImagesToolStripMenuItem.Click += exportROIsOfFolderOfImagesToolStripMenuItem_Click;
             // 
             // importImageJROIToSelectedImageToolStripMenuItem
             // 
-            this.importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
-            this.importImageJROIToSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
-            this.importImageJROIToSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.importImageJROIToSelectedImageToolStripMenuItem_Click);
+            importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
+            importImageJROIToSelectedImageToolStripMenuItem.Size = new Size(282, 22);
+            importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
+            importImageJROIToSelectedImageToolStripMenuItem.Click += importImageJROIToSelectedImageToolStripMenuItem_Click;
             // 
             // exportImageJROIFromSelectedImageToolStripMenuItem
             // 
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
-            this.exportImageJROIFromSelectedImageToolStripMenuItem.Click += new System.EventHandler(this.exportImageJROIFromSelectedImageToolStripMenuItem_Click);
+            exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
+            exportImageJROIFromSelectedImageToolStripMenuItem.Size = new Size(282, 22);
+            exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
+            exportImageJROIFromSelectedImageToolStripMenuItem.Click += exportImageJROIFromSelectedImageToolStripMenuItem_Click;
             // 
             // channelsToolToolStripMenuItem
             // 
-            this.channelsToolToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autoThresholdToolStripMenuItem,
-            this.channelsToolToolStripMenuItem1,
-            this.switchRedBlueToolStripMenuItem});
-            this.channelsToolToolStripMenuItem.Name = "channelsToolToolStripMenuItem";
-            this.channelsToolToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
-            this.channelsToolToolStripMenuItem.Text = "Channels";
+            channelsToolToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { autoThresholdToolStripMenuItem, channelsToolToolStripMenuItem1, switchRedBlueToolStripMenuItem });
+            channelsToolToolStripMenuItem.Name = "channelsToolToolStripMenuItem";
+            channelsToolToolStripMenuItem.Size = new Size(68, 20);
+            channelsToolToolStripMenuItem.Text = "Channels";
             // 
             // autoThresholdToolStripMenuItem
             // 
-            this.autoThresholdToolStripMenuItem.Name = "autoThresholdToolStripMenuItem";
-            this.autoThresholdToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.autoThresholdToolStripMenuItem.Text = "Auto Threshold All";
-            this.autoThresholdToolStripMenuItem.Click += new System.EventHandler(this.autoThresholdToolStripMenuItem_Click);
+            autoThresholdToolStripMenuItem.Name = "autoThresholdToolStripMenuItem";
+            autoThresholdToolStripMenuItem.Size = new Size(172, 22);
+            autoThresholdToolStripMenuItem.Text = "Auto Threshold All";
+            autoThresholdToolStripMenuItem.Click += autoThresholdToolStripMenuItem_Click;
             // 
             // channelsToolToolStripMenuItem1
             // 
-            this.channelsToolToolStripMenuItem1.Name = "channelsToolToolStripMenuItem1";
-            this.channelsToolToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.channelsToolToolStripMenuItem1.Text = "Channels Tool";
-            this.channelsToolToolStripMenuItem1.Click += new System.EventHandler(this.channelsToolToolStripMenuItem_Click);
+            channelsToolToolStripMenuItem1.Name = "channelsToolToolStripMenuItem1";
+            channelsToolToolStripMenuItem1.Size = new Size(172, 22);
+            channelsToolToolStripMenuItem1.Text = "Channels Tool";
+            channelsToolToolStripMenuItem1.Click += channelsToolToolStripMenuItem_Click;
             // 
             // switchRedBlueToolStripMenuItem
             // 
-            this.switchRedBlueToolStripMenuItem.Name = "switchRedBlueToolStripMenuItem";
-            this.switchRedBlueToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.switchRedBlueToolStripMenuItem.Text = "Switch Red Blue";
-            this.switchRedBlueToolStripMenuItem.Click += new System.EventHandler(this.switchRedBlueToolStripMenuItem_Click);
+            switchRedBlueToolStripMenuItem.Name = "switchRedBlueToolStripMenuItem";
+            switchRedBlueToolStripMenuItem.Size = new Size(172, 22);
+            switchRedBlueToolStripMenuItem.Text = "Switch Red Blue";
+            switchRedBlueToolStripMenuItem.Click += switchRedBlueToolStripMenuItem_Click;
             // 
             // stackToolsToolStripMenuItem
             // 
-            this.stackToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stackToolsToolStripMenuItem1,
-            this.duplicateToolStripMenuItem,
-            this.rotateToolStripMenuItem,
-            this.findFocusToolStripMenuItem});
-            this.stackToolsToolStripMenuItem.Name = "stackToolsToolStripMenuItem";
-            this.stackToolsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.stackToolsToolStripMenuItem.Text = "Stacks";
+            stackToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stackToolsToolStripMenuItem1, duplicateToolStripMenuItem, rotateToolStripMenuItem, findFocusToolStripMenuItem });
+            stackToolsToolStripMenuItem.Name = "stackToolsToolStripMenuItem";
+            stackToolsToolStripMenuItem.Size = new Size(52, 20);
+            stackToolsToolStripMenuItem.Text = "Stacks";
             // 
             // stackToolsToolStripMenuItem1
             // 
-            this.stackToolsToolStripMenuItem1.Name = "stackToolsToolStripMenuItem1";
-            this.stackToolsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.stackToolsToolStripMenuItem1.Text = "Stack Tool";
-            this.stackToolsToolStripMenuItem1.Click += new System.EventHandler(this.stackToolsToolStripMenuItem_Click);
+            stackToolsToolStripMenuItem1.Name = "stackToolsToolStripMenuItem1";
+            stackToolsToolStripMenuItem1.Size = new Size(131, 22);
+            stackToolsToolStripMenuItem1.Text = "Stack Tool";
+            stackToolsToolStripMenuItem1.Click += stackToolsToolStripMenuItem_Click;
             // 
             // duplicateToolStripMenuItem
             // 
-            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.duplicateToolStripMenuItem.Text = "Duplicate";
-            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
+            duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            duplicateToolStripMenuItem.Size = new Size(131, 22);
+            duplicateToolStripMenuItem.Text = "Duplicate";
+            duplicateToolStripMenuItem.Click += duplicateToolStripMenuItem_Click;
             // 
             // rotateToolStripMenuItem
             // 
-            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
-            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rotateToolStripMenuItem.Text = "Rotate Flip";
-            this.rotateToolStripMenuItem.DropDownOpening += new System.EventHandler(this.rotateToolStripMenuItem_DropDownOpening);
-            this.rotateToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.rotateToolStripMenuItem_DropDownItemClicked);
-            // 
-            // menuStrip
-            // 
-            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.sizeModeToolStripMenuItem,
-            this.toolboxToolStripMenuItem,
-            this.rOIToolStripMenuItem,
-            this.channelsToolToolStripMenuItem,
-            this.stackToolsToolStripMenuItem,
-            this.formatToolStripMenuItem,
-            this.filtersToolStripMenuItem,
-            this.scriptToolStripMenuItem,
-            this.automationToolStripMenuItem,
-            this.microscopeToolStripMenuItem,
-            this.aboutToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(774, 24);
-            this.menuStrip.TabIndex = 0;
-            // 
-            // formatToolStripMenuItem
-            // 
-            this.formatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bit8ToolStripMenuItem,
-            this.bit16ToolStripMenuItem,
-            this.to24BitToolStripMenuItem,
-            this.to36BitToolStripMenuItem,
-            this.to48BitToolStripMenuItem});
-            this.formatToolStripMenuItem.Name = "formatToolStripMenuItem";
-            this.formatToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.formatToolStripMenuItem.Text = "Format";
-            // 
-            // bit8ToolStripMenuItem
-            // 
-            this.bit8ToolStripMenuItem.Name = "bit8ToolStripMenuItem";
-            this.bit8ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.bit8ToolStripMenuItem.Text = "To 8 Bit";
-            this.bit8ToolStripMenuItem.Click += new System.EventHandler(this.bit8ToolStripMenuItem_Click);
-            // 
-            // bit16ToolStripMenuItem
-            // 
-            this.bit16ToolStripMenuItem.Name = "bit16ToolStripMenuItem";
-            this.bit16ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.bit16ToolStripMenuItem.Text = "To 16 Bit";
-            this.bit16ToolStripMenuItem.Click += new System.EventHandler(this.bit16ToolStripMenuItem_Click);
-            // 
-            // to24BitToolStripMenuItem
-            // 
-            this.to24BitToolStripMenuItem.Name = "to24BitToolStripMenuItem";
-            this.to24BitToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.to24BitToolStripMenuItem.Text = "To 24 Bit";
-            this.to24BitToolStripMenuItem.Click += new System.EventHandler(this.to24BitToolStripMenuItem_Click);
-            // 
-            // to36BitToolStripMenuItem
-            // 
-            this.to36BitToolStripMenuItem.Name = "to36BitToolStripMenuItem";
-            this.to36BitToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.to36BitToolStripMenuItem.Text = "To 32 Bit";
-            this.to36BitToolStripMenuItem.Click += new System.EventHandler(this.to32BitToolStripMenuItem_Click);
-            // 
-            // to48BitToolStripMenuItem
-            // 
-            this.to48BitToolStripMenuItem.Name = "to48BitToolStripMenuItem";
-            this.to48BitToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.to48BitToolStripMenuItem.Text = "To 48 Bit";
-            this.to48BitToolStripMenuItem.Click += new System.EventHandler(this.to48BitToolStripMenuItem_Click);
-            // 
-            // filtersToolStripMenuItem
-            // 
-            this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
-            this.filtersToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
-            this.filtersToolStripMenuItem.Text = "Filters";
-            this.filtersToolStripMenuItem.Click += new System.EventHandler(this.filtersToolStripMenuItem_Click);
-            // 
-            // scriptToolStripMenuItem
-            // 
-            this.scriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runToolStripMenuItem,
-            this.createFunctionToolStripMenuItem,
-            this.consoleToolStripMenuItem,
-            this.scriptRunnerToolStripMenuItem,
-            this.scriptRecorderToolStripMenuItem});
-            this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
-            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
-            this.scriptToolStripMenuItem.Text = "Script";
-            // 
-            // runToolStripMenuItem
-            // 
-            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.runToolStripMenuItem.Text = "Run";
-            this.runToolStripMenuItem.DropDownOpening += new System.EventHandler(this.runToolStripMenuItem_DropDownOpening);
-            // 
-            // createFunctionToolStripMenuItem
-            // 
-            this.createFunctionToolStripMenuItem.Name = "createFunctionToolStripMenuItem";
-            this.createFunctionToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.createFunctionToolStripMenuItem.Text = "Functions Tool";
-            this.createFunctionToolStripMenuItem.Click += new System.EventHandler(this.createFunctionToolStripMenuItem_Click);
-            // 
-            // consoleToolStripMenuItem
-            // 
-            this.consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
-            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.consoleToolStripMenuItem.Text = "Console";
-            this.consoleToolStripMenuItem.Click += new System.EventHandler(this.consoleToolStripMenuItem_Click);
-            // 
-            // scriptRunnerToolStripMenuItem
-            // 
-            this.scriptRunnerToolStripMenuItem.Name = "scriptRunnerToolStripMenuItem";
-            this.scriptRunnerToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.scriptRunnerToolStripMenuItem.Text = "Script Runner";
-            this.scriptRunnerToolStripMenuItem.Click += new System.EventHandler(this.scriptRunnerToolStripMenuItem_Click_1);
-            // 
-            // scriptRecorderToolStripMenuItem
-            // 
-            this.scriptRecorderToolStripMenuItem.Name = "scriptRecorderToolStripMenuItem";
-            this.scriptRecorderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.scriptRecorderToolStripMenuItem.Text = "Script Recorder";
-            this.scriptRecorderToolStripMenuItem.Click += new System.EventHandler(this.scriptRecorderToolStripMenuItem_Click_1);
-            // 
-            // automationToolStripMenuItem
-            // 
-            this.automationToolStripMenuItem.Name = "automationToolStripMenuItem";
-            this.automationToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
-            this.automationToolStripMenuItem.Text = "Automation";
-            this.automationToolStripMenuItem.Click += new System.EventHandler(this.automationToolStripMenuItem_Click);
-            // 
-            // microscopeToolStripMenuItem
-            // 
-            this.microscopeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lightToolToolStripMenuItem});
-            this.microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
-            this.microscopeToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
-            this.microscopeToolStripMenuItem.Text = "Microscope";
-            // 
-            // lightToolToolStripMenuItem
-            // 
-            this.lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
-            this.lightToolToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.lightToolToolStripMenuItem.Text = "Light Path";
-            this.lightToolToolStripMenuItem.Click += new System.EventHandler(this.lightToolToolStripMenuItem_Click);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // openImageJROI
-            // 
-            this.openImageJROI.DefaultExt = "csv";
-            this.openImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
-            this.openImageJROI.Title = "Import ImageJ ROI";
-            // 
-            // saveImageJROI
-            // 
-            this.saveImageJROI.DefaultExt = "csv";
-            this.saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
-            this.saveImageJROI.Title = "Save ROIs to CSV";
+            rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
+            rotateToolStripMenuItem.Size = new Size(131, 22);
+            rotateToolStripMenuItem.Text = "Rotate Flip";
+            rotateToolStripMenuItem.DropDownOpening += rotateToolStripMenuItem_DropDownOpening;
+            rotateToolStripMenuItem.DropDownItemClicked += rotateToolStripMenuItem_DropDownItemClicked;
             // 
             // findFocusToolStripMenuItem
             // 
-            this.findFocusToolStripMenuItem.Name = "findFocusToolStripMenuItem";
-            this.findFocusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.findFocusToolStripMenuItem.Text = "Find Focus";
-            this.findFocusToolStripMenuItem.Click += new System.EventHandler(this.findFocusToolStripMenuItem_Click);
+            findFocusToolStripMenuItem.Name = "findFocusToolStripMenuItem";
+            findFocusToolStripMenuItem.Size = new Size(131, 22);
+            findFocusToolStripMenuItem.Text = "Find Focus";
+            findFocusToolStripMenuItem.Click += findFocusToolStripMenuItem_Click;
+            // 
+            // menuStrip
+            // 
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, sizeModeToolStripMenuItem, toolboxToolStripMenuItem, rOIToolStripMenuItem, channelsToolToolStripMenuItem, stackToolsToolStripMenuItem, formatToolStripMenuItem, filtersToolStripMenuItem, scriptToolStripMenuItem, automationToolStripMenuItem, microscopeToolStripMenuItem, aboutToolStripMenuItem });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Padding = new Padding(7, 2, 0, 2);
+            menuStrip.Size = new Size(774, 24);
+            menuStrip.TabIndex = 0;
+            // 
+            // formatToolStripMenuItem
+            // 
+            formatToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { bit8ToolStripMenuItem, bit16ToolStripMenuItem, to24BitToolStripMenuItem, to36BitToolStripMenuItem, to48BitToolStripMenuItem });
+            formatToolStripMenuItem.Name = "formatToolStripMenuItem";
+            formatToolStripMenuItem.Size = new Size(57, 20);
+            formatToolStripMenuItem.Text = "Format";
+            // 
+            // bit8ToolStripMenuItem
+            // 
+            bit8ToolStripMenuItem.Name = "bit8ToolStripMenuItem";
+            bit8ToolStripMenuItem.Size = new Size(118, 22);
+            bit8ToolStripMenuItem.Text = "To 8 Bit";
+            bit8ToolStripMenuItem.Click += bit8ToolStripMenuItem_Click;
+            // 
+            // bit16ToolStripMenuItem
+            // 
+            bit16ToolStripMenuItem.Name = "bit16ToolStripMenuItem";
+            bit16ToolStripMenuItem.Size = new Size(118, 22);
+            bit16ToolStripMenuItem.Text = "To 16 Bit";
+            bit16ToolStripMenuItem.Click += bit16ToolStripMenuItem_Click;
+            // 
+            // to24BitToolStripMenuItem
+            // 
+            to24BitToolStripMenuItem.Name = "to24BitToolStripMenuItem";
+            to24BitToolStripMenuItem.Size = new Size(118, 22);
+            to24BitToolStripMenuItem.Text = "To 24 Bit";
+            to24BitToolStripMenuItem.Click += to24BitToolStripMenuItem_Click;
+            // 
+            // to36BitToolStripMenuItem
+            // 
+            to36BitToolStripMenuItem.Name = "to36BitToolStripMenuItem";
+            to36BitToolStripMenuItem.Size = new Size(118, 22);
+            to36BitToolStripMenuItem.Text = "To 32 Bit";
+            to36BitToolStripMenuItem.Click += to32BitToolStripMenuItem_Click;
+            // 
+            // to48BitToolStripMenuItem
+            // 
+            to48BitToolStripMenuItem.Name = "to48BitToolStripMenuItem";
+            to48BitToolStripMenuItem.Size = new Size(118, 22);
+            to48BitToolStripMenuItem.Text = "To 48 Bit";
+            to48BitToolStripMenuItem.Click += to48BitToolStripMenuItem_Click;
+            // 
+            // filtersToolStripMenuItem
+            // 
+            filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
+            filtersToolStripMenuItem.Size = new Size(50, 20);
+            filtersToolStripMenuItem.Text = "Filters";
+            filtersToolStripMenuItem.Click += filtersToolStripMenuItem_Click;
+            // 
+            // scriptToolStripMenuItem
+            // 
+            scriptToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { runToolStripMenuItem, createFunctionToolStripMenuItem, consoleToolStripMenuItem, scriptRunnerToolStripMenuItem, scriptRecorderToolStripMenuItem });
+            scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
+            scriptToolStripMenuItem.Size = new Size(49, 20);
+            scriptToolStripMenuItem.Text = "Script";
+            // 
+            // runToolStripMenuItem
+            // 
+            runToolStripMenuItem.Name = "runToolStripMenuItem";
+            runToolStripMenuItem.Size = new Size(154, 22);
+            runToolStripMenuItem.Text = "Run";
+            runToolStripMenuItem.DropDownOpening += runToolStripMenuItem_DropDownOpening;
+            // 
+            // createFunctionToolStripMenuItem
+            // 
+            createFunctionToolStripMenuItem.Name = "createFunctionToolStripMenuItem";
+            createFunctionToolStripMenuItem.Size = new Size(154, 22);
+            createFunctionToolStripMenuItem.Text = "Functions Tool";
+            createFunctionToolStripMenuItem.Click += createFunctionToolStripMenuItem_Click;
+            // 
+            // consoleToolStripMenuItem
+            // 
+            consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
+            consoleToolStripMenuItem.Size = new Size(154, 22);
+            consoleToolStripMenuItem.Text = "Console";
+            consoleToolStripMenuItem.Click += consoleToolStripMenuItem_Click;
+            // 
+            // scriptRunnerToolStripMenuItem
+            // 
+            scriptRunnerToolStripMenuItem.Name = "scriptRunnerToolStripMenuItem";
+            scriptRunnerToolStripMenuItem.Size = new Size(154, 22);
+            scriptRunnerToolStripMenuItem.Text = "Script Runner";
+            scriptRunnerToolStripMenuItem.Click += scriptRunnerToolStripMenuItem_Click_1;
+            // 
+            // scriptRecorderToolStripMenuItem
+            // 
+            scriptRecorderToolStripMenuItem.Name = "scriptRecorderToolStripMenuItem";
+            scriptRecorderToolStripMenuItem.Size = new Size(154, 22);
+            scriptRecorderToolStripMenuItem.Text = "Script Recorder";
+            scriptRecorderToolStripMenuItem.Click += scriptRecorderToolStripMenuItem_Click_1;
+            // 
+            // automationToolStripMenuItem
+            // 
+            automationToolStripMenuItem.Name = "automationToolStripMenuItem";
+            automationToolStripMenuItem.Size = new Size(83, 20);
+            automationToolStripMenuItem.Text = "Automation";
+            automationToolStripMenuItem.Click += automationToolStripMenuItem_Click;
+            // 
+            // microscopeToolStripMenuItem
+            // 
+            microscopeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { lightToolToolStripMenuItem, setupToolStripMenuItem, imagerToolStripMenuItem, stageToolToolStripMenuItem });
+            microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
+            microscopeToolStripMenuItem.Size = new Size(81, 20);
+            microscopeToolStripMenuItem.Text = "Microscope";
+            // 
+            // lightToolToolStripMenuItem
+            // 
+            lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
+            lightToolToolStripMenuItem.Size = new Size(180, 22);
+            lightToolToolStripMenuItem.Text = "Light Path";
+            lightToolToolStripMenuItem.Click += lightToolToolStripMenuItem_Click;
+            // 
+            // setupToolStripMenuItem
+            // 
+            setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+            setupToolStripMenuItem.Size = new Size(180, 22);
+            setupToolStripMenuItem.Text = "Setup";
+            setupToolStripMenuItem.Click += setupToolStripMenuItem_Click;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(52, 20);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
+            // openImageJROI
+            // 
+            openImageJROI.DefaultExt = "csv";
+            openImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
+            openImageJROI.Title = "Import ImageJ ROI";
+            // 
+            // saveImageJROI
+            // 
+            saveImageJROI.DefaultExt = "csv";
+            saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
+            saveImageJROI.Title = "Save ROIs to CSV";
+            // 
+            // imagerToolStripMenuItem
+            // 
+            imagerToolStripMenuItem.Name = "imagerToolStripMenuItem";
+            imagerToolStripMenuItem.Size = new Size(180, 22);
+            imagerToolStripMenuItem.Text = "Imager";
+            imagerToolStripMenuItem.Click += imagerToolStripMenuItem_Click;
+            // 
+            // stageToolToolStripMenuItem
+            // 
+            stageToolToolStripMenuItem.Name = "stageToolToolStripMenuItem";
+            stageToolToolStripMenuItem.Size = new Size(180, 22);
+            stageToolToolStripMenuItem.Text = "Stage Tool";
+            stageToolToolStripMenuItem.Click += stageToolToolStripMenuItem_Click;
             // 
             // TabsView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(77)))), ((int)(((byte)(98)))));
-            this.ClientSize = new System.Drawing.Size(774, 511);
-            this.Controls.Add(this.panel);
-            this.Controls.Add(this.menuStrip);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.KeyPreview = true;
-            this.MainMenuStrip = this.menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.MinimumSize = new System.Drawing.Size(231, 68);
-            this.Name = "TabsView";
-            this.Text = "BioImager";
-            this.Activated += new System.EventHandler(this.ImageViewer_Activated);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TabsView_FormClosing);
-            this.Load += new System.EventHandler(this.TabsView_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TabsView_KeyDown);
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ImageViewer_PreviewKeyDown);
-            this.panel.ResumeLayout(false);
-            this.tabContextMenuStrip.ResumeLayout(false);
-            this.menuStrip.ResumeLayout(false);
-            this.menuStrip.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(69, 77, 98);
+            ClientSize = new Size(774, 511);
+            Controls.Add(panel);
+            Controls.Add(menuStrip);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
+            MainMenuStrip = menuStrip;
+            Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(231, 68);
+            Name = "TabsView";
+            Text = "BioImager";
+            Activated += ImageViewer_Activated;
+            FormClosing += TabsView_FormClosing;
+            Load += TabsView_Load;
+            KeyDown += TabsView_KeyDown;
+            PreviewKeyDown += ImageViewer_PreviewKeyDown;
+            panel.ResumeLayout(false);
+            tabContextMenuStrip.ResumeLayout(false);
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-        private System.Windows.Forms.OpenFileDialog openFilesDialog;
-        private System.Windows.Forms.SaveFileDialog saveOMEFileDialog;
-        private System.Windows.Forms.Panel panel;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        private System.Windows.Forms.SaveFileDialog saveCSVFileDialog;
-        private System.Windows.Forms.OpenFileDialog openCSVFileDialog;
-        private System.Windows.Forms.SaveFileDialog saveTiffFileDialog;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sizeModeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rGBToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem filteredToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rawToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolboxToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem setToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rOIToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rOIManagerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportCSVToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importCSVToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportROIsOfFolderOfImagesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem channelsToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem autoThresholdToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem channelsToolToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem stackToolsToolStripMenuItem;
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem filtersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem formatToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bit8ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bit16ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem to24BitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem to36BitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem to48BitToolStripMenuItem;
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.ContextMenuStrip tabContextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem toWindowToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem scriptRunnerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem scriptRecorderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newTabViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nodeViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem saveOMEToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem openRecentToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem duplicateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveSeriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem automationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addImagesToTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addImagesOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openOMESeriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveTabTiffToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openSeriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearRecentToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rotateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stackToolsToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem emissionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem consoleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem switchRedBlueToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createFunctionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem xMLToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem imagesToStackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem _3dToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importImageJROIToSelectedImageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportImageJROIFromSelectedImageToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openImageJROI;
-        private System.Windows.Forms.SaveFileDialog saveImageJROI;
-        private System.Windows.Forms.ToolStripMenuItem microscopeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lightToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem savePyramidalToolStripMenuItem;
+        private OpenFileDialog openFilesDialog;
+        private SaveFileDialog saveOMEFileDialog;
+        private Panel panel;
+        private FolderBrowserDialog folderBrowserDialog;
+        private SaveFileDialog saveCSVFileDialog;
+        private OpenFileDialog openCSVFileDialog;
+        private SaveFileDialog saveTiffFileDialog;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem saveOMEToolStripMenuItem;
+        private ToolStripMenuItem sizeModeToolStripMenuItem;
+        private ToolStripMenuItem rGBToolStripMenuItem;
+        private ToolStripMenuItem filteredToolStripMenuItem;
+        private ToolStripMenuItem rawToolStripMenuItem;
+        private ToolStripMenuItem toolboxToolStripMenuItem;
+        private ToolStripMenuItem setToolToolStripMenuItem;
+        private ToolStripMenuItem rOIToolStripMenuItem;
+        private ToolStripMenuItem rOIManagerToolStripMenuItem;
+        private ToolStripMenuItem exportCSVToolStripMenuItem;
+        private ToolStripMenuItem importCSVToolStripMenuItem;
+        private ToolStripMenuItem exportROIsOfFolderOfImagesToolStripMenuItem;
+        private ToolStripMenuItem channelsToolToolStripMenuItem;
+        private ToolStripMenuItem autoThresholdToolStripMenuItem;
+        private ToolStripMenuItem channelsToolToolStripMenuItem1;
+        private ToolStripMenuItem stackToolsToolStripMenuItem;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem filtersToolStripMenuItem;
+        private ToolStripMenuItem formatToolStripMenuItem;
+        private ToolStripMenuItem bit8ToolStripMenuItem;
+        private ToolStripMenuItem bit16ToolStripMenuItem;
+        private ToolStripMenuItem to24BitToolStripMenuItem;
+        private ToolStripMenuItem to36BitToolStripMenuItem;
+        private ToolStripMenuItem to48BitToolStripMenuItem;
+        private TabControl tabControl;
+        private ContextMenuStrip tabContextMenuStrip;
+        private ToolStripMenuItem toWindowToolStripMenuItem;
+        private ToolStripMenuItem closeToolStripMenuItem;
+        private ToolStripMenuItem scriptToolStripMenuItem;
+        private ToolStripMenuItem scriptRunnerToolStripMenuItem;
+        private ToolStripMenuItem scriptRecorderToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem openOMEToolStripMenuItem;
+        private ToolStripMenuItem newTabViewToolStripMenuItem;
+        private ToolStripMenuItem nodeViewToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem1;
+        private ToolStripMenuItem saveOMEToolStripMenuItem1;
+        private ToolStripMenuItem openRecentToolStripMenuItem;
+        private ToolStripMenuItem duplicateToolStripMenuItem;
+        private ToolStripMenuItem saveSeriesToolStripMenuItem;
+        private ToolStripMenuItem automationToolStripMenuItem;
+        private ToolStripMenuItem addImagesToTabToolStripMenuItem;
+        private ToolStripMenuItem addImagesOMEToolStripMenuItem;
+        private ToolStripMenuItem openOMESeriesToolStripMenuItem;
+        private ToolStripMenuItem saveTabToolStripMenuItem;
+        private ToolStripMenuItem saveTabTiffToolStripMenuItem;
+        private ToolStripMenuItem openSeriesToolStripMenuItem;
+        private ToolStripMenuItem clearRecentToolStripMenuItem;
+        private ToolStripMenuItem rotateToolStripMenuItem;
+        private ToolStripMenuItem stackToolsToolStripMenuItem1;
+        private ToolStripMenuItem emissionToolStripMenuItem;
+        private ToolStripMenuItem consoleToolStripMenuItem;
+        private ToolStripMenuItem switchRedBlueToolStripMenuItem;
+        private ToolStripMenuItem createFunctionToolStripMenuItem;
+        private ToolStripMenuItem runToolStripMenuItem;
+        private ToolStripMenuItem reloadToolStripMenuItem;
+        private ToolStripMenuItem xMLToolStripMenuItem;
+        private ToolStripMenuItem dToolStripMenuItem;
+        private ToolStripMenuItem imagesToStackToolStripMenuItem;
+        private ToolStripSeparator sepToolStripMenuItem;
+        private ToolStripSeparator sepToolStripMenuItem1;
+        private ToolStripSeparator sepToolStripMenuItem2;
+        private ToolStripSeparator sepToolStripMenuItem3;
+        private ToolStripMenuItem _3dToolStripMenuItem;
+        private ToolStripMenuItem importImageJROIToSelectedImageToolStripMenuItem;
+        private ToolStripMenuItem exportImageJROIFromSelectedImageToolStripMenuItem;
+        private OpenFileDialog openImageJROI;
+        private SaveFileDialog saveImageJROI;
+        private ToolStripMenuItem microscopeToolStripMenuItem;
+        private ToolStripMenuItem lightToolToolStripMenuItem;
+        private ToolStripMenuItem savePyramidalToolStripMenuItem;
         private ToolStripMenuItem findFocusToolStripMenuItem;
+        private ToolStripMenuItem setupToolStripMenuItem;
+        private ToolStripMenuItem imagerToolStripMenuItem;
+        private ToolStripMenuItem stageToolToolStripMenuItem;
     }
 }
