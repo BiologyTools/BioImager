@@ -1,4 +1,5 @@
-﻿using Bio.Source;
+﻿using AForge;
+using Bio.Source;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
+using AForge;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

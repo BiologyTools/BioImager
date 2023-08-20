@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
-
+using AForge;
 namespace Bio
 {
     public partial class ChannelsTool : Form

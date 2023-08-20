@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using AForge;
 namespace Bio
 {
     public partial class ColorTool : Form
@@ -31,7 +31,7 @@ namespace Bio
         public void UpdateGUI()
         {
             color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
-            colorPanel.BackColor = ColorS.ToColor(color, bitsPerPixel);
+            colorPanel.BackColor = System.Drawing.Color.FromArgb(color.R,color.G,color.B);
             if (rBar.Value != redBox.Value)
                 redBox.Value = rBar.Value;
             if (gBar.Value != greenBox.Value)

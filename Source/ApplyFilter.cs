@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using AForge;
 namespace Bio
 {
     public partial class ApplyFilter : Form
@@ -71,7 +71,7 @@ namespace Bio
                 return (int)angleBox.Value;
             }
         }
-        public Color Color
+        public System.Drawing.Color Color
         {
             get
             {

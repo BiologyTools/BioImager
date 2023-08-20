@@ -15,6 +15,8 @@ using AForge.Imaging;
 using AForge.Math.Geometry;
 using AForge;
 using Bio.Graphics;
+using Rectangle = AForge.Rectangle;
+using RectangleF = AForge.RectangleF;
 
 namespace Bio
 {
@@ -199,7 +201,7 @@ namespace Bio
             {
                 if(item.Tag != null)
                 if(item.Tag.ToString() == "tool")
-                item.BackColor = Color.White;
+                item.BackColor = System.Drawing.Color.White;
             }
         }
         /// It updates the GUI
@@ -207,8 +209,8 @@ namespace Bio
         {
             if (ImageView.SelectedImage != null)
             {
-                color1Box.BackColor = ColorS.ToColor(DrawColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
-                color2Box.BackColor = ColorS.ToColor(EraseColor, ImageView.SelectedImage.Buffers[0].BitsPerPixel);
+                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R, DrawColor.G, DrawColor.B);
+                color2Box.BackColor = System.Drawing.Color.FromArgb(EraseColor.R, EraseColor.G, EraseColor.B);
             }
             widthBox.Value = width;
         }
@@ -245,7 +247,7 @@ namespace Bio
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
-            PointF p;
+            AForge.PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
@@ -365,8 +367,9 @@ namespace Bio
                 TextInput ti = new TextInput("");
                 if (ti.ShowDialog() != DialogResult.OK)
                     return;
-                an.font = ti.font;
-                an.strokeColor = ti.color;
+                an.family = ti.font.FontFamily.ToString();
+                an.fontSize = ti.font.Size;
+                an.strokeColor = AForge.Color.FromArgb(ti.color.R,ti.color.G,ti.color.B);
                 an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
@@ -375,7 +378,7 @@ namespace Bio
             {
                 currentTool = GetTool(Tool.Type.pan);
                 UpdateSelected();
-                panPanel.BackColor = Color.LightGray;
+                panPanel.BackColor = System.Drawing.Color.LightGray;
                 Cursor.Current = Cursors.Hand;
             }
             
@@ -389,7 +392,7 @@ namespace Bio
         /// @return a RectangleF.
         public void ToolUp(PointD e, MouseButtons buts)
         {
-            PointF p;
+            PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
@@ -439,15 +442,15 @@ namespace Bio
             if (currentTool.type == Tool.Type.rectSel && buts == MouseButtons.Left)
             {
                 ImageView.selectedAnnotations.Clear();
-                RectangleF r = GetTool(Tool.Type.rectSel).RectangleF;
+                RectangleD r = GetTool(Tool.Type.rectSel).Rectangle;
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound(App.viewer.GetScale()).ToRectangleF().IntersectsWith(r))
+                    if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).ToRectangleF().IntersectsWith(r.ToRectangleF()))
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleF[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
+                        RectangleD[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))
@@ -470,10 +473,9 @@ namespace Bio
                 Rectangle r = new Rectangle((int)ImageView.mouseDown.X, (int)ImageView.mouseDown.Y, (int)(ImageView.mouseUp.X - ImageView.mouseDown.X), (int)(ImageView.mouseUp.Y - ImageView.mouseDown.Y));
                 if (r.Width <= 2 || r.Height <= 2)
                     return;
-                BufferInfo bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
+                AForge.Bitmap bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
                 Statistics[] sts = Statistics.FromBytes(bf);
                 Statistics st = sts[0];
-                Bitmap crop = (Bitmap)bf.Image;
                 Threshold th;
                 if (magicSel.Numeric)
                 {
@@ -487,13 +489,13 @@ namespace Bio
                     th = new Threshold((int)st.Median);
                 else
                     th = new Threshold(st.Min);
-                th.ApplyInPlace(crop);
+                th.ApplyInPlace(bf);
                 Invert inv = new Invert();
-                Bitmap det;
+                AForge.Bitmap det;
                 if (bf.BitsPerPixel > 8)
-                    det = AForge.Imaging.Image.Convert16bppTo8bpp((crop));
+                    det = AForge.Imaging.Image.Convert16bppTo8bpp(bf);
                 else
-                    det = crop;
+                    det = bf;
                 BlobCounter blobCounter = new BlobCounter();
                 blobCounter.ProcessImage(det);
                 Blob[] blobs = blobCounter.GetObjectsInformation();
@@ -532,7 +534,7 @@ namespace Bio
                 floodFiller.FillColor = DrawColor;
                 floodFiller.Tolerance = currentTool.tolerance;
                 floodFiller.Bitmap = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.C, coord.Z, coord.T]];
-                floodFiller.FloodFill(new System.Drawing.Point((int)p.X, (int)p.Y));
+                floodFiller.FloodFill(new AForge.Point((int)p.X, (int)p.Y));
                 App.viewer.UpdateImages();
             }
             else
@@ -563,7 +565,7 @@ namespace Bio
             }
             if (ImageView.SelectedImage == null)
                 return;
-            PointF p;
+            AForge.PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
@@ -613,15 +615,15 @@ namespace Bio
             {
                 PointD d = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, d.X, d.Y);
-                RectangleF r = Tools.GetTool(Tools.Tool.Type.rectSel).RectangleF;
+                RectangleD r = Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle;
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound(App.viewer.GetScale()).ToRectangleF().IntersectsWith(r))
+                    if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).IntersectsWith(r))
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleF[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
+                        RectangleD[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))
@@ -694,7 +696,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.move);
             UpdateSelected();
-            movePanel.BackColor = Color.LightGray;
+            movePanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the textPanel, the currentTool is set to the text tool, the
@@ -706,7 +708,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.text);
             UpdateSelected();
-            textPanel.BackColor = Color.LightGray;
+            textPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// This function is called when the user double clicks on the text panel. It sets the current
@@ -722,7 +724,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.text);
             UpdateSelected();
-            textPanel.BackColor = Color.LightGray;
+            textPanel.BackColor = System.Drawing.Color.LightGray;
 
             if (fontDialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -738,7 +740,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.point);
             UpdateSelected();
-            pointPanel.BackColor = Color.LightGray;
+            pointPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the linePanel, the currentTool is set to the line tool, the
@@ -750,7 +752,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.line);
             UpdateSelected();
-            linePanel.BackColor = Color.LightGray;
+            linePanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the rectangle panel, the current tool is set to the rectangle tool,
@@ -763,7 +765,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.rect);
             UpdateSelected();
-            rectPanel.BackColor = Color.LightGray;
+            rectPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the ellipse button is clicked, the current tool is set to the ellipse tool, the
@@ -776,7 +778,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.ellipse);
             UpdateSelected();
-            ellipsePanel.BackColor = Color.LightGray;
+            ellipsePanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the polygon button, the current tool is set to the polygon tool, the
@@ -789,7 +791,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.polygon);
             UpdateSelected();
-            polyPanel.BackColor = Color.LightGray;
+            polyPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the delete button is clicked, the current tool is set to the delete tool, the selected
@@ -802,7 +804,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.delete);
             UpdateSelected();
-            deletePanel.BackColor = Color.LightGray;
+            deletePanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the freeformPanel, the currentTool is set to the freeform tool, the
@@ -814,7 +816,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.freeform);
             UpdateSelected();
-            freeformPanel.BackColor = Color.LightGray;
+            freeformPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the rectangle selection panel, the current tool is set to the
@@ -827,7 +829,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.rectSel);
             UpdateSelected();
-            rectSelPanel.BackColor = Color.LightGray;
+            rectSelPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the panPanel, the currentTool is set to the pan tool, the selected
@@ -840,7 +842,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.pan);
             UpdateSelected();
-            panPanel.BackColor = Color.LightGray;
+            panPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Hand;
         }
         /// When the magicPanel is clicked, the currentTool is set to the magic tool, the selected tool
@@ -853,7 +855,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.magic);
             UpdateSelected();
-            magicPanel.BackColor = Color.LightGray;
+            magicPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the bucketPanel is clicked, the currentTool is set to the bucket tool, the selected
@@ -866,7 +868,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.bucket);
             UpdateSelected();
-            bucketPanel.BackColor = Color.LightGray;
+            bucketPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         /// When the pencilPanel is clicked, the currentTool is set to the pencil tool, the
@@ -879,7 +881,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.pencil);
             UpdateSelected();
-            pencilPanel.BackColor = Color.LightGray;
+            pencilPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
         MagicSelect magicSel = new MagicSelect(2);
@@ -916,7 +918,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.pencil);
             UpdateSelected();
-            pencilPanel.BackColor = Color.LightGray;
+            pencilPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
             PenTool pt = new PenTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel));
             if (pt.ShowDialog() != DialogResult.OK)
@@ -938,7 +940,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.bucket);
             UpdateSelected();
-            bucketPanel.BackColor = Color.LightGray;
+            bucketPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
             FloodTool pt = new FloodTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel),currentTool.tolerance, ImageView.SelectedBuffer.BitsPerPixel);
             if (pt.ShowDialog() != DialogResult.OK)
@@ -958,7 +960,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.dropper);
             UpdateSelected();
-            dropperPanel.BackColor = Color.LightGray;
+            dropperPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
 
@@ -1014,7 +1016,7 @@ namespace Bio
         {
             currentTool = GetTool(Tool.Type.eraser);
             UpdateSelected();
-            eraserPanel.BackColor = Color.LightGray;
+            eraserPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
         }
 

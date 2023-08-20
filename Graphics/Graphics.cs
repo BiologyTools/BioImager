@@ -1,4 +1,11 @@
-﻿namespace Bio.Graphics
+﻿using AForge;
+using Bitmap = AForge.Bitmap;
+using Point = AForge.Point;
+using PointF = AForge.PointF;
+using Rectangle = AForge.Rectangle;
+using RectangleF = AForge.RectangleF;
+
+namespace Bio.Graphics
 {
     public struct Pen : IDisposable
     {
@@ -24,10 +31,10 @@
     }
     public class Graphics : IDisposable
     {
-        public BufferInfo buf;
+        public Bitmap buf;
         public Pen pen;
         private AbstractFloodFiller filler;
-        public static Graphics FromImage(BufferInfo b)
+        public static Graphics FromImage(Bitmap b)
         {
             Graphics g = new Graphics();
             g.buf = b;
@@ -70,7 +77,7 @@
                 }
             }
         }
-        private void DrawLine(int x, int y, int x2, int y2, BufferInfo bf, ColorS c)
+        private void DrawLine(int x, int y, int x2, int y2, Bitmap bf, ColorS c)
         {
             //Bresenham's algorithm for line drawing.
             int w = x2 - x;
@@ -202,7 +209,7 @@
         {
             //We will use the flood fill algorithm to fill the polygon.
             //First we need to create a new Buffer incase the current Buffer contains filled pixels that could prevent flood fill from filling the whole area.
-            BufferInfo bf = buf.CopyInfo();
+            Bitmap bf = buf.CopyInfo();
             bf.Bytes = new byte[buf.Bytes.Length];
 
             DrawPolygon(pfs, bf, pen.color);
@@ -218,7 +225,7 @@
             polygon = pfs;
             for (int x = r.X; x < r.Width + r.X; x++)
             {
-                if (PointInPolygon(x, p.Y))
+                if (PointInPolygon(x, (int)p.Y))
                 {
                     pp = new Point(x, p.Y);
                     break;
@@ -261,7 +268,7 @@
             pen.color = c;
             FillPolygon(pfs, r);
         }
-        private void DrawPolygon(PointF[] pfs, BufferInfo bf, ColorS s)
+        private void DrawPolygon(PointF[] pfs, Bitmap bf, ColorS s)
         {
             for (int i = 0; i < pfs.Length - 1; i++)
             {

@@ -55,7 +55,7 @@ namespace Bio
             if (ImageView.SelectedImage.ID.EndsWith(".ome.tif"))
                 ImageView.SelectedImage.Update();
             else
-                App.tabsView.AddTab(BioImage.OpenOME(file));
+                App.tabsView.AddTab(BioImage.OpenOME(file,false));
         }
 
         /// If the topMostBox checkbox is checked, then the form will be topmost

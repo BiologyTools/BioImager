@@ -1,5 +1,5 @@
 ﻿using CSScriptLib;
-
+using AForge;
 namespace Bio
 {
     public partial class Scripting : Form

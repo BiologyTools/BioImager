@@ -17,7 +17,15 @@ using WindowsInput;
 using System.Configuration;
 using Bio.Properties;
 using System.Reflection;
-
+using Bitmap = AForge.Bitmap;
+using Color = AForge.Color;
+using PointF = AForge.PointF;
+using RectangleF = AForge.RectangleF;
+using RectangleD = AForge.RectangleD;
+using Rectangle = AForge.Rectangle;
+using Point = AForge.Point;
+using SizeF = AForge.SizeF;
+using AForge;
 
 namespace Bio
 {
@@ -226,7 +234,7 @@ namespace Bio
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
                 Point pp = new Point(r.Right - this.Width, r.Bottom - this.Height - 23);
-                this.Location = pp;
+                this.Location = new System.Drawing.Point((int)pp.X, (int)pp.Y);
             }
             this.Show();
         }
@@ -495,7 +503,7 @@ namespace Bio
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
                 Point pp = new Point((r.Right) - this.Width, (r.Bottom) - this.Height - 30);
-                this.Location = pp;
+                this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
             }
             string s = Win32.GetActiveWindowTitle();
             statusLabel.Text = Microscope.GetPosition().ToString();

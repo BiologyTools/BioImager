@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Threading;
+using AForge;
+using RotateFlipType = AForge.RotateFlipType;
 
 namespace Bio
 {
@@ -80,7 +82,7 @@ namespace Bio
                     }
                     else
                     {
-                        AddTab(BioImage.OpenFile(arg[i]));
+                        BioImage.OpenFile(arg[i],true);
                     }
                 }
             }
@@ -205,7 +207,7 @@ namespace Bio
             int img = Images.images.Count;
             foreach (string item in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenFile(item);
+                BioImage im = BioImage.OpenFile(item,false);
                 if (im == null)
                     return;
                 AddTab(im);
@@ -752,7 +754,7 @@ namespace Bio
                 return;
             foreach (string sts in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenOME(sts);
+                BioImage im = BioImage.OpenOME(sts,true);
                 if (im == null)
                     return;
                 AddTab(im);
@@ -822,7 +824,7 @@ namespace Bio
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             if (!BioImage.isOME(ts.Text))
             {
-                BioImage[] bs = BioImage.OpenSeries(ts.Text);
+                BioImage[] bs = BioImage.OpenSeries(ts.Text,true);
                 for (int i = 0; i < bs.Length; i++)
                 {
                     if (i == 0)
@@ -833,33 +835,7 @@ namespace Bio
             }
             else
             {
-                BioImage[] bs = BioImage.OpenOMESeries(ts.Text);
-                if (bs.Length > 0)
-                {
-                    if (bs.Length == 1)
-                        AddTab(bs[0]);
-                    else
-                    {
-                        OpenInTab tb = new OpenInTab();
-                        if (tb.ShowDialog() == DialogResult.Yes)
-                        {
-                            for (int i = 0; i < bs.Length; i++)
-                            {
-                                if (i == 0)
-                                    AddTab(bs[i]);
-                                else
-                                    Viewer.AddImage(bs[i]);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < bs.Length; i++)
-                            {
-                                AddTab(bs[i]);
-                            }
-                        }
-                    }
-                }
+                BioImage[] bs = BioImage.OpenOMESeries(ts.Text,true,true);
             }
             App.viewer.GoToImage();
             SaveProperties();
@@ -888,11 +864,11 @@ namespace Bio
             }
             if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.NumPad7)
             {
-                App.viewer.Scale = new SizeF(App.viewer.Scale.Width - 0.1f, App.viewer.Scale.Height - 0.1f);
+                App.viewer.Scale = new AForge.SizeF(App.viewer.Scale.Width - 0.1f, App.viewer.Scale.Height - 0.1f);
             }
             if (e.KeyCode == Keys.Add || e.KeyCode == Keys.NumPad9)
             {
-                App.viewer.Scale = new SizeF(App.viewer.Scale.Width - 0.1f, App.viewer.Scale.Height - 0.1f);
+                App.viewer.Scale = new AForge.SizeF(App.viewer.Scale.Width - 0.1f, App.viewer.Scale.Height - 0.1f);
             }
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.NumPad8)
             {
@@ -985,7 +961,7 @@ namespace Bio
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0]);
+                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0],false,true);
                     for (int f = 0; f < bts.Length; f++)
                     {
                         if (f == 0 && i == 0)
@@ -997,7 +973,7 @@ namespace Bio
                 }
                 else
                 {
-                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0]);
+                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0],false,true);
                     for (int f = 0; f < bts.Length; f++)
                     {
                         Viewer.AddImage(bts[f]);
@@ -1021,10 +997,10 @@ namespace Bio
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    AddTab(BioImage.OpenOME(openFilesDialog.FileNames[0]));
+                    AddTab(BioImage.OpenOME(openFilesDialog.FileNames[0],false));
                 }
                 else
-                    App.viewer.AddImage(BioImage.OpenOME(openFilesDialog.FileNames[i]));
+                    App.viewer.AddImage(BioImage.OpenOME(openFilesDialog.FileNames[i],false));
             }
             App.viewer.GoToImage();
         }
@@ -1039,7 +1015,7 @@ namespace Bio
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
-            BioImage[] bs = BioImage.OpenOMESeries(openFilesDialog.FileName);
+            BioImage[] bs = BioImage.OpenOMESeries(openFilesDialog.FileName,false,true);
             if (bs == null)
                 return;
             AddTab(bs[0]);
@@ -1131,7 +1107,7 @@ namespace Bio
             BioImage[] bms = null;
             foreach (string item in openFilesDialog.FileNames)
             {
-                bms = BioImage.OpenSeries(openFilesDialog.FileName);
+                bms = BioImage.OpenSeries(openFilesDialog.FileName,false);
                 for (int i = 0; i < bms.Length; i++)
                 {
                     if (i == 0)
@@ -1241,7 +1217,7 @@ namespace Bio
         /// @param EventArgs The event arguments.
         private void switchRedBlueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (BufferInfo bf in ImageView.SelectedImage.Buffers)
+            foreach (AForge.Bitmap bf in ImageView.SelectedImage.Buffers)
             {
                 bf.SwitchRedBlue();
             }
@@ -1325,7 +1301,7 @@ namespace Bio
             fd.Multiselect = true;
             if (fd.ShowDialog() != DialogResult.OK)
                 return;
-            BioImage b = BioImage.ImagesToStack(fd.FileNames);
+            BioImage b = BioImage.ImagesToStack(fd.FileNames, false);
             AddTab(b);
         }
 

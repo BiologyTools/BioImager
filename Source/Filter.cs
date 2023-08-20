@@ -48,7 +48,7 @@ namespace Bio
                 gr.Text = t.ToString();
                 filterView.Nodes.Add(gr);
             }
-            foreach (Filt f in Filters.filters.Values)
+            foreach (Filt f in Filters.filters)
             {
                 TreeNode nod = new TreeNode();
                 nod.Text = f.name;

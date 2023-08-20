@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AForge;
+using Point = AForge.Point;
+using AForge.Imaging;
 
 namespace Bio
 {
@@ -156,7 +159,7 @@ namespace Bio
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(Imager.apph, ref r);
                 Point pp = new Point(r.Right - Width, r.Bottom - Height - App.imager.Height - 30);
-                this.Location = pp;
+                this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
                 string s = Win32.GetActiveWindowTitle();
                 if (s != null)
                     if (s.Contains(Properties.Settings.Default.AppName))
@@ -184,7 +187,7 @@ namespace Bio
         {
             Properties.Settings.Default.DockMicro = dockBox.Checked;
 #if DEBUG
-            this.Location = new Point(0, 0);
+            this.Location = new System.Drawing.Point(0, 0);
 #endif
         }
 
@@ -345,7 +348,7 @@ namespace Bio
                 MessageBox.Show("'LiveView' GUI Property not set. Go to automation tab and create a property corresponding to the live view GUI element.");
                 return;
             }
-            Rectangle re = Automation.Properties["LiveView"].GetBounds();
+            System.Drawing.Rectangle re = Automation.Properties["LiveView"].GetBounds();
             Microscope.SetFocus((double)upperLimBox.Value);
             long max = long.MinValue;
             double ud = (double)upperLimBox.Value;
@@ -353,17 +356,19 @@ namespace Bio
             {
                 Microscope.SetFocus((double)i);
                 System.Drawing.Graphics g;
-                Bitmap b = new Bitmap((int)re.Width, (int)re.Height);
+                System.Drawing.Bitmap b = new System.Drawing.Bitmap((int)re.Width, (int)re.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = System.Drawing.Graphics.FromImage(b);
-                g.CopyFromScreen(new Point((int)re.X, (int)re.Y), new Point(0, 0), new Size(re.Width, re.Height));
+                g.CopyFromScreen(new System.Drawing.Point((int)re.X, (int)re.Y), new System.Drawing.Point(0, 0), new System.Drawing.Size(re.Width, re.Height));
                 Clipboard.SetImage(b);
-                BufferInfo bf = new BufferInfo("", (Image)b, new ZCT(), 0);
-                long d = BioImage.CalculateFocusQuality(bf);
-                if (max < d)
+                System.Drawing.Imaging.BitmapData d = b.LockBits(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite,System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                AForge.Bitmap bf = new AForge.Bitmap("",new UnmanagedImage(d.Scan0,b.Width,b.Height,b.Width*4,PixelFormat.Format32bppArgb), new ZCT(), 0);
+                long dd = BioImage.CalculateFocusQuality(bf);
+                if (max < dd)
                 {
-                    max = d;
+                    max = dd;
                     ud = (double)i;
                 }
+                b.UnlockBits(d);
                 g.Dispose();
                 b.Dispose();
             }

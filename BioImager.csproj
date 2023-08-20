@@ -15,7 +15,7 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
-    <Version>3.1.1</Version>
+    <Version>3.2.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
@@ -58,7 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AForgeImagingCore" Version="2.2.5" />
+    <PackageReference Include="AForgeBio" Version="1.4.2" />
     <PackageReference Include="BioFormats.NET6" Version="7.0.0" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.1" />
@@ -67,6 +67,8 @@
     <PackageReference Include="H.InputSimulator" Version="1.4.0" />
     <PackageReference Include="IKVM" Version="8.6.2" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
+    <PackageReference Include="NetVips" Version="2.3.1" />
+    <PackageReference Include="NetVips.Native.win-x64" Version="8.14.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ScottPlot" Version="5.0.6-beta" />
     <PackageReference Include="SharpDX" Version="4.2.0" />

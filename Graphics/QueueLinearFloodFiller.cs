@@ -1,3 +1,5 @@
+using AForge;
+using PixelFormat = AForge.PixelFormat;
 namespace Bio
 {
     /// <summary>
@@ -17,7 +19,7 @@ namespace Bio
         /// Fills the specified point on the bitmap with the currently selected fill color.
         /// </summary>
         /// <param name="pt">The starting point for the fill.</param>
-        public override void FloodFill(System.Drawing.Point pt)
+        public override void FloodFill(AForge.Point pt)
         {
             watch.Reset();
             watch.Start();
@@ -28,9 +30,9 @@ namespace Bio
             ranges = new FloodFillRangeQueue(((bitmapWidth + bitmapHeight) / 2) * 5);//new Queue<FloodFillRange>();
 
             //***Get starting color.
-            int x = pt.X; int y = pt.Y;
+            int x = (int)pt.X; int y = (int)pt.Y;
             int idx = CoordsToByteIndex(ref x, ref y);
-            startColor = bitmap.GetPixel(pt.X, pt.Y);
+            startColor = bitmap.GetPixel((int)pt.X,(int)pt.Y);
 
             bool[] pixelsChecked = this.pixelsChecked;
 
@@ -98,29 +100,29 @@ namespace Bio
             {
                 //**fill with the color
                 //bitmap.SetColor(x, y, this.byteFillColor);
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+                if (pixelFormat == PixelFormat.Format8bppIndexed)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                 }
                 else
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                if (pixelFormat == PixelFormat.Format24bppRgb)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                     bitmapBits[idx + 1] = byteFillColor[1];
                     bitmapBits[idx + 2] = byteFillColor[2];
                 }
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb || pixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
+                if (pixelFormat == PixelFormat.Format32bppArgb || pixelFormat == PixelFormat.Format32bppRgb)
                 {
                     bitmapBits[idx + 1] = byteFillColor[0];
                     bitmapBits[idx + 2] = byteFillColor[1];
                     bitmapBits[idx + 3] = byteFillColor[2];
                 }
-                else if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
+                else if (pixelFormat == PixelFormat.Format16bppGrayScale)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                     bitmapBits[idx + 1] = byteFillColor[1];
                 }
-                else if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format48bppRgb)
+                else if (pixelFormat == PixelFormat.Format48bppRgb)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                     bitmapBits[idx + 1] = byteFillColor[1];
@@ -150,30 +152,30 @@ namespace Bio
             {
                 //**fill with the color
                 //bitmap.SetColor(x, y, this.byteFillColor);
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+                if (pixelFormat == PixelFormat.Format8bppIndexed)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                 }
                 else
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                if (pixelFormat == PixelFormat.Format24bppRgb)
                 {
                     bitmapBits[idx] = byteFillColor[2];
                     bitmapBits[idx + 1] = byteFillColor[1];
                     bitmapBits[idx + 2] = byteFillColor[0];
                 }
                 else
-                if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb || pixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
+                if (pixelFormat == PixelFormat.Format32bppArgb || pixelFormat == PixelFormat.Format32bppRgb)
                 {
                     bitmapBits[idx + 1] = byteFillColor[0];
                     bitmapBits[idx + 2] = byteFillColor[1];
                     bitmapBits[idx + 3] = byteFillColor[2];
                 }
-                else if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
+                else if (pixelFormat == PixelFormat.Format16bppGrayScale)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                     bitmapBits[idx + 1] = byteFillColor[1];
                 }
-                else if (pixelFormat == System.Drawing.Imaging.PixelFormat.Format48bppRgb)
+                else if (pixelFormat == PixelFormat.Format48bppRgb)
                 {
                     bitmapBits[idx] = byteFillColor[0];
                     bitmapBits[idx + 1] = byteFillColor[1];
@@ -212,32 +214,32 @@ namespace Bio
                 px++;
             }
             return ret;*/
-            if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+            if (bitmap.PixelFormat == PixelFormat.Format8bppIndexed)
             {
                 return (bitmapBits[px] >= (startColor.R - tolerance.R)) && bitmapBits[px] <= (startColor.R + tolerance.R);
             }
             else
-            if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+            if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
             {
                 return (bitmapBits[px] >= (startColor.R - tolerance.R)) && bitmapBits[px] <= (startColor.R + tolerance.R) &&
                     (bitmapBits[px + 1] >= (startColor.G - tolerance.G)) && bitmapBits[px + 1] <= (startColor.G + tolerance.G) &&
                     (bitmapBits[px + 2] >= (startColor.B - tolerance.B)) && bitmapBits[px + 2] <= (startColor.B + tolerance.B);
             }
             else
-            if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb || bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
+            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppRgb)
             {
                 return (bitmapBits[px + 3] >= (startColor.R - tolerance.R)) && bitmapBits[px + 3] <= (startColor.R + tolerance.R) &&
                     (bitmapBits[px + 2] >= (startColor.G - tolerance.G)) && bitmapBits[px + 2] <= (startColor.G + tolerance.G) &&
                     (bitmapBits[px + 1] >= (startColor.B - tolerance.B)) && bitmapBits[px + 1] <= (startColor.B + tolerance.B);
             }
             else
-            if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format16bppGrayScale)
+            if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale)
             {
                 ushort r = BitConverter.ToUInt16(bitmapBits, px);
                 return (r >= (startColor.R - tolerance.R)) && r <= (startColor.R + tolerance.R);
             }
             else
-            if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format48bppRgb)
+            if (bitmap.PixelFormat == PixelFormat.Format48bppRgb)
             {
                 ushort r = BitConverter.ToUInt16(bitmapBits, px);
                 ushort g = BitConverter.ToUInt16(bitmapBits, px + 2);

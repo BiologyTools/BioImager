@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
-
+using AForge;
 namespace Bio
 {
     public class PMicroscope

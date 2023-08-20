@@ -10,7 +10,16 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
 using System.IO;
-
+using AForge;
+using Bitmap = AForge.Bitmap;
+using Color = AForge.Color;
+using PointF = AForge.PointF;
+using PointD = AForge.PointD;
+using Point3D = AForge.Point3D;
+using RectangleF = AForge.RectangleF;
+using RectangleD = AForge.RectangleD;
+using Rectangle = AForge.Rectangle;
+using Point = AForge.Point;
 namespace Bio
 {
     /* It's a wrapper for the stage*/
@@ -1155,10 +1164,10 @@ namespace Bio
                 folder = GetFolder();
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 Point3D p = GetPosition();
-                b.stageSizeX = p.X;
-                b.stageSizeY = p.Y;
-                b.stageSizeZ = p.Z;
-                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,b.stageSizeX,b.stageSizeY,b.stageSizeZ);
+                b.StageSizeX = p.X;
+                b.StageSizeY = p.Y;
+                b.StageSizeZ = p.Z;
+                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,b.StageSizeX,b.StageSizeY,b.StageSizeZ);
                 string file;
                 if (folder == "" || folder == null)
                     file = Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
@@ -1166,7 +1175,7 @@ namespace Bio
                     file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
                 b.ID = file;
                 b.file = file;
-                Images.AddImage(b);
+                Images.AddImage(b,false);
                 BioImage.SaveOME(file, b.ID);
                 App.viewer.AddImage(b);
             }
@@ -1181,25 +1190,20 @@ namespace Bio
                 pMicroscope.TakeImage(file);
                 byte[] bts = File.ReadAllBytes(file);
                 int w, h;
-                System.Drawing.Imaging.PixelFormat px;
-                Enum.TryParse<System.Drawing.Imaging.PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
+                PixelFormat px;
+                Enum.TryParse<PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
                 pMicroscope.GetSize(out w, out h);
-                BufferInfo bf = new BufferInfo(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
+                Bitmap bf = new Bitmap(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
                 Statistics.CalcStatistics(bf);
                 BioImage bm = new BioImage(file + ".ome.tif");
                 bm.Buffers.Add(bf);
                 //Set the physical size based on objective view
                 RectangleD rec = GetViewRectangle(false);
-                bm.PhysicalSizeX = rec.W / bm.SizeX;
-                bm.PhysicalSizeY = rec.H / bm.SizeY;
-                bm.PhysicalSizeZ = 1;
                 double f = Focus.GetFocus();
+                Resolution res = new Resolution(w,h,px,rec.W / bm.SizeX,rec.H / bm.SizeY,1,rec.X,rec.Y,f);
                 bm.bitsPerPixel = bf.BitsPerPixel;
-                bm.stageSizeX = rec.X;
-                bm.stageSizeY = rec.Y;
-                bm.stageSizeZ = f;
                 bm.UpdateCoords(1, 1, 1);
-                bm.Resolutions.Add(new Resolution(w,h,px,bm.PhysicalSizeX,bm.PhysicalSizeY,bm.PhysicalSizeZ, bm.stageSizeX,bm.stageSizeY,bm.stageSizeZ));
+                bm.Resolutions.Add(res);
                 for (int c = 0; c < bf.RGBChannelsCount; c++)
                 {
                     bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
@@ -1213,7 +1217,7 @@ namespace Bio
                 BioImage.AutoThreshold(bm, false);
                 if (!imagingStack)
                 {   
-                    Images.AddImage(bm);
+                    Images.AddImage(bm,false);
                     BioImage.SaveOME(file + ".ome.tif", bm.ID);
                     if (bm.bitsPerPixel > 8)
                         bm.StackThreshold(true);
@@ -1352,19 +1356,18 @@ namespace Bio
             }
             //Set the physical size based on objective view
             RectangleD rec = GetObjectiveViewRectangle();
-            bi.PhysicalSizeX = rec.W / bi.SizeX;
-            bi.PhysicalSizeY = rec.H / bi.SizeY;
-            bi.PhysicalSizeZ = (UpperLimit - LowerLimit) / bi.SizeZ;
-            bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
-            bi.stageSizeX = rec.X;
-            bi.stageSizeY = rec.Y;
-            bi.stageSizeZ = UpperLimit;
+           bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
+            bi.StageSizeX = rec.X;
+            bi.StageSizeY = rec.Y;
+            bi.StageSizeZ = UpperLimit;
+            bi.Resolutions.Add(new Resolution(bi.SizeX, bi.SizeY, bi.Buffers[0].PixelFormat,
+                rec.W / bi.SizeX, rec.H / bi.SizeY, (UpperLimit - LowerLimit) / bi.SizeZ, bi.StageSizeX,bi.StageSizeY,bi.StageSizeZ));
             BioImage.AutoThreshold(bi, false);
             if (bi.bitsPerPixel > 8)
                 bi.StackThreshold(true);
             else
                 bi.StackThreshold(false);
-            Images.AddImage(bi);
+            Images.AddImage(bi,false);
             imagingStack = false;
             currentImage = bi;
             images.Clear();

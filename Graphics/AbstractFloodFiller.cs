@@ -1,5 +1,12 @@
 using System.Diagnostics;
-
+using AForge;
+using Bitmap = AForge.Bitmap;
+using Color = AForge.Color;
+using PointF = AForge.PointF;
+using RectangleF = AForge.RectangleF;
+using RectangleD = AForge.RectangleD;
+using Rectangle = AForge.Rectangle;
+using Point = AForge.Point;
 namespace Bio
 {
     /// <summary>
@@ -9,7 +16,7 @@ namespace Bio
     public abstract class AbstractFloodFiller
     {
 
-        protected BufferInfo bitmap;
+        protected Bitmap bitmap;
         protected ColorS tolerance = new ColorS(25, 25, 25);
         protected ColorS fillColor = ColorS.FromColor(Color.Black);
         protected bool fillDiagonally = false;
@@ -21,7 +28,7 @@ namespace Bio
         protected int bitmapStride = 0;
         protected int bitmapPixelFormatSize = 0;
         protected byte[] bitmapBits = null;
-        protected System.Drawing.Imaging.PixelFormat pixelFormat;
+        protected PixelFormat pixelFormat;
 
         //internal int timeBenchmark = 0;
         internal Stopwatch watch = new Stopwatch();
@@ -67,7 +74,7 @@ namespace Bio
             set { tolerance = value; }
         }
 
-        public BufferInfo Bitmap
+        public Bitmap Bitmap
         {
             get { return bitmap; }
             set
@@ -79,7 +86,7 @@ namespace Bio
         public abstract void FloodFill(Point pt);
         protected void PrepareForFloodFill(Point pt)
         {
-            startColor = bitmap.GetPixel(pt.X, pt.Y);
+            startColor = bitmap.GetPixel((int)pt.X, (int)pt.Y);
             byteFillColor = new ColorS(fillColor.B, fillColor.G, fillColor.R);
             bitmapStride = bitmap.Stride;
             bitmapPixelFormatSize = bitmap.PixelFormatSize;

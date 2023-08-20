@@ -1,13 +1,15 @@
 ﻿using AForge;
 using Bio.Graphics;
 using SharpDX;
-
+using System.Drawing;
+using Bitmap = System.Drawing.Bitmap;
+using SizeF = System.Drawing.SizeF;
 namespace Bio
 {
     public partial class View3D : Form
     {
         DSystem sys = null;
-        List<BufferInfo> Buffers = new List<BufferInfo>();
+        List<Bitmap> Buffers = new List<Bitmap>();
         private static Vector3 origin = new Vector3(0f, -1f, -2f);
         Vector3 Origin = origin;
         Vector3 r = new Vector3(0, (float)Math.PI, (float)Math.PI);

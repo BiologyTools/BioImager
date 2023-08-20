@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using AForge;
 namespace Bio
 {
     public partial class ROIManager : Form
@@ -108,21 +108,21 @@ namespace Bio
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
+            anno.strokeColor = AForge.Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void gBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
+            anno.strokeColor = AForge.Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void bBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
+            anno.strokeColor = AForge.Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
             UpdateOverlay();
         }
         private void typeBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -268,7 +268,8 @@ namespace Bio
                 return;
             if (fontDialog.ShowDialog() != DialogResult.OK)
                 return;
-            anno.font = fontDialog.Font;
+            anno.family = fontDialog.Font.FontFamily.ToString();
+            anno.fontSize = fontDialog.Font.Size;
         }
         private void strokeWBox_ValueChanged(object sender, EventArgs e)
         {

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using CSScripting;
-using System.Drawing;
+using AForge;
+using Color = AForge.Color;
+using Rectangle = AForge.Rectangle;
+using PointF = AForge.PointF;
 
 namespace Bio
 {
@@ -751,7 +754,8 @@ namespace Bio
                 double angle = version >= 225 ? getFloat(hdrSize + 16 + nameLength * 2 + textLength * 2) : 0f;
                 //Font font = new Font(new string(name), style, size);
                 string fam = new string(name);
-                roi.font = new Font(fam, size);
+                roi.family = fam;
+                roi.fontSize = size;
                 roi.Text = new string(text);
                 /*
                 if (roi.subPixel)
@@ -966,7 +970,7 @@ namespace Bio
             int[] y = new int[roi.PointsD.Count];
             for (int i = 0; i < roi.PointsD.Count; i++)
             {
-                PointF pd = ImageView.SelectedImage.ToImageSpace(roi.PointsD[i]);
+                PointD pd = ImageView.SelectedImage.ToImageSpace(roi.PointsD[i]);
                 x[i] = (int)pd.X;
                 y[i] = (int)pd.Y;
             }
@@ -982,9 +986,9 @@ namespace Bio
         /// @param y The y-coordinate of the ROI.
         static void GetXY(ROI roi, out float x, out float y)
         {
-            PointF pd = ImageView.SelectedImage.ToImageSpace(new PointD(roi.X, roi.Y));
-            x = pd.X;
-            y = pd.Y;
+            PointD pd = ImageView.SelectedImage.ToImageSpace(new PointD(roi.X, roi.Y));
+            x = (float)pd.X;
+            y = (float)pd.Y;
         }
        /// > This function takes a ROI and returns the width and height of the ROI in pixels
        /// 
@@ -1453,8 +1457,8 @@ namespace Bio
             void saveTextRoi(ROI roi)
             {
                 //Font font = roi.getCurrentFont();
-                string fontName = roi.font.FontFamily.ToString();
-                int size = (int)roi.font.Size;
+                string fontName = roi.family.ToString();
+                int size = (int)roi.fontSize;
                 int drawStringMode = 0; //roi.getDrawStringMode() ? 1024 : 0;
                 int style = 0;//font.getStyle() + roi.getJustification() * 256 + drawStringMode;
                 string text = roi.roiName;
@@ -1519,7 +1523,7 @@ namespace Bio
                 putInt(hdr2Offset + RoiDecoder.OVERLAY_LABEL_COLOR, 0);
                 //Font font = proto.getLabelFont();
                 //if (font != null)
-                putShort(hdr2Offset + RoiDecoder.OVERLAY_FONT_SIZE, (int)roi.font.Size);
+                putShort(hdr2Offset + RoiDecoder.OVERLAY_FONT_SIZE, (int)roi.fontSize);
                 if (roiNameSize > 0)
                     putName(roi, hdr2Offset);
                 double strokeWidth = roi.strokeWidth;

@@ -7,7 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using AForge;
+using Bitmap = System.Drawing.Bitmap;
+using Color = System.Drawing.Color;
+using PointF = System.Drawing.PointF;
+using Size = System.Drawing.Size;
+using SizeF = System.Drawing.SizeF;
+using RectangleF = System.Drawing.RectangleF;
+using RectangleD = AForge.RectangleD;
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
 namespace Bio
 {
     public partial class HistogramControl : UserControl

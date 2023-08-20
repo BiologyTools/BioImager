@@ -8,7 +8,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Bitmap = AForge.Bitmap;
+using Color = AForge.Color;
+using PointF = AForge.PointF;
+using PointD = AForge.PointD;
+using Point3D = AForge.Point3D;
+using RectangleF = AForge.RectangleF;
+using RectangleD = AForge.RectangleD;
+using Rectangle = AForge.Rectangle;
+using Point = AForge.Point;
 namespace Bio
 {
     public static class MicroscopeConsole
