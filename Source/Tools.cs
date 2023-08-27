@@ -209,8 +209,8 @@ namespace Bio
         {
             if (ImageView.SelectedImage != null)
             {
-                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R, DrawColor.G, DrawColor.B);
-                color2Box.BackColor = System.Drawing.Color.FromArgb(EraseColor.R, EraseColor.G, EraseColor.B);
+                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R/ushort.MaxValue, DrawColor.G / ushort.MaxValue, DrawColor.B / ushort.MaxValue);
+                color2Box.BackColor = System.Drawing.Color.FromArgb(EraseColor.R / ushort.MaxValue, EraseColor.G / ushort.MaxValue, EraseColor.B / ushort.MaxValue);
             }
             widthBox.Value = width;
         }

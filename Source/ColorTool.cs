@@ -31,7 +31,7 @@ namespace Bio
         public void UpdateGUI()
         {
             color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
-            colorPanel.BackColor = System.Drawing.Color.FromArgb(color.R,color.G,color.B);
+            colorPanel.BackColor = System.Drawing.Color.FromArgb(color.R / ushort.MaxValue,color.G / ushort.MaxValue,color.B / ushort.MaxValue);
             if (rBar.Value != redBox.Value)
                 redBox.Value = rBar.Value;
             if (gBar.Value != greenBox.Value)

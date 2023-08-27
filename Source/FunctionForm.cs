@@ -90,14 +90,11 @@ namespace Bio
             modifierBox.SelectedItem = func.Modifier;
 
             microBox.Items.Clear();
-            microBox.Items.Add(Function.FunctionType.NextCoordinate);
-            microBox.Items.Add(Function.FunctionType.NextSnapCoordinate);
-            microBox.Items.Add(Function.FunctionType.PreviousCoordinate);
-            microBox.Items.Add(Function.FunctionType.PreviousSnapCoordinate);
-            microBox.Items.Add(Function.FunctionType.Objective);
-            microBox.Items.Add(Function.FunctionType.NextCoordinate);
-            microBox.Items.Add(Function.FunctionType.StoreCoordinate);
-            microBox.SelectedItem = func.Microscope;
+            foreach (Function.FunctionType f in (Function.FunctionType[])Enum.GetValues(typeof(Function.FunctionType)))
+            {
+                microBox.Items.Add(f);
+            }
+            microBox.SelectedItem = func.FuncType;
 
             ind = 0;
             recBox.Items.Clear();
@@ -137,7 +134,7 @@ namespace Bio
             stateBox.SelectedItem = func.State;
             keysBox.SelectedItem = func.Key;
             modifierBox.SelectedItem = func.Modifier;
-            microBox.SelectedItem = func.Microscope;
+            microBox.SelectedItem = func.FuncType;
             foreach (Automation.Recording rec in Automation.Recordings.Values)
             {
                 string s = System.IO.Path.GetFileNameWithoutExtension(rec.File);
@@ -173,7 +170,6 @@ namespace Bio
         private void keysBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.Key = (VirtualKeyCode)keysBox.SelectedItem;
-            Func.FuncType = Function.FunctionType.Key;
         }
         /// When the user selects a modifier key from the dropdown menu, the function's modifier is set
         /// to the selected key
@@ -183,7 +179,6 @@ namespace Bio
         private void modifierBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.Modifier = (VirtualKeyCode)modifierBox.SelectedItem;
-            Func.FuncType = Function.FunctionType.Key;
         }
         /// When the user selects a new item in the stateBox, the state of the function is set to the
         /// selected item and the function type is set to key
@@ -193,7 +188,6 @@ namespace Bio
         private void stateBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Func.State = (Function.ButtonState)stateBox.SelectedItem;
-            Func.FuncType = Function.FunctionType.Key;
         }
         /// It saves the function
         /// 
@@ -227,8 +221,9 @@ namespace Bio
                     func.ContextPath.Remove(func.ContextPath.IndexOf('/'), func.ContextPath.Length - func.ContextPath.IndexOf('/'));
                 App.AddContextMenu(func.ContextPath, func);
             }
+            func.FuncType = (Function.FunctionType)microBox.SelectedItem;
             func.Save();
-            Init();
+            this.Close();
         }
         /// When the user selects a property from the dropdown list, the function will set the File
         /// property of the Func object to the name of the property selected, and the FuncType property
@@ -390,7 +385,12 @@ namespace Bio
         /// @param EventArgs e
         private void microBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            func.FuncType = (Function.FunctionType)microBox.SelectedItem;
+            //func.FuncType = (Function.FunctionType)microBox.SelectedItem;
+        }
+
+        private void nameBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
@@ -401,7 +401,20 @@ namespace Bio
         public enum FunctionType
         {
             Key,
-            Microscope,
+            StageUp,
+            StageRight,
+            StageDown,
+            StageLeft,
+            FocusUp,
+            FocusDown,
+            StageFieldUp,
+            StageFieldRight,
+            StageFieldDown,
+            StageFieldLeft,
+            TakeImage,
+            TakeImageStack,
+            RL,
+            TL,
             Objective,
             StoreCoordinate,
             NextCoordinate,
@@ -446,7 +459,6 @@ namespace Bio
             set
             {
                 key = value;
-                FuncType = FunctionType.Key;
             }
         }
 
@@ -459,7 +471,6 @@ namespace Bio
             }
             set
             {
-                FuncType = FunctionType.Key;
                 modifier = value;
             }
         }
@@ -543,18 +554,6 @@ namespace Bio
                 val = value;
             }
         }
-        private string microscope;
-        public string Microscope
-        {
-            get
-            {
-                return microscope;
-            }
-            set
-            {
-                microscope = value;
-            }
-        }
         public override string ToString()
         {
             return name + ", " + MenuPath;
@@ -563,7 +562,14 @@ namespace Bio
         {
             if (s == "")
                 return new Function();
-            return JsonConvert.DeserializeObject<Function>(s);
+            try
+            {
+                return JsonConvert.DeserializeObject<Function>(s);
+            }
+            catch (Exception)
+            {
+                return new Function();
+            }
         }
 
         public string Serialize()
@@ -649,9 +655,61 @@ namespace Bio
             {
                 App.imager.PerformFunction(this);
             }
-            if (FuncType == Function.FunctionType.Microscope)
+            if (FuncType == Function.FunctionType.StageUp)
             {
-                App.imager.PerformFunction(this);
+                Microscope.MoveUp(Value);
+            }
+            if (FuncType == Function.FunctionType.StageRight)
+            {
+                Microscope.MoveRight(Value);
+            }
+            if (FuncType == Function.FunctionType.StageDown)
+            {
+                Microscope.MoveDown(Value);
+            }
+            if (FuncType == Function.FunctionType.StageLeft)
+            {
+                Microscope.MoveLeft(Value);
+            }
+            if (FuncType == Function.FunctionType.FocusUp)
+            {
+                Microscope.SetFocus(Value);
+            }
+            if (FuncType == Function.FunctionType.FocusDown)
+            {
+                Microscope.SetFocus(-Value);
+            }
+            if (FuncType == Function.FunctionType.StageFieldUp)
+            {
+                Microscope.MoveFieldUp();
+            }
+            if (FuncType == Function.FunctionType.StageFieldRight)
+            {
+                Microscope.MoveFieldRight();
+            }
+            if (FuncType == Function.FunctionType.StageFieldDown)
+            {
+                Microscope.MoveFieldDown();
+            }
+            if (FuncType == Function.FunctionType.StageFieldLeft)
+            {
+                Microscope.MoveFieldLeft();
+            }
+            if (FuncType == Function.FunctionType.TakeImage)
+            {
+                Microscope.TakeImage();
+            }
+            if (FuncType == Function.FunctionType.TakeImageStack)
+            {
+                Microscope.TakeImageStack();
+            }
+            if (FuncType == Function.FunctionType.RL)
+            {
+                Microscope.RLShutter.SetPosition((int)Value);
+            }
+            if (FuncType == Function.FunctionType.TL)
+            {
+                Microscope.TLShutter.SetPosition((int)Value);
             }
             return null;
         }

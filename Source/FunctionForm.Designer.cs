@@ -72,9 +72,10 @@ namespace Bio
             this.stateBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.stateBox.ForeColor = System.Drawing.Color.White;
             this.stateBox.FormattingEnabled = true;
-            this.stateBox.Location = new System.Drawing.Point(57, 109);
+            this.stateBox.Location = new System.Drawing.Point(66, 126);
+            this.stateBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.stateBox.Name = "stateBox";
-            this.stateBox.Size = new System.Drawing.Size(87, 21);
+            this.stateBox.Size = new System.Drawing.Size(101, 23);
             this.stateBox.TabIndex = 24;
             this.stateBox.SelectedIndexChanged += new System.EventHandler(this.stateBox_SelectedIndexChanged);
             // 
@@ -82,9 +83,10 @@ namespace Bio
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(-1, 112);
+            this.label5.Location = new System.Drawing.Point(-1, 129);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.Size = new System.Drawing.Size(36, 15);
             this.label5.TabIndex = 23;
             this.label5.Text = "State:";
             // 
@@ -92,9 +94,10 @@ namespace Bio
             // 
             this.applyButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.applyButton.ForeColor = System.Drawing.Color.White;
-            this.applyButton.Location = new System.Drawing.Point(235, 393);
+            this.applyButton.Location = new System.Drawing.Point(274, 453);
+            this.applyButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(75, 23);
+            this.applyButton.Size = new System.Drawing.Size(88, 27);
             this.applyButton.TabIndex = 22;
             this.applyButton.Text = "OK";
             this.applyButton.UseVisualStyleBackColor = false;
@@ -104,9 +107,10 @@ namespace Bio
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(0, 85);
+            this.label1.Location = new System.Drawing.Point(0, 98);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.Size = new System.Drawing.Size(29, 15);
             this.label1.TabIndex = 18;
             this.label1.Text = "Key:";
             // 
@@ -115,9 +119,10 @@ namespace Bio
             this.modifierBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.modifierBox.ForeColor = System.Drawing.Color.White;
             this.modifierBox.FormattingEnabled = true;
-            this.modifierBox.Location = new System.Drawing.Point(205, 109);
+            this.modifierBox.Location = new System.Drawing.Point(239, 126);
+            this.modifierBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.modifierBox.Name = "modifierBox";
-            this.modifierBox.Size = new System.Drawing.Size(103, 21);
+            this.modifierBox.Size = new System.Drawing.Size(119, 23);
             this.modifierBox.TabIndex = 16;
             this.modifierBox.SelectedIndexChanged += new System.EventHandler(this.modifierBox_SelectedIndexChanged);
             // 
@@ -125,9 +130,10 @@ namespace Bio
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(152, 112);
+            this.label2.Location = new System.Drawing.Point(177, 129);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
+            this.label2.Size = new System.Drawing.Size(55, 15);
             this.label2.TabIndex = 15;
             this.label2.Text = "Modifier:";
             // 
@@ -136,9 +142,10 @@ namespace Bio
             this.keysBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.keysBox.ForeColor = System.Drawing.Color.White;
             this.keysBox.FormattingEnabled = true;
-            this.keysBox.Location = new System.Drawing.Point(57, 82);
+            this.keysBox.Location = new System.Drawing.Point(66, 95);
+            this.keysBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.keysBox.Name = "keysBox";
-            this.keysBox.Size = new System.Drawing.Size(251, 21);
+            this.keysBox.Size = new System.Drawing.Size(292, 23);
             this.keysBox.TabIndex = 14;
             this.keysBox.SelectedIndexChanged += new System.EventHandler(this.keysBox_SelectedIndexChanged);
             // 
@@ -146,9 +153,10 @@ namespace Bio
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(0, 139);
+            this.label6.Location = new System.Drawing.Point(0, 160);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 13);
+            this.label6.Size = new System.Drawing.Size(55, 15);
             this.label6.TabIndex = 25;
             this.label6.Text = "Property:";
             // 
@@ -157,9 +165,10 @@ namespace Bio
             this.propBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.propBox.ForeColor = System.Drawing.Color.White;
             this.propBox.FormattingEnabled = true;
-            this.propBox.Location = new System.Drawing.Point(57, 136);
+            this.propBox.Location = new System.Drawing.Point(66, 157);
+            this.propBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.propBox.Name = "propBox";
-            this.propBox.Size = new System.Drawing.Size(251, 21);
+            this.propBox.Size = new System.Drawing.Size(292, 23);
             this.propBox.TabIndex = 26;
             this.propBox.SelectedIndexChanged += new System.EventHandler(this.propBox_SelectedIndexChanged);
             // 
@@ -168,9 +177,10 @@ namespace Bio
             this.recBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.recBox.ForeColor = System.Drawing.Color.White;
             this.recBox.FormattingEnabled = true;
-            this.recBox.Location = new System.Drawing.Point(57, 161);
+            this.recBox.Location = new System.Drawing.Point(66, 186);
+            this.recBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.recBox.Name = "recBox";
-            this.recBox.Size = new System.Drawing.Size(251, 21);
+            this.recBox.Size = new System.Drawing.Size(292, 23);
             this.recBox.TabIndex = 28;
             this.recBox.SelectedIndexChanged += new System.EventHandler(this.recBox_SelectedIndexChanged);
             // 
@@ -178,9 +188,10 @@ namespace Bio
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(0, 164);
+            this.label7.Location = new System.Drawing.Point(0, 189);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 13);
+            this.label7.Size = new System.Drawing.Size(64, 15);
             this.label7.TabIndex = 27;
             this.label7.Text = "Recording:";
             // 
@@ -188,9 +199,10 @@ namespace Bio
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(2, 371);
+            this.label8.Location = new System.Drawing.Point(2, 428);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(77, 13);
+            this.label8.Size = new System.Drawing.Size(84, 15);
             this.label8.TabIndex = 29;
             this.label8.Text = "ImageJ Macro:";
             // 
@@ -198,9 +210,10 @@ namespace Bio
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(2, 398);
+            this.label9.Location = new System.Drawing.Point(2, 459);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(55, 13);
+            this.label9.Size = new System.Drawing.Size(60, 15);
             this.label9.TabIndex = 31;
             this.label9.Text = "Bio Script:";
             // 
@@ -208,9 +221,10 @@ namespace Bio
             // 
             this.setMacroFileBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.setMacroFileBut.ForeColor = System.Drawing.Color.White;
-            this.setMacroFileBut.Location = new System.Drawing.Point(79, 366);
+            this.setMacroFileBut.Location = new System.Drawing.Point(92, 422);
+            this.setMacroFileBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.setMacroFileBut.Name = "setMacroFileBut";
-            this.setMacroFileBut.Size = new System.Drawing.Size(72, 23);
+            this.setMacroFileBut.Size = new System.Drawing.Size(84, 27);
             this.setMacroFileBut.TabIndex = 32;
             this.setMacroFileBut.Text = "Set File";
             this.setMacroFileBut.UseVisualStyleBackColor = false;
@@ -220,9 +234,10 @@ namespace Bio
             // 
             this.setScriptFileBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.setScriptFileBut.ForeColor = System.Drawing.Color.White;
-            this.setScriptFileBut.Location = new System.Drawing.Point(79, 393);
+            this.setScriptFileBut.Location = new System.Drawing.Point(92, 453);
+            this.setScriptFileBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.setScriptFileBut.Name = "setScriptFileBut";
-            this.setScriptFileBut.Size = new System.Drawing.Size(72, 23);
+            this.setScriptFileBut.Size = new System.Drawing.Size(84, 27);
             this.setScriptFileBut.TabIndex = 33;
             this.setScriptFileBut.Text = "Set File";
             this.setScriptFileBut.UseVisualStyleBackColor = false;
@@ -232,9 +247,10 @@ namespace Bio
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(0, 34);
+            this.label10.Location = new System.Drawing.Point(0, 39);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(38, 13);
+            this.label10.Size = new System.Drawing.Size(42, 15);
             this.label10.TabIndex = 34;
             this.label10.Text = "Name:";
             // 
@@ -242,9 +258,10 @@ namespace Bio
             // 
             this.nameBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.nameBox.ForeColor = System.Drawing.Color.White;
-            this.nameBox.Location = new System.Drawing.Point(57, 31);
+            this.nameBox.Location = new System.Drawing.Point(66, 36);
+            this.nameBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.nameBox.Name = "nameBox";
-            this.nameBox.Size = new System.Drawing.Size(251, 20);
+            this.nameBox.Size = new System.Drawing.Size(292, 23);
             this.nameBox.TabIndex = 165;
             this.nameBox.Text = "Function1";
             // 
@@ -253,9 +270,10 @@ namespace Bio
             this.cancelBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.cancelBut.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBut.ForeColor = System.Drawing.Color.White;
-            this.cancelBut.Location = new System.Drawing.Point(157, 393);
+            this.cancelBut.Location = new System.Drawing.Point(183, 453);
+            this.cancelBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cancelBut.Name = "cancelBut";
-            this.cancelBut.Size = new System.Drawing.Size(75, 23);
+            this.cancelBut.Size = new System.Drawing.Size(88, 27);
             this.cancelBut.TabIndex = 166;
             this.cancelBut.Text = "Cancel";
             this.cancelBut.UseVisualStyleBackColor = false;
@@ -265,9 +283,10 @@ namespace Bio
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(0, 190);
+            this.label12.Location = new System.Drawing.Point(0, 219);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(37, 13);
+            this.label12.Size = new System.Drawing.Size(38, 15);
             this.label12.TabIndex = 170;
             this.label12.Text = "Value:";
             // 
@@ -281,14 +300,15 @@ namespace Bio
             0,
             0,
             0});
-            this.valBox.Location = new System.Drawing.Point(57, 188);
+            this.valBox.Location = new System.Drawing.Point(66, 217);
+            this.valBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.valBox.Maximum = new decimal(new int[] {
             10000000,
             0,
             0,
             0});
             this.valBox.Name = "valBox";
-            this.valBox.Size = new System.Drawing.Size(251, 20);
+            this.valBox.Size = new System.Drawing.Size(293, 23);
             this.valBox.TabIndex = 171;
             this.valBox.ValueChanged += new System.EventHandler(this.valBox_ValueChanged);
             // 
@@ -296,9 +316,10 @@ namespace Bio
             // 
             this.performBut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.performBut.ForeColor = System.Drawing.Color.White;
-            this.performBut.Location = new System.Drawing.Point(235, 366);
+            this.performBut.Location = new System.Drawing.Point(274, 422);
+            this.performBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.performBut.Name = "performBut";
-            this.performBut.Size = new System.Drawing.Size(75, 23);
+            this.performBut.Size = new System.Drawing.Size(88, 27);
             this.performBut.TabIndex = 172;
             this.performBut.Text = "Perform";
             this.performBut.UseVisualStyleBackColor = false;
@@ -308,21 +329,23 @@ namespace Bio
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(-1, 218);
+            this.label3.Location = new System.Drawing.Point(-1, 252);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.Size = new System.Drawing.Size(40, 15);
             this.label3.TabIndex = 173;
             this.label3.Text = "Script:";
             // 
             // textBox
             // 
             this.textBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
-            this.textBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox.ForeColor = System.Drawing.Color.White;
-            this.textBox.Location = new System.Drawing.Point(57, 218);
+            this.textBox.Location = new System.Drawing.Point(66, 252);
+            this.textBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
-            this.textBox.Size = new System.Drawing.Size(251, 75);
+            this.textBox.Size = new System.Drawing.Size(292, 86);
             this.textBox.TabIndex = 174;
             this.textBox.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
@@ -330,9 +353,10 @@ namespace Bio
             // 
             this.imageJRadioBut.AutoSize = true;
             this.imageJRadioBut.Checked = true;
-            this.imageJRadioBut.Location = new System.Drawing.Point(205, 296);
+            this.imageJRadioBut.Location = new System.Drawing.Point(239, 342);
+            this.imageJRadioBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.imageJRadioBut.Name = "imageJRadioBut";
-            this.imageJRadioBut.Size = new System.Drawing.Size(59, 17);
+            this.imageJRadioBut.Size = new System.Drawing.Size(62, 19);
             this.imageJRadioBut.TabIndex = 175;
             this.imageJRadioBut.TabStop = true;
             this.imageJRadioBut.Text = "ImageJ";
@@ -342,9 +366,10 @@ namespace Bio
             // bioRadioBut
             // 
             this.bioRadioBut.AutoSize = true;
-            this.bioRadioBut.Location = new System.Drawing.Point(270, 296);
+            this.bioRadioBut.Location = new System.Drawing.Point(315, 342);
+            this.bioRadioBut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.bioRadioBut.Name = "bioRadioBut";
-            this.bioRadioBut.Size = new System.Drawing.Size(40, 17);
+            this.bioRadioBut.Size = new System.Drawing.Size(42, 19);
             this.bioRadioBut.TabIndex = 176;
             this.bioRadioBut.Text = "Bio";
             this.bioRadioBut.UseVisualStyleBackColor = true;
@@ -354,9 +379,10 @@ namespace Bio
             // 
             this.menuPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.menuPath.ForeColor = System.Drawing.Color.White;
-            this.menuPath.Location = new System.Drawing.Point(110, 319);
+            this.menuPath.Location = new System.Drawing.Point(128, 368);
+            this.menuPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.menuPath.Name = "menuPath";
-            this.menuPath.Size = new System.Drawing.Size(200, 20);
+            this.menuPath.Size = new System.Drawing.Size(233, 23);
             this.menuPath.TabIndex = 178;
             this.menuPath.TextChanged += new System.EventHandler(this.menuPath_TextChanged);
             // 
@@ -364,9 +390,10 @@ namespace Bio
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(2, 322);
+            this.label4.Location = new System.Drawing.Point(2, 372);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 13);
+            this.label4.Size = new System.Drawing.Size(76, 15);
             this.label4.TabIndex = 177;
             this.label4.Text = "Menu Path /:";
             // 
@@ -374,9 +401,10 @@ namespace Bio
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(2, 9);
+            this.label11.Location = new System.Drawing.Point(2, 10);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(56, 13);
+            this.label11.Size = new System.Drawing.Size(62, 15);
             this.label11.TabIndex = 179;
             this.label11.Text = "Functions:";
             // 
@@ -385,9 +413,10 @@ namespace Bio
             this.funcsBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.funcsBox.ForeColor = System.Drawing.Color.White;
             this.funcsBox.FormattingEnabled = true;
-            this.funcsBox.Location = new System.Drawing.Point(57, 6);
+            this.funcsBox.Location = new System.Drawing.Point(66, 7);
+            this.funcsBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.funcsBox.Name = "funcsBox";
-            this.funcsBox.Size = new System.Drawing.Size(251, 21);
+            this.funcsBox.Size = new System.Drawing.Size(292, 23);
             this.funcsBox.TabIndex = 180;
             this.funcsBox.SelectedIndexChanged += new System.EventHandler(this.funcsBox_SelectedIndexChanged);
             // 
@@ -396,9 +425,10 @@ namespace Bio
             this.microBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.microBox.ForeColor = System.Drawing.Color.White;
             this.microBox.FormattingEnabled = true;
-            this.microBox.Location = new System.Drawing.Point(71, 55);
+            this.microBox.Location = new System.Drawing.Point(83, 63);
+            this.microBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.microBox.Name = "microBox";
-            this.microBox.Size = new System.Drawing.Size(237, 21);
+            this.microBox.Size = new System.Drawing.Size(276, 23);
             this.microBox.TabIndex = 182;
             this.microBox.SelectedIndexChanged += new System.EventHandler(this.microBox_SelectedIndexChanged);
             // 
@@ -406,9 +436,10 @@ namespace Bio
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(0, 58);
+            this.label13.Location = new System.Drawing.Point(0, 67);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 13);
+            this.label13.Size = new System.Drawing.Size(72, 15);
             this.label13.TabIndex = 181;
             this.label13.Text = "Microscope:";
             // 
@@ -416,9 +447,10 @@ namespace Bio
             // 
             this.contextMenuPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.contextMenuPath.ForeColor = System.Drawing.Color.White;
-            this.contextMenuPath.Location = new System.Drawing.Point(110, 343);
+            this.contextMenuPath.Location = new System.Drawing.Point(128, 396);
+            this.contextMenuPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.contextMenuPath.Name = "contextMenuPath";
-            this.contextMenuPath.Size = new System.Drawing.Size(200, 20);
+            this.contextMenuPath.Size = new System.Drawing.Size(233, 23);
             this.contextMenuPath.TabIndex = 184;
             this.contextMenuPath.TextChanged += new System.EventHandler(this.contextMenuPath_TextChanged);
             // 
@@ -426,20 +458,21 @@ namespace Bio
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(2, 346);
+            this.label14.Location = new System.Drawing.Point(2, 399);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(109, 13);
+            this.label14.Size = new System.Drawing.Size(121, 15);
             this.label14.TabIndex = 183;
             this.label14.Text = "Context Menu Path /:";
             // 
             // FunctionForm
             // 
             this.AcceptButton = this.applyButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
             this.CancelButton = this.cancelBut;
-            this.ClientSize = new System.Drawing.Size(317, 424);
+            this.ClientSize = new System.Drawing.Size(370, 489);
             this.Controls.Add(this.contextMenuPath);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.microBox);
@@ -475,6 +508,7 @@ namespace Bio
             this.Controls.Add(this.keysBox);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FunctionForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Functions";

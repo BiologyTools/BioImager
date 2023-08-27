@@ -539,8 +539,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.Y = form.Func;
-            Settings.Default.Y = ControllerFuncs.Y.ToString();
+            Settings.Default.Y = ControllerFuncs.Y.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// It opens a new form, and if the user clicks OK, it saves the new function to the settings
@@ -556,8 +557,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.B = form.Func;
-            Settings.Default.B = ControllerFuncs.B.ToString();
+            Settings.Default.B = ControllerFuncs.B.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks on the label, a new form is created and shown to the user. If
@@ -573,8 +575,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.A = form.Func;
-            Settings.Default.A = ControllerFuncs.A.ToString();
+            Settings.Default.A = ControllerFuncs.A.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks the label, a new form is created and shown. If the user clicks
@@ -590,8 +593,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.X = form.Func;
-            Settings.Default.X = ControllerFuncs.X.ToString();
+            Settings.Default.X = ControllerFuncs.X.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// It opens a form that allows the user to select a function to be assigned to the back button
@@ -606,8 +610,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.Back = form.Func;
-            Settings.Default.Back = ControllerFuncs.Back.ToString();
+            Settings.Default.Back = ControllerFuncs.Back.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// It opens a new form, and if the user clicks OK, it saves the new settings
@@ -621,8 +626,9 @@ namespace Bio
             FunctionForm form = new FunctionForm(ControllerFuncs.Start, "StartButton");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
-            Settings.Default.Start = ControllerFuncs.Start.ToString();
+            Settings.Default.Start = ControllerFuncs.Start.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks the DPadUpLabel, a new FunctionForm is created and shown. If the
@@ -638,8 +644,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadUp = form.Func;
-            Settings.Default.DPadUp = ControllerFuncs.DPadUp.ToString();
+            Settings.Default.DPadUp = ControllerFuncs.DPadUp.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks the DPadRightLabel, a new FunctionForm is created and shown. If
@@ -655,8 +662,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadRight = form.Func;
-            Settings.Default.DPadRight = ControllerFuncs.DPadRight.ToString();
+            Settings.Default.DPadRight = ControllerFuncs.DPadRight.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks the label, a new form is created and shown. If the user clicks
@@ -672,8 +680,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadDown = form.Func;
-            Settings.Default.DPadDown = ControllerFuncs.DPadDown.ToString();
+            Settings.Default.DPadDown = ControllerFuncs.DPadDown.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks the DPadLeftLabel, a new FunctionForm is created and shown. If
@@ -689,8 +698,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.DPadLeft = form.Func;
-            Settings.Default.DPadLeft = ControllerFuncs.DPadLeft.ToString();
+            Settings.Default.DPadLeft = ControllerFuncs.DPadLeft.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// It opens a new form, and if the user clicks OK, it saves the new function to the settings
@@ -706,8 +716,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.LShoulder = form.Func;
-            Settings.Default.LShoulder = ControllerFuncs.LShoulder.ToString();
+            Settings.Default.LShoulder = ControllerFuncs.LShoulder.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// It opens a new form, and if the user clicks OK, it saves the function to a settings file
@@ -722,8 +733,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.RShoulder = form.Func;
-            Settings.Default.RShoulder = ControllerFuncs.RShoulder.ToString();
+            Settings.Default.RShoulder = ControllerFuncs.RShoulder.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
         /// It opens a new form, and if the user clicks OK, it saves the function to the settings file.
         /// 
@@ -738,8 +750,9 @@ namespace Bio
             if (form.ShowDialog() != DialogResult.OK)
                 return;
             ControllerFuncs.R3 = form.Func;
-            Settings.Default.Right3 = ControllerFuncs.R3.ToString();
+            Settings.Default.Right3 = ControllerFuncs.R3.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         /// When the user double clicks on the label, a new form is created and shown to the user. If
@@ -754,8 +767,9 @@ namespace Bio
             FunctionForm form = new FunctionForm(ControllerFuncs.L3, "L3");
             if (form.ShowDialog() != DialogResult.OK)
                 return;
-            Settings.Default.Left3 = ControllerFuncs.L3.ToString();
+            Settings.Default.Left3 = ControllerFuncs.L3.Serialize();
             Settings.Default.Save();
+            ControllerFuncs.LoadSettings();
         }
 
         #endregion
@@ -1454,78 +1468,75 @@ namespace Bio
             {
                 ImageJ.RunMacro(f.File, "");
             }
-            if (f.FuncType == Function.FunctionType.Microscope)
+            if (f.FuncType.ToString() == "StageUp")
             {
-                if (f.Microscope == "StageUp")
-                {
-                    Microscope.MoveUp(f.Value);
+                Microscope.MoveUp(f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "StageRight")
+            {
+                Microscope.MoveRight(f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "StageDown")
+            {
+                Microscope.MoveDown(f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "StageLeft")
+            {
+                Microscope.MoveLeft(f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "FocusUp")
+            {
+                Microscope.SetFocus(f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "FocusDown")
+            {
+                Microscope.SetFocus(-f.Value);
+            }
+            else
+            if (f.FuncType.ToString() == "StageFieldUp")
+            {
+                Microscope.MoveFieldUp();
+            }
+            else
+            if (f.FuncType.ToString() == "StageFieldRight")
+            {
+                Microscope.MoveFieldRight();
+            }
+            else
+            if (f.FuncType.ToString() == "StageFieldDown")
+            {
+                Microscope.MoveFieldDown();
+            }
+            else
+            if (f.FuncType.ToString() == "StageFieldLeft")
+            {
+                Microscope.MoveFieldLeft();
+            }
+            else
+            if (f.FuncType.ToString() == "TakeImage")
+            {
+                Microscope.TakeImage();
                 }
                 else
-                if (f.Microscope == "StageRight")
-                {
-                    Microscope.MoveRight(f.Value);
-                }
-                else
-                if (f.Microscope == "StageDown")
-                {
-                    Microscope.MoveDown(f.Value);
-                }
-                else
-                if (f.Microscope == "StageLeft")
-                {
-                    Microscope.MoveLeft(f.Value);
-                }
-                else
-                if (f.Microscope == "FocusUp")
-                {
-                    Microscope.SetFocus(f.Value);
-                }
-                else
-                if (f.Microscope == "FocusDown")
-                {
-                    Microscope.SetFocus(-f.Value);
-                }
-                else
-                if (f.Microscope == "StageFieldUp")
-                {
-                    Microscope.MoveFieldUp();
-                }
-                else
-                if (f.Microscope == "StageFieldRight")
-                {
-                    Microscope.MoveFieldRight();
-                }
-                else
-                if (f.Microscope == "StageFieldDown")
-                {
-                    Microscope.MoveFieldDown();
-                }
-                else
-                if (f.Microscope == "StageFieldLeft")
-                {
-                    Microscope.MoveFieldLeft();
-                }
-                else
-                if (f.Microscope == "TakeImage")
-                {
-                    Microscope.TakeImage();
-                }
-                else
-                if (f.Microscope == "TakeImageStack")
+                if (f.FuncType.ToString() == "TakeImageStack")
                 {
                     Microscope.TakeImageStack();
                 }
                 else
-                if (f.Name == "RL")
+                if (f.FuncType.ToString() == "RL")
                 {
                     Microscope.RLShutter.SetPosition((int)f.Value);
                 }
                 else
-                if (f.Name == "TL")
+                if (f.FuncType.ToString() == "TL")
                 {
                     Microscope.TLShutter.SetPosition((int)f.Value);
                 }
-            }
             if (f.FuncType == Function.FunctionType.Property)
             {
                 if (f.Name.StartsWith("Get"))
