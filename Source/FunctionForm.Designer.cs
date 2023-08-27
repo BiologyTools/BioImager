@@ -425,10 +425,10 @@ namespace Bio
             this.microBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.microBox.ForeColor = System.Drawing.Color.White;
             this.microBox.FormattingEnabled = true;
-            this.microBox.Location = new System.Drawing.Point(83, 63);
+            this.microBox.Location = new System.Drawing.Point(66, 63);
             this.microBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.microBox.Name = "microBox";
-            this.microBox.Size = new System.Drawing.Size(276, 23);
+            this.microBox.Size = new System.Drawing.Size(293, 23);
             this.microBox.TabIndex = 182;
             this.microBox.SelectedIndexChanged += new System.EventHandler(this.microBox_SelectedIndexChanged);
             // 
@@ -439,9 +439,9 @@ namespace Bio
             this.label13.Location = new System.Drawing.Point(0, 67);
             this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 15);
+            this.label13.Size = new System.Drawing.Size(34, 15);
             this.label13.TabIndex = 181;
-            this.label13.Text = "Microscope:";
+            this.label13.Text = "Type:";
             // 
             // contextMenuPath
             // 
