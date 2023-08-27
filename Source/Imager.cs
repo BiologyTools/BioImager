@@ -1360,7 +1360,7 @@ namespace Bio
                 Objectives.Objective obj = Bio.Microscope.Objectives.GetObjective();
                 Microscope.Objectives.SetPosition((int)f.Value);
                 //We set locate exposure as the locate tab is the only one that updates lightpath automatically after objective change. 
-                Automation.SetProperty("LocateExposure", obj.LocateExposure.ToString());
+                //Automation.SetProperty("LocateExposure", obj.LocateExposure.ToString());
                 LJoystickStageMoveAmountBox.Value = (decimal)obj.MoveAmountL;
                 RJoystickStageMoveAmountBox.Value = (decimal)obj.MoveAmountR;
                 triggerFocusBox.Value = (decimal)obj.FocusMoveAmount;
