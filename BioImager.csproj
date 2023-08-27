@@ -20,12 +20,8 @@
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Updated Bioformats to 7.0.0, also updated other dependencies.</PackageReleaseNotes>
+    <PackageReleaseNotes>Functions Fix.</PackageReleaseNotes>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="C:\Users\Kari\.nuget\packages\bioformats.net6\7.0.0\contentFiles\any\net6.0\bioformats_package.dll" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="bioformats_package.dll" />
