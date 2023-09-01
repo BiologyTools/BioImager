@@ -20,6 +20,8 @@ using RectangleF = AForge.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = AForge.Rectangle;
 using Point = AForge.Point;
+using org.checkerframework.checker.units.qual;
+
 namespace Bio
 {
     /* It's a wrapper for the stage*/
@@ -1167,7 +1169,7 @@ namespace Bio
                 b.StageSizeX = p.X;
                 b.StageSizeY = p.Y;
                 b.StageSizeZ = p.Z;
-                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,b.StageSizeX,b.StageSizeY,b.StageSizeZ);
+                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,p.X,p.Y,p.Z);
                 string file;
                 if (folder == "" || folder == null)
                     file = Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";

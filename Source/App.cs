@@ -55,6 +55,10 @@ namespace Bio
         {
             BioImage.Initialize();
             Microscope.Initialize();
+            do
+            {
+                Thread.Sleep(100);
+            } while (!BioImage.Initialized);
             setup = new MicroscopeSetup();
             stage = new StageTool();
             

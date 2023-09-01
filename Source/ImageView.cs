@@ -183,6 +183,7 @@ namespace Bio
                 if (value >= 0 && Images.Count > 0)
                 {
                     selIndex = value;
+                    selectedIndex = selIndex;
                     selectedImage = Images[selIndex];
                     InitGUI();
                 }
@@ -832,15 +833,14 @@ namespace Bio
                     RectangleF rec = new RectangleF((float)Images[x].Volume.Location.X, (float)Images[x].Volume.Location.Y, (float)Images[x].Volume.Width, (float)Images[x].Volume.Height);
                     //if (rge.IntersectsWith(rec))
                         dx.RenderTarget2D.DrawBitmap(dBitmaps[x], ToRawRectF(r.X, r.Y, r.Width, r.Height), 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-                    if (Images[x].selected)
+                    if (x == selectedIndex)
                     {
                         dx.RenderTarget2D.DrawRectangle(ToRawRectF(r.X, r.Y, r.Width, r.Height), blue);
                     }
                 }
                 RectangleD re = Microscope.GetViewRectangle(false);
                 System.Drawing.RectangleF vr = ToScreenRectF(re.X, re.Y, re.W, re.H);
-                RawRectangleF rr = ToRawRectF(vr.X, vr.Y, vr.Width, vr.Height);
-                dx.RenderTarget2D.DrawRectangle(rr, red);
+                
 
                 SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
 
@@ -1021,6 +1021,10 @@ namespace Bio
 
                     }
                 }
+
+                RawRectangleF rr = ToRawRectF(vr.X, vr.Y, vr.Width, vr.Height);
+                dx.RenderTarget2D.DrawRectangle(rr, red);
+
                 pen.Dispose();
                 red.Dispose();
                 mag.Dispose();
@@ -2082,8 +2086,7 @@ namespace Bio
             RectangleD d = Microscope.GetViewRectangle(false);
             System.Drawing.RectangleF[] rfs = new System.Drawing.RectangleF[1] { new System.Drawing.RectangleF((float)d.X, (float)d.Y, (float)d.W, (float)d.H) };
             rfs[0] = ToScreenRectF(rfs[0].X, rfs[0].Y, rfs[0].Width, rfs[0].Height);
-            System.Drawing.Pen red = new System.Drawing.Pen(Brushes.Red, 1 / Scale.Width);
-            g.DrawRectangles(red, rfs);
+            
             if (Bitmaps.Count == 0)
                 return;
             System.Drawing.RectangleF[] rf = new System.Drawing.RectangleF[1];
@@ -2114,6 +2117,8 @@ namespace Bio
                 }
                 i++;
             }
+            System.Drawing.Pen red = new System.Drawing.Pen(Brushes.Red, 1 / Scale.Width);
+            g.DrawRectangles(red, rfs);
             blue.Dispose();
             red.Dispose();
             update = false;
@@ -2334,9 +2339,11 @@ namespace Bio
                 RectangleD r = new RectangleD(b.Volume.Location.X, b.Volume.Location.Y, b.Volume.Width, b.Volume.Height);
                 if (r.IntersectsWith(p))
                 {
+                    b.selected = true;
                     SelectedIndex = ind;
-                    break;
                 }
+                else
+                    b.selected = false;
                 ind++;
             }
             if (!Ctrl && e.Button == MouseButtons.Left)

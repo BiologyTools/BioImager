@@ -1887,12 +1887,12 @@ namespace Bio
         }
         public double StageSizeY
         {
-            get { return Resolutions[Resolution].StageSizeX; }
+            get { return Resolutions[Resolution].StageSizeY; }
             set { imageInfo.StageSizeY = value; }
         }
         public double StageSizeZ
         {
-            get { return Resolutions[Resolution].StageSizeX; }
+            get { return Resolutions[Resolution].StageSizeZ; }
             set { imageInfo.StageSizeZ = value; }
         }
 

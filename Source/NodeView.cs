@@ -52,10 +52,10 @@ namespace Bio
         }
         public NodeView(string[] args)
         {
-            Init();
+            App.nodeView = this;
             InitializeComponent();
             InitNodes();
-            App.nodeView = this;
+            Init();
             if (args.Length > 0)
             {
                 App.tabsView = new TabsView(args);
