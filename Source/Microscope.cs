@@ -1169,7 +1169,11 @@ namespace Bio
                 b.StageSizeX = p.X;
                 b.StageSizeY = p.Y;
                 b.StageSizeZ = p.Z;
-                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,b.PhysicalSizeX,b.PhysicalSizeY,b.PhysicalSizeZ,p.X,p.Y,p.Z);
+                RectangleD view = Microscope.GetViewRectangle(true);
+                b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,view.W / b.SizeX, view.H / b.SizeY, b.PhysicalSizeZ,p.X,p.Y,p.Z);
+                b.Volume.Location = p;
+                b.Volume.Width = view.W;
+                b.Volume.Height = view.H;
                 string file;
                 if (folder == "" || folder == null)
                     file = Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
@@ -1201,8 +1205,11 @@ namespace Bio
                 bm.Buffers.Add(bf);
                 //Set the physical size based on objective view
                 RectangleD rec = GetViewRectangle(false);
-                double f = Focus.GetFocus();
-                Resolution res = new Resolution(w,h,px,rec.W / bm.SizeX,rec.H / bm.SizeY,1,rec.X,rec.Y,f);
+                Point3D p = Microscope.GetPosition();
+                Resolution res = new Resolution(w,h,px,rec.W / bm.SizeX,rec.H / bm.SizeY,1, p.X,p.Y,p.Z);
+                bm.Volume.Location = p;
+                bm.Volume.Width = rec.W;
+                bm.Volume.Height = rec.H;
                 bm.bitsPerPixel = bf.BitsPerPixel;
                 bm.UpdateCoords(1, 1, 1);
                 bm.Resolutions.Add(res);

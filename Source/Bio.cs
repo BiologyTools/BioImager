@@ -1757,10 +1757,10 @@ namespace Bio
         {
             BioImage bi = new BioImage(b.ID);
             if (rois)
-                foreach (ROI an in b.Annotations)
-                {
-                    bi.Annotations.Add(an);
-                }
+            foreach (ROI an in b.Annotations)
+            {
+                bi.Annotations.Add(an);
+            }
             foreach (Bitmap bf in b.Buffers)
             {
                 bi.Buffers.Add(bf.Copy());
@@ -1783,7 +1783,8 @@ namespace Bio
             bi.bitsPerPixel = b.bitsPerPixel;
             bi.file = b.file;
             bi.filename = b.filename;
-            bi.Resolutions = b.Resolutions;
+            bi.Resolutions = new List<Resolution>();
+            bi.Resolutions.AddRange(b.Resolutions);
             bi.statistics = b.statistics;
             return bi;
         }
@@ -5058,8 +5059,16 @@ namespace Bio
                 else
                 {
                     bis.Add(res.PhysicalSizeX, new List<BioImage>());
-                    min.Add(res.PhysicalSizeX, new Point3D(res.StageSizeX, res.StageSizeY, res.StageSizeZ));
-                    max.Add(res.PhysicalSizeX, new Point3D(res.StageSizeX, res.StageSizeY, res.StageSizeZ));
+                    min.Add(res.PhysicalSizeX, new Point3D(double.MaxValue, double.MaxValue, double.MaxValue));
+                    max.Add(res.PhysicalSizeX, new Point3D(double.MinValue, double.MinValue, double.MinValue));
+                    if (bms[i].StageSizeX < min[res.PhysicalSizeX].X || bms[i].StageSizeY < min[res.PhysicalSizeX].Y)
+                    {
+                        min[res.PhysicalSizeX] = bms[i].Volume.Location;
+                    }
+                    if (bms[i].StageSizeX > max[res.PhysicalSizeX].X || bms[i].StageSizeY > max[res.PhysicalSizeX].Y)
+                    {
+                        max[res.PhysicalSizeX] = bms[i].Volume.Location;
+                    }
                     bis[res.PhysicalSizeX].Add(bms[i]);
                 }
             }
@@ -5129,18 +5138,22 @@ namespace Bio
                             ome.units.quantity.Length ex = new ome.units.quantity.Length(java.lang.Double.valueOf(c.Excitation), ome.units.UNITS.NANOMETER);
                             omexml.setChannelExcitationWavelength(ex, serie, channel + r);
                         }
+                        /*
+                        if(c.ContrastMethod!=null)
                         omexml.setChannelContrastMethod((ome.xml.model.enums.ContrastMethod)Enum.Parse(typeof(ome.xml.model.enums.ContrastMethod), c.ContrastMethod), serie, channel + r);
+                        if(c.Fluor!=null)
                         omexml.setChannelFluor(c.Fluor, serie, channel + r);
+                        if(c.IlluminationType!=null)
                         omexml.setChannelIlluminationType((ome.xml.model.enums.IlluminationType)Enum.Parse(typeof(ome.xml.model.enums.IlluminationType), c.IlluminationType), serie, channel + r);
-
+                        */
                         if (c.LightSourceIntensity != 0)
                         {
                             ome.units.quantity.Power pw = new ome.units.quantity.Power(java.lang.Double.valueOf(c.LightSourceIntensity), ome.units.UNITS.VOLT);
                             omexml.setLightEmittingDiodePower(pw, serie, channel + r);
                             omexml.setLightEmittingDiodeID(c.DiodeName, serie, channel + r);
                         }
-                        if (c.AcquisitionMode != null)
-                            omexml.setChannelAcquisitionMode((ome.xml.model.enums.AcquisitionMode)Enum.Parse(typeof(ome.xml.model.enums.AcquisitionMode), c.AcquisitionMode), serie, channel + r);
+                        //if (c.AcquisitionMode != null)
+                        //    omexml.setChannelAcquisitionMode((ome.xml.model.enums.AcquisitionMode)Enum.Parse(typeof(ome.xml.model.enums.AcquisitionMode), c.AcquisitionMode), serie, channel + r);
                     }
                 }
 
@@ -5366,8 +5379,8 @@ namespace Bio
                     BioImage b = bis[px][i];
                     writer.setTileSizeX(b.SizeX);
                     writer.setTileSizeY(b.SizeY);
-                    double dx = Math.Ceiling((bis[px][i].StageSizeX - min[px].X) / bis[px][i].Resolutions[bis[px][i].Resolution].VolumeWidth);
-                    double dy = Math.Ceiling((bis[px][i].StageSizeY - min[px].Y) / bis[px][i].Resolutions[bis[px][i].Resolution].VolumeHeight);
+                    double dx = Math.Ceiling((b.Volume.Location.X - min[px].X) / b.Resolutions[b.Resolution].VolumeWidth);
+                    double dy = Math.Ceiling((b.Volume.Location.Y - min[px].Y) / b.Resolutions[b.Resolution].VolumeHeight);
                     for (int bu = 0; bu < b.Buffers.Count; bu++)
                     {
                         byte[] bt = b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian);
@@ -5375,6 +5388,7 @@ namespace Bio
                     }
                     progress = (int)((float)i / bis[px].Count) * 100;
                 }
+                s++;
             }
             bool stop = false;
             do
