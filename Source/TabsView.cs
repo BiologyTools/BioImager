@@ -1368,8 +1368,7 @@ namespace Bio
         {
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
                 return;
-
-            BioImage.SaveOMEPyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
+            BioImage.SavePyramidal(App.viewer.Images.ToArray(), saveOMEFileDialog.FileName, "LZW");
         }
 
         private void findFocusToolStripMenuItem_Click(object sender, EventArgs e)
