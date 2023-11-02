@@ -2447,7 +2447,7 @@ namespace Bio
             if (e.Button != MouseButtons.XButton1 && e.Button != MouseButtons.XButton2)
                 Origin = new PointD(-p.X, -p.Y);
         }
-       /// If the user has selected a ROI, then delete it
+        /// If the user has selected a ROI, then delete it
        /// 
        /// @param sender The object that raised the event.
        /// @param EventArgs 

@@ -3,7 +3,6 @@ using FlaUI.Core.Definitions;
 using FlaUI.Core.Identifiers;
 using FlaUI.UIA3;
 using Gma.System.MouseKeyHook;
-using org.checkerframework.common.returnsreceiver.qual;
 using System.Diagnostics;
 using WindowsInput;
 

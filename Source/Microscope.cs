@@ -20,7 +20,6 @@ using RectangleF = AForge.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = AForge.Rectangle;
 using Point = AForge.Point;
-using org.checkerframework.checker.units.qual;
 
 namespace Bio
 {

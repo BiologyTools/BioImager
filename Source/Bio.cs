@@ -5031,7 +5031,7 @@ namespace Bio
 
             } while (!stop);
         }
-        private static int GetBands(AForge.PixelFormat format)
+        private static int GetBands(PixelFormat format)
         {
             switch (format)
             {
@@ -5048,51 +5048,7 @@ namespace Bio
                     throw new NotSupportedException($"Unsupported pixel format: {format}");
             }
         }
-        public static void SavePyramidal(BioImage[] bms, string file, string compression)
-        {
-            SaveOMEPyramidal(bms, file, compression);
-        }
-        public static Bitmap StitchAtCoordinates(Bitmap baseBitmap, Bitmap overlayBitmap, int x, int y)
-        {
-            if (baseBitmap.PixelFormat != PixelFormat.Format16bppGrayScale || overlayBitmap.PixelFormat != PixelFormat.Format16bppGrayScale)
-                throw new ArgumentException("Both bitmaps must be 16-bit grayscale.");
-
-            int resultWidth = Math.Max(baseBitmap.Width, x + overlayBitmap.Width);
-            int resultHeight = Math.Max(baseBitmap.Height, y + overlayBitmap.Height);
-
-            Bitmap resultBitmap = new Bitmap(resultWidth, resultHeight, PixelFormat.Format16bppGrayScale);
-
-            BitmapData baseData = baseBitmap.LockBits(new Rectangle(0, 0, baseBitmap.Width, baseBitmap.Height), ImageLockMode.ReadOnly, baseBitmap.PixelFormat);
-            BitmapData overlayData = overlayBitmap.LockBits(new Rectangle(0, 0, overlayBitmap.Width, overlayBitmap.Height), ImageLockMode.ReadOnly, overlayBitmap.PixelFormat);
-            BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0, resultWidth, resultHeight), ImageLockMode.ReadWrite, PixelFormat.Format16bppGrayScale);
-
-            // Copy baseBitmap to resultBitmap
-            for (int row = 0; row < baseData.Height; row++)
-            {
-                IntPtr srcRow = baseData.Scan0 + (row * baseData.Stride);
-                IntPtr destRow = resultData.Scan0 + (row * resultData.Stride);
-                byte[] rowData = new byte[baseData.Stride];
-                Marshal.Copy(srcRow, rowData, 0, baseData.Stride);
-                Marshal.Copy(rowData, 0, destRow, baseData.Stride);
-            }
-
-            // Copy overlayBitmap to resultBitmap at the specified coordinates
-            for (int row = 0; row < overlayData.Height; row++)
-            {
-                IntPtr srcRow = overlayData.Scan0 + (row * overlayData.Stride);
-                IntPtr destRow = resultData.Scan0 + ((row + y) * resultData.Stride) + (x * 2); // x * 2 because it's 16-bit
-                byte[] rowData = new byte[overlayData.Stride];
-                Marshal.Copy(srcRow, rowData, 0, overlayData.Stride);
-                Marshal.Copy(rowData, 0, destRow, overlayData.Stride);
-            }
-
-            baseBitmap.UnlockBits(baseData);
-            overlayBitmap.UnlockBits(overlayData);
-            resultBitmap.UnlockBits(resultData);
-
-            return resultBitmap;
-        }
-        public static void SaveOMEPyramidal(BioImage[] bms, string file, string compression)
+        public static void SaveOMEPyramidal(BioImage[] bms, string file, Enums.ForeignTiffCompression compression, int compressionLevel)
         {
             if (File.Exists(file))
                 File.Delete(file);
@@ -5156,16 +5112,28 @@ namespace Bio
                 "xsi:schemaLocation=\"http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd\">";
             NetVips.Image img = null;
             int ib = 0;
+            
             foreach (double px in bis.Keys)
             {
-                met += 
+                int c = bis[px][s].SizeC;
+                if (bis[px][s].Buffers[0].isRGB)
+                    c = 3;
+                string endian = (bis[px][s].Buffers[0].LittleEndian).ToString().ToLower();
+                met +=
                 "<Image ID=\"Image:" + ib + "\">" +
-                "<Pixels BigEndian=\"false\" DimensionOrder= \"XYCZT\" ID= \"Pixels:0\" Interleaved=\"false\" " +
-                "PhysicalSizeX=\"1000.0\" PhysicalSizeXUnit=\"µm\" PhysicalSizeY=\"1000.0\" PhysicalSizeYUnit=\"µm\" SignificantBits=\"16\" " +
-                "SizeC = \"3\" SizeT = \"" + bis[px][s].SizeT.ToString() + "\" SizeX =\"" + ss[px].Width +
-                "\" SizeY= \"" + ss[px].Height + "\" SizeZ=\"" + bis[px][s].SizeZ + "\" Type= \"uint16\">" +
-                "</Pixels>" +
-                "</Image>";
+                "<Pixels BigEndian=\"" + endian + "\" DimensionOrder= \"XYCZT\" ID= \"Pixels:0\" Interleaved=\"true\" " +
+                "PhysicalSizeX=\"" + bis[px][s].PhysicalSizeX + "\" PhysicalSizeXUnit=\"µm\" PhysicalSizeY=\"" + bis[px][s].PhysicalSizeY + "\" PhysicalSizeYUnit=\"µm\" SignificantBits=\"" + bis[px][s].bitsPerPixel + "\" " +
+                "SizeC = \"" + c + "\" SizeT = \"" + bis[px][s].SizeT + "\" SizeX =\"" + ss[px].Width +
+                "\" SizeY= \"" + ss[px].Height + "\" SizeZ=\"" + bis[px][s].SizeZ;
+                if (bis[px][s].bitsPerPixel > 8) met += "\" Type= \"uint16\">";
+                else met += "\" Type= \"uint8\">";
+                int i = 0;
+                foreach (Channel ch in bis[px][s].Channels)
+                {
+                    met += "<Channel ID=\"Channel:" + ib + ":" + i + "\" SamplesPerPixel=\"1\"></Channel>";
+                    i++;
+                }
+                met += "</Pixels></Image>";
                 ib++;
             }
             met += "</OME>";
@@ -5199,11 +5167,13 @@ namespace Bio
                     mutable.Set(GValue.GIntType, "page-height", ss[last].Height);
                 });
                 if(bis[px][0].bitsPerPixel > 8)
-                    mutated.Tiffsave(file, Enums.ForeignTiffCompression.Lzw, 1, Enums.ForeignTiffPredictor.None, null, true, ss[px].Width, ss[px].Height, true, false, 16,
-                    Enums.ForeignTiffResunit.Cm, 1,1, true, null, Enums.RegionShrink.Nearest, 0, true, Enums.ForeignDzDepth.One, true, false, null, null, ss[px].Height);
+                    mutated.Tiffsave(file, compression, 1, Enums.ForeignTiffPredictor.None, null, true, ss[px].Width, ss[px].Height, true, false, 16,
+                    Enums.ForeignTiffResunit.Cm, 1000 * bis[px][0].PhysicalSizeX, 1000 * bis[px][0].PhysicalSizeY, true, null, Enums.RegionShrink.Nearest,
+                    compressionLevel, true, Enums.ForeignDzDepth.One, true, false, null, null, ss[px].Height);
                 else
-                    mutated.Tiffsave(file, Enums.ForeignTiffCompression.Lzw, 1, Enums.ForeignTiffPredictor.None, null, true, ss[px].Width, ss[px].Height, true, false, 8,
-                    Enums.ForeignTiffResunit.Cm, 1, 1, true, null, Enums.RegionShrink.Nearest, 0, true, Enums.ForeignDzDepth.One, true, false, null, null, ss[px].Height);
+                    mutated.Tiffsave(file, compression, 1, Enums.ForeignTiffPredictor.None, null, true, ss[px].Width, ss[px].Height, true, false, 8,
+                    Enums.ForeignTiffResunit.Cm, 1000 * bis[px][0].PhysicalSizeX, 1000 * bis[px][0].PhysicalSizeY, true, null, Enums.RegionShrink.Nearest,
+                    compressionLevel, true, Enums.ForeignDzDepth.One, true, false, null, null, ss[px].Height);
                 s++;
             }
 
@@ -5355,9 +5325,9 @@ namespace Bio
                     Bitmap bm;
                     byte[] imageData = subImage.WriteToMemory();
                     if (b.Resolutions[res].RGBChannelsCount == 3)
-                        bm = new Bitmap(width, height, PixelFormat.Format24bppRgb, imageData, new ZCT(), b.file);
+                        bm = new Bitmap(b.file,width, height, PixelFormat.Format24bppRgb, imageData, new ZCT(), 0, null, b.littleEndian);
                     else
-                        bm = new Bitmap(width, height, PixelFormat.Format8bppIndexed, imageData, new ZCT(), b.file);
+                        bm = new Bitmap(b.file, width, height, PixelFormat.Format8bppIndexed, imageData, new ZCT(), 0, null, b.littleEndian);
                     return bm;
 
                 }
@@ -5366,9 +5336,9 @@ namespace Bio
                     Bitmap bm;
                     byte[] imageData = subImage.WriteToMemory();
                     if (b.Resolutions[res].RGBChannelsCount == 3)
-                        bm = new Bitmap(width, height, PixelFormat.Format24bppRgb, imageData, new ZCT(), b.file);
+                        bm = new Bitmap(b.file, width, height, PixelFormat.Format48bppRgb, imageData, new ZCT(), 0, null, b.littleEndian);
                     else
-                        bm = new Bitmap(width, height, PixelFormat.Format8bppIndexed, imageData, new ZCT(), b.file);
+                        bm = new Bitmap(b.file, width, height, PixelFormat.Format16bppGrayScale, imageData, new ZCT(), 0, null, b.littleEndian);
                     return bm;
                 }
             }
@@ -6021,12 +5991,14 @@ namespace Bio
         /// @return A Bitmap object.
         public static Bitmap GetTile(BioImage b, ZCT coord, int serie, int tilex, int tiley, int tileSizeX, int tileSizeY)
         {
+            /*
             if ((!OMESupport() && b.file.EndsWith("ome.tif") && vips) || (b.file.EndsWith(".tif") && vips))
             {
                 //We can get a tile faster with libvips rather than bioformats.
                 //and incase we are on mac we can't use bioformats due to IKVM not supporting mac.
                 return ExtractRegionFromTiledTiff(b, tilex, tiley, tileSizeX, tileSizeY, serie);
             }
+            */
             string curfile = reader.getCurrentFile();
             if (curfile == null)
             {
@@ -6555,13 +6527,9 @@ namespace Bio
         /// it will return true. If an exception is caught, it will return false.
         public static bool VipsSupport(string file)
         {
-            //Currently GTKSharp and LibVips causes an error so on windows no netvips support.
-            if (OperatingSystem.IsWindows())
-                return false;
             try
             {
                 netim = NetVips.Image.Tiffload(file);
-                //Settings.AddSettings("VipsSupport", "true");
             }
             catch (Exception e)
             {
