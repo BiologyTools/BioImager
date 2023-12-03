@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-using Bio.Graphics;
-using Pen = System.Drawing.Pen;
-using System.Threading;
+﻿using System.ComponentModel;
 using SharpDX.Mathematics.Interop;
 using AForge;
 using Bitmap = AForge.Bitmap;
@@ -20,8 +7,11 @@ using PointF = AForge.PointF;
 using RectangleF = AForge.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = AForge.Rectangle;
-using Point = AForge.Point;
+using Point = AForge.PointD;
 using SizeF = AForge.SizeF;
+using OpenSlideGTK;
+using Mapsui.Tiling.Fetcher;
+
 namespace Bio
 {
     public partial class ImageView : UserControl, IDisposable
@@ -59,8 +49,13 @@ namespace Bio
             resolutions = im.Resolutions;
             if (im.isPyramidal)
             {
-                hScrollBar.Maximum = im.Resolutions[resolution].SizeX;
-                vScrollBar.Maximum = im.Resolutions[resolution].SizeY;
+                if(im.slideImage!= null)
+                {
+                    openSlide = true;
+                    Initialize(im.file);
+                }    
+                hScrollBar.Maximum = im.Resolutions[Level].SizeX;
+                vScrollBar.Maximum = im.Resolutions[Level].SizeY;
                 hScrollBar.Visible = true;
                 vScrollBar.Visible = true;
             }
@@ -77,6 +72,7 @@ namespace Bio
             UpdateImages();
             GoToImage();
             Mode = ViewMode.Filtered;
+            if(!openSlide)
             Resolution = im.series;
             UpdateView();
             if (HardwareAcceleration)
@@ -239,8 +235,8 @@ namespace Bio
             SelectedIndex = Images.Count - 1;
             if (im.isPyramidal)
             {
-                hScrollBar.Maximum = im.Resolutions[resolution].SizeX;
-                vScrollBar.Maximum = im.Resolutions[resolution].SizeY;
+                hScrollBar.Maximum = im.Resolutions[Level].SizeX;
+                vScrollBar.Maximum = im.Resolutions[Level].SizeY;
                 hScrollBar.Visible = true;
                 vScrollBar.Visible = true;
             }
@@ -504,6 +500,14 @@ namespace Bio
         PointD origin = new PointD(0, 0);
         Point pyramidalOrigin = new Point(0, 0);
         bool hardwareAcceleration = true;
+        bool openSlide = false;
+        public bool OpenSlide
+        {
+            get { return openSlide; }
+            set { openSlide = value; }
+        }
+        public int? MacroResolution { get { return SelectedImage.MacroResolution; }}
+        public int? LabelResolution { get { return SelectedImage.LabelResolution; }}
         /* A property of the class PointD. */
         public PointD Origin
         {
@@ -515,7 +519,7 @@ namespace Bio
             }
         }
        /* Setting the value of the pyramidalOrigin variable. */
-        public Point PyramidalOrigin
+        public PointD PyramidalOrigin
         {
             get { return pyramidalOrigin; }
             set
@@ -524,6 +528,10 @@ namespace Bio
                     hScrollBar.Value = (int)value.X;
                 if (vScrollBar.Maximum > value.Y && value.Y > -1)
                     vScrollBar.Value = (int)value.Y;
+                if(openSlide)
+                {
+                    map.Navigator.CenterOn(new Mapsui.MPoint(value.X,value.Y));
+                }
                 pyramidalOrigin = value;
                 UpdateImage();
                 UpdateView();
@@ -533,21 +541,114 @@ namespace Bio
         }
         /* A property of the class ImageViewer. It is a getter and setter for the resolution of the
         image. */
-        public int Resolution
+        public double Resolution
         {
-            get { return resolution; }
+            get 
+            {
+                if (OpenSlide)
+                        return map.Navigator.Viewport.Resolution;
+                return resolution; 
+            }
             set
             {
-                if (SelectedImage.Resolutions.Count <= value || value < 0)
-                    return;
-                double x = PyramidalOrigin.X * ((double)SelectedImage.Resolutions[resolution].SizeX / (double)SelectedImage.Resolutions[value].SizeX);
-                double y = PyramidalOrigin.Y * ((double)SelectedImage.Resolutions[resolution].SizeY / (double)SelectedImage.Resolutions[value].SizeY);
-                hScrollBar.Maximum = SelectedImage.Resolutions[value].SizeX;
-                vScrollBar.Maximum = SelectedImage.Resolutions[value].SizeY;
-                PyramidalOrigin = new Point((int)x, (int)y);
-                resolution = value;
+                if (openSlide)
+                {
+                    if (value <= 0)
+                        return;
+                    int res = LevelFromResolution(value);
+                    resolution = value;
+                    map.Navigator.OverridePanBounds = new Mapsui.MRect(-SelectedImage.Resolutions[res].SizeX, -SelectedImage.Resolutions[res].SizeY, SelectedImage.Resolutions[res].SizeX * 2, SelectedImage.Resolutions[res].SizeY * 2);
+                    map.Navigator.ZoomTo(resolution);
+                    Tools.selectBoxSize = (float)(ROI.selectBoxSize * resolution);
+                }
+                else
+                {
+                    if (value > resolution)
+                    {
+                        //++resolution zoom out
+                        double x = ((float)PyramidalOrigin.X / (float)SelectedImage.Resolutions[Level].SizeX) * (float)SelectedImage.Resolutions[(int)value].SizeX;
+                        double y = ((float)PyramidalOrigin.Y / (float)SelectedImage.Resolutions[Level].SizeY) * (float)SelectedImage.Resolutions[(int)value].SizeY;
+                        float w = Width / 4;
+                        float h = Height / 4;
+                        resolution = value;
+                        PyramidalOrigin = new Point(x - w, y - h);
+                    }
+                    else
+                    {
+                        //--resolution zoom in
+                        double x = ((float)PyramidalOrigin.X / (float)SelectedImage.Resolutions[Level].SizeX) * (float)SelectedImage.Resolutions[(int)value].SizeX;
+                        double y = ((float)PyramidalOrigin.Y / (float)SelectedImage.Resolutions[Level].SizeY) * (float)SelectedImage.Resolutions[(int)value].SizeY;
+                        float w = Width / 2;
+                        float h = Height / 2;
+                        resolution = value;
+                        PyramidalOrigin = new Point(x + w, y + h);
+                    }
+                    hScrollBar.Maximum = SelectedImage.Resolutions[Level].SizeX - pictureBox.Width;
+                    vScrollBar.Maximum = SelectedImage.Resolutions[Level].SizeY - pictureBox.Height;
+                }
                 UpdateImage();
                 UpdateView();
+            }
+        }
+        /* Setting the Level of the image. */
+        public int LevelFromResolution(double resolution)
+        {
+            int lev;
+            if (MacroResolution.HasValue)
+            {
+                if (resolution >= MacroResolution.Value)
+                {
+                    int r = 0;
+                    for (int i = 0; i < SelectedImage.Resolutions.Count; i++)
+                    {
+                        if (i <= resolution - 1)
+                            r = i;
+                    }
+                    if (r - 1 <= MacroResolution.Value)
+                        lev = MacroResolution.Value - 1;
+                    else
+                        lev = r - 1;
+                }
+                else
+                    return (int)resolution;
+            }
+            else
+            {
+                int r = 0;
+                for (int i = 0; i < SelectedImage.Resolutions.Count; i++)
+                {
+                    if (i <= resolution - 1)
+                        r = i;
+                }
+                lev = r;
+            }
+            if (!OpenSlide)
+            {
+                return lev;
+            }
+            else
+            {
+                if (MacroResolution.HasValue)
+                {
+                    if (lev >= MacroResolution.Value - 1)
+                        return lev - 1;
+                    else
+                        return lev;
+                }
+                else
+                {
+                    return lev - 1;
+                }
+            }
+        }
+        public int Level
+        {
+            get
+            {
+                if (_openSlideBase == null)
+                    return (int)resolution;
+                return OpenSlideGTK.TileUtil.GetLevel(_openSlideBase.Schema.Resolutions, Resolution);
+                //return LevelFromResolution(resolution);
             }
         }
         /* A property that is used to set the scale of the object. */
@@ -562,6 +663,16 @@ namespace Bio
                 scale = value;
                 update = true;
                 UpdateView();
+                if (SelectedImage != null)
+                    if (SelectedImage.isPyramidal)
+                    {
+                        if (openSlide)
+                            Tools.selectBoxSize = (float)(ROI.selectBoxSize * resolution);
+                        else
+                            Tools.selectBoxSize = ROI.selectBoxSize;
+                    }
+                    else
+                        Tools.selectBoxSize = ROI.selectBoxSize * Scale.Width;
             }
         }
         /* A property of a class. */
@@ -1101,10 +1212,24 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        Bitmap bf = BioImage.GetTile(SelectedImage,c, resolution,(int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
-                        bitmap = (Bitmap)bf.ImageRGB;
-                        SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
-                        SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
+                        if (openSlide)
+                        {
+                            byte[] bts = _openSlideBase.GetSlice(new SliceInfo(map.Navigator.Viewport.CenterX, map.Navigator.Viewport.CenterY, pictureBox.Width, pictureBox.Height, map.Navigator.Viewport.Resolution));
+                            if (bts != null)
+                            {
+                                bitmap = new Bitmap((int)Math.Ceiling(OpenSlideBase.destExtent.Width), (int)Math.Ceiling(OpenSlideBase.destExtent.Height), PixelFormat.Format24bppRgb, bts, new ZCT(), "");
+                                b.Buffers[index] = bitmap;
+                            }
+                            else
+                                throw new InvalidOperationException();
+                        }
+                        else
+                        {
+                            Bitmap bf = BioImage.GetTile(SelectedImage, c, Level, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                            bitmap = (Bitmap)bf.ImageRGB;
+                            SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
+                            SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
+                        }
                     }
                     else
                         bitmap = b.GetFiltered(coords, b.RChannel.RangeR, b.GChannel.RangeG, b.BChannel.RangeB);
@@ -1114,7 +1239,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        Bitmap bf = BioImage.GetTile(SelectedImage, c, Level, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1127,7 +1252,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        Bitmap bf = BioImage.GetTile(SelectedImage, c, Level, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1140,7 +1265,7 @@ namespace Bio
                     if (SelectedImage.isPyramidal)
                     {
                         ZCT c = GetCoordinate();
-                        Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
+                        Bitmap bf = BioImage.GetTile(SelectedImage, c, Level, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
                         bitmap = (Bitmap)bf.ImageRGB;
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
                         SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
@@ -1174,94 +1299,7 @@ namespace Bio
         /// @return A bitmap
         public void UpdateImage()
         {
-            if (SelectedImage == null || (dx == null && HardwareAcceleration))
-                return;
-            ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
-            bitmap = null;
-            GC.Collect();
-            if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
-            {
-                zBar.Value = 0;
-                cBar.Value = 0;
-                tBar.Value = 0;
-                InitGUI();
-            }
-            int index = SelectedImage.Coords[zBar.Value, cBar.Value, tBar.Value];
-            if (Mode == ViewMode.Filtered)
-            {
-                if (SelectedImage.isPyramidal)
-                {
-                    ZCT c = GetCoordinate();
-                    Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
-                    bitmap = (Bitmap)bf.ImageRGB;
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
-                }
-                else
-                    bitmap = SelectedImage.GetFiltered(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
-            }
-            else if (Mode == ViewMode.RGBImage)
-            {
-                if (SelectedImage.isPyramidal)
-                {
-                    ZCT c = GetCoordinate();
-                    Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
-                    bitmap = (Bitmap)bf.ImageRGB;
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
-                }
-                else
-                    bitmap = SelectedImage.GetRGBBitmap(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
-            }
-            else if (Mode == ViewMode.Raw)
-            {
-                if (SelectedImage.isPyramidal)
-                {
-                    ZCT c = GetCoordinate();
-                    Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
-                    bitmap = (Bitmap)bf.ImageRGB;
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
-                }
-                else
-                    bitmap = (Bitmap)SelectedImage.Buffers[index].ImageRGB;
-            }
-            else if (Mode == ViewMode.Emission)
-            {
-                if (SelectedImage.isPyramidal)
-                {
-                    ZCT c = GetCoordinate();
-                    Bitmap bf = BioImage.GetTile(SelectedImage, c, resolution, (int)PyramidalOrigin.X, (int)PyramidalOrigin.Y, pictureBox.Width, pictureBox.Height);
-                    bitmap = (Bitmap)bf.ImageRGB;
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]].Dispose();
-                    SelectedImage.Buffers[SelectedImage.Coords[c.Z, c.C, c.T]] = bf;
-                }
-                else
-                    bitmap = SelectedImage.GetEmission(coords, RChannel.RangeR, GChannel.RangeG, BChannel.RangeB);
-            }
-
-            if (bitmap != null)
-                if (bitmap.PixelFormat == PixelFormat.Format16bppGrayScale || bitmap.PixelFormat == PixelFormat.Format48bppRgb)
-                    bitmap = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bitmap);
-
-            if (HardwareAcceleration)
-            {
-                if (dBitmaps[SelectedIndex] != null)
-                {
-                    dBitmaps[SelectedIndex].Dispose();
-                    dBitmaps[SelectedIndex] = null;
-                }
-                dBitmaps[SelectedIndex] = DBitmap.FromImage(dx.RenderTarget2D, Bitmap.To32Bit(bitmap));
-            }
-
-
-            if (SelectedIndex < Bitmaps.Count)
-                Bitmaps[SelectedIndex] = bitmap;
-            else
-                Bitmaps.Add(bitmap);
-
-            update = false;
-            UpdateView();
+            UpdateImages();
         }
         /// When the user selects a new channel from the dropdown menu, the program updates the image to
         /// display the new channel
@@ -1560,6 +1598,37 @@ namespace Bio
        /// @param e the mouse event
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                    return;
+            if(SelectedImage.isPyramidal)
+            {
+                if(openSlide)
+                {
+                    if (Ctrl)
+                    if (e.Delta > 0)
+                    {
+                        Resolution*=0.95;
+                    }
+                    else
+                    {
+                        Resolution*=1.05;
+                    }
+                }
+                else
+                {
+                    if (Ctrl)
+                    if (e.Delta > 0)
+                    {
+                        if (resolution - 1 > 0)
+                            Resolution--;
+                    }
+                    else
+                    {
+                        if (resolution + 1 < SelectedImage.Resolutions.Count)
+                            Resolution++;
+                    }
+                }
+            }
             float dx = Scale.Width / 50;
             float dy = Scale.Height / 50;
             if (Ctrl)
@@ -1591,22 +1660,7 @@ namespace Bio
                 if (zBar.Value - 1 >= zBar.Minimum)
                     zBar.Value -= 1;
             }
-            if (SelectedImage == null)
-                return;
-            else
-            {
-                if (Ctrl)
-                if (e.Delta > 0)
-                {
-                    if (resolution - 1 > 0)
-                        Resolution--;
-                }
-                else
-                {
-                    if (resolution + 1 < SelectedImage.Resolutions.Count)
-                        Resolution++;
-                }
-            }
+            
         }
         /// If the mouse wheel is scrolled up, increase the value of the trackbar by 1, if the mouse
         /// wheel is scrolled down, decrease the value of the trackbar by 1
@@ -1842,10 +1896,6 @@ namespace Bio
         {
             return new System.Drawing.Point((int)p.X, (int)p.Y);
         }
-        private System.Drawing.PointF ToPointF(Point p)
-        {
-            return new System.Drawing.PointF((float)p.X, (float)p.Y);
-        }
         private System.Drawing.PointF ToPointF(PointD p)
         {
             return new System.Drawing.PointF((float)p.X, (float)p.Y);
@@ -1906,6 +1956,10 @@ namespace Bio
                         b = new SolidBrush(System.Drawing.Color.FromArgb(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B));
                     PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
                     float width = (float)ToViewSizeW(ROI.selectBoxSize / w);
+                    if(openSlide)
+                    {
+                        width = (float)(ROI.selectBoxSize * resolution);
+                    }
                     if (an.type == ROI.Type.Point)
                     {
                         g.DrawLine(pen, ToPointF(ToScreenSpace(an.Point)), ToPointF(ToScreenSpace(an.Point.X + 1, an.Point.Y + 1)));
@@ -2040,11 +2094,16 @@ namespace Bio
         /// @param PaintEventArgs e
         private void overlayPictureBox_Paint(object sender, PaintEventArgs e)
         {
+            if(SelectedImage==null)
+                return;
             System.Drawing.Graphics g = e.Graphics;
-            g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
-            if (Scale.Width == 0)
-                Scale = new SizeF(0.00001f, 0.00001f);
-            g.ScaleTransform(Scale.Width, Scale.Height);
+            if (!SelectedImage.isPyramidal)
+            {
+                g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
+                if (Scale.Width == 0)
+                    Scale = new SizeF(0.00001f, 0.00001f);
+                g.ScaleTransform(Scale.Width, Scale.Height);
+            }
             DrawOverlay(g);
             TabsView.graphics = g;
             if ((Tools.currentTool.type == Tools.Tool.Type.rectSel && down) || (Tools.currentTool.type == Tools.Tool.Type.magic && down))
@@ -2104,7 +2163,8 @@ namespace Bio
                 if (SelectedImage.isPyramidal)
                 {
                     g.ResetTransform();
-                    g.DrawImage(ToSysBitmap(Bitmaps[i]),new System.Drawing.Point(0,0));
+                    System.Drawing.Bitmap bm = ToSysBitmap(Bitmaps[i]);
+                    g.DrawImage(bm,new System.Drawing.Point(0,0));
                 }
                 else if (rg.IntersectsWith(rec))
                 { 
@@ -2124,7 +2184,7 @@ namespace Bio
             update = false;
         }
 
-        private int resolution;
+        private double resolution;
         private double scaleorig = 0;
         /// It draws the view.
         /// 
@@ -2153,15 +2213,16 @@ namespace Bio
         /// @return The point in the image space.
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
-            tools.ToolMove(p, mouseDownButtons);
             if (SelectedImage == null)
             {
                 return;
             }
+            PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
+            tools.ToolMove(p, mouseDownButtons);
+            
             PointD ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
-
+            this.Parent.Text = "Level: " + Level + " Res:" + Resolution + " Orig:" + PyramidalOrigin.ToString();
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
                 if (cBar.Value < cBar.Maximum)
@@ -2283,8 +2344,10 @@ namespace Bio
         /// @return The mouse location in the picture box.
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             App.viewer = this;
-            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
+            PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             if (e.Button == MouseButtons.Middle)
             {
                 PointD pd = new PointD(p.X - mouseDown.X, p.Y - mouseDown.Y);
@@ -2303,8 +2366,6 @@ namespace Bio
             mouseUp = p;
             down = false;
             up = true;
-            if (SelectedImage == null)
-                return;
             tools.ToolUp(p, e.Button);
         }
         /// The function is called when the mouse is pressed down on the picturebox
@@ -2315,18 +2376,17 @@ namespace Bio
         /// @return The mouseDownButtons is being returned.
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             App.viewer = this;
-            selectedImage = SelectedImage;
             mouseDownButtons = e.Button;
             mouseUpButtons = MouseButtons.None;
-            PointD p = ToViewSpace(e.Location.X, e.Location.Y);
+            PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             pd = new PointD(p.X, p.Y);
             mouseDown = pd;
             mouseD = new Point(e.Location.X, e.Location.Y);
             down = true;
             up = false;
-            if (SelectedImage == null)
-                return;
             PointD ip;
             if (HardwareAcceleration)
                 ip = SelectedImage.ToImageSpace(new PointD(SelectedImage.Volume.Width - p.X, SelectedImage.Volume.Height - p.Y));
@@ -2360,6 +2420,11 @@ namespace Bio
             {
                 float width = (float)ToViewSizeW(ROI.selectBoxSize / Scale.Width);
                 float height = (float)ToViewSizeH(ROI.selectBoxSize / Scale.Height);
+                if(openSlide)
+                {
+                    width = Tools.selectBoxSize;
+                    height = Tools.selectBoxSize;
+                }
                 foreach (BioImage bi in Images)
                 {
                     foreach (ROI an in bi.Annotations)
@@ -2368,7 +2433,7 @@ namespace Bio
                         {
                             selectedAnnotations.Add(an);
                             an.selected = true;
-                            RectangleD[] sels = an.GetSelectBoxes(width);
+                            RectangleD[] sels = an.GetSelectBoxes(Tools.selectBoxSize);
                             RectangleD r = new RectangleD(p.X, p.Y, sels[0].W, sels[0].H);
                             for (int i = 0; i < sels.Length; i++)
                             {
@@ -2626,16 +2691,25 @@ namespace Bio
         {
             Mode = ViewMode.Raw;
         }
-
-        /// Convert a point from the coordinate system of the image to the coordinate system of the view
+        /// It takes a point in the image space and returns the point in the view space
         /// 
-        /// @param Point The point in the image that you want to convert to view space.
+        /// @param x the x coordinate of the point in the image
+        /// @param y the y coordinate of the point in the image
         /// 
-        /// @return A PointF object.
-        public PointF ToViewSpace(Point p)
+        /// @return The point in the image space that corresponds to the point in the view space.
+        public PointD ImageToViewSpace(double x, double y)
         {
-            PointD d = ToViewSpace(p.X, p.Y);
-            return new PointF((float)d.X, (float)d.Y);
+            if (SelectedImage.isPyramidal)
+            {
+                if (openSlide)
+                {
+                    return new PointD((PyramidalOrigin.X + x) * Resolution, (PyramidalOrigin.Y + y) * Resolution);
+                }
+                else
+                    return new PointD(PyramidalOrigin.X + x, PyramidalOrigin.Y + y);
+            }
+            else
+                return ToViewSpace(x, y);
         }
         /// Convert a point from world space to view space
         /// 
@@ -2664,6 +2738,18 @@ namespace Bio
         /// @return A PointD object.
         public PointD ToViewSpace(double x, double y)
         {
+            if (SelectedImage.isPyramidal)
+            {
+                if (openSlide)
+                {
+                    double ddx = x / Resolution;
+                    double ddy = y / Resolution;
+                    return new PointD(ddx, ddy);
+                }
+                else
+                return new PointD(PyramidalOrigin.X + x, PyramidalOrigin.Y + y);
+            }
+            
             double dx = (ToViewSizeW(x - (pictureBox.Width / 2)) / Scale.Width) - Origin.X;
             double dy = (ToViewSizeH(y - (pictureBox.Height / 2)) / Scale.Height) - Origin.Y;
             return new PointD(dx, dy);
@@ -2675,6 +2761,10 @@ namespace Bio
         /// @return The return value is the size of the object in pixels.
         private double ToViewSizeW(double d)
         {
+            if (openSlide)
+            {
+                return d / Resolution;
+            }
             double x = (double)(d / PxWmicron);
             return x;
         }
@@ -2685,6 +2775,10 @@ namespace Bio
         /// @return The return value is the size of the object in pixels.
         public double ToViewSizeH(double d)
         {
+            if (openSlide)
+            {
+                return d / Resolution;
+            }
             double y = (double)(d / PxHmicron);
             return y;
         }
@@ -2818,16 +2912,44 @@ namespace Bio
         /// @return A RectangleF object.
         public System.Drawing.RectangleF ToScreenRectF(double x, double y, double w, double h)
         {
-            PointD pf;
-            if (HardwareAcceleration)
+            if (SelectedImage == null)
             {
-                double dx = (pxWmicron * (-Origin.X)) * Scale.Width;
-                double dy = (pxHmicron * (-Origin.Y)) * Scale.Height;
-                System.Drawing.RectangleF rf = new System.Drawing.RectangleF((float)(PxWmicron * -x * Scale.Width + dx), (float)(PxHmicron * -y * Scale.Height + dy), (float)(PxWmicron * -w * Scale.Width), (float)(PxHmicron * -h * Scale.Height));
-                return rf;
+                PointD pf;
+                if (HardwareAcceleration)
+                {
+                    double dx = (pxWmicron * (-Origin.X)) * Scale.Width;
+                    double dy = (pxHmicron * (-Origin.Y)) * Scale.Height;
+                    System.Drawing.RectangleF rf = new System.Drawing.RectangleF((float)(PxWmicron * -x * Scale.Width + dx), (float)(PxHmicron * -y * Scale.Height + dy), (float)(PxWmicron * -w * Scale.Width), (float)(PxHmicron * -h * Scale.Height));
+                    return rf;
+                }
+                pf = ToScreenSpace(x, y);
+                return new System.Drawing.RectangleF((float)pf.X, (float)pf.Y, ToScreenScaleW(w), ToScreenScaleH(h));
             }
-            pf = ToScreenSpace(x, y);
-            return new System.Drawing.RectangleF((float)pf.X, (float)pf.Y, ToScreenScaleW(w), ToScreenScaleH(h));
+            if (SelectedImage.isPyramidal)
+            {
+                if (openSlide)
+                {
+                    PointD d = ToViewSpace(x, y);
+                    double dw = ToViewSizeW(w);
+                    double dh = ToViewSizeH(h);
+                    return new System.Drawing.RectangleF((float)(d.X - PyramidalOrigin.X),(float)(d.Y - PyramidalOrigin.Y), (float)dw, (float)dh);
+                }
+                else
+                return new System.Drawing.RectangleF((float)(x - pyramidalOrigin.X), (float)(y - pyramidalOrigin.Y), (float)w, (float)h);
+            }
+            else
+            {
+                PointD pf;
+                if (HardwareAcceleration)
+                {
+                    double dx = (pxWmicron * (-Origin.X)) * Scale.Width;
+                    double dy = (pxHmicron * (-Origin.Y)) * Scale.Height;
+                    System.Drawing.RectangleF rf = new System.Drawing.RectangleF((float)(PxWmicron * -x * Scale.Width + dx), (float)(PxHmicron * -y * Scale.Height + dy), (float)(PxWmicron * -w * Scale.Width), (float)(PxHmicron * -h * Scale.Height));
+                    return rf;
+                }
+                pf = ToScreenSpace(x, y);
+                return new System.Drawing.RectangleF((float)pf.X, (float)pf.Y, ToScreenScaleW(w), ToScreenScaleH(h));
+            }
         }
         /// > It takes a rectangle in the coordinate system of the stage and returns a rectangle in the
         /// coordinate system of the picturebox
@@ -3324,6 +3446,55 @@ namespace Bio
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
             Function.Initialize();
+        }
+
+        #region OpenSlide
+        private OpenSlideBase _openSlideBase;
+        private ISlideSource _slideSource;
+        public Mapsui.Map map = new Mapsui.Map();
+        /// <summary>
+        /// Open slide file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Initialize(string file)
+        {
+            if (_openSlideBase != null) (_openSlideBase as IDisposable).Dispose();
+            {
+                _slideSource = OpenSlideGTK.SlideSourceBase.Create(file);
+                _openSlideBase = (OpenSlideGTK.OpenSlideBase)_slideSource;
+            }
+            if (_openSlideBase == null)
+            {
+                Console.WriteLine("Unable to open with OpenSlide, opening with Bioformats instead.");
+                openSlide = false;
+            }
+            else
+            {
+                openSlide = true;
+                if (MacroResolution.HasValue)
+                {
+                    int lev = MacroResolution.Value - 2;
+                    Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel;
+                }
+                else
+                {
+                    Resolution = _openSlideBase.Schema.Resolutions[0].UnitsPerPixel;
+                }
+                map.Layers.Add(new SlideTileLayer(_slideSource, dataFetchStrategy: new MinimalDataFetchStrategy()));
+                map.Layers.Add(new SlideSliceLayer(_slideSource) { Enabled = false, Opacity = 0.5 });
+                map.Navigator.ZoomTo(Resolution, new Mapsui.MPoint((double)pictureBox.Width / 2, (double)pictureBox.Height / 2));
+            }
+        }
+        #endregion
+
+        private void pictureBox_SizeChanged(object sender, EventArgs e)
+        {
+            if (openSlide)
+            {
+                map.Navigator.SetSize(pictureBox.Width, pictureBox.Height);
+                map.Navigator.OverridePanBounds = new Mapsui.MRect(-SelectedImage.Resolutions[Level].SizeX, -SelectedImage.Resolutions[Level].SizeY, SelectedImage.Resolutions[Level].SizeX, SelectedImage.Resolutions[Level].SizeY);
+            }
         }
     }
 }

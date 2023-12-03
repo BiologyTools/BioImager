@@ -214,9 +214,9 @@ namespace Bio
             }
             widthBox.Value = width;
         }
-
+        public static float selectBoxSize = ROI.selectBoxSize;
         ROI anno = new ROI();
-       /// The function is called when the user clicks the mouse button. 
+        /// The function is called when the user clicks the mouse button. 
        /// 
        /// The function checks if the user is using the line, polygon, freeform, rectangle, ellipse,
        /// delete, or text tool. 
@@ -450,7 +450,7 @@ namespace Bio
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleD[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
+                        RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))
@@ -545,13 +545,7 @@ namespace Bio
             }
             UpdateOverlay();
         }
-        /// The function is called when the mouse is moved. It checks if the mouse is down and if the
-        /// current tool is the eraser. If so, it draws an ellipse on the image
-        /// 
-        /// @param PointD A point with double precision
-        /// @param MouseButtons Left, Right, Middle
-        /// 
-        /// @return the current tool.
+
         public void ToolMove(PointD e, MouseButtons buts)
         {
             if (App.viewer == null)
@@ -623,7 +617,7 @@ namespace Bio
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.selected = true;
-                        RectangleD[] sels = an.GetSelectBoxes(App.viewer.Scale.Width);
+                        RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
                         for (int i = 0; i < sels.Length; i++)
                         {
                             if (sels[i].IntersectsWith(r))

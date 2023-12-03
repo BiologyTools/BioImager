@@ -385,9 +385,10 @@ namespace Bio
             this.channelBoxB.DropDownWidth = 150;
             this.channelBoxB.ForeColor = System.Drawing.Color.White;
             this.channelBoxB.FormattingEnabled = true;
-            this.channelBoxB.Location = new System.Drawing.Point(292, 2);
+            this.channelBoxB.Location = new System.Drawing.Point(341, 2);
+            this.channelBoxB.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.channelBoxB.Name = "channelBoxB";
-            this.channelBoxB.Size = new System.Drawing.Size(120, 21);
+            this.channelBoxB.Size = new System.Drawing.Size(139, 23);
             this.channelBoxB.TabIndex = 8;
             this.channelBoxB.SelectedIndexChanged += new System.EventHandler(this.channelBoxB_SelectedIndexChanged);
             // 
@@ -397,9 +398,10 @@ namespace Bio
             this.channelBoxG.DropDownWidth = 150;
             this.channelBoxG.ForeColor = System.Drawing.Color.White;
             this.channelBoxG.FormattingEnabled = true;
-            this.channelBoxG.Location = new System.Drawing.Point(166, 2);
+            this.channelBoxG.Location = new System.Drawing.Point(194, 2);
+            this.channelBoxG.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.channelBoxG.Name = "channelBoxG";
-            this.channelBoxG.Size = new System.Drawing.Size(120, 21);
+            this.channelBoxG.Size = new System.Drawing.Size(139, 23);
             this.channelBoxG.TabIndex = 6;
             this.channelBoxG.SelectedIndexChanged += new System.EventHandler(this.channelBoxG_SelectedIndexChanged);
             // 
@@ -408,9 +410,10 @@ namespace Bio
             this.labelRGB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelRGB.AutoSize = true;
             this.labelRGB.ForeColor = System.Drawing.Color.White;
-            this.labelRGB.Location = new System.Drawing.Point(4, 6);
+            this.labelRGB.Location = new System.Drawing.Point(5, 7);
+            this.labelRGB.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelRGB.Name = "labelRGB";
-            this.labelRGB.Size = new System.Drawing.Size(30, 13);
+            this.labelRGB.Size = new System.Drawing.Size(29, 15);
             this.labelRGB.TabIndex = 5;
             this.labelRGB.Text = "RGB";
             // 
@@ -420,9 +423,10 @@ namespace Bio
             this.channelBoxR.DropDownWidth = 150;
             this.channelBoxR.ForeColor = System.Drawing.Color.White;
             this.channelBoxR.FormattingEnabled = true;
-            this.channelBoxR.Location = new System.Drawing.Point(40, 2);
+            this.channelBoxR.Location = new System.Drawing.Point(47, 2);
+            this.channelBoxR.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.channelBoxR.Name = "channelBoxR";
-            this.channelBoxR.Size = new System.Drawing.Size(120, 21);
+            this.channelBoxR.Size = new System.Drawing.Size(139, 23);
             this.channelBoxR.TabIndex = 4;
             this.channelBoxR.SelectedIndexChanged += new System.EventHandler(this.channelBoxR_SelectedIndexChanged);
             // 
@@ -436,18 +440,20 @@ namespace Bio
             this.rgbBoxsPanel.Controls.Add(this.labelRGB);
             this.rgbBoxsPanel.Controls.Add(this.channelBoxG);
             this.rgbBoxsPanel.ForeColor = System.Drawing.Color.White;
-            this.rgbBoxsPanel.Location = new System.Drawing.Point(0, 50);
+            this.rgbBoxsPanel.Location = new System.Drawing.Point(0, 58);
+            this.rgbBoxsPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rgbBoxsPanel.Name = "rgbBoxsPanel";
-            this.rgbBoxsPanel.Size = new System.Drawing.Size(428, 25);
+            this.rgbBoxsPanel.Size = new System.Drawing.Size(499, 29);
             this.rgbBoxsPanel.TabIndex = 13;
             // 
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.ForeColor = System.Drawing.Color.White;
-            this.statusLabel.Location = new System.Drawing.Point(8, 6);
+            this.statusLabel.Location = new System.Drawing.Point(9, 7);
+            this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 13);
+            this.statusLabel.Size = new System.Drawing.Size(0, 15);
             this.statusLabel.TabIndex = 3;
             // 
             // tLabel
@@ -457,9 +463,10 @@ namespace Bio
             this.tLabel.AutoSize = true;
             this.tLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.tLabel.ForeColor = System.Drawing.Color.White;
-            this.tLabel.Location = new System.Drawing.Point(4, 31);
+            this.tLabel.Location = new System.Drawing.Point(5, 36);
+            this.tLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.tLabel.Name = "tLabel";
-            this.tLabel.Size = new System.Drawing.Size(14, 13);
+            this.tLabel.Size = new System.Drawing.Size(13, 15);
             this.tLabel.TabIndex = 13;
             this.tLabel.Text = "T";
             // 
@@ -471,10 +478,10 @@ namespace Bio
             this.tBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.tBar.ContextMenuStrip = this.timePlayMenuStrip;
             this.tBar.LargeChange = 1;
-            this.tBar.Location = new System.Drawing.Point(15, 25);
+            this.tBar.Location = new System.Drawing.Point(18, 29);
             this.tBar.Margin = new System.Windows.Forms.Padding(0);
             this.tBar.Name = "tBar";
-            this.tBar.Size = new System.Drawing.Size(413, 25);
+            this.tBar.Size = new System.Drawing.Size(482, 29);
             this.tBar.TabIndex = 16;
             this.tBar.ValueChanged += new System.EventHandler(this.timeBar_ValueChanged);
             // 
@@ -552,10 +559,10 @@ namespace Bio
             this.zBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.zBar.ContextMenuStrip = this.zPlayMenuStrip;
             this.zBar.LargeChange = 1;
-            this.zBar.Location = new System.Drawing.Point(15, 1);
+            this.zBar.Location = new System.Drawing.Point(18, 1);
             this.zBar.Margin = new System.Windows.Forms.Padding(0);
             this.zBar.Name = "zBar";
-            this.zBar.Size = new System.Drawing.Size(413, 25);
+            this.zBar.Size = new System.Drawing.Size(482, 29);
             this.zBar.TabIndex = 12;
             this.zBar.ValueChanged += new System.EventHandler(this.zBar_ValueChanged);
             // 
@@ -566,9 +573,10 @@ namespace Bio
             this.zLabel.AutoSize = true;
             this.zLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.zLabel.ForeColor = System.Drawing.Color.White;
-            this.zLabel.Location = new System.Drawing.Point(4, 4);
+            this.zLabel.Location = new System.Drawing.Point(5, 5);
+            this.zLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.zLabel.Name = "zLabel";
-            this.zLabel.Size = new System.Drawing.Size(14, 13);
+            this.zLabel.Size = new System.Drawing.Size(14, 15);
             this.zLabel.TabIndex = 9;
             this.zLabel.Text = "Z";
             // 
@@ -580,10 +588,10 @@ namespace Bio
             this.cBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.cBar.ContextMenuStrip = this.cPlayMenuStrip;
             this.cBar.LargeChange = 1;
-            this.cBar.Location = new System.Drawing.Point(15, 50);
+            this.cBar.Location = new System.Drawing.Point(18, 58);
             this.cBar.Margin = new System.Windows.Forms.Padding(0);
             this.cBar.Name = "cBar";
-            this.cBar.Size = new System.Drawing.Size(413, 25);
+            this.cBar.Size = new System.Drawing.Size(482, 29);
             this.cBar.TabIndex = 15;
             this.cBar.ValueChanged += new System.EventHandler(this.cBar_ValueChanged);
             // 
@@ -594,9 +602,10 @@ namespace Bio
             this.cLabel.AutoSize = true;
             this.cLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(91)))), ((int)(((byte)(138)))));
             this.cLabel.ForeColor = System.Drawing.Color.White;
-            this.cLabel.Location = new System.Drawing.Point(4, 55);
+            this.cLabel.Location = new System.Drawing.Point(5, 63);
+            this.cLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.cLabel.Name = "cLabel";
-            this.cLabel.Size = new System.Drawing.Size(14, 13);
+            this.cLabel.Size = new System.Drawing.Size(15, 15);
             this.cLabel.TabIndex = 15;
             this.cLabel.Text = "C";
             // 
@@ -628,9 +637,10 @@ namespace Bio
             this.trackBarPanel.Controls.Add(this.zLabel);
             this.trackBarPanel.Controls.Add(this.cLabel);
             this.trackBarPanel.Controls.Add(this.rgbBoxsPanel);
-            this.trackBarPanel.Location = new System.Drawing.Point(0, 293);
+            this.trackBarPanel.Location = new System.Drawing.Point(0, 338);
+            this.trackBarPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.trackBarPanel.Name = "trackBarPanel";
-            this.trackBarPanel.Size = new System.Drawing.Size(428, 75);
+            this.trackBarPanel.Size = new System.Drawing.Size(499, 87);
             this.trackBarPanel.TabIndex = 17;
             // 
             // statusPanel
@@ -642,8 +652,9 @@ namespace Bio
             this.statusPanel.Controls.Add(this.ticksLabel);
             this.statusPanel.Controls.Add(this.statusLabel);
             this.statusPanel.Location = new System.Drawing.Point(0, 0);
+            this.statusPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(428, 25);
+            this.statusPanel.Size = new System.Drawing.Size(499, 29);
             this.statusPanel.TabIndex = 18;
             // 
             // ticksLabel
@@ -651,9 +662,10 @@ namespace Bio
             this.ticksLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ticksLabel.AutoSize = true;
             this.ticksLabel.ForeColor = System.Drawing.Color.White;
-            this.ticksLabel.Location = new System.Drawing.Point(335, 6);
+            this.ticksLabel.Location = new System.Drawing.Point(391, 7);
+            this.ticksLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ticksLabel.Name = "ticksLabel";
-            this.ticksLabel.Size = new System.Drawing.Size(0, 13);
+            this.ticksLabel.Size = new System.Drawing.Size(0, 15);
             this.ticksLabel.TabIndex = 4;
             // 
             // showControlsToolStripMenuItem
@@ -684,12 +696,13 @@ namespace Bio
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
-            this.pictureBox.Location = new System.Drawing.Point(0, 25);
+            this.pictureBox.Location = new System.Drawing.Point(0, 29);
             this.pictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(412, 251);
+            this.pictureBox.Size = new System.Drawing.Size(481, 290);
             this.pictureBox.TabIndex = 20;
             this.pictureBox.TabStop = false;
+            this.pictureBox.SizeChanged += new System.EventHandler(this.pictureBox_SizeChanged);
             this.pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
             this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.rgbPictureBox_MouseMove);
@@ -702,10 +715,10 @@ namespace Bio
             | System.Windows.Forms.AnchorStyles.Right)));
             this.overlayPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.overlayPictureBox.ContextMenuStrip = this.contextMenuStrip;
-            this.overlayPictureBox.Location = new System.Drawing.Point(0, 25);
+            this.overlayPictureBox.Location = new System.Drawing.Point(0, 29);
             this.overlayPictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.overlayPictureBox.Name = "overlayPictureBox";
-            this.overlayPictureBox.Size = new System.Drawing.Size(412, 251);
+            this.overlayPictureBox.Size = new System.Drawing.Size(481, 290);
             this.overlayPictureBox.TabIndex = 19;
             this.overlayPictureBox.TabStop = false;
             this.overlayPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.overlayPictureBox_Paint);
@@ -718,9 +731,9 @@ namespace Bio
             // 
             this.hScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar.Location = new System.Drawing.Point(0, 276);
+            this.hScrollBar.Location = new System.Drawing.Point(0, 318);
             this.hScrollBar.Name = "hScrollBar";
-            this.hScrollBar.Size = new System.Drawing.Size(429, 18);
+            this.hScrollBar.Size = new System.Drawing.Size(500, 18);
             this.hScrollBar.SmallChange = 10;
             this.hScrollBar.TabIndex = 24;
             this.hScrollBar.Visible = false;
@@ -730,9 +743,9 @@ namespace Bio
             // 
             this.vScrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar.Location = new System.Drawing.Point(412, 25);
+            this.vScrollBar.Location = new System.Drawing.Point(481, 29);
             this.vScrollBar.Name = "vScrollBar";
-            this.vScrollBar.Size = new System.Drawing.Size(17, 251);
+            this.vScrollBar.Size = new System.Drawing.Size(17, 290);
             this.vScrollBar.SmallChange = 10;
             this.vScrollBar.TabIndex = 23;
             this.vScrollBar.Visible = false;
@@ -751,9 +764,10 @@ namespace Bio
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dxPanel.BackColor = System.Drawing.SystemColors.Control;
             this.dxPanel.ContextMenuStrip = this.contextMenuStrip;
-            this.dxPanel.Location = new System.Drawing.Point(0, 25);
+            this.dxPanel.Location = new System.Drawing.Point(0, 29);
+            this.dxPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dxPanel.Name = "dxPanel";
-            this.dxPanel.Size = new System.Drawing.Size(428, 269);
+            this.dxPanel.Size = new System.Drawing.Size(499, 310);
             this.dxPanel.TabIndex = 25;
             this.dxPanel.SizeChanged += new System.EventHandler(this.dxPanel_SizeChanged);
             this.dxPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
@@ -764,7 +778,7 @@ namespace Bio
             // 
             // ImageView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(122)))), ((int)(((byte)(156)))));
             this.Controls.Add(this.vScrollBar);
@@ -775,9 +789,9 @@ namespace Bio
             this.Controls.Add(this.overlayPictureBox);
             this.Controls.Add(this.pictureBox);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(100, 100);
+            this.MinimumSize = new System.Drawing.Size(117, 115);
             this.Name = "ImageView";
-            this.Size = new System.Drawing.Size(428, 368);
+            this.Size = new System.Drawing.Size(499, 425);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ImageView_KeyDown);
             this.timePlayMenuStrip.ResumeLayout(false);
             this.contextMenuStrip.ResumeLayout(false);
