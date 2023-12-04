@@ -27,6 +27,8 @@ Microscope.TakeTiles(4,4);
 
 - C# scripting with sample tool-script and other sample scripts in "/Scripts/" folder. [See samples](https://github.com/BioMicroscopy/BioImage-Scripts)
 
+- Cell Imager tool allows for performing imaging routines on individual cells based on blob detection.
+
 - Supports running ImageJ macro commands on images open in Bio. New Console to run ImageJ macro commands and Bio C# functions.
 
 - Multiple view modes like Emission, and Filtered. ROI's shown for each channel can be configured in ROI Manager.
@@ -48,6 +50,7 @@ Microscope.TakeTiles(4,4);
 - Use AForge filters by opening filters tool window and right click to apply. Currently supports only some AForge filters as many of them do not support 16bit and 48bit images. Convert to 8bit image to make use of more filters. Applyed filters can be easily recorded and used in scripts. Bio impliments some filters like crop for 16 & 48 bit images.
 
 ## Setup
+- Install dependency [OpenSlide](https://openslide.org/docs/windows/) be sure to add the /bin path of opeslide binaries to your Environmental Variable PATH. By editing your PATH variable.
 - For detailed Setup instructions see [setup.](https://github.com/BiologyTools/BioImager/wiki/Setup)
 - For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
 - For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
@@ -55,12 +58,14 @@ Microscope.TakeTiles(4,4);
 - `Star this project on Github to help spread the word about Bio!`
 
 ## Dependencies
+- [OpenSlide](https://openslide.org/)
 - [BioFormats.Net](https://github.com/GDanovski/BioFormats.Net)
 - [IKVM](http://www.ikvm.net/)
 - [AForge](http://www.aforgenet.com/)
 - [LibTiff.Net](https://bitmiracle.com/libtiff/)
 - [Cs-script](https://github.com/oleg-shilo/cs-script/blob/master/LICENSE)
 - [SharpDX](https://github.com/sharpdx/SharpDX)
+
 
 ## Licenses
 - Bio [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
