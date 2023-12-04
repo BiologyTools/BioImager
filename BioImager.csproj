@@ -15,12 +15,12 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
-    <Version>3.3.0</Version>
+    <Version>3.4.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>BioFormats.NET6 missing DLLs fix. As well as dependency updates.</PackageReleaseNotes>
+    <PackageReleaseNotes>OpenSlide integration for improved navigation &amp; performance. As well as new Cell Imager tool for performing imaging routines on groups of cells based on blob detection.</PackageReleaseNotes>
     </PropertyGroup>
 
   <ItemGroup>
