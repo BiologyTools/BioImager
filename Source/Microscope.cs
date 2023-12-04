@@ -1155,10 +1155,16 @@ namespace Bio
             Properties.Settings.Default.ImagingPath = folder;
             Properties.Settings.Default.Save();
         }
+
         /// It takes an image from the camera and saves it to a file
         /// 
         /// @return The image is being returned.
-        public static void TakeImage()
+        public static BioImage TakeImage()
+        {
+            return TakeImage(true,true,false);
+        }
+
+        public static BioImage TakeImage(bool save, bool addToImages, bool newTab)
         {
             if (Properties.Settings.Default.SimulateCamera && !Properties.Settings.Default.PMicroscope)
             {
@@ -1180,9 +1186,11 @@ namespace Bio
                     file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
                 b.ID = file;
                 b.file = file;
-                Images.AddImage(b,false);
+                if(addToImages)
+                Images.AddImage(b,newTab);
+                if(save)
                 BioImage.SaveOME(file, b.ID);
-                App.viewer.AddImage(b);
+                return b;
             }
             else if (Properties.Settings.Default.PMicroscope)
             {
@@ -1225,30 +1233,33 @@ namespace Bio
                 BioImage.AutoThreshold(bm, false);
                 if (!imagingStack)
                 {   
-                    Images.AddImage(bm,false);
+                    if(addToImages)
+                    Images.AddImage(bm,newTab);
+                    if(save)
                     BioImage.SaveOME(file + ".ome.tif", bm.ID);
                     if (bm.bitsPerPixel > 8)
                         bm.StackThreshold(true);
                     else
                         bm.StackThreshold(false);
-                    App.viewer.AddImage(bm);
                 }
                 else
                     bi.Buffers.Add(bm.Buffers[0]);
                 //We delete the temporary file created by camera.
                 File.Delete(file);
                 currentImage = bm;
+                return bi;
             }
             else
             {
                 if (Function.Functions.ContainsKey("TakeImage"))
                 {
                     App.imager.PerformFunction(Function.Functions["TakeImage"]);
+                    return null;
                 }
                 else
                 {
                     MessageBox.Show("Go to Microscope Setup to set 'TakeImage' function eg. a Button shortcut or GUI recording. Or set camera simulation on & set Camera image.", "Function 'TakeImage' not defined.");
-                    return;
+                    return null;
                 }
             }
         }
@@ -1388,8 +1399,9 @@ namespace Bio
         /// 
         /// @param width The number of tiles in the x direction
         /// @param height The number of fields to take in the y direction
-        public static void TakeTiles(int width, int height)
+        public static BioImage[] TakeTiles(int width, int height, bool save = true, bool addToImages = true, bool newTab = false)
         {
+            List<BioImage> ims = new List<BioImage>();
             imagingStack = true;
             bool leftright = false;
             if (Properties.Settings.Default.PMicroscope)
@@ -1405,7 +1417,7 @@ namespace Bio
                     Microscope.MoveFieldDown();
                 }
                 leftright = !leftright;
-                Microscope.TakeImage();
+                ims.Add(Microscope.TakeImage(save, addToImages, newTab));
                 for (int x = 0; x < width - 1; x++)
                 {
                     if (leftright)
@@ -1416,7 +1428,7 @@ namespace Bio
                     {
                         Microscope.MoveFieldLeft();
                     }
-                    Microscope.TakeImage();
+                    ims.Add(Microscope.TakeImage(save,addToImages,newTab));
                 }
             }
             //If we are using the imaging application to take images we need to add them to the viewer as the filesystemwatcher
@@ -1435,6 +1447,7 @@ namespace Bio
                 images.Clear();
             }
             imagingStack = false;
+            return ims.ToArray();
         }
         /// It returns a rectangle that represents the viewable area of the current objective
         /// 

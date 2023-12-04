@@ -23,7 +23,6 @@ namespace Bio
             InitializeComponent();
             serie = im.series;
             selectedImage = im;
-            tools = App.tools;
             Dock = DockStyle.Fill;
             Images.Add(im);
             App.viewer = this;
@@ -85,7 +84,6 @@ namespace Bio
         public ImageView()
         {
             InitializeComponent();
-            tools = App.tools;
             Dock = DockStyle.Fill;
             App.viewer = this;
             SetCoordinate(0, 0, 0);
@@ -185,7 +183,7 @@ namespace Bio
                 }
             }
         }
-        public Tools tools;
+        public Tools tools { get { return App.tools; } }
         public string filepath = "";
         public int serie = 0;
         public int minSizeX = 50;
@@ -913,6 +911,7 @@ namespace Bio
         /// @return A Bitmap
         public void RenderFrame()
         {
+            drawing = true;
             if (HardwareAcceleration && dx != null)
             {
                 dx.BeginDraw();
@@ -1144,8 +1143,8 @@ namespace Bio
                 gray.Dispose();
                 b.Dispose();
                 dx.EndDraw();
-                return;
             }
+            drawing = false;
         }
         /// > Update the status of the application and then render the frame
         /// 
@@ -1171,7 +1170,12 @@ namespace Bio
         public void UpdateImages()
         {
             if (SelectedImage == null)
-                return;
+            {
+                if (Images.Count > 0)
+                    SelectedIndex = 0;
+                else
+                    return;
+            }
             for (int i = 0; i < Bitmaps.Count; i++)
             {
                 Bitmaps[i] = null;
@@ -1292,6 +1296,30 @@ namespace Bio
             }
             update = true;
             UpdateView();
+        }
+        bool drawing = false;
+        public void RemoveImage(int i)
+        {
+            do
+            {
+                Thread.Sleep(50);
+                Application.DoEvents();
+            } while (drawing);
+            Images[i].Dispose();
+            Images.RemoveAt(i);
+        }
+        public void RemoveImages()
+        {
+            do
+            {
+                Thread.Sleep(50);
+                Application.DoEvents();
+            } while (drawing);
+            for (int i = 0; i < Images.Count; i++)
+            {
+                Images[i].Dispose();
+            }
+            Images.Clear();
         }
         Bitmap bitmap;
         /// It takes a 16-bit image, converts it to 8-bit, and then converts it to a DirectX texture
@@ -1956,9 +1984,12 @@ namespace Bio
                         b = new SolidBrush(System.Drawing.Color.FromArgb(an.strokeColor.R, an.strokeColor.G, an.strokeColor.B));
                     PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
                     float width = (float)ToViewSizeW(ROI.selectBoxSize / w);
-                    if(openSlide)
+                    if (SelectedImage.isPyramidal)
                     {
-                        width = (float)(ROI.selectBoxSize * resolution);
+                        if (openSlide)
+                            width = (float)(ROI.selectBoxSize * resolution);
+                        else
+                            width = ROI.selectBoxSize;
                     }
                     if (an.type == ROI.Type.Point)
                     {
@@ -2135,6 +2166,7 @@ namespace Bio
                 RenderFrame();
                 return;
             }
+            drawing = true;
             if (Bitmaps.Count == 0 || Bitmaps.Count != Images.Count)
                 UpdateImages();
             g.TranslateTransform(pictureBox.Width / 2, pictureBox.Height / 2);
@@ -2182,6 +2214,7 @@ namespace Bio
             blue.Dispose();
             red.Dispose();
             update = false;
+            drawing = false;
         }
 
         private double resolution;

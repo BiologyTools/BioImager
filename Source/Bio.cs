@@ -61,8 +61,11 @@ namespace Bio
             App.nodeView.UpdateNodes();
             if (newtab)
                 App.tabsView.AddTab(im);
-            //App.Image = im;
-            //NodeView.viewer.AddTab(im);
+            else
+            {
+                if (!App.viewer.Images.Contains(im))
+                    App.viewer.Images.Add(im);
+            }
         }
         /// It takes a string as an argument, and returns the number of times that string appears in the
         /// list of images

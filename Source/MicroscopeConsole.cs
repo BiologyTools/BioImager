@@ -72,6 +72,23 @@ namespace Bio
         {
             RunCommand(new Command(Command.Type.SetStage, new double[] { p.X, p.Y }));
         }
+        static void Start()
+        {
+            ProcessStartInfo ps = new ProcessStartInfo();
+#if DEBUG
+            ps.CreateNoWindow = false;
+#else
+            ps.CreateNoWindow = true;
+#endif
+            ps.Arguments = Properties.Settings.Default.LibPath;
+            ps.Arguments = ps.Arguments.Replace(' ', '_');
+            ps.FileName = Application.StartupPath + "MicroscopeConsole\\MicroscopeConsole.exe";
+            ps.UseShellExecute = false;
+            ps.RedirectStandardError = true;
+            ps.RedirectStandardOutput = true;
+            ps.RedirectStandardInput = true;
+            console = Process.Start(ps);
+        }
         public static Command RunCommand(Command c)
         {
             Process[] prs = Process.GetProcessesByName("MicroscopeConsole.exe");
@@ -79,38 +96,35 @@ namespace Bio
                 console = prs[0];
             if (console == null)
             {
-                ProcessStartInfo ps = new ProcessStartInfo();
-                string arg = JsonConvert.SerializeObject(c);
-#if DEBUG
-                ps.CreateNoWindow = false;
-#else
-                ps.CreateNoWindow = true;
-#endif
-                ps.Arguments = Properties.Settings.Default.LibPath;
-                ps.Arguments = ps.Arguments.Replace(' ', '_');
-                ps.FileName = Application.StartupPath + "MicroscopeConsole\\MicroscopeConsole.exe";
-                ps.UseShellExecute = false;
-                ps.RedirectStandardError = true;
-                ps.RedirectStandardOutput = true;
-                ps.RedirectStandardInput = true;
-                console = Process.Start(ps);
+                A:
+                Start();
             }
             if (c.type.ToString().StartsWith("Get"))
             {
                 string arg = JsonConvert.SerializeObject(c);
                 console.StandardInput.WriteLine("Command:" + arg);
-                do
+                A:
+                try
                 {
-                    if (console.HasExited)
-                        break;
-                    string st = console.StandardOutput.ReadLine();
-                    if(st != null)
-                    if (st.Length > 0)
+                    do
                     {
-                        return JsonConvert.DeserializeObject<Command>(st);
-                    }
-                    Thread.Sleep(20);
-                } while (true);
+                        if (console.HasExited)
+                            break;
+                        string st = console.StandardOutput.ReadLine();
+                        if(st != null)
+                        if (st.Length > 0)
+                        {
+                            return JsonConvert.DeserializeObject<Command>(st);
+                        }
+                        Thread.Sleep(20);
+                    } while (true);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    goto A;
+                }
+                
                 string er = console.StandardError.ReadToEnd();
                 string o = console.StandardOutput.ReadToEnd();
                 Console.WriteLine(er);

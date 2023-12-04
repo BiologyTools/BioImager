@@ -944,7 +944,7 @@ namespace Bio
 
         private void stageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            App.stage.Show();
         }
 
         /// If the user selects a file, open it as an OME series, and add each image to the current tab
@@ -1393,6 +1393,11 @@ namespace Bio
         private void stageToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.stage.Show();
+        }
+
+        private void cellImagerToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            App.cellImager.Show();
         }
     }
 }

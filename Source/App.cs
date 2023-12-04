@@ -1,5 +1,6 @@
 ﻿using AForge;
 using Bio.Source;
+using BioImager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace Bio
         public static Recordings recordings = null;
         public static Automation automation = null;
         public static MicroscopeSetup setup = null;
+        public static CellImager cellImager = null;
         public static BioConsole console = null;
         public static Light lightTool = null;
         public static Library lib = null;
@@ -61,7 +63,7 @@ namespace Bio
             } while (!BioImage.Initialized);
             setup = new MicroscopeSetup();
             stage = new StageTool();
-            
+            cellImager = new CellImager();
             stackTools = new StackTools();
             tools = new Tools();            
             manager = new ROIManager();
