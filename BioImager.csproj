@@ -14,7 +14,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
-    <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
+    <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
     <Version>3.5.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
