@@ -1,5 +1,5 @@
 ﻿
-namespace Bio.PythonMicroscope
+namespace BioImager.PythonMicroscope
 {
     partial class MicroscopeSetup
     {

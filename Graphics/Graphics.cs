@@ -5,7 +5,7 @@ using PointF = AForge.PointF;
 using Rectangle = AForge.Rectangle;
 using RectangleF = AForge.RectangleF;
 
-namespace Bio.Graphics
+namespace BioImager.Graphics
 {
     public struct Pen : IDisposable
     {

@@ -15,7 +15,7 @@ using System.Threading;
 using SharpDX.XInput;
 using WindowsInput;
 using System.Configuration;
-using Bio.Properties;
+using BioImager.Properties;
 using System.Reflection;
 using Bitmap = AForge.Bitmap;
 using Color = AForge.Color;
@@ -27,7 +27,7 @@ using Point = AForge.Point;
 using SizeF = AForge.SizeF;
 using AForge;
 
-namespace Bio
+namespace BioImager
 {
     public partial class Imager : Form
     {
@@ -228,9 +228,9 @@ namespace Bio
             }
             this.TopMost = topMostCheckBox.Checked;
 
-            if (dockToApp.Checked)
+            if (dockToApp.Checked && !Properties.Settings.Default.PycroManager)
             {
-                //We set window location based on ZEN®
+                //We set window location based on imaging application location.
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
                 Point pp = new Point(r.Right - this.Width, r.Bottom - this.Height - 23);
@@ -497,7 +497,8 @@ namespace Bio
         /// @param EventArgs 
         private void statusTimer_Tick(object sender, EventArgs e)
         {
-            if (dockToApp.Checked)
+            //We will not dock to pycromanager
+            if (dockToApp.Checked && !Properties.Settings.Default.PycroManager)
             {
                 //We set window location based on imaging app location.
                 Win32.Rect r = new Win32.Rect();
@@ -1357,7 +1358,7 @@ namespace Bio
             }
             if (f.FuncType == Function.FunctionType.Objective)
             {
-                Objectives.Objective obj = Bio.Microscope.Objectives.GetObjective();
+                Objectives.Objective obj = BioImager.Microscope.Objectives.GetObjective();
                 Microscope.Objectives.SetPosition((int)f.Value);
                 //We set locate exposure as the locate tab is the only one that updates lightpath automatically after objective change. 
                 //Automation.SetProperty("LocateExposure", obj.LocateExposure.ToString());

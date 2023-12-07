@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using AForge;
-namespace Bio
+namespace BioImager
 {
     public partial class ChannelsTool : Form
     {

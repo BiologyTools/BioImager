@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bio
+namespace BioImager
 {
     static class Prior
     {

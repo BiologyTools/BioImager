@@ -11,7 +11,7 @@ using Color = AForge.Color;
 using Rectangle = AForge.Rectangle;
 using PointF = AForge.PointF;
 
-namespace Bio
+namespace BioImager
 {
     public class ImageJ
     {

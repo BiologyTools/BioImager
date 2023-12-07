@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using AForge;
-namespace Bio
+namespace BioImager
 {
     public class PMicroscope
     {

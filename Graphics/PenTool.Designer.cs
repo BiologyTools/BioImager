@@ -1,4 +1,4 @@
-﻿namespace Bio.Graphics
+﻿namespace BioImager.Graphics
 {
     partial class PenTool
     {

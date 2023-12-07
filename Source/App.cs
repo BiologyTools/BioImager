@@ -1,5 +1,5 @@
 ﻿using AForge;
-using Bio.Source;
+using BioImager;
 using BioImager;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio
+namespace BioImager
 {
     public class App
     {
@@ -72,7 +72,10 @@ namespace Bio
             seriesTool = new Series();
             recordings = new Recordings();
             automation = new Automation();
-            lightTool = new Light();
+            if (!Properties.Settings.Default.PycroManager)
+            {
+                lightTool = new Light();
+            }
             lib = new Library();
             imager = new Imager();
             console = new BioConsole();

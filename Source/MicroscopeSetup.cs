@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Configuration;
 
-namespace Bio
+namespace BioImager
 {
     public partial class MicroscopeSetup : Form
     {

@@ -6,7 +6,7 @@ using Gma.System.MouseKeyHook;
 using System.Diagnostics;
 using WindowsInput;
 
-namespace Bio
+namespace BioImager
 {
     public class Automation
     {

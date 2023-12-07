@@ -7,7 +7,7 @@ using RectangleF = AForge.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = AForge.Rectangle;
 using Point = AForge.Point;
-namespace Bio
+namespace BioImager
 {
     /// <summary>
     /// The base class that the flood fill algorithms inherit from. Implements the

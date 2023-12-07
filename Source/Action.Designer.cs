@@ -1,4 +1,4 @@
-﻿namespace Bio.Source
+﻿namespace BioImager
 {
     partial class Action
     {

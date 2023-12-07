@@ -1,5 +1,5 @@
 ﻿
-namespace Bio.Source
+namespace BioImager
 {
     partial class ImagesView
     {

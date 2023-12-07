@@ -1,4 +1,4 @@
-﻿namespace Bio
+﻿namespace BioImager
 {
     partial class HistogramControl
     {

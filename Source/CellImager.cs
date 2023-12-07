@@ -2,7 +2,7 @@
 using AForge.Imaging;
 using AForge.Math.Geometry;
 using AForge;
-using Bio;
+using BioImager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio
+namespace BioImager
 {
     public partial class CellImager : Form
     {

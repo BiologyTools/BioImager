@@ -1,6 +1,6 @@
 using AForge;
 using PixelFormat = AForge.PixelFormat;
-namespace Bio
+namespace BioImager
 {
     /// <summary>
     /// Implements the QueueLinear flood fill algorithm using array-based pixel manipulation.

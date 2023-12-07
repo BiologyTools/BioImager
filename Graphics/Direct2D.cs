@@ -4,7 +4,7 @@ using SharpDX.DXGI;
 using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using Factory = SharpDX.Direct2D1.Factory;
 
-namespace Bio
+namespace BioImager
 {
     public class Direct2D : IDisposable
     {

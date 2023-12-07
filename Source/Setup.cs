@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio
+namespace BioImager
 {
     public partial class Setup : Form
     {
@@ -36,8 +36,6 @@ namespace Bio
             {
                 Properties.Settings.Default.LibPath = libraryPathBox.Text;
             }
-            else if (!pythonRadioBut.Checked)
-                return;
             Properties.Settings.Default.Setup = true;
             DialogResult = DialogResult.OK;
             Properties.Settings.Default.Save();
@@ -74,13 +72,13 @@ namespace Bio
             Properties.Settings.Default.PMicroscope = libRadioBut.Checked;
         }
 
-       /// It opens a file dialog, and if the user selects a file, it sets the text of the imgPathBox to
-       /// the path of the file
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param EventArgs The EventArgs class is the base class for classes containing event data.
-       /// 
-       /// @return The file path of the executable.
+        /// It opens a file dialog, and if the user selects a file, it sets the text of the imgPathBox to
+        /// the path of the file
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param EventArgs The EventArgs class is the base class for classes containing event data.
+        /// 
+        /// @return The file path of the executable.
         private void setImagingBut_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();
@@ -105,6 +103,11 @@ namespace Bio
                 return;
             libraryPathBox.Text = d.FileName;
             Properties.Settings.Default.PMicroscope = false;
+        }
+
+        private void micromanRadioBut_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PycroManager = micromanRadioBut.Checked;
         }
     }
 }

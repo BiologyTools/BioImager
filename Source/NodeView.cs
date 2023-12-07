@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using AForge;
 
-namespace Bio
+namespace BioImager
 {
     public partial class NodeView : Form
     {

@@ -8,17 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Bio;
+using BioImager;
 using System.IO;
 using AForge.Imaging.Filters;
 using AForge.Imaging;
 using AForge.Math.Geometry;
 using AForge;
-using Bio.Graphics;
+using BioImager.Graphics;
 using Rectangle = AForge.Rectangle;
 using RectangleF = AForge.RectangleF;
 
-namespace Bio
+namespace BioImager
 {
     public partial class Tools : Form
     {

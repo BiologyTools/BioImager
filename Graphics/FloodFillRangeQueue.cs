@@ -1,4 +1,4 @@
-namespace Bio
+namespace BioImager
 {
     /// <summary>A queue of FloodFillRanges.</summary>
 	public class FloodFillRangeQueue

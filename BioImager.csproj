@@ -24,6 +24,20 @@
     </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="PycroManager\GetExposure.py" />
+    <None Remove="PycroManager\GetObjective.py" />
+    <None Remove="PycroManager\GetStageXY.py" />
+    <None Remove="PycroManager\GetStageXYZ.py" />
+    <None Remove="PycroManager\GetStageXYZ.py~RF16afb9c5.TMP" />
+    <None Remove="PycroManager\SetExposure.py" />
+    <None Remove="PycroManager\SetObjective.py" />
+    <None Remove="PycroManager\SetStageXY.py" />
+    <None Remove="PycroManager\SetStageXYZ.py" />
+    <None Remove="PycroManager\TakeImage.py" />
+    <None Remove="PycroManager\TakeImage.py~RF1a0a11ea.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="bioformats_package.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -42,16 +56,44 @@
     <Content Include="MicroscopeConsole\Newtonsoft.Json.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="PycroManager\GetExposure.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\SetObjective.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\GetObjective.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\GetStageXY.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\GetStageXYZ.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\SetExposure.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\SetStageXY.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\SetStageXYZ.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PycroManager\TakeImage.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AForgeBio" Version="1.4.3" />
     <PackageReference Include="BioFormats.NET6" Version="7.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
-    <PackageReference Include="CS-Script" Version="4.8.3" />
+    <PackageReference Include="CS-Script" Version="4.8.10" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.1" />
+    <PackageReference Include="IKVM" Version="8.6.4" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NetVips" Version="2.4.0" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.0" />
@@ -68,10 +110,6 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\RepoErik\MicroscopeConsole\MicroscopeConsole\MicroscopeConsole\MicroscopeConsole.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">
@@ -91,6 +129,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -100,5 +142,12 @@
     <Reference Include="bioformats_package">
       <HintPath>bioformats_package.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

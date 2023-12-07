@@ -1,6 +1,6 @@
 ﻿using AForge;
 
-namespace Bio
+namespace BioImager
 {
     public class DSystem                    // 120 lines
     {

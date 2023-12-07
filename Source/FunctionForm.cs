@@ -1,4 +1,4 @@
-﻿using Bio.Properties;
+﻿using BioImager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ using WindowsInput;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Bio
+namespace BioImager
 {
     public partial class FunctionForm : Form
     {

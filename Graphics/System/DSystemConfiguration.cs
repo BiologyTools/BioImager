@@ -1,4 +1,4 @@
-﻿namespace Bio
+﻿namespace BioImager
 {
     public class DSystemConfiguration                   // 52 lines
     {

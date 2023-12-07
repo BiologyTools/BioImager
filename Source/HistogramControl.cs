@@ -17,7 +17,7 @@ using RectangleF = System.Drawing.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = System.Drawing.Rectangle;
 using Point = System.Drawing.Point;
-namespace Bio
+namespace BioImager
 {
     public partial class HistogramControl : UserControl
     {

@@ -1,4 +1,4 @@
-﻿namespace Bio
+﻿namespace BioImager
 {
     public class DInput                 // 31 lines
     {

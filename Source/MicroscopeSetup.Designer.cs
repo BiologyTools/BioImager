@@ -1,5 +1,5 @@
 ﻿
-namespace Bio
+namespace BioImager
 {
     partial class MicroscopeSetup
     {

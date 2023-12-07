@@ -11,7 +11,7 @@ using AForge;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Bio
+namespace BioImager
 {
     /* SDK is C# class wrapper for PriorScientificSDK DLL */
     public class SDK

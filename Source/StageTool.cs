@@ -12,7 +12,7 @@ using AForge;
 using Point = AForge.Point;
 using AForge.Imaging;
 
-namespace Bio
+namespace BioImager
 {
     public partial class StageTool : Form
     {
@@ -155,11 +155,14 @@ namespace Bio
         {
             if (dockBox.Checked)
             {
-                //We set window location based on imaging app location.
-                Win32.Rect r = new Win32.Rect();
-                Win32.GetWindowRect(Imager.apph, ref r);
-                Point pp = new Point(r.Right - Width, r.Bottom - Height - App.imager.Height - 30);
-                this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
+                if (!Properties.Settings.Default.PycroManager)
+                {
+                    //We set window location based on imaging app location.
+                    Win32.Rect r = new Win32.Rect();
+                    Win32.GetWindowRect(Imager.apph, ref r);
+                    Point pp = new Point(r.Right - Width, r.Bottom - Height - App.imager.Height - 30);
+                    this.Location = new System.Drawing.Point((int)pp.X, (int)pp.Y);
+                }
                 string s = Win32.GetActiveWindowTitle();
                 if (s != null)
                     if (s.Contains(Properties.Settings.Default.AppName))

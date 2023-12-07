@@ -1,6 +1,6 @@
 ﻿using CSScriptLib;
 using AForge;
-namespace Bio
+namespace BioImager
 {
     public partial class Scripting : Form
     {

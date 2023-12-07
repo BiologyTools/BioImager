@@ -13,7 +13,7 @@ using loci.formats.services;
 using ome.xml.model.primitives;
 using loci.formats.meta;
 
-namespace Bio
+namespace BioImager
 {
     public partial class Resolutions : Form
     {

@@ -12,7 +12,7 @@ using SizeF = AForge.SizeF;
 using OpenSlideGTK;
 using Mapsui.Tiling.Fetcher;
 
-namespace Bio
+namespace BioImager
 {
     public partial class ImageView : UserControl, IDisposable
     {
@@ -2255,7 +2255,6 @@ namespace Bio
             
             PointD ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
-            this.Parent.Text = "Level: " + Level + " Res:" + Resolution + " Orig:" + PyramidalOrigin.ToString();
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
                 if (cBar.Value < cBar.Maximum)
@@ -3255,7 +3254,7 @@ namespace Bio
             }
             foreach (BioImage item in Images)
             {
-                Bio.Images.RemoveImage(item);
+                BioImager.Images.RemoveImage(item);
             }
         }
         public void GoToStage()
@@ -3355,10 +3354,10 @@ namespace Bio
         /// @param EventArgs e
         private void drawToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Bio.Graphics.Graphics g = Bio.Graphics.Graphics.FromImage(SelectedBuffer);
+            BioImager.Graphics.Graphics g = BioImager.Graphics.Graphics.FromImage(SelectedBuffer);
             foreach (ROI item in AnnotationsRGB)
             {
-                Bio.Graphics.Pen p = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, SelectedBuffer.BitsPerPixel);
+                BioImager.Graphics.Pen p = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, SelectedBuffer.BitsPerPixel);
                 g.pen = p;
                 if (item.selected)
                 {
@@ -3408,10 +3407,10 @@ namespace Bio
        /// @param EventArgs e
         private void fillToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Bio.Graphics.Graphics g = Bio.Graphics.Graphics.FromImage(SelectedBuffer);
+            BioImager.Graphics.Graphics g = BioImager.Graphics.Graphics.FromImage(SelectedBuffer);
             foreach (ROI item in AnnotationsRGB)
             {
-                Bio.Graphics.Pen p = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, SelectedBuffer.BitsPerPixel);
+                BioImager.Graphics.Pen p = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, SelectedBuffer.BitsPerPixel);
                 if (item.selected)
                 {
                     if (item.type == ROI.Type.Line)

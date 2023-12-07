@@ -1,10 +1,10 @@
 ﻿using AForge;
-using Bio.Graphics;
+using BioImager.Graphics;
 using SharpDX;
 using System.Drawing;
 using Bitmap = System.Drawing.Bitmap;
 using SizeF = System.Drawing.SizeF;
-namespace Bio
+namespace BioImager
 {
     public partial class View3D : Form
     {

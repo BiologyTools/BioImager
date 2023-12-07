@@ -4,7 +4,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using System.Runtime.InteropServices;
 
-namespace Bio
+namespace BioImager
 {
     public class DColorShader                   
     {

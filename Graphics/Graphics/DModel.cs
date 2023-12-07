@@ -2,7 +2,7 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using AForge;
-namespace Bio
+namespace BioImager
 {
     public class DModel
     {

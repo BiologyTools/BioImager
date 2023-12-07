@@ -30,9 +30,8 @@ using Gtk;
 using System.Linq;
 using NetVips;
 using loci.formats.ome;
-using com.sun.corba.se.spi.orb;
 
-namespace Bio
+namespace BioImager
 {
     /* A class declaration. */
     public static class Images
@@ -2216,6 +2215,7 @@ namespace Bio
                 MacroResolution = i;
                 LabelResolution = i + 1;
             }
+  
         }
         /// Converts a 16-bit image to an 8-bit image
         public void To8Bit()

@@ -6,7 +6,7 @@ using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using Bitmap = SharpDX.Direct2D1.Bitmap;
 using PixelFormat = SharpDX.Direct2D1.PixelFormat;
 
-namespace Bio
+namespace BioImager
 {
     public class Configuration
     {

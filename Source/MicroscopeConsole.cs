@@ -1,23 +1,9 @@
-﻿using Bio;
-using com.google.api.client.json;
+﻿using BioImager;
 using Newtonsoft.Json;
-using org.checkerframework.checker.units.qual;
-using System;
-using System.Collections.Generic;
+
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bitmap = AForge.Bitmap;
-using Color = AForge.Color;
-using PointF = AForge.PointF;
 using PointD = AForge.PointD;
-using Point3D = AForge.Point3D;
-using RectangleF = AForge.RectangleF;
-using RectangleD = AForge.RectangleD;
-using Rectangle = AForge.Rectangle;
-using Point = AForge.Point;
-namespace Bio
+namespace BioImager
 {
     public static class MicroscopeConsole
     {
@@ -96,7 +82,6 @@ namespace Bio
                 console = prs[0];
             if (console == null)
             {
-                A:
                 Start();
             }
             if (c.type.ToString().StartsWith("Get"))

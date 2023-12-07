@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Bio
+namespace BioImager
 {
     public partial class Recordings : Form
     {

@@ -1,5 +1,5 @@
 ﻿using AForge;
-namespace Bio.Graphics
+namespace BioImager.Graphics
 {
     public partial class FloodTool : Form
     {

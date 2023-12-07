@@ -20,8 +20,7 @@ using RectangleF = AForge.RectangleF;
 using RectangleD = AForge.RectangleD;
 using Rectangle = AForge.Rectangle;
 using Point = AForge.Point;
-
-namespace Bio
+namespace BioImager
 {
     /* It's a wrapper for the stage*/
     public class Stage
@@ -83,9 +82,14 @@ namespace Bio
                 Microscope.pMicroscope.SetPosition(new PointD(px, py));
             }
             else
+            if (Properties.Settings.Default.PycroManager)
+            {
+                PycroManager.SetPosition(new PointD(px, py));
+            }
+            else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetStage, new double[]{px,py }));
+                BioImager.MicroscopeConsole.RunCommand(new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetStage, new double[]{px,py }));
             }
             else if (Properties.Settings.Default.LibPath.Contains("Prio"))
             {
@@ -152,10 +156,17 @@ namespace Bio
                 return pd;
             }
             else
+            if (Properties.Settings.Default.PycroManager)
+            {
+                PointD pd;
+                PycroManager.GetPosition(out pd, false);
+                return pd;
+            }
+            else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetStage,null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetStage,null));
                 return new PointD(com.doubles[0], com.doubles[1]);
             }
             else if (Properties.Settings.Default.LibPath.Contains("Prio"))
@@ -206,8 +217,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetStageSWLimit, null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetStageSWLimit, null));
                 minX = com.doubles[0];
                 minY = com.doubles[1];
                 maxX = com.doubles[2];
@@ -225,8 +236,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetStageSWLimit, 
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetStageSWLimit, 
                     new double[] {xmin,xmax,ymin,ymax}));
             }
             if (Recorder.recordMicroscope)
@@ -257,10 +268,17 @@ namespace Bio
                 PointD p = Microscope.Stage.GetPosition(true);
                 Microscope.pMicroscope.SetPosition(new Point3D(p.X,p.Y,f));
             }
+            else
+            if (Properties.Settings.Default.PycroManager)
+            {
+                PointD p = Microscope.Stage.GetPosition(true);
+                PycroManager.SetPosition(new Point3D(p.X, p.Y, f));
+            }
+            else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetFocus,new double[] { f}));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetFocus,new double[] { f}));
                 z = f;
             }
             else if (Properties.Settings.Default.LibPath.Contains("Prio"))
@@ -296,10 +314,16 @@ namespace Bio
                 Microscope.pMicroscope.GetPosition3D(out p, update);
                 return p.Z;
             }
+            else if(Properties.Settings.Default.PycroManager)
+            {
+                Point3D p;
+                PycroManager.GetPosition3D(out p, update);
+                return p.Z;
+            }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetFocus, null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetFocus, null));
                 return com.doubles[0];
             }
             if (Properties.Settings.Default.LibPath.Contains("Prio"))
@@ -320,8 +344,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetStageSWLimit, null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetStageSWLimit, null));
                 upperLimit = com.doubles[0];
                 lowerLimit = com.doubles[1];
                 return new PointD(upperLimit,lowerLimit);
@@ -338,8 +362,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                   new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetFocusSWLimit,
+                BioImager.MicroscopeConsole.RunCommand(
+                   new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetFocusSWLimit,
                    new double[] { xd, yd }));
             }
             upperLimit = xd;
@@ -423,8 +447,8 @@ namespace Bio
             }
             else if(Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetObjective, new double[] { index }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetObjective, new double[] { index }));
                 this.index = index;
             }
         }
@@ -433,8 +457,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetObjective, null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetObjective, null));
                 return (int)com.doubles[0];
             }
             else if (Properties.Settings.Default.LibPath.Contains("Prio"))
@@ -519,8 +543,8 @@ namespace Bio
         /// @return The position of the shutter.
         public short GetPosition()
         {
-            Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetTLShutter, null));
+            BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetTLShutter, null));
             return (short)com.doubles[0];
         }
         
@@ -536,8 +560,8 @@ namespace Bio
                 Recorder.AddLine("Microscope.TLShutter.SetPosition(" + p + ");");
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetTLShutter, new double[] { p }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetTLShutter, new double[] { p }));
                 position = p;
             }
             if (Properties.Settings.Default.LibPath.Contains("Prio"))
@@ -561,8 +585,8 @@ namespace Bio
         /// @return The position of the shutter.
         public short GetPosition()
         {
-            Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetHXPShutter, null));
+            BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetHXPShutter, null));
             if (com.doubles == null)
                 return 0;
             return (short)com.doubles[0];
@@ -580,8 +604,8 @@ namespace Bio
                 Recorder.AddLine("Microscope.TLShutter.SetPosition(" + p + ");");
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetHXPShutter, new double[] { p }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetHXPShutter, new double[] { p }));
                 position = p;
             }
         }
@@ -599,8 +623,8 @@ namespace Bio
         /// @return The position of the shutter.
         public short GetPosition()
         {
-            Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetRLShutter, null));
+            BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetRLShutter, null));
             return (short)com.doubles[0];
         }
        
@@ -612,8 +636,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetRLShutter, new double[] { p }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetRLShutter, new double[] { p }));
             }
             position = p;
             if (Recorder.recordMicroscope)
@@ -644,20 +668,20 @@ namespace Bio
             {
                 if (type == Type.HXP)
                 {
-                    Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                        (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetHXP, null));
+                    BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                        (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetHXP, null));
                     return (short)com.doubles[0];
                 }
                 else if(type == Type.RL)
                 {
-                    Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                        (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetRLHalogen, null));
+                    BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                        (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetRLHalogen, null));
                     return (short)com.doubles[0];
                 }
                 else if (type == Type.TL)
                 {
-                    Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                        (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetTLHalogen, null));
+                    BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                        (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetTLHalogen, null));
                     return (short)com.doubles[0];
                 }
             }
@@ -675,18 +699,18 @@ namespace Bio
             {
                 if (type == Type.HXP)
                 {
-                    Bio.MicroscopeConsole.RunCommand(
-                        new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetHXP, new double[] { f }));
+                    BioImager.MicroscopeConsole.RunCommand(
+                        new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetHXP, new double[] { f }));
                 }
                 else if(type == Type.RL)
                 {
-                    Bio.MicroscopeConsole.RunCommand(
-                        new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetRLHalogen, new double[] { f }));
+                    BioImager.MicroscopeConsole.RunCommand(
+                        new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetRLHalogen, new double[] { f }));
                 }
                 else if (type == Type.TL)
                 {
-                    Bio.MicroscopeConsole.RunCommand(
-                        new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetTLHalogen, new double[] { f }));
+                    BioImager.MicroscopeConsole.RunCommand(
+                        new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetTLHalogen, new double[] { f }));
                 }
             }
         }
@@ -711,8 +735,8 @@ namespace Bio
         {
             if(Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.Command com = Bio.MicroscopeConsole.RunCommand
-                    (new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.GetRLShutter, null));
+                BioImager.MicroscopeConsole.Command com = BioImager.MicroscopeConsole.RunCommand
+                    (new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.GetRLShutter, null));
                 return (int)com.doubles[0];
             }
             if (Properties.Settings.Default.PMicroscope)
@@ -732,8 +756,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetFilterWheel, new double[] { i }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetFilterWheel, new double[] { i }));
             }
             if (Properties.Settings.Default.PMicroscope)
             {
@@ -818,11 +842,32 @@ namespace Bio
                 pMicroscope.Initialize();
                 bool b = pMicroscope.SetPosition(new Point3D(100, 100, 100));
                 Point3D p;
-                bool res = pMicroscope.GetPosition3D(out p,false);
+                bool res = pMicroscope.GetPosition3D(out p, false);
                 bool bb = pMicroscope.TakeImage(Application.StartupPath + "\\Image");
                 Objectives = new Objectives(6);
                 Stage = new Stage();
                 Focus = new Focus();
+            }
+            else
+            if (Properties.Settings.Default.PycroManager)
+            {
+                //First we determine which MMConfig file we are using. There is currently no way of doing this programmatically. So we will ask the user.
+                if (Properties.Settings.Default.MMConfig == "")
+                {
+                    OpenFileDialog fl = new OpenFileDialog();
+                    fl.Filter = "Config Files (*.cfg)|*.cfg";
+                    fl.InitialDirectory = Properties.Settings.Default.AppPath;
+                    MessageBox.Show("Micro-Manager current configuration file not set please select the current configuration.");
+                    fl.Title = "Set Current Config File (Shown in MicroManager GUI))";
+                    if (fl.ShowDialog() != DialogResult.OK)
+                        Application.Exit();
+                    Properties.Settings.Default.MMConfig = fl.FileName;
+                }
+                PycroManager.Initialize(Properties.Settings.Default.MMConfig);
+                Objectives = new Objectives(7);
+                Stage = new Stage();
+                Focus = new Focus();
+                //TODO add suppport for shutters.
             }
             else
             if (Properties.Settings.Default.AppPath == "")
@@ -933,8 +978,8 @@ namespace Bio
         {
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
             {
-                Bio.MicroscopeConsole.RunCommand(
-                    new Bio.MicroscopeConsole.Command(Bio.MicroscopeConsole.Command.Type.SetCalibration, new double[] { calibMode }));
+                BioImager.MicroscopeConsole.RunCommand(
+                    new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetCalibration, new double[] { calibMode }));
                 //We check to see if focus & stage are correctly calibrated on lower limit and perform calibration if necessary
                 PointD cur = Stage.GetPosition(true);
                 double z = Focus.GetFocus();
@@ -1246,6 +1291,34 @@ namespace Bio
                     bi.Buffers.Add(bm.Buffers[0]);
                 //We delete the temporary file created by camera.
                 File.Delete(file);
+                currentImage = bm;
+                return bi;
+            }
+            else if (Properties.Settings.Default.PycroManager)
+            {
+                folder = GetFolder();
+                string file;
+                if (folder == "" || folder == null)
+                    file = Properties.Settings.Default.ImageName + (ImageCount++).ToString();
+                else
+                    file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++);
+                BioImage bm = PycroManager.TakeImage(file);
+
+                if (!imagingStack)
+                {
+                    if (addToImages)
+                        Images.AddImage(bm, newTab);
+                    if (save)
+                        BioImage.SaveOME(file + ".ome.tif", bm.ID);
+                    if (bm.bitsPerPixel > 8)
+                        bm.StackThreshold(true);
+                    else
+                        bm.StackThreshold(false);
+                }
+                else
+                {
+                    bi.Buffers.AddRange(bm.Buffers);
+                }
                 currentImage = bm;
                 return bi;
             }

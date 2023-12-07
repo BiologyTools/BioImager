@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace Bio
+namespace BioImager
 {
     /* It's a form that displays an XML tree */
     public partial class XMLView : Form

@@ -8,7 +8,7 @@ using System.Threading;
 using AForge;
 using RotateFlipType = AForge.RotateFlipType;
 
-namespace Bio
+namespace BioImager
 {
     public partial class TabsView : Form
     {
@@ -788,7 +788,7 @@ namespace Bio
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (saveTiffFileDialog.ShowDialog() == DialogResult.OK)
-                Bio.BioImage.Save(ImageView.SelectedImage.ID, saveTiffFileDialog.FileName);
+                BioImager.BioImage.Save(ImageView.SelectedImage.ID, saveTiffFileDialog.FileName);
         }
 
         /// If the user clicks the "Save OME" menu item, then show the save file dialog and if the user
@@ -799,7 +799,7 @@ namespace Bio
         private void saveOMEToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (saveOMEFileDialog.ShowDialog() == DialogResult.OK)
-                Bio.BioImage.Save(ImageView.SelectedImage.ID, saveOMEFileDialog.FileName);
+                BioImager.BioImage.Save(ImageView.SelectedImage.ID, saveOMEFileDialog.FileName);
         }
         /// It clears the dropdown menu, then adds each item in the recent list to the dropdown menu.
         /// 

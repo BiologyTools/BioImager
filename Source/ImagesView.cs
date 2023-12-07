@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio.Source
+namespace BioImager
 {
     public partial class ImagesView : Form
     {

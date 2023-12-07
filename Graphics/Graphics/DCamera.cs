@@ -1,6 +1,6 @@
 ﻿using SharpDX;
 
-namespace Bio
+namespace BioImager
 {
     public class DCamera                    // 53 lines
     {

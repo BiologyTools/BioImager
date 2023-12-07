@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bio.PythonMicroscope
+namespace BioImager.PythonMicroscope
 {
     public partial class MicroscopeSetup : Form
     {
