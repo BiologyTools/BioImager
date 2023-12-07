@@ -15,73 +15,89 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by python-microscope.</Description>
-    <Version>3.4.0</Version>
+    <Version>3.5.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>OpenSlide integration for improved navigation &amp; performance. As well as new Cell Imager tool for performing imaging routines on groups of cells based on blob detection.</PackageReleaseNotes>
+    <PackageReleaseNotes>Micromanager 2.0 integration. As well as Nuget package Fix.</PackageReleaseNotes>
     </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="PycroManager\GetExposure.py" />
-    <None Remove="PycroManager\GetObjective.py" />
-    <None Remove="PycroManager\GetStageXY.py" />
-    <None Remove="PycroManager\GetStageXYZ.py" />
-    <None Remove="PycroManager\GetStageXYZ.py~RF16afb9c5.TMP" />
-    <None Remove="PycroManager\SetExposure.py" />
-    <None Remove="PycroManager\SetObjective.py" />
-    <None Remove="PycroManager\SetStageXY.py" />
-    <None Remove="PycroManager\SetStageXYZ.py" />
-    <None Remove="PycroManager\TakeImage.py" />
-    <None Remove="PycroManager\TakeImage.py~RF1a0a11ea.TMP" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="bioformats_package.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>lib\net6.0-windows7.0</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="MicroscopeConsole\MicroscopeConsole.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="MicroscopeConsole\MicroscopeConsole.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="MicroscopeConsole\MicroscopeConsole.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="MicroscopeConsole\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="MicroscopeConsole\Newtonsoft.Json.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\GetExposure.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\SetObjective.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\GetObjective.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\GetStageXY.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\GetStageXYZ.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\SetExposure.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\SetStageXY.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\SetStageXYZ.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\TakeImage.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>
 

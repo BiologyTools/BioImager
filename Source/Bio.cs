@@ -63,7 +63,10 @@ namespace BioImager
             else
             {
                 if (!App.viewer.Images.Contains(im))
+                {
                     App.viewer.Images.Add(im);
+                    App.viewer.Update();
+                }
             }
         }
         /// It takes a string as an argument, and returns the number of times that string appears in the
