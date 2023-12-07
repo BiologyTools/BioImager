@@ -1,6 +1,6 @@
 # BioImager
 
-A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss® & all devices supported by [python-microscope.](https://github.com/python-microscope) If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging & supports XInput game controllers to move stage, take images, run ImageJ macros on images or Bio C# scripts. Also check out the wiki for [library usage.](https://github.com/BiologyTools/Bio/wiki/Library-Usage) or check out the [documentation.](https://biologytools.github.io/Documentation/BioImager-3.3.0/html/index.html)
+A .NET microscopy imaging application based on Bio. Supports various microscopes by using imported libraries & GUI automation. Supported libraries include Prior® & Zeiss® & all devices supported by latest [Micromanager 2.0](https://micro-manager.org/Device_Support) [python-microscope.](https://github.com/python-microscope) If your microscope is not supported check your manufacturer's SDK to implement "Microscope.cs" or use GUI Automation functions. Works with or without hardware through microscope simulation. Allows for tiled & depth stack imaging & supports XInput game controllers to move stage, take images, run ImageJ macros on images or Bio C# scripts. Also check out the wiki for [library usage.](https://github.com/BiologyTools/Bio/wiki/Library-Usage) or check out the [documentation.](https://biologytools.github.io/Documentation/BioImager-3.3.0/html/index.html)
 
 ![Nuget](https://img.shields.io/nuget/v/BioImager) ![Nuget](https://img.shields.io/nuget/dt/BioImager) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8187849.svg)](https://doi.org/10.5281/zenodo.8187849)
 
@@ -51,6 +51,7 @@ Microscope.TakeTiles(4,4);
 
 ## Setup
 - Install dependency [OpenSlide](https://openslide.org/docs/windows/) be sure to add the /bin path of opeslide binaries to your Environmental Variable PATH. By editing your PATH variable.
+- For Micro-Manager 2.0 install the nightly build from [here](https://download.micro-manager.org/nightly/2.0/Windows/) then install [pycromanager](https://github.com/micro-manager/pycro-manager) by running ```pip install pycromanager```
 - For detailed Setup instructions see [setup.](https://github.com/BiologyTools/BioImager/wiki/Setup)
 - For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
 - For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
