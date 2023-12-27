@@ -1096,7 +1096,24 @@ namespace BioImager
         {
             return RLShutter.GetPosition();
         }
-
+        /// <summary>
+        /// Gets the current position of a named shutter.
+        /// </summary>
+        /// <param name="shutter">Name of the shutter.</param>
+        /// <returns>Position of the named shutter</returns>
+        public static int GetShutterPosition(string shutter)
+        {
+            return PycroManager.Shutters.GetPosition(shutter);
+        }
+        /// <summary>
+        /// Sets the current position of a named shutter.
+        /// </summary>
+        /// <param name="shutter">Name of the shutter.</param>
+        /// <returns>Position of the named shutter</returns>
+        public static bool SetShutterPosition(string shutter, int state)
+        {
+            return PycroManager.Shutters.SetPosition(shutter, state);
+        }
         /// Move the stage up by a distance of d
         /// 
         /// @param d The distance to move the stage up.

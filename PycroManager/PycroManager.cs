@@ -85,6 +85,7 @@ namespace BioImager
                 Console.WriteLine("Unable to find Objective Turret (DObjective) Label in MMConfig.");
                 return false;
             }
+            Shutters.Initialize();
             Point3D loc = new Point3D();
             GetPosition3D(out loc, true);
             focus = loc.Z;
@@ -320,18 +321,65 @@ namespace BioImager
                     return 0;
                 }
                 else
-                    return 0;
+                    throw new Exception("Unable to get objective position. " + s);
             }
         }
-        public static List<Shutter> Shutters = new List<Shutter>();
-        public class Shutter
+        public static class Shutters
         {
-            public string Name { get; set; }
-            public bool Position { get; set; }
-            public Shutter(string name)
+            public class Shutter
             {
-                Name = name;
+                public string Name { get; set; }
+                public Shutter(string name)
+                {
+                    Name = name;
+                }
+            }
+            public static List<Shutter> List = new List<Shutter>();
+            public static void Initialize()
+            {
+                if (Config.ContainsKey("Device"))
+                {
+                    //We get the name of the shutters.
+                    foreach (Conf item in Config["Device"])
+                    {
+                        if (item.Values.Last().Contains("Shutter"))
+                        {
+                            List.Add(new Shutter(item.Type));
+                        }
+                    }
+                }
+            }
+            public static int GetPosition(string shutterName)
+            {
+                string s = run_cmd("GetShutter.py", shutterName);
+                if (s.Contains("OK"))
+                {
+                    string[] sts = s.Split();
+                    string st = sts[0].ToLower();
+                    if (bool.Parse(st))
+                        return 1;
+                    else
+                        return 0;
+                }
+                else
+                    throw new Exception("Unable to get shutter position. " + s);
+            }
+            public static bool SetPosition(string shutterName, int state)
+            {
+                string s;
+                if(state == 0)
+                    s = run_cmd("SetShutter.py", shutterName + " 0");
+                else
+                    s = run_cmd("SetShutter.py", shutterName + " 1");
+                if (s.Contains("OK"))
+                {
+                    return true;
+                }
+                else
+                    return false;
             }
         }
+        
+        
     }
 }
