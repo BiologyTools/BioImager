@@ -407,6 +407,12 @@ namespace BioImager
             public Objective()
             {
             }
+            public override string ToString()
+            {
+                if (Name == "" || Name == null)
+                    return "Objective " + Index.ToString();
+                else return Name;
+            }
         }
         private int index;
         public int moveWait = 1000;
@@ -451,6 +457,10 @@ namespace BioImager
                     new BioImager.MicroscopeConsole.Command(BioImager.MicroscopeConsole.Command.Type.SetObjective, new double[] { index }));
                 this.index = index;
             }
+            else if(Properties.Settings.Default.PycroManager)
+            {
+                PycroManager.Objectives.SetPosition(index);
+            }
         }
         
         public int GetPosition()
@@ -464,6 +474,10 @@ namespace BioImager
             else if (Properties.Settings.Default.LibPath.Contains("Prio"))
             {
                 return Microscope.sdk.GetNosePiece();
+            }
+            else if(Properties.Settings.Default.PycroManager)
+            {
+                return PycroManager.Objectives.GetPosition();
             }
             else if(!Properties.Settings.Default.PMicroscope && Automation.Properties.ContainsKey("GetO1"))
             {
@@ -519,12 +533,6 @@ namespace BioImager
             }
             return 0;
         }
-        /// If the library path contains "MTB", then return the list at the position of the
-        /// changerType.InvokeMember("get_Position", BindingFlags.InvokeMethod, null, changer, null)
-        /// 
-        /// If the library path does not contain "MTB", then return the list at the index
-        /// 
-        /// @return The Objective object.
         public Objective GetObjective()
         {
             return List[(short)GetPosition()];
@@ -616,7 +624,7 @@ namespace BioImager
     {
         public static Type rlType;
         public static object rlShutter = null;
-        public static int position;
+        internal static int position;
         /// If the library path contains "MTB", then return the position of the shutter, otherwise
         /// return the position of the shutter
         /// 
@@ -644,6 +652,7 @@ namespace BioImager
                 Recorder.AddLine("Microscope.RLShutter.SetPosition(" + p + ");");
         }
     }
+
     /* The LightSource class is a wrapper class for the IMTBContinual interface. */
     public class LightSource
     {
@@ -865,9 +874,12 @@ namespace BioImager
                 }
                 PycroManager.Initialize(Properties.Settings.Default.MMConfig);
                 Objectives = new Objectives(7);
+                for (int i = 0; i < PycroManager.Objectives.List.Count; i++)
+                {
+                    Objectives.List[PycroManager.Objectives.List[i].Index].Name = PycroManager.Objectives.List[i].Name;
+                }
                 Stage = new Stage();
                 Focus = new Focus();
-                //TODO add suppport for shutters.
             }
             else
             if (Properties.Settings.Default.AppPath == "")

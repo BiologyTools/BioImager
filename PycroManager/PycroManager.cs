@@ -74,11 +74,12 @@ namespace BioImager
                     if(item.Type == "Objective")
                     {
                         //We set the 
-                        TurretName = item.Values[0];
+                        TurretName = "Objective";
                         initialized = true;
                     }
                 }
             }
+            Objectives.Initialize();
             if(!initialized)
             {
                 Console.WriteLine("Unable to find Objective Turret (DObjective) Label in MMConfig.");
@@ -269,6 +270,28 @@ namespace BioImager
                     return GetConfigs("ConfigGroup", "Objective").Length;
                 }
             }
+            public static List<Objective> List = new List<Objective>();
+            public class Objective
+            {
+                public string Name { get; set; }
+                public int Index {  get; set; }
+                public int Magnification { get; set; }
+                public Objective(string name, int index, int mag)
+                {
+                    Name = name;
+                    Index = index;
+                    Magnification = mag;
+                }
+            }
+            internal static void Initialize()
+            {
+                int i = 0;
+                foreach (Conf obj in GetConfigs("ConfigGroup", "Objective"))
+                {
+                    List.Add(new Objective(obj.Values[0], int.Parse(obj.Values[3]), int.Parse(obj.Values[0].Replace("X", ""))));
+                }
+            }
+
             public static Conf GetObjective(int index)
             {
                 return GetConfigs("ConfigGroup", "Objective")[index];
@@ -283,15 +306,31 @@ namespace BioImager
                 else
                     return false;
             }
-            public static bool GetPosition()
+            public static int GetPosition()
             {
                 string s = run_cmd("GetObjective.py", TurretName);
                 if (s.Contains("OK"))
                 {
-                    return true;
+                    string[] sts = s.Split();
+                    foreach (Objective o in List)
+                    {
+                        if(o.Name == sts[0])
+                            return o.Index; 
+                    }
+                    return 0;
                 }
                 else
-                    return false;
+                    return 0;
+            }
+        }
+        public static List<Shutter> Shutters = new List<Shutter>();
+        public class Shutter
+        {
+            public string Name { get; set; }
+            public bool Position { get; set; }
+            public Shutter(string name)
+            {
+                Name = name;
             }
         }
     }

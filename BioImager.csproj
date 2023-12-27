@@ -15,20 +15,15 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>3.5.0</Version>
+    <Version>3.6.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Micromanager 2.0 integration. As well as Nuget package Fix.</PackageReleaseNotes>
+    <PackageReleaseNotes>Layers for imaging multiple resolutions.</PackageReleaseNotes>
     </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bioformats_package.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>lib\net6.0-windows7.0</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
     <Content Include="MicroscopeConsole\MicroscopeConsole.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
@@ -102,19 +97,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AForgeBio" Version="1.4.3" />
-    <PackageReference Include="BioFormats.NET6" Version="7.0.1" />
+    <PackageReference Include="AForgeBio" Version="1.5.0" />
+    <PackageReference Include="BioFormats.NET6" Version="7.1.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
-    <PackageReference Include="CS-Script" Version="4.8.10" />
+    <PackageReference Include="CS-Script" Version="4.8.13" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.1" />
-    <PackageReference Include="IKVM" Version="8.6.4" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NetVips" Version="2.4.0" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenSlideGTK" Version="1.3.0" />
+    <PackageReference Include="OpenSlideGTK" Version="1.3.1" />
     <PackageReference Include="ScottPlot" Version="5.0.6-beta" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
@@ -153,11 +147,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="bioformats_package">
-      <HintPath>bioformats_package.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

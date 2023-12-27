@@ -1,6 +1,4 @@
 from pycromanager import Core
-import numpy as np
-import matplotlib.pyplot as plt
 import sys
 core = Core()
 core.snap_image()
