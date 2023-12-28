@@ -498,7 +498,7 @@ namespace BioImager
         private void statusTimer_Tick(object sender, EventArgs e)
         {
             //We will not dock to pycromanager
-            if (dockToApp.Checked && !Properties.Settings.Default.PycroManager)
+            if (dockToApp.Checked && !Properties.Settings.Default.PycroManager && !Properties.Settings.Default.PMicroscope)
             {
                 //We set window location based on imaging app location.
                 Win32.Rect r = new Win32.Rect();

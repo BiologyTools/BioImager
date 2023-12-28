@@ -50,15 +50,26 @@ namespace BioImager
                 set { node.Text = value; }
             }
         }
+        static bool setup = false;
         public NodeView(string[] args)
         {
+            List<string> sts = new List<string>();
+            sts.AddRange(args);
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Contains("-setup"))
+                {
+                    setup = true;
+                    sts.RemoveAt(i);
+                }
+            }
             App.nodeView = this;
             InitializeComponent();
             InitNodes();
             Init();
             if (args.Length > 0)
             {
-                App.tabsView = new TabsView(args);
+                App.tabsView = new TabsView(sts.ToArray());
                 App.tabsView.Show();
             }
             else
@@ -71,7 +82,7 @@ namespace BioImager
 
         private static void Init()
         {
-            if (!Properties.Settings.Default.Setup)
+            if (!Properties.Settings.Default.Setup || setup)
                 new Setup().ShowDialog();
             App.Initialize();
             Filters.Init();

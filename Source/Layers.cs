@@ -36,6 +36,7 @@ namespace BioImager
             {
                 if (r == App.viewer.Layers[i].Resolution)
                     App.viewer.Layers[i] = new Layer(App.viewer.Layers[i].Resolution,e.Item.Checked);
+                App.viewer.UpdateView();
             }
         }
     }

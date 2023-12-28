@@ -30,7 +30,7 @@ namespace BioImager
             {
                 Properties.Settings.Default.AppPath = imgPathBox.Text;
             }
-            else
+            else if(!pythonRadioBut.Checked)
                 return;
             if (libraryPathBox.Text != "" && libRadioBut.Checked)
             {
@@ -60,6 +60,7 @@ namespace BioImager
         private void pythonRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PMicroscope = pythonRadioBut.Checked;
+            Properties.Settings.Default.PycroManager = false;
         }
 
         /// If the user clicks on the libRadioBut radio button, then the PMicroscope variable in the
@@ -69,7 +70,8 @@ namespace BioImager
         /// @param EventArgs The EventArgs class is the base class for classes that contain event data.
         private void libRadioBut_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.PMicroscope = libRadioBut.Checked;
+            Properties.Settings.Default.PMicroscope = false;
+            Properties.Settings.Default.PycroManager = false;
         }
 
         /// It opens a file dialog, and if the user selects a file, it sets the text of the imgPathBox to
@@ -108,6 +110,7 @@ namespace BioImager
         private void micromanRadioBut_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PycroManager = micromanRadioBut.Checked;
+            Properties.Settings.Default.PMicroscope = false;
         }
     }
 }

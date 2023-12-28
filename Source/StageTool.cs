@@ -155,7 +155,7 @@ namespace BioImager
         {
             if (dockBox.Checked)
             {
-                if (!Properties.Settings.Default.PycroManager)
+                if (!Properties.Settings.Default.PycroManager && !Properties.Settings.Default.PMicroscope)
                 {
                     //We set window location based on imaging app location.
                     Win32.Rect r = new Win32.Rect();

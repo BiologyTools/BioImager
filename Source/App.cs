@@ -72,7 +72,7 @@ namespace BioImager
             seriesTool = new Series();
             recordings = new Recordings();
             automation = new Automation();
-            if (!Properties.Settings.Default.PycroManager)
+            if (!Properties.Settings.Default.PycroManager && !Properties.Settings.Default.PMicroscope)
             {
                 lightTool = new Light();
             }

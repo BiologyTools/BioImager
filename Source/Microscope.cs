@@ -1310,7 +1310,7 @@ namespace BioImager
                     if(addToImages)
                     Images.AddImage(bm,newTab);
                     if(save)
-                    BioImage.SaveOME(file + ".ome.tif", bm.ID);
+                    BioImage.SaveAsync(file + ".ome.tif", bm.ID,0,true);
                     if (bm.bitsPerPixel > 8)
                         bm.StackThreshold(true);
                     else
@@ -1473,12 +1473,13 @@ namespace BioImager
             }
             //Set the physical size based on objective view
             RectangleD rec = GetObjectiveViewRectangle();
-           bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
+            bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
             bi.StageSizeX = rec.X;
             bi.StageSizeY = rec.Y;
             bi.StageSizeZ = UpperLimit;
             bi.Resolutions.Add(new Resolution(bi.SizeX, bi.SizeY, bi.Buffers[0].PixelFormat,
-                rec.W / bi.SizeX, rec.H / bi.SizeY, (UpperLimit - LowerLimit) / bi.SizeZ, bi.StageSizeX,bi.StageSizeY,bi.StageSizeZ));
+                rec.W / bi.SizeX, rec.H / bi.SizeY, (UpperLimit - LowerLimit) / bi.SizeZ, rec.X,rec.Y,UpperLimit));
+            bi.Volume = new VolumeD(new Point3D(bi.StageSizeX, bi.StageSizeY, bi.StageSizeZ),new Point3D(bi.SizeX * bi.PhysicalSizeX, bi.SizeY * bi.PhysicalSizeY, bi.StageSizeZ * bi.PhysicalSizeZ));
             BioImage.AutoThreshold(bi, false);
             if (bi.bitsPerPixel > 8)
                 bi.StackThreshold(true);
@@ -1500,7 +1501,7 @@ namespace BioImager
         public static BioImage[] TakeTiles(int width, int height, bool save = true, bool addToImages = true, bool newTab = false)
         {
             List<BioImage> ims = new List<BioImage>();
-            imagingStack = true;
+            imagingStack = false;
             bool leftright = false;
             if (Properties.Settings.Default.PMicroscope)
             {
