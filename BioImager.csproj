@@ -21,6 +21,7 @@
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Layers for imaging multiple resolutions.</PackageReleaseNotes>
+    <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
   <ItemGroup>
@@ -54,6 +55,11 @@
       <Pack>True</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
+    <Content Include="PycroManager\GetShutter.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
     <Content Include="PycroManager\SetObjective.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
@@ -75,6 +81,11 @@
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PycroManager\SetExposure.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="PycroManager\SetShutter.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
@@ -148,11 +159,17 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
+  
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="C:\Users\Erikr\.nuget\packages\bioformats.net6\7.0.1\contentFiles\any\net6.0\bioformats_package.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

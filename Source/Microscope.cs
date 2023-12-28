@@ -1338,11 +1338,7 @@ namespace BioImager
                     if (addToImages)
                         Images.AddImage(bm, newTab);
                     if (save)
-                        BioImage.SaveOME(file + ".ome.tif", bm.ID);
-                    if (bm.bitsPerPixel > 8)
-                        bm.StackThreshold(true);
-                    else
-                        bm.StackThreshold(false);
+                        BioImage.SaveAsync(file + ".ome.tif", bm.ID,0,true);
                 }
                 else
                 {
@@ -1569,7 +1565,6 @@ namespace BioImager
         /// @return A rectangle with the dimensions of the viewport.
         public static RectangleD GetViewRectangle(bool update)
         {
-            Objectives.Objective o = Objectives.GetObjective();
             if (update)
             {
                 PointD d = Stage.GetPosition(false);

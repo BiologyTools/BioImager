@@ -101,6 +101,7 @@ namespace BioImager
                 b.filename = Path.GetFileName(b.filename);
             TabPage t = new TabPage(b.filename);
             ImageView v = new ImageView(b);
+            v.ShowStage = false;
             v.Dock = DockStyle.Fill;
             t.Controls.Add(v);
             if (Width < b.SizeX || Height < b.SizeY)
@@ -117,6 +118,7 @@ namespace BioImager
         {
             TabPage t = new TabPage("Viewer");
             ImageView v = new ImageView();
+            v.ShowStage = true;
             v.Dock = DockStyle.Fill;
             t.Controls.Add(v);
             tabControl.TabPages.Add(t);

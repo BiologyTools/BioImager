@@ -35,13 +35,16 @@
             // layersBox
             // 
             layersBox.BackColor = Color.FromArgb(49, 91, 138);
+            layersBox.CheckBoxes = true;
             layersBox.Dock = DockStyle.Fill;
             layersBox.ForeColor = Color.White;
             layersBox.Location = new Point(0, 0);
+            layersBox.MultiSelect = false;
             layersBox.Name = "layersBox";
             layersBox.Size = new Size(168, 197);
             layersBox.TabIndex = 0;
             layersBox.UseCompatibleStateImageBehavior = false;
+            layersBox.View = View.List;
             layersBox.ItemChecked += layersBox_ItemChecked;
             // 
             // Layers

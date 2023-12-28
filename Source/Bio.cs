@@ -64,7 +64,7 @@ namespace BioImager
             {
                 if (!App.viewer.Images.Contains(im))
                 {
-                    App.viewer.Images.Add(im);
+                    App.viewer.AddImage(im);
                     App.viewer.Update();
                 }
             }
@@ -82,8 +82,10 @@ namespace BioImager
             {
                 string name = images[im].ID;
                 int sti = name.LastIndexOf("-");
-                string st = name.Remove(sti);
-                if (images[im].ID.Contains(st))
+                string st = name;
+                if(sti != -1)
+                    st = name.Remove(sti);
+                if (images[im].ID == st)
                     i++;
             }
             return i;
@@ -5045,19 +5047,14 @@ namespace BioImager
             for (int i = 0; i < bms.Length; i++)
             {
                 string file = bms[i].file;
-                ////Progress pr = new //Progress(file, "Saving");
-                //pr.Show();
                 BioImage b = bms[i];
                 writer.setSeries(i);
                 for (int bu = 0; bu < b.Buffers.Count; bu++)
                 {
                     progressValue = (float)bu / (float)b.Buffers.Count;
-                    writer.saveBytes(bu, b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian));
-                    //pr.Update//ProgressF((float)bu / b.Buffers.Count);
-                    //Application.DoEvents();
+                    byte[] bts = b.Buffers[bu].GetSaveBytes(BitConverter.IsLittleEndian);
+                    writer.saveBytes(bu, bts);
                 }
-                //pr.Close();
-                //pr.Dispose();
             }
             bool stop = false;
             do

@@ -21,10 +21,10 @@ namespace BioImager
         private void Layers_Activated(object sender, EventArgs e)
         {
             layersBox.Items.Clear();
-            foreach (Layer d in App.viewer.Layers)
+            for (int i = 0; i < App.viewer.Layers.Count; i++)
             {
-                ListViewItem l = new ListViewItem(d.Resolution.ToString());
-                l.Checked = d.Enabled;
+                ListViewItem l = new ListViewItem(App.viewer.Layers[i].Resolution.ToString());
+                l.Checked = App.viewer.Layers[i].Enabled;
                 layersBox.Items.Add(l);
             }
         }
