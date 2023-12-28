@@ -55,8 +55,10 @@ namespace BioImager
             controlsToolStripMenuItem = new ToolStripMenuItem();
             hideControlsToolStripMenuItem1 = new ToolStripMenuItem();
             hideStatusToolStripMenuItem = new ToolStripMenuItem();
+            hideOverViewToolStripMenuItem = new ToolStripMenuItem();
             copyViewToClipboardToolStripMenuItem = new ToolStripMenuItem();
             layersToolStripMenuItem = new ToolStripMenuItem();
+            removeImageToolStripMenuItem = new ToolStripMenuItem();
             zPlayMenuStrip = new ContextMenuStrip(components);
             playZToolStripMenuItem = new ToolStripMenuItem();
             stopZToolStripMenuItem = new ToolStripMenuItem();
@@ -98,7 +100,7 @@ namespace BioImager
             vScrollBar = new VScrollBar();
             saveCSVFileDialog = new SaveFileDialog();
             dxPanel = new Panel();
-            hideOverViewToolStripMenuItem = new ToolStripMenuItem();
+            removeImagesToolStripMenuItem = new ToolStripMenuItem();
             timePlayMenuStrip.SuspendLayout();
             contextMenuStrip.SuspendLayout();
             zPlayMenuStrip.SuspendLayout();
@@ -164,9 +166,9 @@ namespace BioImager
             // 
             // contextMenuStrip
             // 
-            contextMenuStrip.Items.AddRange(new ToolStripItem[] { rOIToolStripMenuItem, viewToolStripMenuItem, moveStageToImageToolStripMenuItem, goToToolStripMenuItem, goToImageToolStripMenuItem, goToStageToolStripMenuItem, controlsToolStripMenuItem, copyViewToClipboardToolStripMenuItem, layersToolStripMenuItem });
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { rOIToolStripMenuItem, viewToolStripMenuItem, moveStageToImageToolStripMenuItem, goToToolStripMenuItem, goToImageToolStripMenuItem, goToStageToolStripMenuItem, controlsToolStripMenuItem, copyViewToClipboardToolStripMenuItem, layersToolStripMenuItem, removeImageToolStripMenuItem, removeImagesToolStripMenuItem });
             contextMenuStrip.Name = "contextMenuStrip1";
-            contextMenuStrip.Size = new Size(200, 202);
+            contextMenuStrip.Size = new Size(200, 268);
             // 
             // rOIToolStripMenuItem
             // 
@@ -287,16 +289,23 @@ namespace BioImager
             // hideControlsToolStripMenuItem1
             // 
             hideControlsToolStripMenuItem1.Name = "hideControlsToolStripMenuItem1";
-            hideControlsToolStripMenuItem1.Size = new Size(180, 22);
+            hideControlsToolStripMenuItem1.Size = new Size(152, 22);
             hideControlsToolStripMenuItem1.Text = "Hide Controls";
             hideControlsToolStripMenuItem1.Click += hideControlsToolStripMenuItem_Click;
             // 
             // hideStatusToolStripMenuItem
             // 
             hideStatusToolStripMenuItem.Name = "hideStatusToolStripMenuItem";
-            hideStatusToolStripMenuItem.Size = new Size(180, 22);
+            hideStatusToolStripMenuItem.Size = new Size(152, 22);
             hideStatusToolStripMenuItem.Text = "Hide Status";
             hideStatusToolStripMenuItem.Click += HideStatusMenuItem_Click;
+            // 
+            // hideOverViewToolStripMenuItem
+            // 
+            hideOverViewToolStripMenuItem.Name = "hideOverViewToolStripMenuItem";
+            hideOverViewToolStripMenuItem.Size = new Size(152, 22);
+            hideOverViewToolStripMenuItem.Text = "Hide OverView";
+            hideOverViewToolStripMenuItem.Click += hideOverviewToolStripMenuItem_Click;
             // 
             // copyViewToClipboardToolStripMenuItem
             // 
@@ -311,6 +320,13 @@ namespace BioImager
             layersToolStripMenuItem.Size = new Size(199, 22);
             layersToolStripMenuItem.Text = "Layers";
             layersToolStripMenuItem.Click += layersToolStripMenuItem_Click;
+            // 
+            // removeImageToolStripMenuItem
+            // 
+            removeImageToolStripMenuItem.Name = "removeImageToolStripMenuItem";
+            removeImageToolStripMenuItem.Size = new Size(199, 22);
+            removeImageToolStripMenuItem.Text = "Remove Image";
+            removeImageToolStripMenuItem.Click += removeImageToolStripMenuItem_Click;
             // 
             // zPlayMenuStrip
             // 
@@ -731,12 +747,12 @@ namespace BioImager
             dxPanel.MouseMove += rgbPictureBox_MouseMove;
             dxPanel.MouseUp += pictureBox_MouseUp;
             // 
-            // hideOverViewToolStripMenuItem
+            // removeImagesToolStripMenuItem
             // 
-            hideOverViewToolStripMenuItem.Name = "hideOverViewToolStripMenuItem";
-            hideOverViewToolStripMenuItem.Size = new Size(180, 22);
-            hideOverViewToolStripMenuItem.Text = "Hide OverView";
-            hideOverViewToolStripMenuItem.Click += hideOverviewToolStripMenuItem_Click;
+            removeImagesToolStripMenuItem.Name = "removeImagesToolStripMenuItem";
+            removeImagesToolStripMenuItem.Size = new Size(199, 22);
+            removeImagesToolStripMenuItem.Text = "Remove Images";
+            removeImagesToolStripMenuItem.Click += removeImagesToolStripMenuItem_Click;
             // 
             // ImageView
             // 
@@ -845,5 +861,7 @@ namespace BioImager
         private System.Windows.Forms.Panel dxPanel;
         private ToolStripMenuItem layersToolStripMenuItem;
         private ToolStripMenuItem hideOverViewToolStripMenuItem;
+        private ToolStripMenuItem removeImageToolStripMenuItem;
+        private ToolStripMenuItem removeImagesToolStripMenuItem;
     }
 }

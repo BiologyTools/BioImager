@@ -20,7 +20,7 @@
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Layers for imaging multiple resolutions.</PackageReleaseNotes>
+    <PackageReleaseNotes>Layers for easier imaging of multiple resolutions. Bug fixes to PycroManager &amp; Python-Microscope.</PackageReleaseNotes>
     <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
@@ -400,6 +400,8 @@
     </Content>
     <Content Include="PythonMicroscope\microscope\config.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PythonMicroscope\microscope\getcamrect.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

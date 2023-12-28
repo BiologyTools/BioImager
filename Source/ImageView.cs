@@ -1271,6 +1271,7 @@ namespace BioImager
                 overlayPictureBox.Invalidate();
             }
         }
+        bool updating = false;
         /// It takes a list of images, and for each image, it gets the image at the current Z, C, T
         /// coordinates, and then converts it to a bitmap
         /// 
@@ -1284,6 +1285,7 @@ namespace BioImager
                 else
                     return;
             }
+            updating = true;
             for (int i = 0; i < Bitmaps.Count; i++)
             {
                 Bitmaps[i] = null;
@@ -1441,7 +1443,7 @@ namespace BioImager
                 bi++;
             }
             update = true;
-            UpdateView();
+            updating = false;
         }
         bool drawing = false;
         public void RemoveImage(int i)
@@ -1450,9 +1452,10 @@ namespace BioImager
             {
                 System.Threading.Thread.Sleep(50);
                 Application.DoEvents();
-            } while (drawing);
+            } while (drawing || updating);
             Images[i].Dispose();
             Images.RemoveAt(i);
+            UpdateImages();
         }
         public void RemoveImages()
         {
@@ -1460,12 +1463,13 @@ namespace BioImager
             {
                 Thread.Sleep(50);
                 Application.DoEvents();
-            } while (drawing);
+            } while (drawing || updating);
             for (int i = 0; i < Images.Count; i++)
             {
                 Images[i].Dispose();
             }
             Images.Clear();
+            UpdateImages();
         }
         Bitmap bitmap;
         /// It takes a 16-bit image, converts it to 8-bit, and then converts it to a DirectX texture
@@ -2355,7 +2359,7 @@ namespace BioImager
             if (ShowOverview)
             {
                 g.ResetTransform();
-                g.DrawImage(ToSysBitmap(overviewBitmap), new System.Drawing.Point(0,0));
+                g.DrawImage(ToSysBitmap(overviewBitmap), new System.Drawing.Point(0, 0));
                 g.DrawRectangle(Pens.Gray, overview.X, overview.Y, overview.Width, overview.Height);
                 if (!openSlide)
                 {
@@ -3690,6 +3694,15 @@ namespace BioImager
                 hideOverViewToolStripMenuItem.Text = "Hide Overview";
             }
         }
+        private void removeImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveImage(SelectedIndex);
+        }
+        
+        private void removeImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveImages();
+        }
         #region OpenSlide
         private OpenSlideBase _openSlideBase;
         private ISlideSource _slideSource;
@@ -3725,7 +3738,6 @@ namespace BioImager
 
         #endregion
 
-
-
+        
     }
 }

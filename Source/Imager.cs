@@ -154,33 +154,35 @@ namespace BioImager
             timer.Start();
             TimeSpan st1 = timer.Elapsed;
             m_ID = "";
-
-            //We start the imaging application making sure the we have the right path to the executable.
-            AppPath = Settings.Default.AppPath;
-            if (!File.Exists(AppPath))
+            if (Settings.Default.AppPath != "")
             {
-                MessageBox.Show("Error!", "Imaging appplication not found. Please locate the executable.");
-                //path is not default. Let the user find it.
-                if (openExeFileDialog.ShowDialog() != DialogResult.OK)
-                    this.Close();
-                Settings.Default.AppPath = openExeFileDialog.FileName;
-            }
-            string pn = Path.GetFileNameWithoutExtension(AppPath);
-            Process[] prs = Process.GetProcessesByName(pn);
-            if (prs.Length == 0)
-            {
-                AppP = Process.Start(AppPath);
-            }
-            else
-                AppP = prs[0];
-            apph = AppP.MainWindowHandle;
-            //We use a try block incase of Win32 Access violation error.
-            try
-            {
-                AppP.WaitForInputIdle();
-            }
-            catch (Exception)
-            {
+                //We start the imaging application making sure the we have the right path to the executable.
+                AppPath = Settings.Default.AppPath;
+                if (!File.Exists(AppPath))
+                {
+                    MessageBox.Show("Error!", "Imaging appplication not found. Please locate the executable.");
+                    //path is not default. Let the user find it.
+                    if (openExeFileDialog.ShowDialog() != DialogResult.OK)
+                        Application.Exit();
+                    Settings.Default.AppPath = openExeFileDialog.FileName;
+                }
+                string pn = Path.GetFileNameWithoutExtension(AppPath);
+                Process[] prs = Process.GetProcessesByName(pn);
+                if (prs.Length == 0)
+                {
+                    AppP = Process.Start(AppPath);
+                }
+                else
+                    AppP = prs[0];
+                apph = AppP.MainWindowHandle;
+                //We use a try block incase of Win32 Access violation error.
+                try
+                {
+                    AppP.WaitForInputIdle();
+                }
+                catch (Exception)
+                {
+                }
             }
             statusTimer.Start();
 
@@ -362,6 +364,7 @@ namespace BioImager
         /// @return The gamepad state.
         private void controllerJoystickUpdate_Tick(object sender, EventArgs e)
         {
+            if(AppP!=null)
             if (AppP.HasExited)
             {
                 return;
