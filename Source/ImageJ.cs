@@ -15,9 +15,96 @@ namespace BioImager
 {
     public class ImageJ
     {
+        public static class Macro
+        {
+            public class Command
+            {
+                public string Name { get; set; }
+                public string Arguments { get; set; }
+                public string Description { get; set; }
+                public Command(string name, string args, string description)
+                {
+                    Name = name;
+                    Arguments = args;
+                    Description = description;
+                }
+                public override string ToString()
+                {
+                    return Name.ToString();
+                }
+            }
+            public class Function
+            {
+                public string Name { get; set; }
+                public string Arguments { get; set; }
+                public string Description { get; set; }
+                public Function(string name, string args, string description)
+                {
+                    Name = name;
+                    Arguments = args;
+                    Description = description;
+                }
+                public override string ToString()
+                {
+                    return Name.ToString();
+                }
+            }
+            public static Dictionary<string, Command> Commands = new Dictionary<string, Command>();
+            public static Dictionary<string, List<Function>> Functions = new Dictionary<string, List<Function>>();
+            internal static void Initialize()
+            {
+                string[] sts = File.ReadAllLines("macro-functions.txt");
+                foreach (string s in sts)
+                {
+                    string com = "";
+                    string args = "";
+                    string doc = "";
+                    bool indoc = false, inargs = false;
+                    if (!s.StartsWith('#'))
+                    {
+                        for (int i = 0; i < s.Length; i++)
+                        {
+                            if (!inargs)
+                            {
+                                if (s[i] != '(')
+                                    com += s[i];
+                                else
+                                    inargs = true;
+                                if (s[i] == ' ')
+                                {
+                                    inargs = true;
+                                    indoc = true;
+                                }
+                            }
+                            else
+                            if (!indoc)
+                                if (s[i] != ')')
+                                    args += s[i];
+                                else
+                                    indoc = true;
+                            else
+                                doc += s[i];
+                        }
+                        if (!Functions.ContainsKey(com))
+                            Functions.Add(com, new List<Function>() { new Function(com, args, doc) });
+                        else
+                            Functions[com].Add(new Function(com, args, doc));
+                    }
+                }
+                string[] cs = File.ReadAllLines("macro-commands.csv");
+                foreach (string s in cs)
+                {
+                    string[] v = s.Split(',');
+                    Commands.Add(v[0], new Command(v[0], v[1], ""));
+                }
+            }
+        }
+        public static List<Macro.Command> Macros = new List<Macro.Command>();
         public static string ImageJPath;
         public static List<Process> processes = new List<Process>();
         private static Random rng = new Random();
+        static bool init = false;
+        public static bool Initialized { get { return init; } private set { } }
         /// It runs a macro in ImageJ
         /// 
         /// @param file the path to the macro file
@@ -26,10 +113,9 @@ namespace BioImager
         /// @return The macro is being returned.
         public static void RunMacro(string file, string param)
         {
-            if(ImageJPath == "")
+            if(!Initialized)
             {
-                if (!App.SetImageJPath())
-                    return;
+                Initialize(true);
             }
             file.Replace("/", "\\");
             Process pr = new Process();
@@ -49,11 +135,9 @@ namespace BioImager
         /// @return The macro is returning a string.
         public static void RunString(string con, string param, bool headless)
         {
-
-            if (ImageJPath == "")
+            if (!Initialized)
             {
-                if (!App.SetImageJPath())
-                    return;
+                Initialize(true);
             }
             Process pr = new Process();
             pr.StartInfo.FileName = ImageJPath;
@@ -101,12 +185,11 @@ namespace BioImager
         /// open the image.
         /// 
         /// @return The return value is the result of the last statement in the script.
-        public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats)
+        public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats, bool newTab)
         {
-            if (ImageJPath == "" || ImageJPath == null)
+            if (!Initialized)
             {
-                if (!App.SetImageJPath())
-                    return;
+                Initialize(true);
             }
             string filename = "";
             string dir = Path.GetDirectoryName(ImageView.SelectedImage.file);
@@ -141,108 +224,56 @@ namespace BioImager
             File.Delete(ffile);
             File.Copy(file, ffile);
             File.Delete(file);
-            App.tabsView.AddTab(BioImage.OpenFile(ffile));
+            if (ImageView.SelectedImage.Filename != filename + ".ome.tif" || ImageView.SelectedImage.Filename != filename + ".tif")
+            {
+                if (ImageView.SelectedImage.filename.EndsWith(".tif"))
+                    BioImage.OpenFile(ffile, newTab);
+                else
+                    BioImage.OpenFile(ffile, true);
+            }
+            else
+            {
+                App.viewer.Images[App.viewer.SelectedIndex] = BioImage.OpenFile(ffile, 0, false, false);
+            }
             App.viewer.UpdateImage();
             App.viewer.UpdateView();
-            
             Recorder.AddLine("RunOnImage(\"" + con + "\"," + headless + "," + onTab + ");");
         }
 
-        /*
-        public static void RunOnImage(string con, bool headless, bool onTab)
-        {
-            string filename = "";
-            string dir = Path.GetDirectoryName(ImageView.SelectedImage.file);
-            if(App.viewer.Images.Count == 1)
-            {
-                if (ImageView.SelectedImage.ID.EndsWith(".ome.tif"))
-                {
-                    filename = Path.GetFileNameWithoutExtension(ImageView.SelectedImage.ID);
-                    filename = filename.Remove(filename.Length - 4, 4);
-                }
-                else
-                    filename = Path.GetFileNameWithoutExtension(ImageView.SelectedImage.ID);
-            }
-            else
-            {
-                string f = App.viewer.Images[0].ID;
-                if (f.EndsWith(".ome.tif"))
-                {
-                    filename = Path.GetFileNameWithoutExtension(f);
-                    filename = filename.Remove(filename.Length - 4, 4);
-                }
-                else
-                    filename = Path.GetFileNameWithoutExtension(f);
-            }
-
-            string temp;
-            if(dir == "")
-                temp = filename + "-temp" + ".ome.tif";
-            else
-                temp = dir + "\\" + filename  + "-temp" + ".ome.tif";
-            temp = temp.Replace("\\", "/");
-            string st;
-            if (!onTab)
-            {
-                st =
-                "run(\"Bio-Formats Importer\", \"open=\" + getArgument + \" autoscale color_mode=Default open_all_series display_rois rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT\"); " + con +
-                "run(\"Bio-Formats Exporter\", \"save=" + temp + " export compression=Uncompressed\"); " +
-                "dir = getDir(\"startup\"); " +
-                "File.saveString(\"done\", dir + \"/done.txt\");";
-            }
-            else
-            {
-                //Currently v.2.4.1 some OME series written by Bio open up only correctly in ImageJ when opened with ImageJ open() rather than BioFormats.
-                st =
-                "open(getArgument); " + con +
-                "run(\"Bio-Formats Exporter\", \"save=" + temp + " export compression=Uncompressed\"); " +
-                "dir = getDir(\"startup\"); " +
-                "File.saveString(\"done\", dir + \"/done.txt\");";
-            }
-            if (App.viewer.Images.Count == 1)
-            {
-                //First we save to a temp file.
-                BioImage.SaveOME(temp, ImageView.SelectedImage.file);
-            }
-            else
-            {
-                //First we save to a temp file.
-                List<string> sts = new List<string>();
-                foreach (BioImage item in App.viewer.Images)
-                {
-                    sts.Add(item.ID);
-                }
-                BioImage.SaveOMESeries(sts.ToArray(), temp);
-            }
-            //We save the image as a temp image as otherwise imagej won't export due to file access error.
-            RunString(st, temp, headless);
-            string ffile = dir + "/" + filename + ".ome.tif";
-            File.Delete(ImageView.SelectedImage.file);
-            File.Copy(temp, ImageView.SelectedImage.file);
-            File.Delete(temp);
-            if (ImageView.SelectedImage.ID.EndsWith(".ome.tif"))
-            {
-                if(ImageView.SelectedImage.seriesCount > 1)
-                foreach (BioImage item in App.viewer.Images)
-                {
-                    item.Update();
-                }
-                else
-                    ImageView.SelectedImage.Update();
-            }
-            else
-            {
-                App.tabsView.AddTab(BioImage.OpenFile(ImageView.SelectedImage.file));
-            }
-            Recorder.AddLine("RunOnImage(\"" + con + "," + headless + "," + onTab + ");");
-        }
-        */
         /// This function is used to initialize the path of the ImageJ.exe file
         /// 
         /// @param path The path to the ImageJ executable.
-        public static void Initialize(string path)
+        public static bool Initialize(bool imagej)
         {
-            ImageJPath = path;
+            if (!imagej)
+                return false;
+            if (!SetImageJPath())
+                return false;
+            Macro.Initialize();
+            string[] ds = Directory.GetFiles(Path.GetDirectoryName(ImageJPath) + "/macros");
+            foreach (string s in ds)
+            {
+                if (s.EndsWith(".ijm") || s.EndsWith(".txt"))
+                    Macros.Add(new Macro.Command(Path.GetFileName(s), "", ""));
+            }
+            return true;
+        }
+        /// If the ImageJ path is not set, prompt the user to set it
+        /// 
+        /// @return The return value is a boolean.
+        public static bool SetImageJPath()
+        {
+            MessageBox.Show("ImageJ path not set. Set the ImageJ executable location.");
+            OpenFileDialog file = new OpenFileDialog();
+            file.Title = "Set the ImageJ executable location.";
+            if (file.ShowDialog() != DialogResult.OK)
+                return false;
+            Properties.Settings.Default.ImageJPath = file.FileName;
+            Properties.Settings.Default.Save();
+            ImageJPath = file.FileName;
+            init = true;
+            file.Dispose();
+            return true;
         }
 
         /* It reads a binary file and returns a ROI object */
@@ -930,7 +961,7 @@ namespace BioImager
 
         /// > It converts the ROI type to the ImageJ type
         /// 
-        /// @param ROI The ROI object to be written to the file.
+        /// @param ROI The ROI object to be converted.
         /// 
         /// @return The ROI type is being returned.
         static int GetImageJType(ROI roi)

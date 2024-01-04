@@ -598,7 +598,7 @@ namespace BioImager
             }
             if (FuncType == Function.FunctionType.ImageJ)
             {
-                ImageJ.RunOnImage(script, false, BioConsole.onTab, BioConsole.useBioformats);
+                ImageJ.RunOnImage(script, false, BioConsole.onTab, BioConsole.useBioformats, BioConsole.newTab);
             }
             if (FuncType == Function.FunctionType.Property)
             {

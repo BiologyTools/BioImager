@@ -242,8 +242,9 @@ namespace BioImager
        /// @param MouseButtons A set of values that indicate which mouse button was pressed.
        /// 
        /// @return The return type is void.
-        public void ToolDown(PointD e, MouseButtons buts)
+        public void ToolDown(PointD e, MouseEventArgs args)
         {
+            MouseButtons buts = args.Button;
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
@@ -252,6 +253,7 @@ namespace BioImager
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
                 p = ImageView.SelectedImage.ToImageSpace(e);
+            Plugins.MouseDown(App.viewer, p, args);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
@@ -390,8 +392,9 @@ namespace BioImager
         /// @param MouseButtons Left, Right, Middle, XButton1, XButton2
         /// 
         /// @return a RectangleF.
-        public void ToolUp(PointD e, MouseButtons buts)
+        public void ToolUp(PointD e, MouseEventArgs args)
         {
+            MouseButtons buts = args.Button;
             PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
@@ -400,6 +403,7 @@ namespace BioImager
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
+            Plugins.MouseUp(App.viewer, p, args);
             if (currentTool.type == Tool.Type.point && buts == MouseButtons.Left)
             {
                 ROI an = new ROI();
@@ -546,11 +550,12 @@ namespace BioImager
             UpdateOverlay();
         }
 
-        public void ToolMove(PointD e, MouseButtons buts)
+        public void ToolMove(PointD e, MouseEventArgs args)
         {
+            MouseButtons buts = args.Button;
             if (App.viewer == null)
                 return;
-            Scripting.UpdateState(Scripting.State.GetMove(e, buts));
+            
             if (Tools.currentTool.type == Tools.Tool.Type.pan && buts == MouseButtons.Left || buts == MouseButtons.Middle)
             {
                 PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
@@ -564,6 +569,8 @@ namespace BioImager
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
                 p = ImageView.SelectedImage.ToImageSpace(e);
+            Scripting.UpdateState(Scripting.State.GetMove(p, buts));
+            Plugins.MouseMove(App.viewer, p, args);
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);

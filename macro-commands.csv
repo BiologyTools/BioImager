@@ -1,0 +1,816 @@
+Command,Plugin
+16-bit,ij.plugin.Converter("16-bit")
+2D Histogram,util.Histogram_2D
+2D Stitching,Stitching_2D
+3-3-2 RGB,ij.plugin.LutLoader("3-3-2 RGB")
+32-bit,ij.plugin.Converter("32-bit")
+3D Objects Counter,_3D_objects_counter
+3D OC Options,_3D_OC_Options
+3D Project...,ij.plugin.Projector
+3D Stitching,Stitching_3D
+3D Surface Plot,Interactive_3D_Surface_Plot
+3D Viewer,ij3d.ImageJ_3D_Viewer
+8-bit,ij.plugin.Converter("8-bit")
+8-bit Color,ij.plugin.Converter("8-bit Color")
+About bUnwarpJ...,bunwarpj.Credits
+About ImageJ...,ij.plugin.AboutBox
+About This Submenu...,ij.plugin.SimpleCommands("about")
+About TrakEM2...,ini.trakem2.utils.Utils
+About...,QuickPALM.Run_MyMacro("About_.txt")
+About/Help LSMToolbox,LSM_Toolbox("about")
+Abs,ij.plugin.filter.ImageMath("abs")
+Add Empty Frame,video2.Add_Empty_Frame
+Add Image...,ij.plugin.OverlayCommands("image")
+Add Noise,ij.plugin.filter.Filters("add")
+Add Popup Split Channels,script:Examples/Add_Popup_Split_Channels.bsh
+Add Shortcut by Name... ,ij.plugin.Hotkeys("install2")
+Add Shortcut... ,ij.plugin.Hotkeys("install")
+Add Slice,ij.plugin.StackEditor("add")
+Add Specified Noise...,ij.plugin.filter.Filters("noise")
+Add...,ij.plugin.filter.ImageMath("add")
+Adelsons Squares,script:File/Open_Samples/Adelsons_Squares.ijm
+Advanced Weka Segmentation,trainableSegmentation.Weka_Segmentation
+Align Image by line ROI,Align_Image
+Amira as TrakEM2...,ini.trakem2.New_Project("amira")
+Amira...,AmiraMeshReader_
+AmiraMesh ...,AmiraMeshWriter_
+AmiraTable ...,AmiraTableWriter_
+Anaglyph for Red Cyan glasses,script:Examples/Anaglyph_for_Red_Cyan_glasses.rb
+Analyse Particles,QuickPALM.Analyse_Particles
+Analyze Line Graph,ij.plugin.filter.LineGraphAnalyzer
+Analyze Particles...,ij.plugin.filter.ParticleAnalyzer
+Analyze Skeleton (2D/3D),sc.fiji.analyzeSkeleton.AnalyzeSkeleton_
+Analyze...,sc.fiji.io.Analyze_Reader
+Analyze... ,sc.fiji.io.Analyze_Writer
+AND...,ij.plugin.filter.ImageMath("and")
+Animated Gif ... ,sc.fiji.io.Gif_Stack_Writer
+Animated Gif...,sc.fiji.io.Animated_Gif_Reader
+Animation Options...,ij.plugin.Animator("options")
+Anisotropic Diffusion 2D,anisotropic_diffusion.Anisotropic_Diffusion_2D
+Appearance...,ij.plugin.AppearanceOptions
+Apply external transformation,fiji.plugin.Apply_External_Transformation
+Apply LUT,ij.plugin.filter.LutApplier
+Apply saved SIOX segmentator,siox.Load_Segmentation
+Apply Transformations,spim.fiji.plugin.Apply_Transformation
+Area to Line,ij.plugin.Selection("toline")
+Arrange Channels...,ij.plugin.ChannelArranger
+Arrow ,fiji.util.ArrowTool
+Arrow Tool...,ij.plugin.ArrowToolOptions
+As HDF5,spim.fiji.plugin.resave.Resave_HDF5
+As TIFF,spim.fiji.plugin.resave.Resave_TIFF
+Attach to Cluster...,edu.utexas.clm.archipelago.Fiji_Archipelago("client")
+AuPbSn 40,ij.plugin.URLOpener("AuPbSn40.jpg")
+Auto Crop,fiji.selection.Select_Bounding_Box("autocrop")
+Auto Crop (guess background color),fiji.selection.Select_Bounding_Box("autoautocrop")
+Auto Local Threshold,fiji.threshold.Auto_Local_Threshold
+Auto Threshold,fiji.threshold.Auto_Threshold
+Average Color,Average_Color
+Average Images,vib.Average_Images
+AVI...,ij.plugin.AVI_Reader
+AVI... ,ij.plugin.filter.AVI_Writer
+Balloon,sc.fiji.balloonSegmentation.BalloonSegmentation_
+Bandpass Filter...,ij.plugin.filter.FFTFilter
+Bat Cochlea Renderings,ij.plugin.URLOpener("bat-cochlea-renderings.zip")
+Bat Cochlea Volume,ij.plugin.URLOpener("bat-cochlea-volume.zip")
+Bead-based registration,fiji.plugin.Bead_Registration
+Benchmark,ij.plugin.Benchmark
+Big Warp,bdv.ij.BigWarpImagePlusPlugIn
+Big Warp Apply,bdv.ij.ApplyBigwarpPlugin
+Big Warp to Displacement field,bdv.ij.BigWarpToDeformationFieldPlugIn
+Big Warp XML/HDF5,command:bdv.ij.BigWarpBdvCommand
+BigDataViewer...,command:bdv.ij.ImportPlugIn
+Bilateral Filter,Bilateral_Filter
+Bin...,ij.plugin.Binner
+Bio-Formats,loci.plugins.LociImporter("location=[Local machine] windowless=false ")
+Bio-Formats (Remote),loci.plugins.LociImporter("location=[Internet]")
+Bio-Formats (Windowless),loci.plugins.LociImporter("location=[Local machine] windowless=true ")
+Bio-Formats Exporter,loci.plugins.LociExporter("")
+Bio-Formats Importer,loci.plugins.LociImporter("location=[Local machine] windowless=false ")
+Bio-Formats Macro Extensions,loci.plugins.macro.LociFunctions("")
+Bio-Formats Plugins Configuration,loci.plugins.config.LociConfig("")
+Bio-Formats Plugins...,loci.plugins.About("")
+Bio-Formats Remote Importer,loci.plugins.LociImporter("location=[Internet]")
+Bio-Formats Windowless Importer,loci.plugins.LociImporter("location=[Local machine] windowless=true ")
+Biorad ...,Biorad_Writer
+Biorad...,Biorad_Reader
+Bleach Correction,emblcmci.BleachCorrection
+blend two images,script:Examples/blend_two_images.clj
+Blobs Demo in Ruby,script:Examples/Blobs_Demo_in_Ruby.rb
+Blow/Lasso Tool,plugin.Lasso_
+Blue,ij.plugin.LutLoader("blue")
+BMP...,ij.plugin.filter.Writer("bmp")
+Boats,ij.plugin.URLOpener("boats.gif")
+Bridge (174K),ij.plugin.URLOpener("bridge.gif")
+Browse BigDataServer,command:bdv.ij.BigDataBrowserPlugIn
+bUnwarpJ,bunwarpj.bUnwarpJ_
+Cache Sample Images ,ij.plugin.URLOpener("cache")
+Calculator Plus,Calculator_Plus
+Calibrate...,ij.plugin.filter.Calibrator
+Calibration Bar...,ij.plugin.CalibrationBar
+Canvas Size...,ij.plugin.CanvasResizer
+Capture Delayed...,ij.plugin.ScreenGrabber("delay")
+Capture Image,ij.plugin.ScreenGrabber("image")
+Cardio (RGB DICOM),ij.plugin.URLOpener("cardio.dcm.zip")
+Cascade,ij.plugin.WindowOrganizer("cascade")
+Cell Colony,ij.plugin.URLOpener("Cell_Colony.jpg")
+Cell Counter,sc.fiji.cellCounter.Cell_Counter
+celsius to fahrenheit,script:Examples/celsius_to_fahrenheit.clj
+Centipede Drawing (45KB),ij.plugin.URLOpener("http://imagej.net/media/centipede-drawing.jpg")
+Centipede Mivart (43KB),ij.plugin.URLOpener("http://imagej.net/media/centipede-mivart.png")
+Check Required Update Sites,script:Plugins/AutoRun/Check_Required_Update_Sites.js
+chess ,script:Examples/chess_.py
+Circle Interpolator,sc.fiji.timelapse.Circle_Interpolator
+Clear,ij.plugin.filter.Filler("clear")
+Clear Outside,ij.plugin.filter.Filler("outside")
+Clear Results,ij.plugin.filter.Analyzer("clear")
+Close-,ij.plugin.filter.Binary("close")
+Clown,ij.plugin.URLOpener("clown.jpg")
+Collect Garbage,CollectGarbage_
+Coloc 2,sc.fiji.coloc.Coloc_2
+Colocalization Test,sc.fiji.coloc.Colocalisation_Test
+Colocalization Threshold,sc.fiji.coloc.Colocalisation_Threshold
+Colocalize...,command:net.imagej.ops.commands.coloc.Colocalize
+Color Balance...,ij.plugin.frame.ContrastAdjuster("balance")
+Color Clustering,trainableSegmentation.unsupervised.Color_Clustering
+Color Histogram,ColorHistogram_
+Color Histogram...,ColorHistogram_("about")
+Color Inspector 3D,Color_Inspector_3D
+Color Threshold...,ij.plugin.frame.ColorThresholder
+Colors...,ij.plugin.Colors
+Colour Deconvolution,sc.fiji.colourDeconvolution.Colour_Deconvolution
+Combine Profile Stacks,sc.fiji.timelapse.Combine_Profile_Stacks
+Combine...,ij.plugin.StackCombiner
+Command Launcher BeanShell,script:Examples/Command_Launchers/Command_Launcher_BeanShell.bsh
+Command Launcher Clojure,script:Examples/Command_Launchers/Command_Launcher_Clojure.clj
+Command Launcher Javascript,script:Examples/Command_Launchers/Command_Launcher_Javascript.js
+Command Launcher Python,script:Examples/Command_Launchers/Command_Launcher_Python.py
+Command Launcher Ruby,script:Examples/Command_Launchers/Command_Launcher_Ruby.rb
+Comparing Lengths,script:File/Open_Samples/Comparing_Lengths.ijm
+Compile and Run...,sc.fiji.compat.Compile_and_Run
+Compiler...,ij.plugin.Compiler("options")
+compose rgb-stacks,script:Examples/compose_rgb-stacks.bsh
+Compute Curvatures,Compute_Curvatures
+Compute Topography,Compute_Topography
+Concatenate...,ij.plugin.Concatenator
+Confocal Series,ij.plugin.URLOpener("confocal-series.zip")
+Console,command:org.scijava.ui.swing.console.ShowConsole
+Conversions...,ij.plugin.Options("conv")
+Convert to Mask,ij.plugin.Thresholder("mask")
+Convert...,ij.plugin.BatchConverter
+Convex Hull,ij.plugin.Selection("hull")
+Convolve (3D),process3d.Convolve_3d
+Convolve...,ij.plugin.filter.Convolver
+Coordinates...,ij.plugin.Coordinates
+Copy to System,ij.plugin.Clipboard("scopy")
+Correct 3D drift,script:Plugins/Registration/Correct_3D_drift.py
+Cover Maker,script:Examples/CoverMaker/Cover_Maker.py
+CPU Meter,CPU_Meter
+Create Desktop Icon,script:Plugins/Utilities/Create_Desktop_Icon.bsh
+Create Mask,ij.plugin.Selection("mask")
+Create Selection,ij.plugin.Selection("from")
+Crop (3D),stacks.Three_Pane_Crop
+CT (16-bit DICOM),ij.plugin.URLOpener("ct.dcm.zip")
+Curve Fitting...,ij.plugin.frame.Fitter
+Custom Filter...,ij.plugin.filter.FFTCustomFilter
+Cyan,ij.plugin.LutLoader("cyan")
+DAT EMMENU ...,sc.fiji.io.Open_DAT_EMMENU
+Define Bounding Box,spim.fiji.plugin.Define_Bounding_Box
+Define Multi-View Dataset,spim.fiji.plugin.Define_Multi_View_Dataset
+Deinterleave,DeInterleave_
+Delaunay Voronoi,Delaunay_Voronoi
+Delayed Snapshot,script:Examples/Delayed_Snapshot.py
+Delayed Snapshot Window,script:Examples/Delayed_Snapshot_Window.bsh
+Delete Frame,video2.Delete_Frame
+Delete Slice,ij.plugin.StackEditor("delete")
+Despeckle,ij.plugin.filter.RankFilters("despeckle")
+Dev. Resources...,ij.plugin.BrowserLauncher("http://imagej.net/ij/developer/index.html")
+DF3 ...,sc.fiji.io.Save_DF3
+DF3...,sc.fiji.io.Open_DF3
+Dialog Prompt Demo,command:org.scijava.ui.swing.commands.DialogPromptDemo
+Dichromacy,Dichromacy_
+DICOM...,ij.plugin.Options("dicom")
+Dilate,ij.plugin.filter.Binary("dilate")
+Dilate (3D),process3d.Dilate_
+Directionality,fiji.analyze.directionality.Directionality_
+Display LUTs,ij.plugin.SimpleCommands("display")
+Display View,spim.fiji.plugin.Display_View
+Distance Map,ij.plugin.filter.EDM("edm")
+Distance Map to Distance Ridge,sc.fiji.localThickness.Distance_Ridge
+Distance Ridge to Local Thickness,sc.fiji.localThickness.Local_Thickness_Parallel
+Distance Transform 3D,process3d.Distance_Transform_3D
+Distortion Correction,lenscorrection.Distortion_Correction
+Distribution...,ij.plugin.Distribution
+Divide...,ij.plugin.filter.ImageMath("div")
+DM3 Reader...,sc.fiji.io.DM3_Reader
+Dot Blot,ij.plugin.URLOpener("Dot_Blot.jpg")
+downsample ,script:Examples/downsample_.js
+Draw Roi,video2.Draw_Roi
+Dump Stack,command:org.scijava.plugins.commands.debug.DumpStack
+Duplicate,sc.fiji.i5d.plugin.Duplicate_Image5D("")
+Duplicate Frame,video2.Duplicate_Frame
+Duplicate Transformations,spim.fiji.plugin.Duplicate_Transformation
+Dynamic Reslice,fiji.stacks.Dynamic_Reslice
+Dynamic ROI Profiler,script:Analyze/Dynamic_ROI_Profiler.clj
+East,ij.plugin.filter.Shadows("east")
+Edit LUT As Text,script:Examples/Edit_LUT_As_Text.py
+Edit LUT...,ij.plugin.LUT_Editor
+Edit...,ij.plugin.Compiler("edit")
+Elastic Montaging,mpicbg.ij.plugin.ElasticMontage
+Elastic Stack Alignment,mpicbg.ij.plugin.ElasticAlign
+Embryos,ij.plugin.URLOpener("embryos.jpg")
+Enhance Contrast...,ij.plugin.ContrastEnhancer
+Enhance Local Contrast (CLAHE),mpicbg.ij.clahe.PlugIn
+Enlarge...,ij.plugin.RoiEnlarger
+EPS ...,sc.fiji.io.Export_EPS
+Erode,ij.plugin.filter.Binary("erode")
+Erode (3D),process3d.Erode_
+Exp,ij.plugin.filter.ImageMath("exp")
+Export Current Image as XML/HDF5,command:bdv.ij.ExportImagePlusPlugIn
+Export Current Image as XML/N5,command:bdv.ij.ExportImagePlusAsN5PlugIn
+Export Fused Sequence as XML/HDF5,command:bdv.ij.ExportSpimFusionPlugIn
+Export N5,command:org.janelia.saalfeldlab.n5.ij.N5Exporter
+Export Spim Sequence as XML/HDF5,command:bdv.ij.ExportSpimSequencePlugIn
+Extended Profile Plot,script:Examples/Extended_Profile_Plot.bsh
+Extract Images From PDF...,sc.fiji.io.Extract_Images_From_PDF
+Extract MOPS Correspondences,MOPS_ExtractPointRoi
+Extract SIFT Correspondences,SIFT_ExtractPointRoi
+extract stack under arealist,script:Examples/TrakEM2_Example_Scripts/extract_stack_under_arealist.py
+Fast FFT (2D/3D),registration3d.Fast_FourierTransform
+Fast VirtualStack Opener,QuickPALM.Run_MyMacro("Fast_VirtualStack_Opener.txt")
+FD Math...,ij.plugin.FFTMath
+FFT,ij.plugin.FFT("fft")
+FFT Options...,ij.plugin.FFT("options")
+FIB-SEM ...,sc.fiji.io.FIBSEM_Reader
+Fiji Cube,script:Examples/Fiji_Cube.ijm
+Fiji Logo 3D,script:Examples/Fiji_Logo_3D.js
+FilamentDetector,command:sc.fiji.filamentdetector.FilamentDetectorPlugin
+Fill Holes,ij.plugin.filter.Binary("fill")
+Fill ROI holes,Fill_holes
+Find Commands...,ij.plugin.CommandFinder
+Find Connected Regions,util.Find_Connected_Regions
+Find differences,FindIt_
+Find Dimension of Raw Image,script:Examples/Find_Dimension_of_Raw_Image.py
+Find Edges,ij.plugin.filter.Filters("edge")
+Find Jar For Class,script:Plugins/Utilities/Find_Jar_For_Class.bsh
+Find Maxima...,ij.plugin.filter.MaximumFinder
+Find Ops...,command:net.imagej.ui.swing.ops.FindOps
+Fire,ij.plugin.LutLoader("fire")
+First-instar brain (6.3MB),ij.plugin.URLOpener("http://samples.fiji.sc/first-instar-brain.zip")
+Fit Circle,ij.plugin.Selection("circle")
+Fit Circle to Image,fiji.util.Circle_Fitter
+Fit Ellipse,ij.plugin.Selection("ellipse")
+Fit Rectangle,ij.plugin.Selection("rect")
+Fit Spline,ij.plugin.Selection("spline")
+FITS...,ij.plugin.filter.Writer("fits")
+Fix Funny Filenames,script:File/Fix_Funny_Filenames.ijm
+Flip Horizontally,ij.plugin.filter.Transformer("fliph")
+Flip Vertically,ij.plugin.filter.Transformer("flipv")
+Flip Z,ij.plugin.StackReverser
+Flood Fill(3D),process3d.Flood_Fill
+FlowJ,FlowJ_
+Fluorescent Cells,ij.plugin.URLOpener("FluorescentCells.zip")
+Fly Brain,ij.plugin.URLOpener("flybrain.zip")
+Fonts...,ij.plugin.SimpleCommands("fonts")
+Fractal Box Count...,ij.plugin.filter.FractalBoxCounter
+Frangi Vesselness,command:net.imagej.ops.commands.filter.FrangiVesselness
+Fresh Start,ij.plugin.Options("fresh-start")
+From ROI Manager,ij.plugin.OverlayCommands("from")
+Fuse/Deconvolve Dataset,spim.fiji.plugin.Image_Fusion
+Gamma...,ij.plugin.filter.ImageMath("gamma")
+Gaussian Blur 3D...,ij.plugin.GaussianBlur3D
+Gaussian Blur...,ij.plugin.filter.GaussianBlur
+Gaussian Window MSE,mpicbg.ij.plugin.MSEGaussianFlow
+Gaussian-based stack focuser,sc.fiji.timelapse.Gaussian_Stack_Focuser
+Gel,ij.plugin.URLOpener("gel.gif")
+Gel Analyzer Options...,ij.plugin.GelAnalyzer("options")
+Geometry to Distance Map,sc.fiji.localThickness.EDT_S1D
+Gif...,ij.plugin.filter.Writer("gif")
+Gradient (3D),process3d.Gradient_
+Graph Cut,graphcut.Graph_Cut
+Gray Morphology,GrayMorphology_
+Gray Morphology...,GrayMorphology_("about")
+Grays,ij.plugin.LutLoader("grays")
+Green,ij.plugin.LutLoader("green")
+Grid...,ij.plugin.Grid
+Grid/Collection stitching,plugin.Stitching_Grid
+Grouped Z Project...,ij.plugin.GroupedZProjector
+HDF5 (append)...,sc.fiji.hdf5.HDF5_Writer_Vibez("append")
+HDF5 (new or replace)...,sc.fiji.hdf5.HDF5_Writer_Vibez("replace")
+HDF5...,sc.fiji.hdf5.HDF5_Reader_Vibez
+HeLa Cells (48-bit RGB),ij.plugin.URLOpener("hela-cells.zip")
+Helmholtz Analysis,Helmholtz_Analysis
+Help,ij.plugin.BrowserLauncher("https://docs.openmicroscopy.org/latest/bio-formats/users/index.html")
+Help on Menu Item,fiji.help.Context_Help
+Hide Overlay,ij.plugin.OverlayCommands("hide")
+Home,ij.plugin.SimpleCommands("showdirHome")
+Homogenize Ball Radius,script:Examples/TrakEM2_Example_Scripts/Homogenize_Ball_Radius.py
+HSB (32-bit),ij.plugin.Converter("HSB (32-bit)")
+HSB Stack,ij.plugin.Converter("HSB Stack")
+Hyperstack to Stack,ij.plugin.HyperStackConverter("hstostack")
+Hyperstack...,ij.plugin.HyperStackMaker
+Hypervolume Opener,sc.fiji.i5d.plugin.Hypervolume_Opener("")
+Ice,ij.plugin.LutLoader("ice")
+Icns ...,sc.fiji.io.Icns_Writer
+Icns...,sc.fiji.io.Icns_Reader
+ICO ...,sc.fiji.io.ICO_Writer
+ICO...,sc.fiji.io.ICO_Reader
+IFT (3D),process3d.IFT_
+IJ Robot,IJ_Robot
+Image,ij.plugin.SimpleCommands("showdirImage")
+Image Calculator...,ij.plugin.ImageCalculator
+Image Expression Parser,fiji.process.Image_Expression_Parser
+Image Expression Parser (Macro),fiji.process.Image_Expression_Parser("macro")
+Image Sequence...,ij.plugin.FolderOpener
+Image Sequence... ,ij.plugin.StackWriter
+Image to Results,ij.plugin.SimpleCommands("itor")
+Image to Selection...,ij.plugin.OverlayCommands("image-roi")
+Image To Tool Icon,script:Examples/Image_To_Tool_Icon.bsh
+Image with Overlay,ij.plugin.URLOpener("ImageWithOverlay.zip")
+Image... ,command:io.scif.commands.OpenDataset
+Image...  ,command:io.scif.commands.SaveDataset
+Image5D Extensions,sc.fiji.i5d.plugin.Image5D_Extensions("")
+Image5D Stack to RGB,sc.fiji.i5d.plugin.Image5D_Stack_to_RGB("")
+Image5D to Stack,sc.fiji.i5d.plugin.Image5D_to_Stack("")
+Image5D...,sc.fiji.i5d.plugin.I5D_about("about")
+ImageJ,ij.plugin.SimpleCommands("showdirImageJ")
+ImageJ Properties,ij.plugin.JavaProperties
+ImageJ Website...,ij.plugin.BrowserLauncher
+ImageJ2...,command:net.imagej.legacy.ImageJ2Options
+Images to Stack,ij.plugin.ImagesToStack
+Implicit Interpolate Binary,Implicit_Interpolate_Binary
+In [+],ij.plugin.Zoom("in")
+Input/Output...,ij.plugin.Options("io")
+Insert Stack,video2.Insert_Stack
+Insert...,ij.plugin.StackInserter
+Inspect Java Objects,fiji.debugging.Object_Inspector
+Inspect Objects,command:org.scijava.ui.swing.commands.InspectObjects
+Install PlugIn...,sc.fiji.compat.PlugInInstaller
+Install...,ij.plugin.MacroInstaller
+Integral Block MSE,mpicbg.ij.plugin.MSEBlockFlow
+Integral Block PMCC,mpicbg.ij.plugin.PMCCBlockFlow
+Interactive Affine,Transform_Affine
+Interactive Moving Least Squares,Transform_MovingLeastSquaresMesh
+Interactive Perspective,Transform_Perspective
+Interactive Rigid,Transform_Rigid
+Interactive Similarity,Transform_Similarity
+Interactive Stack Rotation,Stack_Rotate
+Interactive Thin Plate Spline,Transform_ThinPlateSpline
+Interleave,Stack_Interleaver
+Internal Clipboard,ij.plugin.Clipboard("show")
+Interpolate,ij.plugin.Selection("interpolate")
+Inverse FFT,ij.plugin.FFT("inverse")
+Invert LUT,ij.plugin.LutLoader("invert")
+Invert LUTs,ij.plugin.SimpleCommands("invert")
+IPLab Reader...,sc.fiji.io.IPLab_Reader
+IsoData Classifier,IsoData_Classifier
+Janelia H265 Reader,org.janelia.it.fiji.plugins.h5j.H5j_Reader
+JavaScript,ij.plugin.NewPlugin("javascript")
+Jpeg...,ij.plugin.filter.Writer("jpeg")
+Kalman Stack Filter,Kalman_Filter
+Kappa - Curvature Analysis,command:sc.fiji.kappa.KappaPlugin
+Koala Binary...,sc.fiji.io.Koala_Bin_Reader
+Kuwahara Filter,Kuwahara_Filter
+KymographBuilder,command:sc.fiji.kymographBuilder.KymographBuilder
+Lab Stack,ij.plugin.Converter("Lab Stack")
+Label,ij.plugin.filter.Filler("label")
+Label Peaks,ij.plugin.GelAnalyzer("label")
+Label...,ij.plugin.filter.StackLabeler
+Labels...,ij.plugin.OverlayLabels
+Landmark Correspondences,Transform_Roi
+Laplace (3D),process3d.Laplace_
+Leaf,ij.plugin.URLOpener("leaf.jpg")
+Leica SP ...,leica.Leica_SP_Writer
+Leica SP...,leica.Leica_SP_Reader
+Lena (68K),ij.plugin.URLOpener("lena-std.tif")
+Level Sets,levelsets.ij.LevelSet
+Line Graph,ij.plugin.URLOpener("LineGraph.jpg")
+Line to Area,ij.plugin.Selection("toarea")
+Line Width...,ij.plugin.Options("line")
+Line Width... ,ij.plugin.frame.LineWidthAdjuster
+Linear Gradient,fiji.drawing.Linear_Gradient
+Linear Kuwahara,Kuwahara_LinearStructure_Filter_v3
+Linear Stack Alignment with SIFT,SIFT_Align
+list all threads,script:Examples/list_all_threads.py
+List Commands,ij.plugin.Hotkeys("list")
+List Elements,ij.plugin.OverlayCommands("list")
+List Shortcuts,ij.plugin.CommandLister("shortcuts")
+Load a TrackMate file,fiji.plugin.trackmate.LoadTrackMatePlugIn
+Load HDF5 File...,sc.fiji.hdf5.HDF5_Reader_Vibez
+Load Particles (.tif file - fast),QuickPALM.Load_particles_tableFromImg
+Local Thickness (complete process),sc.fiji.localThickness.Local_Thickness_Driver
+Log,ij.plugin.filter.ImageMath("log")
+LOI Interpolator,sc.fiji.timelapse.LOI_Interpolator
+LOI Interpolator Tool,sc.fiji.timelapse.LOI_Interpolator_Tool
+Look and Feel...,command:org.scijava.ui.swing.laf.OptionsLookAndFeel
+LSM...,LSM_Reader
+LSMReader...,LSM_Reader("about")
+LSMToolbox...,LSM_Toolbox("about")
+LSS16 ...,sc.fiji.io.LSS16_Writer
+LSS16...,sc.fiji.io.LSS16_Reader
+LUT...,ij.plugin.filter.Writer("lut")
+LUT... ,ij.plugin.LutLoader
+LUTs,ij.plugin.SimpleCommands("showdirLuts")
+M51 Galaxy (16-bits),ij.plugin.URLOpener("m51.zip")
+Macro,ij.plugin.NewPlugin("macro")
+Macro Functions...,ij.plugin.BrowserLauncher("https://wsr.imagej.net/developer/macro/functions.html")
+Macro Tool,ij.plugin.NewPlugin("macro-tool")
+Macro...,ij.plugin.filter.ImageMath("macro")
+Macro... ,ij.plugin.BatchProcessor
+Macros,ij.plugin.SimpleCommands("showdirMacros")
+Magenta,ij.plugin.LutLoader("magenta")
+Magic Montage Tools,ij.plugin.SimpleCommands("magic")
+Main Window [enter],ij.plugin.WindowOrganizer("imagej")
+Make Band...,ij.plugin.Selection("band")
+Make Binary,ij.plugin.Thresholder
+Make Circular Selection...,ij.plugin.CircularRoiMaker
+Make Composite,ij.plugin.CompositeConverter
+Make Fiji Package,fiji.packaging.Package_Maker
+Make Inverse,ij.plugin.Selection("inverse")
+Make Montage,sc.fiji.i5d.plugin.Make_Montage("")
+Make Montage...,ij.plugin.MontageMaker
+Make rectangular selection rounded,fiji.selection.Rounded_Rectangle
+Make Screencast,script:File/Make_Screencast.bsh
+Make Subset...,ij.plugin.SubstackMaker
+Make Substack...,ij.plugin.SubstackMaker
+Make Transition,video2.Make_Transition
+Malaria Sporozoites (9.2MB),ij.plugin.URLOpener("http://samples.fiji.sc/_malaria_parasites.tif")
+Mandelbrot Set,command:net.imagej.plugins.commands.debug.MandelbrotSetImage
+Manual landmark selection (3d),plugin.Manual_Landmark_Selection
+Manual Threshold...,script:Image/Adjust/Manual_Threshold....js
+Manual Tracking,Manual_Tracking
+Manual tracking with TrackMate,fiji.plugin.trackmate.ManualTrackingPlugIn
+Mask Of Nearby Points,util.Mask_Of_Nearby_Points
+Max (3D),process3d.Maximum_
+Max...,ij.plugin.filter.ImageMath("max")
+Maximize,ij.plugin.Zoom("max")
+Maximum (3D),process3d.Maximum_
+Maximum 3D...,ij.plugin.Filters3D("max")
+Maximum...,ij.plugin.filter.RankFilters("max")
+Mean,mpicbg.ij.plugin.Mean
+Mean 3D...,ij.plugin.Filters3D("mean")
+Mean...,ij.plugin.filter.RankFilters("mean")
+Measure AreaLists,script:Examples/TrakEM2_Example_Scripts/Measure_AreaLists.py
+Measure Connected Components,command:sc.fiji.labkit.ui.plugin.MeasureConnectedComponents
+Measure Overlay,ij.plugin.OverlayCommands("measure")
+Measure Stack...,ij.plugin.SimpleCommands("measure")
+Measure...,ij.plugin.BatchMeasure
+Median,ij.plugin.filter.Binary("median")
+Median (3D),process3d.Median_
+Median 3D...,ij.plugin.Filters3D("median")
+Median...,ij.plugin.filter.RankFilters("median")
+Memory & Threads...,sc.fiji.compat.Memory
+Merge Channels...,ij.plugin.RGBStackMerge
+Merge Cluster Jobs,spim.fiji.plugin.Merge_Cluster_Jobs
+MHD/MHA ...,sc.fiji.io.MetaImage_Writer
+MHD/MHA compressed ...,sc.fiji.io.MetaImage_CWriter
+MHD/MHA...,sc.fiji.io.MetaImage_Reader
+Min...,ij.plugin.filter.ImageMath("min")
+Minimum (3D),process3d.Minimum_
+Minimum 3D...,ij.plugin.Filters3D("min")
+Minimum...,ij.plugin.filter.RankFilters("min")
+Misc...,ij.plugin.Options("misc")
+Mitosis (5D stack),ij.plugin.URLOpener("Spindly-GFP.zip")
+Monitor Events...,ij.plugin.EventListener
+Monitor Memory...,ij.plugin.frame.MemoryMonitor
+Montage to Stack...,ij.plugin.StackMaker
+Move Roi,video2.Move_Roi
+Moving Least Squares,Moving_Least_Squares
+MRC Leginon ...,sc.fiji.io.Open_MRC_Leginon
+MRI Stack,ij.plugin.URLOpener("mri-stack.zip")
+MTrack2 ,MTrack2_
+Multi Kymograph,sc.fiji.multiKymograph.MultipleKymograph_
+Multi Overlay,sc.fiji.multiKymograph.MultipleOverlay_
+Multi-view deconvolution,fiji.plugin.Multi_View_Deconvolution
+Multi-view fusion,fiji.plugin.Multi_View_Fusion
+Multiple Image Processor,MultipleImageProcessor
+Multiply...,ij.plugin.filter.ImageMath("mul")
+Multithreaded Image Processing,script:Examples/Multithreaded_Image_Processing.clj
+N5,org.janelia.saalfeldlab.n5.ij.N5Importer
+N5 Viewer,org.janelia.saalfeldlab.n5.bdv.N5ViewerPlugin
+Name Landmarks and Register,landmarks.Name_Points
+NaN Background,ij.plugin.filter.ImageMath("nan")
+Neuron (5 channels),ij.plugin.URLOpener("Rat_Hippocampal_Neuron.zip")
+New Fiji News,fiji.Wiki_Editor("news")
+New Fiji Tutorial,fiji.Wiki_Editor("tutorial-maker")
+New Fiji Wiki Screenshot,fiji.Wiki_Editor("screenshot")
+New Hyperstack...,ij.plugin.HyperStackMaker
+New Image5D,sc.fiji.i5d.plugin.New_Image5D("")
+New Video,video2.New_Video
+Next Slice [>],ij.plugin.Animator("next")
+Nile Bend,ij.plugin.URLOpener("NileBend.jpg")
+Normalize Local Contrast,mpicbg.ij.plugin.NormalizeLocalContrast
+North,ij.plugin.filter.Shadows("north")
+Northeast,ij.plugin.filter.Shadows("northeast")
+Northwest,ij.plugin.filter.Shadows("northwest")
+Nrrd ...,sc.fiji.io.Nrrd_Reader
+Nrrd ... ,sc.fiji.io.Nrrd_Writer
+OME-TIFF...,loci.plugins.LociExporter("")
+Open,ij.plugin.filter.Binary("open")
+Open as Panel,ij.plugin.SimpleCommands("opencp")
+Open Current Image,command:bdv.ij.OpenImagePlusPlugIn
+Open Current Image With Labkit,command:sc.fiji.labkit.ui.plugin.LabkitPlugin
+Open Image File With Labkit,command:sc.fiji.labkit.ui.plugin.LabkitImportPlugin
+Open Image5D,sc.fiji.i5d.plugin.Open_Image5D("")
+Open Imaris (experimental),command:bdv.ij.OpenImarisPlugIn
+Open Series As Image5D,sc.fiji.i5d.plugin.Open_Series_As_Image5D("")
+Open Video,video2.Open_Video
+Open XML/HDF5,command:bdv.ij.BigDataViewerPlugIn
+Options...,ij.plugin.filter.Binary("options")
+OR...,ij.plugin.filter.ImageMath("or")
+Organ of Corti (4D stack),ij.plugin.URLOpener("organ-of-corti.zip")
+Out [-],ij.plugin.Zoom("out")
+Outline,ij.plugin.filter.Binary("outline")
+Page Setup...,ij.plugin.filter.Printer("setup")
+Pairwise stitching,plugin.Stitching_Pairwise
+Panorama equirectangular view,mpicbg.panorama.Panorama_View
+Particle Analyzer (3D),process3d.Particle_Analyzer_3D
+Particles,ij.plugin.URLOpener("particles.gif")
+Paste Control...,ij.plugin.frame.PasteController
+PDF ...,sc.fiji.io.PDF_Viewer
+PDF ... ,sc.fiji.io.PDF_Writer
+PGM...,ij.plugin.filter.Writer("pgm")
+Phase Map,sc.fiji.timelapse.Phase_Map
+PIV analysis,fiji.plugin.pivanalyser.PIV_analyser
+Plasma Cloud,script:Examples/Plasma_Cloud.rb
+Plot XY Profile,ij.plugin.StackPlotter
+Plot Z-axis Profile,ij.plugin.ZAxisProfiler
+Plots...,ij.plugin.Profiler("set")
+Plugin,ij.plugin.NewPlugin("plugin")
+Plugin Filter,ij.plugin.NewPlugin("filter")
+Plugin Frame,ij.plugin.NewPlugin("frame")
+Plugin Tool,ij.plugin.NewPlugin("plugin-tool")
+Plugins,ij.plugin.SimpleCommands("showdirPlugins")
+PNG...,ij.plugin.filter.Writer("png")
+Point Tool...,ij.plugin.PointToolOptions
+Points from Mask,fiji.selection.Binary_to_Point_Selection
+Prepare Cover Maker Database,script:Examples/CoverMaker/Prepare_Cover_Maker_Database.py
+Previous Slice [<],ij.plugin.Animator("previous")
+Proxy Settings...,ij.plugin.ProxySettings
+Put Behind [tab],ij.plugin.Commands("tab")
+Quantile Based Normalization,util.Quantile_Based_Normalization
+Quit,ij.plugin.Commands("quit")
+Radial Gradient,fiji.drawing.Radial_Gradient
+Radial Reslice,fiji.stacks.Radial_Reslice
+random noise example,script:Examples/random_noise_example.clj
+Raw Data...,ij.plugin.filter.Writer("raw")
+Raw...,ij.plugin.Raw
+Re-order Hyperstack ...,fiji.stacks.Hyperstack_rearranger
+Re-plot Lanes,ij.plugin.GelAnalyzer("replot")
+Read Reconstruct Project...,edu.utexas.clm.reconstructreader.reconstruct.Reconstruct_Reader
+Rebin (3D),process3d.Rebin_
+Reciprocal,ij.plugin.filter.ImageMath("reciprocal")
+Reconstruct Dataset,QuickPALM.Reconstruct_Dataset
+Record Desktop,script:Plugins/Utilities/Record_Desktop.py
+Record Window,script:Plugins/Utilities/Record_Window.py
+Record...,ij.plugin.frame.Recorder
+Red,ij.plugin.LutLoader("red")
+Red/Green,ij.plugin.LutLoader("redgreen")
+Redisplay Power Spectrum,ij.plugin.FFT("redisplay")
+Reduce Dimensionality...,ij.plugin.HyperStackReducer
+Reduce...,ij.plugin.StackReducer
+Refresh Menus,ij.plugin.ImageJ_Updater("menus")
+Register Virtual Stack Slices,register_virtual_stack.Register_Virtual_Stack_MT
+Release Notes...,ij.plugin.BrowserLauncher("https://wsr.imagej.net/notes.html")
+Remove Detections by Distance,spim.fiji.plugin.ThinOut_Detections
+Remove Detections Interactively,spim.fiji.plugin.Interactive_Remove_Detections
+Remove NaNs...,ij.plugin.filter.RankFilters("nan")
+Remove Outliers,mpicbg.ij.plugin.RemoveOutliers
+Remove Outliers...,ij.plugin.filter.RankFilters("outliers")
+Remove Overlay,ij.plugin.OverlayCommands("remove")
+Remove Shortcut...,ij.plugin.Hotkeys("remove")
+Remove Slice Labels,ij.plugin.SimpleCommands("remove")
+Remove Slope,Remove_Slope
+Rename...,ij.plugin.SimpleCommands("rename")
+Repeat a Recent Command,fiji.util.Recent_Commands
+Replace Red with Magenta,fiji.color.Convert_Red_To_Magenta
+Replace value,Replace_Value
+Report a Bug,Bug_Submitter.Bug_Submitter
+Resample,vib.Resample_
+Reset,ij.plugin.GelAnalyzer("reset")
+Reset...,ij.plugin.SimpleCommands("reset")
+Reset... ,ij.plugin.Options("reset")
+Reslice [/]...,ij.plugin.Slicer
+Reslice Z,Reslice_Z
+Results to Image,ij.plugin.SimpleCommands("rtoi")
+Results...,ij.plugin.MeasurementsWriter
+Results... ,ij.plugin.SimpleCommands("import")
+Retinex,Retinex_
+Reverse,ij.plugin.StackReverser
+RGB Color,ij.plugin.Converter("RGB Color")
+RGB Stack,ij.plugin.Converter("RGB Stack")
+RGB to CIELAB,RGB_to_CIELAB
+RGB to Image5D,sc.fiji.i5d.plugin.RGB_to_Image5D("")
+RGB to Luminance,util.RGB_to_Luminance
+Ridge Detection,de.biomedical_imaging.ij.steger.Lines_
+Rigid Registration,vib.RigidRegistration_
+ROF Denoise,fiji.denoise.ROF_Denoise
+Roi Defaults...,ij.gui.RoiDefaultsDialog
+ROI Manager...,ij.plugin.frame.RoiManager
+Rotate 90 Degrees Left,ij.plugin.filter.Transformer("left")
+Rotate 90 Degrees Right,ij.plugin.filter.Transformer("right")
+Rotate...,ij.plugin.Selection("rotate")
+Rotate... ,ij.plugin.filter.Rotator
+Rounded Rect Tool...,ij.plugin.RectToolOptions
+Run Script from File,command:org.scijava.batch.FileScriptBatchProcessor
+Run Script from Menu,command:org.scijava.batch.MenuScriptBatchProcessor
+Run...,ij.plugin.Macro_Runner
+Salt and Pepper,ij.plugin.filter.SaltAndPepper
+Same Slice in Multiple Images,script:Examples/Same_Slice_in_Multiple_Images.rb
+Sample Variance,mpicbg.ij.plugin.SampleVariance
+Save Image5D,sc.fiji.i5d.plugin.Save_Image5D("")
+Save Particles (.tif file - fast),QuickPALM.Save_particles_table2img
+Save to HDF5 File (append)...,sc.fiji.hdf5.HDF5_Writer_Vibez("append")
+Save XY Coordinates...,ij.plugin.XYCoordinates
+Scale Bar...,ij.plugin.ScaleBar
+Scale to DPI,script:Image/Adjust/Scale_to_DPI.js
+Scale to Fit,ij.plugin.Zoom("scale")
+Scale... ,ij.plugin.RoiScaler
+Script Interpreter,command:org.scijava.ui.swing.script.ScriptInterpreterPlugin
+Script...,command:org.scijava.ui.swing.script.ScriptEditor
+Scriptable load HDF5...,sc.fiji.hdf5.HDF5_Simple_Reader
+Scriptable save HDF5 (append)...,sc.fiji.hdf5.HDF5_Simple_Writer("append")
+Seam remover,Seam_Remover
+Search Bar...,command:net.imagej.legacy.search.SearchOptions
+Search...,ij.plugin.SimpleCommands("search")
+Segment blob in 3D Viewer,ij3d.segmentation.Blob_Segmentation_in_3D
+Segment Image With Labkit,command:sc.fiji.labkit.ui.plugin.SegmentImageWithLabkitPlugin
+Segmentation Editor,Segmentation_Editor
+Select Bounding Box,fiji.selection.Select_Bounding_Box
+Selection...,ij.plugin.filter.RoiWriter
+Series Labeler,Series_Labeler
+Set Active Axis...,command:net.imagej.plugins.commands.axispos.SetActiveAxis
+Set Channel Display,sc.fiji.i5d.plugin.Set_Channel_Display("")
+Set Channel Labels,sc.fiji.i5d.plugin.Set_Channel_Labels("")
+Set Color By Wavelength,script:Image/Color/Set_Color_By_Wavelength.ijm
+Set Label...,ij.plugin.SimpleCommands("set")
+Set Measurements...,ij.plugin.filter.Analyzer("set")
+Set Position,sc.fiji.i5d.plugin.Set_Position("")
+Set Scale...,ij.plugin.filter.ScaleDialog
+Set Slice...,ij.plugin.Animator("set")
+Set...,ij.plugin.filter.ImageMath("set")
+Set... ,ij.plugin.Zoom("set")
+Shadows Demo,ij.plugin.filter.Shadows("demo")
+Shape Index Map,fiji.geom.Shape_Index_Map
+Shape-based averaging,Rohlfing_SBA
+Sharpen,ij.plugin.filter.Filters("sharpen")
+Show Amira Surface,isosurface.AmiraSurface
+Show Circular Masks...,ij.plugin.filter.RankFilters("masks")
+Show Color Surfaces,isosurface.Show_Colour_Surfaces
+Show label centers,Show_Label_Centers
+Show LSMToolbox,LSM_Toolbox("")
+Show LUT,ij.plugin.filter.LutViewer
+Show Overlay,ij.plugin.OverlayCommands("show")
+Simulate Color Blindness,Daltonize_
+Sintered Alumina (2.6MB),ij.plugin.URLOpener("http://fiji.sc/samples/Sintered_Alumina.tif.zip")
+Size...,ij.plugin.Resizer
+Skeletonize,ij.plugin.filter.Binary("skel")
+Skeletonize (2D/3D),sc.fiji.skeletonize3D.Skeletonize3D_
+Slice Keeper,Slice_Keeper
+Slice Remover,Slice_Remover
+Smooth (3D),process3d.Smooth_
+South,ij.plugin.filter.Shadows("south")
+Southeast,ij.plugin.filter.Shadows("southeast")
+Southwest,ij.plugin.filter.Shadows("southwest")
+Specify Calibration,spim.fiji.plugin.Specify_Calibration
+Specify...,ij.plugin.SpecifyROI
+Spectrum,ij.plugin.LutLoader("spectrum")
+Spheres and Tubes in 3D,customnode.Mesh_Maker
+SPIM,spimopener.SPIM_Opener
+Spirals ,script:File/Open_Samples/Spirals_.ijm
+Spline Deformation Generator,SplineDeformationGenerator.SplineDeformationGenerator_
+Split Channels,ij.plugin.ChannelSplitter
+Square,ij.plugin.filter.ImageMath("sqr")
+Square Root,ij.plugin.filter.ImageMath("sqrt")
+Stack Difference,sc.fiji.multiKymograph.StackDifference_
+Stack From List...,ij.plugin.ListVirtualStack
+Stack Slicer,loci.plugins.Slicer("")
+Stack Sorter,Stack_Sorter
+Stack Splitter,Stack_Splitter
+Stack to Hyperstack...,ij.plugin.HyperStackConverter("stacktohs")
+Stack to Image5D,sc.fiji.i5d.plugin.Stack_to_Image5D("")
+Stack to Images,ij.plugin.StackEditor("toimages")
+Stack to RGB,ij.plugin.RGBStackConverter
+Standard Deviation,mpicbg.ij.plugin.StandardDeviation
+Start Animation [\],ij.plugin.Animator("start")
+Start Cluster...,edu.utexas.clm.archipelago.Fiji_Archipelago("gui")
+start viewer,view5d.View5D_("")
+Startup Macros...,ij.plugin.Commands("startup")
+Startup...,ij.plugin.Startup
+Statistical Region Merging,SRM_
+Statistics,ij.plugin.Stack_Statistics
+Stitch Collection of Images,Stitch_Image_Collection
+Stitch Grid of Images,Stitch_Image_Grid
+Stitch Sequence of Grids of Images,Stitch_Image_Grid_Sequence
+Stop Animation,ij.plugin.Animator("stop")
+Straight Lines,script:File/Open_Samples/Straight_Lines.ijm
+Straighten...,ij.plugin.Straightener
+Stress Test,edu.utexas.clm.archipelago.example.Stress_Test("")
+Striped Circles,script:File/Open_Samples/Striped_Circles.ijm
+Subtract Background...,ij.plugin.filter.BackgroundSubtracter
+Subtract...,ij.plugin.filter.ImageMath("sub")
+Summarize,ij.plugin.filter.Analyzer("sum")
+Surface Plot...,ij.plugin.SurfacePlotter
+SurfaceJ,SurfaceJ_
+Surfaceness,features.Surfaceness_
+SVG...,sc.fiji.io.SVG_Reader
+Swap Quadrants,ij.plugin.FFT("swap")
+Sync Measure 3D,Sync_Measure_3D("")
+Sync Measure 3D...,Sync_Measure_3D("about")
+Sync Windows,Sync_Windows("")
+Sync Windows...,Sync_Windows("about")
+Synchronize Windows,ij.plugin.frame.SyncWindows
+System Information,command:org.scijava.plugins.commands.debug.SystemInformation
+T1 Head (16-bits),ij.plugin.URLOpener("t1-head.zip")
+T1 Head Renderings,ij.plugin.URLOpener("t1-rendering.zip")
+T2 Select All,script:Examples/TrakEM2_Example_Scripts/T2_Select_All.py
+T2 set all transforms to identity,script:Examples/TrakEM2_Example_Scripts/T2_set_all_transforms_to_identity.py
+Table... ,ij.plugin.SimpleCommands("table")
+Table...  ,command:org.scijava.table.io.ExportTableCommand
+Task Monitor Bar...,command:net.imagej.legacy.task.TaskMonitorOptions
+TEM Filter,ij.plugin.URLOpener("TEM_filter_sample.jpg")
+temp,ij.plugin.SimpleCommands("showdirTemp")
+Temporal-Color Code,script:Image/Hyperstacks/Temporal-Color_Code.ijm
+Test Block Matching Parameters,mpicbg.ij.plugin.BlockMatching_TestParameters
+Test Cluster,edu.utexas.clm.archipelago.example.Test_Cluster("")
+Test Java3D,Test_Java3D
+Test Marching Cubes,MC_Test
+Text File... ,ij.plugin.TextFileReader
+Text Image...,ij.plugin.filter.Writer("text")
+Text Image... ,ij.plugin.TextReader
+Text Window...,ij.plugin.NewPlugin("text+dialog")
+Text...,ij.plugin.TextWriter
+The Hue Game,script:Examples/The_Hue_Game.bsh
+Thread killer,Thread_Killer
+Threads,ij.plugin.ThreadLister
+TIFF Virtual Stack...,ij.plugin.FileInfoVirtualStack
+Tiff...,ij.plugin.filter.Writer("tiff")
+Tile,ij.plugin.WindowOrganizer("tile")
+Time Stamper,Time_Stamper
+To Bounding Box,ij.plugin.Selection("tobox")
+To ROI Manager,ij.plugin.OverlayCommands("to")
+To Selection,ij.plugin.Zoom("to")
+ToAST,ToAST25_
+Toggle Cluster Processing,spim.fiji.plugin.Toggle_Cluster_Options
+Toggle Overlay,ij.plugin.OverlayCommands("toggle")
+Top Hat...,ij.plugin.filter.RankFilters("tophat")
+TorstenRaw GZ Reader...,sc.fiji.io.TorstenRaw_GZ_Reader
+TrackMate,fiji.plugin.trackmate.TrackMateRunner
+Tracks for TrackMate (807K),ij.plugin.URLOpener("http://fiji.sc/samples/FakeTracks.tif")
+Trainable Segmentation,trainableSegmentation.Trainable_Segmentation
+Trainable Segmentation 2D,edu.utexas.archipelago.plugin.Batch_Weka_Segmentation
+Trainable Weka Segmentation,trainableSegmentation.Weka_Segmentation
+Trainable Weka Segmentation 3D,trainableSegmentation.Weka_Segmentation("3D")
+TrakEM2 (blank),ini.trakem2.New_Project("blank")
+TrakEM2 (from template),ini.trakem2.New_Project
+TrakEM2 Folder Watcher,fsalign.FS_Align_TrakEM2
+TrakEM2 XML...,ini.trakem2.Open_Project
+Transfer Channel Settings,sc.fiji.i5d.plugin.Transfer_Channel_Settings("")
+Transform Virtual Stack Slices,register_virtual_stack.Transform_Virtual_Stack_MT
+Translate...,ij.plugin.filter.Translator
+Translate... ,ij.plugin.Selection("translate")
+Tree Rings,ij.plugin.URLOpener("Tree_Rings.jpg")
+Triangle Algorithm,Triangle_Algorithm
+Tubeness,features.Tubeness_
+Ultimate Points,ij.plugin.filter.EDM("points")
+Unsharp Mask...,ij.plugin.filter.UnsharpMask
+Update Bio-Formats Plugins,loci.plugins.Updater("")
+Update ImageJ...,ij.plugin.ImageJ_Updater
+Update QuickPALM,QuickPALM.Run_MyMacro("Update_.txt")
+Update...,command:net.imagej.ui.swing.updater.ImageJUpdater
+Upload Image to Fiji Wiki,fiji.Upload_Image_To_Wiki
+Upload Sample Image...,command:net.imagej.plugins.commands.upload.SampleImageUploader
+URL...,ij.plugin.URLOpener
+V3Draw...,Vaa3d_Writer
+Vaa3d...,org.janelia.vaa3d.reader.Vaa3d_Reader
+Variance 3D...,ij.plugin.Filters3D("var")
+Variance...,ij.plugin.filter.RankFilters("variance")
+VIB Protocol,VIB_Protocol
+Vibez validate...,sc.fiji.hdf5.Vibez_Validate
+View5D ,view5d.View5D_
+Virtual Image5D Opener,sc.fiji.i5d.plugin.Virtual_Image5D_Opener("")
+Virtual Stack...,ij.plugin.BatchProcessor("stack")
+Visual grep,Visual_Grep
+Visualize Detections,spim.fiji.plugin.Visualize_Detections
+Visualize OME Metadata,command:sc.fiji.omevisual.OMEVisual
+Volume Calculator,volumeCalculator.Volume_Calculator
+Volume Reconstructor,Volume_Reconstructor_
+Volume Viewer,fiji.plugin.volumeviewer.Volume_Viewer
+VolumeJ,VolumeJ_
+Voronoi,ij.plugin.filter.EDM("voronoi")
+Walking Average,sc.fiji.multiKymograph.WalkingAverage_
+Wand Tool...,ij.plugin.WandToolOptions
+Watch Events,command:org.scijava.ui.swing.commands.WatchEvents
+Watershed,ij.plugin.filter.EDM("watershed")
+Wavefront .OBJ ...,marchingcubes.ExportMesh_
+West,ij.plugin.filter.Shadows("west")
+Window/Level...,ij.plugin.frame.ContrastAdjuster("wl")
+Write Reconstruct Project...,edu.utexas.clm.reconstructreader.trakem2.Reconstruct_Writer
+XOR...,ij.plugin.filter.ImageMath("xor")
+XPM ...,sc.fiji.io.XPM_Writer
+XY Coordinates...,ij.plugin.filter.XYWriter
+XY Coordinates... ,ij.plugin.XY_Reader
+Yellow,ij.plugin.LutLoader("yellow")
+Z Project,sc.fiji.i5d.plugin.Z_Project("")
+Z Project...,ij.plugin.ZProjector
+Z-Spacing Correction,org.janelia.thickness.plugin.ZPositionCorrection
+ZIP...,ij.plugin.filter.Writer("zip")

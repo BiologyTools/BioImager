@@ -77,15 +77,14 @@ namespace BioImager
         /// @return The number of images that contain the name of the image.
         public static int GetImageCountByName(string s)
         {
+            string name = Path.GetFileName(s);
+            string ext = Path.GetExtension(s);
+            if (name.Split('-').Length > 2)
+                name = name.Remove(name.LastIndexOf('-'), name.Length - name.LastIndexOf('-'));
             int i = 0;
             for (int im = 0; im < images.Count; im++)
             {
-                string name = images[im].ID;
-                int sti = name.LastIndexOf("-");
-                string st = name;
-                if(sti != -1)
-                    st = name.Remove(sti);
-                if (images[im].ID == st)
+                if (images[im].ID.Contains(name) && images[im].ID.EndsWith(ext))
                     i++;
             }
             return i;
@@ -102,25 +101,16 @@ namespace BioImager
             if (i == 0)
                 return Path.GetFileName(s);
             string name = Path.GetFileNameWithoutExtension(s);
-            string ext = Path.GetExtension(s);
-            int sti = name.LastIndexOf("-");
-            if (sti == -1)
+            if (Path.GetFileNameWithoutExtension(name) != name)
+                name = Path.GetFileNameWithoutExtension(name);
+            string ext = s.Substring(s.IndexOf('.'), s.Length - s.IndexOf('.'));
+            if (name.Split('-').Length > 2)
             {
-                return name + "-" + (i) + ext;
+                string sts = name.Remove(name.LastIndexOf('-'), name.Length - name.LastIndexOf('-'));
+                return sts + "-" + i + ext;
             }
             else
-            {
-                string stb = name.Substring(0, sti);
-                string sta = name.Substring(sti + 1, name.Length - sti - 1);
-                int ind;
-                if (int.TryParse(sta, out ind))
-                {
-                    return stb + "-" + (i + 1).ToString() + ext;
-                }
-                else
-                    return name + "-" + (i + 1) + ext;
-            }
-            //
+                return name + "-" + i + ext;
         }
         /// This function removes an image from the table
         /// 

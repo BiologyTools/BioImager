@@ -23,12 +23,12 @@ namespace BioImager
         {
             string file = im.ID.Replace("\\", "/");
             InitializeComponent();
-            if (im.slideImage == null && im.isPyramidal && OpenSlide)
+            if (im.slideImage != null && im.isPyramidal && OpenSlide)
                 openSlide = true;
             serie = im.series;
             selectedImage = im;
             Dock = DockStyle.Fill;
-            Images.Add(im);
+            AddImage(im);
             App.viewer = this;
             if (file == "" || file == null)
                 return;
@@ -203,7 +203,7 @@ namespace BioImager
         private bool updateOverlay = false;
         public List<BioImage> Images = new List<BioImage>();
         List<SharpDX.Direct2D1.Bitmap> dBitmaps = new List<SharpDX.Direct2D1.Bitmap>();
-        private static int selIndex = 0;
+        private int selIndex = 0;
         ///A property that is used to set the selected index of the image. */
         public int SelectedIndex
         {
@@ -1021,11 +1021,11 @@ namespace BioImager
             drawing = true;
             if (HardwareAcceleration && dx != null)
             {
+                Plugins.Render(this, dx);
                 dx.BeginDraw();
                 dx.RenderTarget2D.Clear(new RawColor4(1.0f, 1.0f, 1.0f, 1.0f));
                 System.Drawing.RectangleF rg = ToScreenRectF(PointD.MinX, PointD.MinY, PointD.MaxX - PointD.MinX, PointD.MaxY - PointD.MinY);
                 //dx.RenderTarget2D.Transform = SharpDX.Matrix3x2.Rotation((float)Math.PI);
-
                 SharpDX.Direct2D1.SolidColorBrush pen = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 0.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush red = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(1.0f, 0.0f, 0.0f, 1.0f));
                 SharpDX.Direct2D1.SolidColorBrush green = new SharpDX.Direct2D1.SolidColorBrush(dx.RenderTarget2D, new RawColor4(0.0f, 1.0f, 0.0f, 1.0f));
@@ -1776,6 +1776,7 @@ namespace BioImager
         /// @param e the mouse event
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            Plugins.ScrollEvent(sender, e);
             if (SelectedImage == null)
                 return;
             if (SelectedImage.isPyramidal)
@@ -2313,7 +2314,6 @@ namespace BioImager
                 RenderFrame();
                 return;
             }
-
             drawing = true;
             if (Bitmaps.Count == 0 || Bitmaps.Count != Images.Count)
                 UpdateImages();
@@ -2403,6 +2403,7 @@ namespace BioImager
         private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
             update = true;
+            Plugins.Paint(sender, e);
             DrawView(e.Graphics);
         }
         /// GetScale() returns the scale of the image in the viewport.
@@ -2432,7 +2433,7 @@ namespace BioImager
                 return;
             }
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
-            tools.ToolMove(p, mouseDownButtons);
+            tools.ToolMove(p, e);
 
             PointD ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
@@ -2577,7 +2578,7 @@ namespace BioImager
             mouseUp = p;
             down = false;
             up = true;
-            tools.ToolUp(p, e.Button);
+            tools.ToolUp(p, e);
         }
         /// The function is called when the mouse is pressed down on the picturebox
         /// 
@@ -2724,7 +2725,7 @@ namespace BioImager
                 }
             }
             UpdateStatus();
-            tools.ToolDown(mouseDown, e.Button);
+            tools.ToolDown(mouseDown, e);
         }
         /// > If the user double clicks on the picture box, then the selected image is set to the image
         /// that the user double clicked on
@@ -2740,7 +2741,7 @@ namespace BioImager
             App.viewer = this;
             selectedImage = SelectedImage;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
-            tools.ToolDown(p, e.Button);
+            tools.ToolDown(p, e);
             if (e.Button != MouseButtons.XButton1 && e.Button != MouseButtons.XButton2)
                 Origin = new PointD(-p.X, -p.Y);
         }
@@ -3302,6 +3303,7 @@ namespace BioImager
         public void ImageView_KeyDown(object sender, KeyEventArgs e)
         {
             double moveAmount = 5 * Scale.Width;
+            Plugins.KeyDownEvent(sender,e);
             if (e.KeyCode == Keys.C && e.Control)
             {
                 CopySelection();
@@ -3344,6 +3346,15 @@ namespace BioImager
             }
         }
 
+        private void ImageView_KeyUp(object sender, KeyEventArgs e)
+        {
+            Plugins.KeyUpEvent(sender, e);
+        }
+
+        private void ImageView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Plugins.KeyPressEvent(sender, e);
+        }
         /// If the selected image is not null, set the origin to the center of the image, and set the
         /// scale to the height of the image.
         /// 
@@ -3698,7 +3709,7 @@ namespace BioImager
         {
             RemoveImage(SelectedIndex);
         }
-        
+
         private void removeImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RemoveImages();
@@ -3737,6 +3748,7 @@ namespace BioImager
         }
 
         #endregion
+
 
         
     }

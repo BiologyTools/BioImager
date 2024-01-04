@@ -40,7 +40,7 @@ namespace BioImager
         {
             get
             {
-                return App.tabsView.ImageView;
+                return App.tabsView.Viewer;
             }
         }
         public TabsView(BioImage arg)
@@ -110,7 +110,6 @@ namespace BioImager
                 Height = b.SizeY + 190;
             }
             tabControl.TabPages.Add(t);
-            tabControl.Dock = DockStyle.Fill;
             tabControl.SelectedIndex = tabControl.TabCount - 1;
             ResizeView();
         }
@@ -123,7 +122,65 @@ namespace BioImager
             t.Controls.Add(v);
             tabControl.TabPages.Add(t);
             filters = new Filter();
+            App.tabsView = this;
+            Plugins.Initialize();
+            string a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            foreach (char c in a)
+            {
+                ToolStripMenuItem me = new ToolStripMenuItem(c.ToString());
+                foreach (ImageJ.Macro.Command command in ImageJ.Macro.Commands.Values)
+                {
+                    if (command.Name.StartsWith(c))
+                    {
+                        ToolStripMenuItem menuItem = new ToolStripMenuItem(command.Name.ToString());
+                        menuItem.Click += MenuItem_Click;
+                        me.DropDownItems.Add(menuItem);
+                    }
+                }
+                commandToolStripMenuItem.DropDownItems.Add(me);
+            }
+            foreach (Scripting.Script s in Scripting.Scripts.Values)
+            {
+                ToolStripMenuItem mi = new ToolStripMenuItem(s.name);
+                mi.Click += Mi_Click;
+                runToolStripMenuItem.DropDownItems.Add(mi);
+            }
+            foreach (ImageJ.Macro.Command c in ImageJ.Macros)
+            {
+                ToolStripMenuItem mi = new ToolStripMenuItem(c.Name);
+                mi.Click += Mi_Click;
+                runToolStripMenuItem.DropDownItems.Add(mi);
+            }
             init = true;
+        }
+
+        private void Mi_Click(object? sender, EventArgs e)
+        {
+            ToolStripMenuItem m = (ToolStripMenuItem)sender;
+            if (m.Text.EndsWith(".ijm") || m.Text.EndsWith(".txt") && !m.Text.EndsWith(".cs"))
+            {
+                string ma = File.ReadAllText(m.Text);
+                ImageJ.RunOnImage(ma, BioConsole.headless, BioConsole.onTab, BioConsole.useBioformats,BioConsole.newTab);
+            }
+            else
+                Scripting.RunByName(m.Text);
+        }
+
+        private void MenuItem_Click(object? sender, EventArgs e)
+        {
+            if (ImageView.SelectedImage == null) return;
+            ToolStripMenuItem m = (ToolStripMenuItem)sender;
+            ImageJ.RunOnImage("run(\"" + m.Text + "\");", BioConsole.headless, BioConsole.onTab, BioConsole.useBioformats, BioConsole.newTab);
+            ToolStripMenuItem mi = new ToolStripMenuItem(m.Text);
+            mi.Click += MenuItem_Click;
+            bool con = false;
+            foreach (ToolStripMenuItem item in recentToolStripMenuItem.DropDownItems)
+            {
+                if (item.Text == m.Text)
+                    con = true;
+            }
+            if (!con)
+                recentToolStripMenuItem.DropDownItems.Add(mi);
         }
 
         /// If the image is pyramidal, add 42 to the width and 206 to the height. Otherwise, add 20 to
@@ -136,7 +193,7 @@ namespace BioImager
                 return;
             System.Drawing.Size s;
             if (SelectedImage.isPyramidal)
-                s = new System.Drawing.Size(ImageView.SelectedImage.Resolutions[ImageView.Level].SizeX + 42, ImageView.SelectedImage.Resolutions[ImageView.Level].SizeY + 206);
+                s = new System.Drawing.Size(ImageView.SelectedImage.Resolutions[Viewer.Level].SizeX + 42, ImageView.SelectedImage.Resolutions[Viewer.Level].SizeY + 206);
             else
                 s = new System.Drawing.Size(ImageView.SelectedImage.SizeX + 20, ImageView.SelectedImage.SizeY + 180);
             if (s.Width > Screen.PrimaryScreen.Bounds.Width || s.Height > Screen.PrimaryScreen.Bounds.Height)
@@ -161,15 +218,6 @@ namespace BioImager
                 if (ImageView.SelectedImage == null)
                     return null;
                 return ImageView.SelectedImage;
-            }
-        }
-
-        /* A property of the ImageView class. */
-        public ImageView ImageView
-        {
-            get
-            {
-                return Viewer;
             }
         }
 
@@ -206,10 +254,9 @@ namespace BioImager
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
-            int img = Images.images.Count;
             foreach (string item in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenFile(item,false);
+                BioImage im = BioImage.OpenFile(item,0,false,false);
                 if (im == null)
                     return;
                 AddTab(im);
@@ -673,7 +720,7 @@ namespace BioImager
                 rGBToolStripMenuItem.Checked = false;
             //We update the active Viewer.
             App.viewer = Viewer;
-            ImageView.SelectedIndex = 0;
+            Viewer.SelectedIndex = 0;
         }
 
         /// It removes the selected tab from the tab control, disposes of the image view, removes the
@@ -1040,7 +1087,7 @@ namespace BioImager
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             bool convert = false;
-            foreach (BioImage b in ImageView.Images)
+            foreach (BioImage b in Viewer.Images)
             {
                 if (b.isRGB)
                 {
@@ -1057,7 +1104,7 @@ namespace BioImager
                     mes = "Saving Series as OME only supports 8 bit & 16 bit images. Convert 8 bit?";
                 if (MessageBox.Show(this, mes, "Convert to supported format?", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    foreach (BioImage b in ImageView.Images)
+                    foreach (BioImage b in Viewer.Images)
                     {
                         if (b.bitsPerPixel > 8)
                             b.To16Bit();
@@ -1163,8 +1210,8 @@ namespace BioImager
             string st = e.ClickedItem.Text;
             RotateFlipType rot = (RotateFlipType)Enum.Parse(typeof(RotateFlipType), st);
             ImageView.SelectedImage.RotateFlip(rot);
-            ImageView.UpdateImage();
-            ImageView.UpdateView();
+            Viewer.UpdateImage();
+            Viewer.UpdateView();
         }
 
         /// If the dropdown menu has no items, add the items from the RotateFlipType enum
@@ -1223,7 +1270,7 @@ namespace BioImager
             {
                 bf.SwitchRedBlue();
             }
-            ImageView.UpdateImages();
+            Viewer.UpdateImages();
         }
         /// This function creates a new function form and shows it
         /// 

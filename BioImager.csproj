@@ -15,16 +15,27 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>3.6.0</Version>
+    <Version>3.7.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Layers for easier imaging of multiple resolutions. Bug fixes to PycroManager &amp; Python-Microscope.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added plugins see example plugin. Improved ImageJ integration. BioConsole autocomplete.</PackageReleaseNotes>
     <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="macro-commands.csv" />
+    <None Remove="macro-functions.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="macro-commands.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="macro-functions.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="PythonMicroscope\microscope\abc.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>

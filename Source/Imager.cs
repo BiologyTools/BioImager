@@ -149,7 +149,11 @@ namespace BioImager
         public Imager()
         {
             InitializeComponent();
-
+            if (Settings.Default.PycroManager)
+            {
+                topMostCheckBox.Checked = false;
+                dockToApp.Checked = false;
+            }
             Stopwatch timer = new Stopwatch();
             timer.Start();
             TimeSpan st1 = timer.Elapsed;
