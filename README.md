@@ -86,6 +86,10 @@ Microscope.TakeTiles(4,4);
 -  Program installer include sample script "Sample.cs" which gets & sets pixels and saves resulting image.
 -  Use Script recorder to record program function calls and script runner to turn recorder text into working scripts. (See sample) [scripts](https://github.com/BioMicroscopy/BioImage-Scripts)
 
+## Plugins
+- Save plugin DLL's into "StartupPath/Plugins"
+- See [example plugin](https://github.com/BiologyTools/PluginExampleWIN) to create your own plugins.
+
 ## Sample Tool Script
 ```
 //css_reference Bio.dll;
