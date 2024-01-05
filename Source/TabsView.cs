@@ -260,6 +260,7 @@ namespace BioImager
                 if (im == null)
                     return;
                 AddTab(im);
+                Images.images.Add(im);
                 if (!App.recent.Contains(im.ID))
                     App.recent.Add(im.ID);
             }
@@ -801,12 +802,19 @@ namespace BioImager
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
-            foreach (string sts in openFilesDialog.FileNames)
+            foreach (string item in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenOME(sts,true);
+                BioImage im = BioImage.OpenOME(item, 0, false, false, false, 0,0,0,0);
                 if (im == null)
                     return;
                 AddTab(im);
+                Images.images.Add(im);
+                if (!App.recent.Contains(im.ID))
+                    App.recent.Add(im.ID);
+            }
+            foreach (string item in App.recent)
+            {
+                openRecentToolStripMenuItem.DropDownItems.Add(item, null, ItemClicked);
             }
         }
 

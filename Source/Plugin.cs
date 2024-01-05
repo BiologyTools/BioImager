@@ -35,6 +35,7 @@ namespace BioImager
     {
         public static void Initialize()
         {
+            Directory.CreateDirectory("Plugins");
             foreach (string s in Directory.GetFiles("Plugins"))
             {
                 if (!s.EndsWith(".dll") || Plugin.Plugins.ContainsKey(Path.GetFileName(s)))

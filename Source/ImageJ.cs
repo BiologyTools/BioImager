@@ -237,7 +237,7 @@ namespace BioImager
             }
             App.viewer.UpdateImage();
             App.viewer.UpdateView();
-            Recorder.AddLine("RunOnImage(\"" + con + "\"," + headless + "," + onTab + ");");
+            Recorder.AddLine("RunOnImage(\"" + con + "\"," + headless + "," + onTab + "," + newTab + ");");
         }
 
         /// This function is used to initialize the path of the ImageJ.exe file

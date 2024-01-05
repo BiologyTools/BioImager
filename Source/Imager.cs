@@ -514,6 +514,7 @@ namespace BioImager
                 this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
             }
             string s = Win32.GetActiveWindowTitle();
+            if(Microscope.initialized)
             statusLabel.Text = Microscope.GetPosition().ToString();
             if (s != null)
                 if (s.Contains(Settings.Default.AppName))

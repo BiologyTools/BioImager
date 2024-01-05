@@ -43,7 +43,7 @@ namespace BioImager
         {
             for (int i = 0; i < images.Count; i++)
             {
-                if (images[i].ID == ids || images[i].file == ids)
+                if (images[i].ID == ids || images[i].file == ids || images[i].filename == Path.GetFileName(ids))
                     return images[i];
             }
             return null;

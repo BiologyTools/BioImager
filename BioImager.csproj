@@ -488,12 +488,12 @@
 
   <ItemGroup>
     <PackageReference Include="AForgeBio" Version="1.5.0" />
-    <PackageReference Include="BioFormats.NET6" Version="7.1.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.13" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.1" />
+    <PackageReference Include="IKVM" Version="8.6.4" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NetVips" Version="2.4.0" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.0" />
@@ -510,6 +510,12 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="bioformats_package">
+      <HintPath>bioformats_package.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">
