@@ -1018,23 +1018,12 @@ namespace BioImager
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0],false,true);
-                    for (int f = 0; f < bts.Length; f++)
-                    {
-                        if (f == 0 && i == 0)
-                            AddTab(bts[f]);
-                        else
-                            Viewer.AddImage(bts[f]);
-                    }
-                    AddTab(BioImage.OpenFile(openFilesDialog.FileNames[0]));
+                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i],0,true,true);
                 }
                 else
                 {
-                    BioImage[] bts = BioImage.OpenOMESeries(openFilesDialog.FileNames[0],false,true);
-                    for (int f = 0; f < bts.Length; f++)
-                    {
-                        Viewer.AddImage(bts[f]);
-                    }
+                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i], 0, true, false);
+                    Viewer.AddImage(b);
                 }
             }
             App.viewer.GoToImage();
@@ -1054,10 +1043,13 @@ namespace BioImager
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    AddTab(BioImage.OpenOME(openFilesDialog.FileNames[0],false));
+                    BioImage b = BioImage.OpenOME(openFilesDialog.FileNames[i], 0, true, true, false, 0,0,0,0);
                 }
                 else
-                    App.viewer.AddImage(BioImage.OpenOME(openFilesDialog.FileNames[i],false));
+                {
+                    BioImage b = BioImage.OpenOME(openFilesDialog.FileNames[i], 0, true, true, false, 0, 0, 0, 0);
+                    Viewer.AddImage(b);
+                }
             }
             App.viewer.GoToImage();
         }

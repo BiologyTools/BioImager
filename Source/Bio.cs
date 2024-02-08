@@ -6557,7 +6557,7 @@ namespace BioImager
                     null,
                     DialogFlags.DestroyWithParent,
                     MessageType.Info,
-                    ButtonsType.Ok, "BioGTK currently doens't support OME images on Arm64 MacOS due to dependency IKVM 8.6.2 not yet supporting Mac Arm64." +
+                    ButtonsType.Ok, "BioGTK currently doens't support OME images on Arm64 MacOS due to dependency IKVM 8.6.4 not yet supporting Mac Arm64." +
                     "On MacOS ImageJ Tiff files, LibVips supported whole-slide images, and BioGTK Tiff files are supported.");
                     md.Run();
                 }
