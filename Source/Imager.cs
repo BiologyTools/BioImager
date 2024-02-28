@@ -16,24 +16,15 @@ using SharpDX.XInput;
 using WindowsInput;
 using System.Configuration;
 using BioImager.Properties;
-using System.Reflection;
-using Bitmap = AForge.Bitmap;
-using Color = AForge.Color;
-using PointF = AForge.PointF;
-using RectangleF = AForge.RectangleF;
-using RectangleD = AForge.RectangleD;
-using Rectangle = AForge.Rectangle;
-using Point = AForge.Point;
-using SizeF = AForge.SizeF;
+using Settings = BioImager.Properties.Settings;
 using AForge;
-
 namespace BioImager
 {
     public partial class Imager : Form
     {
         private static Process AppP = null;
         public static IntPtr apph;
-        private Point mainWinDefLocation = new Point(1473, 509);
+        private System.Drawing.Point mainWinDefLocation = new System.Drawing.Point(1473, 509);
         public static string AppPath = "";
         public static List<BioImage> StoredImages = new List<BioImage>();
         public Controller controller;
@@ -239,7 +230,7 @@ namespace BioImager
                 //We set window location based on imaging application location.
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
-                Point pp = new Point(r.Right - this.Width, r.Bottom - this.Height - 23);
+                System.Drawing.Point pp = new System.Drawing.Point(r.Right - this.Width, r.Bottom - this.Height - 23);
                 this.Location = new System.Drawing.Point((int)pp.X, (int)pp.Y);
             }
             this.Show();
@@ -510,7 +501,7 @@ namespace BioImager
                 //We set window location based on imaging app location.
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
-                Point pp = new Point((r.Right) - this.Width, (r.Bottom) - this.Height - 30);
+                System.Drawing.Point pp = new System.Drawing.Point((r.Right) - this.Width, (r.Bottom) - this.Height - 30);
                 this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
             }
             string s = Win32.GetActiveWindowTitle();

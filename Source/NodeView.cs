@@ -219,7 +219,7 @@ namespace BioImager
                 an.Text = input.TextValue;
                 an.family = input.Font.FontFamily.ToString();
                 an.strokeWidth = input.Font.Size;
-                an.strokeColor = AForge.Color.FromArgb(input.color.R, input.color.G, input.color.B);
+                an.strokeColor = System.Drawing.Color.FromArgb(input.color.R, input.color.G, input.color.B);
             }
             UpdateNodes();
             UpdateOverlay();

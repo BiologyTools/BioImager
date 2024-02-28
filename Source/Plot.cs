@@ -87,24 +87,20 @@ namespace BioImager
         private void InitBars()
         {
             model.Clear();
-            int i = 0;
-            List<ScottPlot.Plottables.BarSeries> seriesList = new List<ScottPlot.Plottables.BarSeries>();
             foreach (double[] items in data)
             {
-                List<ScottPlot.Plottables.Bar> bars = new List<ScottPlot.Plottables.Bar>();
+                int i = 0;
+                List<Bar> bars = new List<Bar>();
                 foreach (double item in items)
                 {
-                    bars.Add(new ScottPlot.Plottables.Bar(i, item));
+                    Bar b = new Bar();
+                    b.Value = item;
+                    b.Position = i;
+                    bars.Add(b);
+                    i++;
                 }
-                ScottPlot.Plottables.BarSeries series1 = new()
-                {
-                    Bars = bars,
-                    Label = i.ToString(),
-                };
-                seriesList.Add(series1);
-                i++;
+                model.Add.Bars(bars);
             }
-            model.Add.Bar(seriesList);
         }
 
         private void Plot_ResizeEnd(object sender, EventArgs e)

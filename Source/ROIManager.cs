@@ -108,21 +108,21 @@ namespace BioImager
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = AForge.Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
+            anno.strokeColor = System.Drawing.Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void gBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = AForge.Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
+            anno.strokeColor = System.Drawing.Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void bBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = AForge.Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
+            anno.strokeColor = System.Drawing.Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
             UpdateOverlay();
         }
         private void typeBox_SelectedIndexChanged(object sender, EventArgs e)

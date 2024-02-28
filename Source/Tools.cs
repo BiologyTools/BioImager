@@ -17,6 +17,7 @@ using AForge;
 using BioImager.Graphics;
 using Rectangle = AForge.Rectangle;
 using RectangleF = AForge.RectangleF;
+using RectangleD = AForge.RectangleD;
 
 namespace BioImager
 {
@@ -371,7 +372,7 @@ namespace BioImager
                     return;
                 an.family = ti.font.FontFamily.ToString();
                 an.fontSize = ti.font.Size;
-                an.strokeColor = AForge.Color.FromArgb(ti.color.R,ti.color.G,ti.color.B);
+                an.strokeColor = System.Drawing.Color.FromArgb(ti.color.R,ti.color.G,ti.color.B);
                 an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }

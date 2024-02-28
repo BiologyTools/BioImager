@@ -11,15 +11,9 @@ using System.Threading;
 using System.Reflection;
 using System.IO;
 using AForge;
-using Bitmap = AForge.Bitmap;
-using Color = AForge.Color;
-using PointF = AForge.PointF;
-using PointD = AForge.PointD;
-using Point3D = AForge.Point3D;
-using RectangleF = AForge.RectangleF;
-using RectangleD = AForge.RectangleD;
-using Rectangle = AForge.Rectangle;
 using Point = AForge.Point;
+using RectangleD = AForge.RectangleD;
+using Bitmap = AForge.Bitmap;
 namespace BioImager
 {
     /* It's a wrapper for the stage*/

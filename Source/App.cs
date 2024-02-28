@@ -1,6 +1,5 @@
 ﻿using AForge;
 using BioImager;
-using BioImager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +61,7 @@ namespace BioImager
             } while (!BioImage.Initialized);
             imager = new Imager();
             Microscope.Initialize();
-            ImageJ.Initialize(true);
+            ImageJ.Initialize();
             setup = new MicroscopeSetup();
             stage = new StageTool();
             cellImager = new CellImager();

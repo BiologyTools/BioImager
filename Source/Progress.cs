@@ -22,6 +22,17 @@ namespace BioImager
             fileLabel.Text = file;
             timer.Start();
         }
+        public string Status
+        {
+            get { return statusLabel.Text; }
+            set { statusLabel.Text = value; }
+        }
+        public float ProgressValue
+        {
+            get { return progressBar.Value; }
+            set { progressBar.Value = (int)(value * 100); }
+        }
+
         public void UpdateProgress(int p)
         {
             progressBar.Value = p;
