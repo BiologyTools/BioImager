@@ -246,7 +246,7 @@ namespace BioImager
                 else
                     return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 data = null;
                 return false;

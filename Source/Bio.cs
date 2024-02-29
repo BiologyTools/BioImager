@@ -2053,7 +2053,7 @@ namespace BioImager
         }
         private int sizeZ, sizeC, sizeT;
         private Statistics statistics;
-        private double resolution = 0;
+        private double resolution = 1;
         public static float progressValue = 0;
         ImageInfo imageInfo = new ImageInfo();
         /// It copies the BioImage b and returns a new BioImage object.
@@ -2588,6 +2588,7 @@ namespace BioImager
         /// <returns></returns>
         public int LevelFromResolution(double Resolution)
         {
+            int l = 0;
             double[] ds = new double[Resolutions.Count];
             for (int i = 0; i < Resolutions.Count; i++)
             {
@@ -2597,18 +2598,16 @@ namespace BioImager
             {
                 if (ds[i] > Resolution)
                 {
-                    if(MacroResolution.HasValue)
-                    {
-                        if (i < MacroResolution.Value)
-                            return i;
-                        else
-                            return MacroResolution.Value - 1;
-                    }
-                    else
-                        return i;
+                    l = i;
+                    break;
                 }
             }
-            return 0;
+            if(MacroResolution.HasValue)
+            {
+                return MacroResolution.Value - 1;
+            }
+            else
+            return l;
         }
         /// <summary>
         /// Get Unit Per Pixel for pyramidal images.
@@ -2622,7 +2621,7 @@ namespace BioImager
         /// <summary>
         /// Updates the Buffers based on current pyramidal origin and resolution.
         /// </summary>
-        public async void UpdateBuffersPyramidal()
+        public void UpdateBuffersPyramidal()
         {
             for (int i = 0; i < Buffers.Count; i++)
             {
@@ -2635,28 +2634,25 @@ namespace BioImager
                 {
                     byte[] bts = openSlideBase.GetSlice(new OpenSlideGTK.SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, PyramidalSize.Width, PyramidalSize.Height, resolution));
                     Bitmap bf = new Bitmap((int)Math.Round(OpenSlideBase.destExtent.Width), (int)Math.Round(OpenSlideBase.destExtent.Height), PixelFormat.Format24bppRgb, bts, new ZCT(), "");
-                    bf.Stats = Statistics.FromBytes(bf);
                     Buffers.Add(bf);
                 }
                 else
                 {
                 start:
-                    byte[] bts = await slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, PyramidalSize.Width, PyramidalSize.Height, resolution));
+                    byte[] bts = slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, PyramidalSize.Width, PyramidalSize.Height, resolution)).Result;
                     if (bts == null)
                     {
                         if (PyramidalOrigin.X == 0 && PyramidalOrigin.Y == 0)
                         {
-                            Resolution = 1;
+                            resolution = 1;
                         }
                         pyramidalOrigin = new PointD(0, 0);
                         goto start;
                     }
-                    Bitmap bf = new Bitmap((int)Math.Round(SlideBase.destExtent.Width), (int)Math.Round(SlideBase.destExtent.Height), PixelFormat.Format24bppRgb, bts, new ZCT(), "");
-                    bf.Stats = Statistics.FromBytes(bf);
-                    Buffers.Add(bf);
+                    Buffers.Add(new Bitmap((int)Math.Round(SlideBase.destExtent.Width), (int)Math.Round(SlideBase.destExtent.Height), PixelFormat.Format24bppRgb, bts, new ZCT(), ""));
                 }
             }
-            BioImage.AutoThreshold(this, false);
+            BioImage.AutoThreshold(this, true);
             if (bitsPerPixel > 8)
                 StackThreshold(true);
             else
@@ -6689,7 +6685,7 @@ namespace BioImager
             //We check if we can open this with OpenSlide as this is faster than Bioformats with IKVM.
             if (b.openSlideImage != null)
             {
-                return new Bitmap(tileSizeX, tileSizeY, AForge.PixelFormat.Format32bppArgb, b.slideImage.ReadRegion(serie, tilex, tiley, tileSizeX, tileSizeY), coord, "");
+                return new Bitmap(tileSizeX, tileSizeY, AForge.PixelFormat.Format32bppArgb, b.openSlideImage.ReadRegion(serie, tilex, tiley, tileSizeX, tileSizeY), coord, "");
             }
 
             string curfile = reader.getCurrentFile();
@@ -6775,7 +6771,7 @@ namespace BioImager
             //We check if we can open this with OpenSlide as this is faster than Bioformats with IKVM.
             if (b.openSlideImage != null)
             {
-                return new Bitmap(tileSizeX, tileSizeY, AForge.PixelFormat.Format32bppArgb, b.slideImage.ReadRegion(serie, tilex, tiley, tileSizeX, tileSizeY), new ZCT(), "");
+                return new Bitmap(tileSizeX, tileSizeY, AForge.PixelFormat.Format32bppArgb, b.openSlideImage.ReadRegion(serie, tilex, tiley, tileSizeX, tileSizeY), new ZCT(), "");
             }
 
             string curfile = reader.getCurrentFile();

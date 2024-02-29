@@ -76,10 +76,9 @@ namespace BioImager
             }
             update = true;
             InitPreview();
-            UpdateImages();
             GoToImage();
+            UpdateImages();
             Mode = ViewMode.Filtered;
-
             UpdateView();
             if (HardwareAcceleration)
             {
@@ -1360,7 +1359,7 @@ namespace BioImager
                         dBitmaps[bi] = null;
                     }
                     Bitmap bf = new Bitmap("", bitmap, new ZCT(), 0);
-                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, (Bitmap)bf.ImageRGB);
+                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, bf);
                 }
                 else
                     Bitmaps.Add(bitmap);
@@ -2337,7 +2336,7 @@ namespace BioImager
             }
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             tools.ToolMove(p, e);
-            MouseMove = p;
+            mouseMove = p;
             MouseMoveInt = new PointD(e.X, e.Y);
             PointD ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
@@ -3285,16 +3284,6 @@ namespace BioImager
             get { return mouseMoveInt; }
             set { mouseMoveInt = value; }
         }
-        public PointD MouseDown
-        {
-            get { return mouseDown; }
-            set { mouseDown = value; }
-        }
-        public PointD MouseMove
-        {
-            get { return mouseMove; }
-            set { mouseMove = value; }
-        }
         /// It takes an image index and centers the image in the viewport
         /// 
         /// @param i the index of the image to go to
@@ -3311,7 +3300,7 @@ namespace BioImager
                     if (MacroResolution.HasValue)
                     {
                         int lev = MacroResolution.Value - 2;
-                        Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel;
+                        Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel*0.98;
                     }
                     else
                     {
@@ -3322,13 +3311,13 @@ namespace BioImager
                 {
                     if (MacroResolution.HasValue)
                     {
-                        int lev = MacroResolution.Value - 1;
-                        Resolution = Math.Round(SelectedImage.GetUnitPerPixel(lev), 2);
+                        int lev = MacroResolution.Value-1;
+                        Resolution = SelectedImage.slideBase.Schema.Resolutions[lev].UnitsPerPixel*0.98;
                         PyramidalOrigin = new PointD(0, 0);
                     }
                     else
                     {
-                        Resolution = Math.Round(SelectedImage.GetUnitPerPixel(SelectedImage.Resolutions.Count - 1), 2);
+                        Resolution = SelectedImage.GetUnitPerPixel(SelectedImage.Resolutions.Count - 1)*0.98;
                     }
                 }
             }

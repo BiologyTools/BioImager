@@ -180,10 +180,10 @@ namespace BioImager
         /// 
         /// @param con The ImageJ macro to run.
         /// @param headless Whether to run ImageJ in headless mode.
-        /// @param onTab If true, the image will be opened in a new tab. If false, the image will be
-        /// opened in the current tab.
+        /// @param onTab Whether to run the macro on current tab of images.
         /// @param bioformats If the image is a bioformats image, it will use the bioformats importer to
         /// open the image.
+        /// @param newTab Whether or not the result should open in a new tab.
         /// 
         /// @return The return value is the result of the last statement in the script.
         public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats, bool newTab)
