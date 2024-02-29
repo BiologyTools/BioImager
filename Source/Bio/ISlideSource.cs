@@ -60,7 +60,7 @@ namespace BioImager
         private LruCache<TileIndex, byte[]> cache;
         private int capacity;
         ISlideSource source = null;
-        public TileCache(ISlideSource source, int capacity = 10000)
+        public TileCache(ISlideSource source, int capacity = 500)
         {
             this.source = source;
             this.capacity = capacity;

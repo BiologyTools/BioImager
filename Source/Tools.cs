@@ -559,6 +559,23 @@ namespace BioImager
             
             if (Tools.currentTool.type == Tools.Tool.Type.pan && buts == MouseButtons.Left || buts == MouseButtons.Middle)
             {
+                if (ImageView.SelectedImage.isPyramidal)
+                {
+                    if (App.viewer.OpenSlide)
+                    {
+                        if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
+                        {
+                            App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
+                        }
+                    }
+                    else
+                    {
+                        if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
+                        {
+                            App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
+                        }
+                    }
+                }
                 PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                 App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
                 UpdateView();

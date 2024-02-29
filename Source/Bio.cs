@@ -2005,20 +2005,6 @@ namespace BioImager
             get { return resolution; }
             set 
             {
-                if (MacroResolution.HasValue)
-                {
-                    if (value >= GetUnitPerPixel(MacroResolution.Value))
-                        return;
-                    if (value <= GetUnitPerPixel(0))
-                        return;
-                }
-                else
-                {
-                    if (value >= GetUnitPerPixel(Resolutions.Count-1))
-                        return;
-                    if (value <= GetUnitPerPixel(0))
-                        return;
-                }
                 resolution = value;
             }
         }

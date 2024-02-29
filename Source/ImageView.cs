@@ -670,11 +670,6 @@ namespace BioImager
             }
             set
             {
-                if (value < 0) return;
-                if (!openSlide && value >= SelectedImage.Resolutions.Count)
-                    return;
-                if (SelectedImage.Type == BioImage.ImageType.well && value > SelectedImage.Resolutions.Count - 1)
-                    return;
                 double dp = Resolution / value;
                 SelectedImage.PyramidalOrigin = new PointD((dp * PyramidalOrigin.X), (dp * PyramidalOrigin.Y));
                 SelectedImage.Resolution = value;
@@ -981,17 +976,24 @@ namespace BioImager
         {
             if (SelectedImage == null)
                 return;
+            string res = "";
+            if (SelectedImage.Type == BioImage.ImageType.well)
+                res = "Well:" + SelectedImage.Level;
+            else if(SelectedImage.Type == BioImage.ImageType.pyramidal)
+            {
+                res = "Res.:" + Resolution;
+            }
             if (Mode == ViewMode.RGBImage)
             {
                 if (timeEnabled)
                 {
                     statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (tBar.Value + 1) + "/" + (tBar.Maximum + 1) + ", " +
-                        mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") ";
+                        mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
                 }
                 else
                 {
                     statusLabel.Text = (zBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString()
-                        + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") ";
+                        + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
                 }
 
             }
@@ -1000,12 +1002,12 @@ namespace BioImager
                 if (timeEnabled)
                 {
                     statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (cBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + (tBar.Value + 1) + "/" + (tBar.Maximum + 1) + ", " +
-                        mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") ";
+                        mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
                 }
                 else
                 {
                     statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (cBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + mousePoint + mouseColor + ", " +
-                        SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") ";
+                        SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
                 }
             }
         }
@@ -2335,7 +2337,8 @@ namespace BioImager
             }
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             tools.ToolMove(p, e);
-
+            MouseMove = p;
+            MouseMoveInt = new PointD(e.X, e.Y);
             PointD ip = SelectedImage.ToImageSpace(p);
             mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
@@ -2474,6 +2477,7 @@ namespace BioImager
                     PyramidalOrigin = new PointD(PyramidalOrigin.X - pf.X, PyramidalOrigin.Y - pf.Y);
                 }
             }
+            
             mouseUpButtons = e.Button;
             mouseDownButtons = MouseButtons.None;
             mouseUp = p;
@@ -2492,6 +2496,7 @@ namespace BioImager
             if (SelectedImage == null)
                 return;
             App.viewer = this;
+            MouseDownInt = new PointD(e.X, e.Y);
             mouseDownButtons = e.Button;
             mouseUpButtons = MouseButtons.None;
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
@@ -2837,12 +2842,7 @@ namespace BioImager
         {
             if (SelectedImage.isPyramidal)
             {
-                if (openSlide)
-                {
-                    return new PointD((PyramidalOrigin.X + x) * Resolution, (PyramidalOrigin.Y + y) * Resolution);
-                }
-                else
-                    return new PointD(PyramidalOrigin.X + x, PyramidalOrigin.Y + y);
+                return new PointD((PyramidalOrigin.X + x) * Resolution, (PyramidalOrigin.Y + y) * Resolution);
             }
             else
                 return ToViewSpace(x, y);
@@ -3264,16 +3264,36 @@ namespace BioImager
         /// @return The method is returning the value of the variable "Scale"
         public void GoToImage()
         {
-            if (SelectedImage == null)
-                return;
-            double dx = SelectedImage.Volume.Width / 2;
-            double dy = SelectedImage.Volume.Height / 2;
-            Origin = new PointD(-(SelectedImage.Volume.Location.X + dx), -(SelectedImage.Volume.Location.Y + dy));
-            double wx, wy;
-            wx = ViewWidth / ToScreenScaleW(SelectedImage.Volume.Width);
-            wy = ViewHeight / ToScreenScaleH(SelectedImage.Volume.Height);
-            Scale = new SizeF((float)wy, (float)wy);
-            UpdateView();
+            GoToImage(0);
+        }
+        public PointD PyramidalOriginTransformed
+        {
+            get { return new PointD(PyramidalOrigin.X * Resolution, PyramidalOrigin.Y * Resolution); }
+            set { PyramidalOrigin = new PointD(value.X / Resolution, value.Y / Resolution); }
+        }
+        PointD mouseDownInt = new PointD(0, 0);
+        PointD mouseMoveInt = new PointD(0, 0);
+        PointD mouseMove = new PointD(0, 0);
+        /* A property that returns the value of the mouseDownInt variable. */
+        public PointD MouseDownInt
+        {
+            get { return mouseDownInt; }
+            set { mouseDownInt = value; }
+        }
+        public PointD MouseMoveInt
+        {
+            get { return mouseMoveInt; }
+            set { mouseMoveInt = value; }
+        }
+        public PointD MouseDown
+        {
+            get { return mouseDown; }
+            set { mouseDown = value; }
+        }
+        public PointD MouseMove
+        {
+            get { return mouseMove; }
+            set { mouseMove = value; }
         }
         /// It takes an image index and centers the image in the viewport
         /// 
@@ -3657,28 +3677,10 @@ namespace BioImager
             {
                 openSlide = false;
                 _slideBase = SelectedImage.slideBase;
-                if (MacroResolution.HasValue)
-                {
-                    int lev = MacroResolution.Value - 2;
-                    Resolution = _slideBase.Schema.Resolutions[lev].UnitsPerPixel;
-                }
-                else
-                {
-                    Resolution = _slideBase.Schema.Resolutions[0].UnitsPerPixel;
-                }
             }
             else
             {
                 openSlide = true;
-                if (MacroResolution.HasValue)
-                {
-                    int lev = MacroResolution.Value - 3;
-                    Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel;
-                }
-                else
-                {
-                    Resolution = _openSlideBase.Schema.Resolutions[0].UnitsPerPixel;
-                }
             }
         }
 
