@@ -1359,7 +1359,7 @@ namespace BioImager
                         dBitmaps[bi] = null;
                     }
                     Bitmap bf = new Bitmap("", bitmap, new ZCT(), 0);
-                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, bf);
+                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, (bf));
                 }
                 else
                     Bitmaps.Add(bitmap);
@@ -2013,7 +2013,7 @@ namespace BioImager
             ZCT cor = GetCoordinate();
             foreach (BioImage bi in Images)
             {
-                if (!IsLayerEnabled(bi.PhysicalSizeX) && !bi.isPyramidal)
+                if (!IsLayerEnabled(bi.PhysicalSizeX))
                     continue;
                 foreach (ROI an in bi.Annotations)
                 {
@@ -2335,7 +2335,7 @@ namespace BioImager
                 return;
             }
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
-            tools.ToolMove(p, e);
+            tools.ToolMove(p, e.Button);
             mouseMove = p;
             MouseMoveInt = new PointD(e.X, e.Y);
             PointD ip = SelectedImage.ToImageSpace(p);
@@ -2482,7 +2482,7 @@ namespace BioImager
             mouseUp = p;
             down = false;
             up = true;
-            tools.ToolUp(p, e);
+            tools.ToolUp(p, e.Button);
         }
         /// The function is called when the mouse is pressed down on the picturebox
         /// 
@@ -2633,7 +2633,7 @@ namespace BioImager
                 }
             }
             UpdateStatus();
-            tools.ToolDown(mouseDown, e);
+            tools.ToolDown(mouseDown, e.Button);
         }
         /// > If the user double clicks on the picture box, then the selected image is set to the image
         /// that the user double clicked on
@@ -2648,7 +2648,7 @@ namespace BioImager
                 return;
             App.viewer = this;
             PointD p = ToViewSpace(e.Location.X, e.Location.Y);
-            tools.ToolDown(p, e);
+            tools.ToolDown(p, e.Button);
             if (e.Button != MouseButtons.XButton1 && e.Button != MouseButtons.XButton2)
                 Origin = new PointD(-p.X, -p.Y);
         }
@@ -2875,14 +2875,9 @@ namespace BioImager
         {
             if (SelectedImage.isPyramidal)
             {
-                if (openSlide)
-                {
-                    double ddx = x / Resolution;
-                    double ddy = y / Resolution;
-                    return new PointD(ddx, ddy);
-                }
-                else
-                    return new PointD(PyramidalOrigin.X + x, PyramidalOrigin.Y + y);
+                double ddx = x / Resolution;
+                double ddy = y / Resolution;
+                return new PointD(ddx, ddy);
             }
             double dx, dy;
             if (HardwareAcceleration)
@@ -2904,7 +2899,7 @@ namespace BioImager
         /// @return The return value is the size of the object in pixels.
         private double ToViewSizeW(double d)
         {
-            if (openSlide)
+            if (SelectedImage.isPyramidal)
             {
                 return d / Resolution;
             }
@@ -2918,7 +2913,7 @@ namespace BioImager
         /// @return The return value is the size of the object in pixels.
         public double ToViewSizeH(double d)
         {
-            if (openSlide)
+            if (SelectedImage.isPyramidal)
             {
                 return d / Resolution;
             }
@@ -3069,15 +3064,10 @@ namespace BioImager
             }
             if (SelectedImage.isPyramidal)
             {
-                if (openSlide)
-                {
-                    PointD d = ToViewSpace(x, y);
-                    double dw = ToViewSizeW(w);
-                    double dh = ToViewSizeH(h);
-                    return new System.Drawing.RectangleF((float)(d.X - PyramidalOrigin.X), (float)(d.Y - PyramidalOrigin.Y), (float)dw, (float)dh);
-                }
-                else
-                    return new System.Drawing.RectangleF((float)(x - PyramidalOrigin.X), (float)(y - PyramidalOrigin.Y), (float)w, (float)h);
+                PointD d = ToViewSpace(x, y);
+                double dw = ToViewSizeW(w);
+                double dh = ToViewSizeH(h);
+                return new System.Drawing.RectangleF((float)(d.X - PyramidalOrigin.X), (float)(d.Y - PyramidalOrigin.Y), (float)dw, (float)dh);
             }
             else
             {

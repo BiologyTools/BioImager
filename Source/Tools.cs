@@ -8,16 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BioImager;
 using System.IO;
 using AForge.Imaging.Filters;
 using AForge.Imaging;
 using AForge.Math.Geometry;
 using AForge;
 using BioImager.Graphics;
+using BioImager;
 using Rectangle = AForge.Rectangle;
-using RectangleF = AForge.RectangleF;
-using RectangleD = AForge.RectangleD;
+using Bitmap = AForge.Bitmap;
 
 namespace BioImager
 {
@@ -31,8 +30,8 @@ namespace BioImager
         private static ColorS drawColor = new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue);
         private static ColorS eraseColor = new ColorS(0, 0, 0);
         private static int width = 1;
-        
-        public static Rectangle selectionRectangle;
+
+        public static System.Drawing.Rectangle selectionRectangle;
         public static Hashtable tools = new Hashtable();
         private AbstractFloodFiller floodFiller = null;
         /* It's a class that contains a list of tools, and each tool has a type, a rectangle, a script,
@@ -88,9 +87,9 @@ namespace BioImager
                 get { return rect; }
                 set { rect = value; }
             }
-            public RectangleF RectangleF
+            public AForge.RectangleF RectangleF
             {
-                get { return new RectangleF((float)rect.X, (float)rect.Y, (float)rect.W, (float)rect.H); }
+                get { return new AForge.RectangleF((float)rect.X, (float)rect.Y, (float)rect.W, (float)rect.H); }
             }
             public string script;
             public Type type;
@@ -200,9 +199,9 @@ namespace BioImager
         {
             foreach (Control item in this.Controls)
             {
-                if(item.Tag != null)
-                if(item.Tag.ToString() == "tool")
-                item.BackColor = System.Drawing.Color.White;
+                if (item.Tag != null)
+                    if (item.Tag.ToString() == "tool")
+                        item.BackColor = System.Drawing.Color.White;
             }
         }
         /// It updates the GUI
@@ -210,7 +209,7 @@ namespace BioImager
         {
             if (ImageView.SelectedImage != null)
             {
-                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R/ushort.MaxValue, DrawColor.G / ushort.MaxValue, DrawColor.B / ushort.MaxValue);
+                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R / ushort.MaxValue, DrawColor.G / ushort.MaxValue, DrawColor.B / ushort.MaxValue);
                 color2Box.BackColor = System.Drawing.Color.FromArgb(EraseColor.R / ushort.MaxValue, EraseColor.G / ushort.MaxValue, EraseColor.B / ushort.MaxValue);
             }
             widthBox.Value = width;
@@ -218,43 +217,41 @@ namespace BioImager
         public static float selectBoxSize = ROI.selectBoxSize;
         ROI anno = new ROI();
         /// The function is called when the user clicks the mouse button. 
-       /// 
-       /// The function checks if the user is using the line, polygon, freeform, rectangle, ellipse,
-       /// delete, or text tool. 
-       /// 
-       /// If the user is using the line tool, the function creates a new ROI object and adds it to the
-       /// image's annotations. 
-       /// 
-       /// If the user is using the polygon tool, the function creates a new ROI object and adds it to
-       /// the image's annotations. 
-       /// 
-       /// If the user is using the freeform tool, the function creates a new ROI object and adds it to
-       /// the image's annotations. 
-       /// 
-       /// If the user is using the rectangle tool, the function creates a new ROI object and adds it to
-       /// the image's annotations. 
-       /// 
-       /// If the user is using the ellipse tool, the function creates a new ROI object and adds it to
-       /// the image's annotations. 
-       /// 
-       /// If
-       /// 
-       /// @param PointD A point with double precision
-       /// @param MouseButtons A set of values that indicate which mouse button was pressed.
-       /// 
-       /// @return The return type is void.
-        public void ToolDown(PointD e, MouseEventArgs args)
+        /// 
+        /// The function checks if the user is using the line, polygon, freeform, rectangle, ellipse,
+        /// delete, or text tool. 
+        /// 
+        /// If the user is using the line tool, the function creates a new ROI object and adds it to the
+        /// image's annotations. 
+        /// 
+        /// If the user is using the polygon tool, the function creates a new ROI object and adds it to
+        /// the image's annotations. 
+        /// 
+        /// If the user is using the freeform tool, the function creates a new ROI object and adds it to
+        /// the image's annotations. 
+        /// 
+        /// If the user is using the rectangle tool, the function creates a new ROI object and adds it to
+        /// the image's annotations. 
+        /// 
+        /// If the user is using the ellipse tool, the function creates a new ROI object and adds it to
+        /// the image's annotations. 
+        /// 
+        /// If
+        /// 
+        /// @param PointD A point with double precision
+        /// @param MouseButtons A set of values that indicate which mouse button was pressed.
+        /// 
+        /// @return The return type is void.
+        public void ToolDown(PointD e, MouseButtons buts)
         {
-            MouseButtons buts = args.Button;
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
-            AForge.PointD p;
+            PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
                 p = ImageView.SelectedImage.ToImageSpace(e);
-            Plugins.MouseDown(App.viewer, p, args);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
@@ -327,12 +324,12 @@ namespace BioImager
                 ImageView.SelectedImage.Annotations.Add(anno);
             }
             else
-            if(currentTool.type == Tool.Type.delete && buts == MouseButtons.Left)
+            if (currentTool.type == Tool.Type.delete && buts == MouseButtons.Left)
             {
                 for (int i = 0; i < ImageView.SelectedImage.Annotations.Count; i++)
                 {
                     ROI an = ImageView.SelectedImage.Annotations[i];
-                    if (an.BoundingBox.IntersectsWith(e.X,e.Y))
+                    if (an.BoundingBox.IntersectsWith(e.X, e.Y))
                     {
                         if (an.selectedPoints.Count == 0)
                         {
@@ -370,9 +367,8 @@ namespace BioImager
                 TextInput ti = new TextInput("");
                 if (ti.ShowDialog() != DialogResult.OK)
                     return;
-                an.family = ti.font.FontFamily.ToString();
-                an.fontSize = ti.font.Size;
-                an.strokeColor = System.Drawing.Color.FromArgb(ti.color.R,ti.color.G,ti.color.B);
+                an.font = new Font(ti.font.FontFamily, ti.font.Size);
+                an.strokeColor = ti.color;
                 an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
@@ -384,18 +380,17 @@ namespace BioImager
                 panPanel.BackColor = System.Drawing.Color.LightGray;
                 Cursor.Current = Cursors.Hand;
             }
-            
+
             UpdateOverlay();
-        }        
+        }
         /// The function ToolUp() is called when the mouse button is released
         /// 
         /// @param PointD X,Y
         /// @param MouseButtons Left, Right, Middle, XButton1, XButton2
         /// 
         /// @return a RectangleF.
-        public void ToolUp(PointD e, MouseEventArgs args)
+        public void ToolUp(PointD e, MouseButtons buts)
         {
-            MouseButtons buts = args.Button;
             PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
@@ -404,7 +399,6 @@ namespace BioImager
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
-            Plugins.MouseUp(App.viewer, p, args);
             if (currentTool.type == Tool.Type.point && buts == MouseButtons.Left)
             {
                 ROI an = new ROI();
@@ -478,7 +472,7 @@ namespace BioImager
                 Rectangle r = new Rectangle((int)ImageView.mouseDown.X, (int)ImageView.mouseDown.Y, (int)(ImageView.mouseUp.X - ImageView.mouseDown.X), (int)(ImageView.mouseUp.Y - ImageView.mouseDown.Y));
                 if (r.Width <= 2 || r.Height <= 2)
                     return;
-                AForge.Bitmap bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
+                Bitmap bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
                 Statistics[] sts = Statistics.FromBytes(bf);
                 Statistics st = sts[0];
                 Threshold th;
@@ -494,13 +488,13 @@ namespace BioImager
                     th = new Threshold((int)st.Median);
                 else
                     th = new Threshold(st.Min);
-                th.ApplyInPlace(bf);
+                th.ApplyInPlace((Bitmap)bf.Image);
                 Invert inv = new Invert();
-                AForge.Bitmap det;
+                Bitmap det;
                 if (bf.BitsPerPixel > 8)
-                    det = AForge.Imaging.Image.Convert16bppTo8bpp(bf);
+                    det = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bf.Image);
                 else
-                    det = bf;
+                    det = (Bitmap)bf.Image;
                 BlobCounter blobCounter = new BlobCounter();
                 blobCounter.ProcessImage(det);
                 Blob[] blobs = blobCounter.GetObjectsInformation();
@@ -545,50 +539,30 @@ namespace BioImager
             else
             if (Tools.currentTool.type == Tools.Tool.Type.dropper && buts == MouseButtons.Left)
             {
-                DrawColor = ImageView.SelectedBuffer.GetPixel((int)p.X,(int)p.Y);
+                DrawColor = ImageView.SelectedBuffer.GetPixel((int)p.X, (int)p.Y);
                 UpdateGUI();
             }
             UpdateOverlay();
         }
 
-        public void ToolMove(PointD e, MouseEventArgs args)
+        public void ToolMove(PointD e, MouseButtons buts)
         {
-            MouseButtons buts = args.Button;
             if (App.viewer == null)
                 return;
-            
+            Scripting.UpdateState(Scripting.State.GetMove(e, buts));
             if (Tools.currentTool.type == Tools.Tool.Type.pan && buts == MouseButtons.Left || buts == MouseButtons.Middle)
             {
-                if (ImageView.SelectedImage.isPyramidal)
-                {
-                    if (App.viewer.OpenSlide)
-                    {
-                        if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
-                        {
-                            App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
-                        }
-                    }
-                    else
-                    {
-                        if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
-                        {
-                            App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
-                        }
-                    }
-                }
                 PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                 App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
                 UpdateView();
             }
             if (ImageView.SelectedImage == null)
                 return;
-            AForge.PointD p;
+            PointD p;
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
                 p = ImageView.SelectedImage.ToImageSpace(e);
-            Scripting.UpdateState(Scripting.State.GetMove(p, buts));
-            Plugins.MouseMove(App.viewer, p, args);
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);
@@ -610,8 +584,9 @@ namespace BioImager
                     anno.AddPoint(new PointD(e.X, e.Y));
                 }
                 UpdateOverlay();
-            }else
-            
+            }
+            else
+
             if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle)
             {
                 if (anno.GetPointCount() == 4)
@@ -680,7 +655,7 @@ namespace BioImager
                             {
                                 an.closed = false;
                                 an.RemovePoints(an.selectedPoints.ToArray());
-                                
+
                             }
                         }
                     }
@@ -695,11 +670,11 @@ namespace BioImager
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, d.X, d.Y);
                 UpdateOverlay();
             }
-            
+
             if (buts == MouseButtons.Left && currentTool.type == Tool.Type.eraser)
             {
                 Graphics.Graphics g = Graphics.Graphics.FromImage(ImageView.SelectedBuffer);
-                Graphics.Pen pen = new Graphics.Pen(Tools.EraseColor, (int)Tools.StrokeWidth,ImageView.SelectedBuffer.BitsPerPixel);
+                Graphics.Pen pen = new Graphics.Pen(Tools.EraseColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel);
                 g.FillEllipse(new Rectangle((int)p.X, (int)p.Y, (int)width, (int)Tools.StrokeWidth), pen.color);
                 pen.Dispose();
                 App.viewer.UpdateImage();
@@ -961,7 +936,7 @@ namespace BioImager
             UpdateSelected();
             bucketPanel.BackColor = System.Drawing.Color.LightGray;
             Cursor.Current = Cursors.Arrow;
-            FloodTool pt = new FloodTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel),currentTool.tolerance, ImageView.SelectedBuffer.BitsPerPixel);
+            FloodTool pt = new FloodTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel), currentTool.tolerance, ImageView.SelectedBuffer.BitsPerPixel);
             if (pt.ShowDialog() != DialogResult.OK)
                 return;
             Tools.StrokeWidth = pt.Pen.width;
@@ -1025,12 +1000,12 @@ namespace BioImager
             width = (int)widthBox.Value;
         }
 
-       /// When the user clicks on the eraser panel, the current tool is set to the eraser tool, the
-       /// selected tool is updated, the eraser panel's background color is set to light gray, and the
-       /// cursor is set to an arrow
-       /// 
-       /// @param sender The object that raised the event.
-       /// @param MouseEventArgs The event data generated by a mouse event.
+        /// When the user clicks on the eraser panel, the current tool is set to the eraser tool, the
+        /// selected tool is updated, the eraser panel's background color is set to light gray, and the
+        /// cursor is set to an arrow
+        /// 
+        /// @param sender The object that raised the event.
+        /// @param MouseEventArgs The event data generated by a mouse event.
         private void eraserPanel_MouseClick(object sender, MouseEventArgs e)
         {
             currentTool = GetTool(Tool.Type.eraser);
