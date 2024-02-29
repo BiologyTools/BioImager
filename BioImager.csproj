@@ -14,27 +14,30 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>3.8.0</Version>
+    <Version>3.8.1</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>New SlideBase and SlideImage based on OpenSlide implimentation for Bioformats type images. As well as dependency updates.</PackageReleaseNotes>
+    <PackageReleaseNotes>New SlideBase and SlideImage based on OpenSlide implimentation for Bioformats type images. As well as dependency updates. As well as Nuget package fix.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="bioformats_package.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="bioformats_package.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\lib\net6.0-windows7.0</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="macro-commands.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="macro-functions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="PythonMicroscope\microscope\abc.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
