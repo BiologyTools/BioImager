@@ -5520,7 +5520,7 @@ namespace BioImager
             }
             SaveOMESeries(bm,f,planes);
         }
-        private static int GetBands(PixelFormat format)
+        public static int GetBands(PixelFormat format)
         {
             switch (format)
             {
@@ -8129,9 +8129,10 @@ namespace BioImager
             {
                 Buffers[i].Dispose();
             }
-            for (int i = 0; i < Channels.Count; i++)
+            for (int i = 0; i < Annotations.Count; i++)
             {
-                Channels[i].Dispose();
+                if (Annotations[i].roiMask!=null)
+                Annotations[i].roiMask.Dispose();
             }
         }
         /// This function returns the filename of the object, and the location of the object in the 3D

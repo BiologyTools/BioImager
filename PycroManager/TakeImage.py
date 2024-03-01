@@ -9,6 +9,5 @@ print(core.get_image_width())
 print(core.get_image_height())
 print(core.get_image_bit_depth())
 print(core.get_bytes_per_pixel())
-print(core.get_exposure())
 print(ch)
 print("OK");

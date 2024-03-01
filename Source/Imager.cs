@@ -161,7 +161,7 @@ namespace BioImager
                         Application.Exit();
                     Settings.Default.AppPath = openExeFileDialog.FileName;
                 }
-                string pn = Path.GetFileNameWithoutExtension(AppPath);
+                string pn = Path.GetFileName(AppPath);
                 Process[] prs = Process.GetProcessesByName(pn);
                 if (prs.Length == 0)
                 {

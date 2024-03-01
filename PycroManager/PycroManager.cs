@@ -160,7 +160,6 @@ namespace BioImager
                 depth = int.Parse(sts[4]);
                 bits = int.Parse(sts[6]);
                 channels = int.Parse(sts[8]);
-
                 PixelFormat format = PixelFormat.Format8bppIndexed;
                 if (depth > 8 && bits == 2)
                     format = PixelFormat.Format16bppGrayScale;
@@ -174,7 +173,7 @@ namespace BioImager
                 for (int i = 0; i < channels; i++)
                 {
                     //Each channel is saved as a seperate file
-                    bm[i] = new AForge.Bitmap(width,height,format,File.ReadAllBytes(Application.StartupPath + "/PycroManager/" + fil + i),new ZCT(), "");
+                    bm[i] = new AForge.Bitmap(width,height,format,File.ReadAllBytes(Application.StartupPath + "PycroManager/" + fil + i),new ZCT(), "");
                     //We delete the temporary file.
                     File.Delete(file + i);
                 }
@@ -295,7 +294,8 @@ namespace BioImager
 
             public static Conf GetObjective(int index)
             {
-                return GetConfigs("ConfigGroup", "Objective")[index];
+                Conf[] cfs = GetConfigs("ConfigGroup", "Objective");
+                return cfs[index];
             }
             public static bool SetPosition(int i)
             {

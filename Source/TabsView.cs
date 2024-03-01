@@ -82,7 +82,7 @@ namespace BioImager
                     }
                     else
                     {
-                        BioImage.OpenFile(arg[i],true);
+                        BioImage.OpenFile(arg[i], true);
                     }
                 }
             }
@@ -160,7 +160,7 @@ namespace BioImager
             if (m.Text.EndsWith(".ijm") || m.Text.EndsWith(".txt") && !m.Text.EndsWith(".cs"))
             {
                 string ma = File.ReadAllText(m.Text);
-                ImageJ.RunOnImage(ma, BioConsole.headless, BioConsole.onTab, BioConsole.useBioformats,BioConsole.newTab);
+                ImageJ.RunOnImage(ma, BioConsole.headless, BioConsole.onTab, BioConsole.useBioformats, BioConsole.newTab);
             }
             else
                 Scripting.RunByName(m.Text);
@@ -256,7 +256,7 @@ namespace BioImager
                 return;
             foreach (string item in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenFile(item,0,false,false);
+                BioImage im = BioImage.OpenFile(item, 0, false, false);
                 if (im == null)
                     return;
                 AddTab(im);
@@ -804,7 +804,7 @@ namespace BioImager
                 return;
             foreach (string item in openFilesDialog.FileNames)
             {
-                BioImage im = BioImage.OpenOME(item, 0, false, false, false, 0,0,0,0);
+                BioImage im = BioImage.OpenOME(item, 0, false, false, false, 0, 0, 0, 0);
                 if (im == null)
                     return;
                 AddTab(im);
@@ -881,7 +881,7 @@ namespace BioImager
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             if (!BioImage.isOME(ts.Text))
             {
-                BioImage[] bs = BioImage.OpenSeries(ts.Text,true);
+                BioImage[] bs = BioImage.OpenSeries(ts.Text, true);
                 for (int i = 0; i < bs.Length; i++)
                 {
                     if (i == 0)
@@ -892,7 +892,7 @@ namespace BioImager
             }
             else
             {
-                BioImage[] bs = BioImage.OpenOMESeries(ts.Text,true,true);
+                BioImage[] bs = BioImage.OpenOMESeries(ts.Text, true, true);
             }
             App.viewer.GoToImage();
             SaveProperties();
@@ -1018,7 +1018,7 @@ namespace BioImager
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i],0,true,true);
+                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i], 0, true, true);
                 }
                 else
                 {
@@ -1043,7 +1043,7 @@ namespace BioImager
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    BioImage b = BioImage.OpenOME(openFilesDialog.FileNames[i], 0, true, true, false, 0,0,0,0);
+                    BioImage b = BioImage.OpenOME(openFilesDialog.FileNames[i], 0, true, true, false, 0, 0, 0, 0);
                 }
                 else
                 {
@@ -1064,7 +1064,7 @@ namespace BioImager
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
-            BioImage[] bs = BioImage.OpenOMESeries(openFilesDialog.FileName,false,true);
+            BioImage[] bs = BioImage.OpenOMESeries(openFilesDialog.FileName, false, true);
             if (bs == null)
                 return;
             AddTab(bs[0]);
@@ -1156,7 +1156,7 @@ namespace BioImager
             BioImage[] bms = null;
             foreach (string item in openFilesDialog.FileNames)
             {
-                bms = BioImage.OpenSeries(openFilesDialog.FileName,false);
+                bms = BioImage.OpenSeries(openFilesDialog.FileName, false);
                 for (int i = 0; i < bms.Length; i++)
                 {
                     if (i == 0)
@@ -1447,6 +1447,11 @@ namespace BioImager
         private void cellImagerToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             App.cellImager.Show();
+        }
+
+        private void slideImagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.slideImager.Show();
         }
     }
 }

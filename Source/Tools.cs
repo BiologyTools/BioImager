@@ -248,6 +248,7 @@ namespace BioImager
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
             PointD p;
+            if(ImageView.SelectedImage!=null)
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else
@@ -391,7 +392,8 @@ namespace BioImager
         /// @return a RectangleF.
         public void ToolUp(PointD e, MouseButtons buts)
         {
-            PointD p;
+            PointD p = new PointD();
+            if(ImageView.SelectedImage != null)
             if (App.viewer.HardwareAcceleration)
                 p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
             else

@@ -42,7 +42,7 @@ namespace BioImager
                 comboBox.Items.Add(item);
             }
         }
-        
+
         private void maxWidthBar_Scroll(object sender, EventArgs e)
         {
             maxWidthLabel.Text = "Max Width:" + maxWidthBar.Value;
@@ -68,7 +68,7 @@ namespace BioImager
             thresholdLabel.Text = "Threshold:" + thresholdBar.Value;
         }
 
-        
+
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -78,9 +78,9 @@ namespace BioImager
 
         private void detectBut_Click(object sender, EventArgs e)
         {
-            b = Microscope.TakeImage(false,false,false);
+            b = Microscope.TakeImage(false, false, false);
             bitmap = new System.Drawing.Bitmap(b.SizeX, b.SizeY);
-            
+
             Statistics[] sts = Statistics.FromBytes(b.Buffers[0]);
             Statistics st = sts[0];
             Threshold th;
@@ -90,10 +90,10 @@ namespace BioImager
             }
             else
                 th = new Threshold((int)(st.Median));
-            AForge.Bitmap bf = b.GetBitmap(0, (int)chanBox.Value-1, 0);
+            AForge.Bitmap bf = b.GetBitmap(0, (int)chanBox.Value - 1, 0);
             if (bf.RGBChannelsCount > 1)
             {
-                ExtractChannel ch = new ExtractChannel((short)(rgbBox.Value-1));
+                ExtractChannel ch = new ExtractChannel((short)(rgbBox.Value - 1));
                 bf = ch.Apply(bf);
             }
             th.ApplyInPlace(bf);
@@ -140,7 +140,7 @@ namespace BioImager
                 PointD loc = new PointD(b.StageSizeX + (blob.Rectangle.X * b.PhysicalSizeX), b.StageSizeY + (blob.Rectangle.Y * b.PhysicalSizeY));
                 Microscope.Objectives.SetPosition(objectivesBox.SelectedIndex);
                 Microscope.SetPosition(loc);
-                if(tileBox.Checked)
+                if (tileBox.Checked)
                 {
                     for (int y = 0; y < tileYBox.Value; y++)
                     {
@@ -149,7 +149,7 @@ namespace BioImager
                             if (comboBox.SelectedIndex != -1)
                                 ((Scripting.Script)comboBox.SelectedItem).Run();
                             else
-                            images.AddRange(Microscope.TakeTiles((int)tileXBox.Value,(int)tileYBox.Value));
+                                images.AddRange(Microscope.TakeTiles((int)tileXBox.Value, (int)tileYBox.Value));
                         }
                     }
                 }
@@ -158,7 +158,7 @@ namespace BioImager
                     if (comboBox.SelectedIndex != -1)
                         ((Scripting.Script)comboBox.SelectedItem).Run();
                     else
-                        images.Add(Microscope.TakeImage(false,false,false));
+                        images.Add(Microscope.TakeImage(false, false, false));
                 }
             }
             Microscope.Objectives.SetPosition(o);
@@ -175,7 +175,7 @@ namespace BioImager
 
         private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
-            if(bitmap==null)
+            if (bitmap == null)
                 return;
             System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap);
             int i = 0;
@@ -192,7 +192,7 @@ namespace BioImager
             bb.Dispose();
             r.Dispose();
             g.Dispose();
-            e.Graphics.DrawImage(bitmap, 0, 0,pictureBox.Width,pictureBox.Height);
+            e.Graphics.DrawImage(bitmap, 0, 0, pictureBox.Width, pictureBox.Height);
         }
 
         private void imageAllBut_Click(object sender, EventArgs e)
@@ -205,8 +205,8 @@ namespace BioImager
             List<Blob> blobs = new List<Blob>();
             foreach (ListViewItem blob in listView.Items)
             {
-                if(blob.Selected)
-                blobs.Add((Blob)blob.Tag);
+                if (blob.Selected)
+                    blobs.Add((Blob)blob.Tag);
             }
             Image(blobs.ToArray());
         }
@@ -214,6 +214,12 @@ namespace BioImager
         private void listView_SelectedIndexChanged(object sender, EventArgs e)
         {
             pictureBox.Invalidate();
+        }
+
+        private void CellImager_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
         }
     }
 }

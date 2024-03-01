@@ -252,17 +252,23 @@ namespace BioImager
         /// @return The method is returning the value of the zBar.Value, cBar.Value, and tBar.Value.
         public void SetCoordinate(int z, int c, int t)
         {
-            if (SelectedImage == null)
-                return;
-            if (z >= SelectedImage.SizeZ)
-                zBar.Value = zBar.Maximum;
-            if (c >= SelectedImage.SizeC)
-                cBar.Value = cBar.Maximum;
-            if (t >= SelectedImage.SizeT)
-                tBar.Value = tBar.Maximum;
-            zBar.Value = z;
-            cBar.Value = c;
-            tBar.Value = t;
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                App.viewer.Invoke((MethodInvoker)delegate
+                {
+                    if (SelectedImage == null)
+                        return;
+                    if (z >= SelectedImage.SizeZ)
+                        zBar.Value = zBar.Maximum;
+                    if (c >= SelectedImage.SizeC)
+                        cBar.Value = cBar.Maximum;
+                    if (t >= SelectedImage.SizeT)
+                        tBar.Value = tBar.Maximum;
+                    zBar.Value = z;
+                    cBar.Value = c;
+                    tBar.Value = t;
+                });
+            });
         }
         /// It returns the coordinate of the selected image
         /// 
@@ -1067,8 +1073,6 @@ namespace BioImager
                     if (x == selectedIndex)
                         dx.RenderTarget2D.DrawRectangle(ToRawRectF(r.X, r.Y, r.Width, r.Height), blue);
                 }
-                SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
-
                 bool bounds = showBounds;
                 bool labels = showText;
                 foreach (BioImage bi in Images)
@@ -1700,8 +1704,7 @@ namespace BioImager
         private void ImageView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             Plugins.ScrollEvent(sender, e);
-            if (SelectedImage == null)
-                return;
+            if(SelectedImage!= null)
             if (SelectedImage.isPyramidal)
             {
                 if (Ctrl)
@@ -2330,10 +2333,6 @@ namespace BioImager
         /// @return The point in the image space.
         private void rgbPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-            {
-                return;
-            }
             PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             tools.ToolMove(p, e.Button);
             mouseMove = p;
@@ -2462,10 +2461,15 @@ namespace BioImager
         /// @return The mouse location in the picture box.
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
+            mouseUpButtons = e.Button;
+            mouseDownButtons = MouseButtons.None;
+            mouseUp = p;
+            down = false;
+            up = true;
             if (SelectedImage == null)
                 return;
             App.viewer = this;
-            PointD p = ImageToViewSpace(e.Location.X, e.Location.Y);
             if (e.Button == MouseButtons.Middle)
             {
                 PointD pd = new PointD(p.X - mouseDown.X, p.Y - mouseDown.Y);
@@ -2476,12 +2480,6 @@ namespace BioImager
                     PyramidalOrigin = new PointD(PyramidalOrigin.X - pf.X, PyramidalOrigin.Y - pf.Y);
                 }
             }
-            
-            mouseUpButtons = e.Button;
-            mouseDownButtons = MouseButtons.None;
-            mouseUp = p;
-            down = false;
-            up = true;
             tools.ToolUp(p, e.Button);
         }
         /// The function is called when the mouse is pressed down on the picturebox
@@ -2492,8 +2490,6 @@ namespace BioImager
         /// @return The mouseDownButtons is being returned.
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (SelectedImage == null)
-                return;
             App.viewer = this;
             MouseDownInt = new PointD(e.X, e.Y);
             mouseDownButtons = e.Button;
@@ -2505,6 +2501,8 @@ namespace BioImager
             down = true;
             up = false;
             PointD ip;
+            if (SelectedImage == null)
+                return;
             if (HardwareAcceleration)
                 ip = SelectedImage.ToImageSpace(new PointD(SelectedImage.Volume.Width - p.X, SelectedImage.Volume.Height - p.Y));
             else
@@ -2839,6 +2837,8 @@ namespace BioImager
         /// @return The point in the image space that corresponds to the point in the view space.
         public PointD ImageToViewSpace(double x, double y)
         {
+            if(SelectedImage==null)
+                return ToViewSpace(x, y);
             if (SelectedImage.isPyramidal)
             {
                 return new PointD((PyramidalOrigin.X + x) * Resolution, (PyramidalOrigin.Y + y) * Resolution);
@@ -2873,6 +2873,7 @@ namespace BioImager
         /// @return A PointD object.
         public PointD ToViewSpace(double x, double y)
         {
+            if(SelectedImage!=null)
             if (SelectedImage.isPyramidal)
             {
                 double ddx = x / Resolution;
@@ -2899,6 +2900,7 @@ namespace BioImager
         /// @return The return value is the size of the object in pixels.
         private double ToViewSizeW(double d)
         {
+            if(SelectedImage!=null)
             if (SelectedImage.isPyramidal)
             {
                 return d / Resolution;
@@ -2913,7 +2915,8 @@ namespace BioImager
         /// @return The return value is the size of the object in pixels.
         public double ToViewSizeH(double d)
         {
-            if (SelectedImage.isPyramidal)
+            if (SelectedImage != null)
+                if (SelectedImage.isPyramidal)
             {
                 return d / Resolution;
             }

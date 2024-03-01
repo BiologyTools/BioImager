@@ -27,6 +27,7 @@ namespace BioImager
         public static Automation automation = null;
         public static MicroscopeSetup setup = null;
         public static CellImager cellImager = null;
+        public static SlideImager slideImager = null;
         public static BioConsole console = null;
         public static Light lightTool = null;
         public static Library lib = null;
@@ -73,6 +74,7 @@ namespace BioImager
             seriesTool = new Series();
             recordings = new Recordings();
             automation = new Automation();
+            slideImager = new SlideImager();
             if (!Properties.Settings.Default.PycroManager && !Properties.Settings.Default.PMicroscope)
             {
                 lightTool = new Light();

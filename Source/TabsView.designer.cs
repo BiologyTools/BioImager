@@ -116,10 +116,11 @@ namespace BioImager
             setupToolStripMenuItem = new ToolStripMenuItem();
             commandToolStripMenuItem = new ToolStripMenuItem();
             recentToolStripMenuItem = new ToolStripMenuItem();
+            runToolStripMenuItem1 = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             openImageJROI = new OpenFileDialog();
             saveImageJROI = new SaveFileDialog();
-            runToolStripMenuItem1 = new ToolStripMenuItem();
+            slideImagerToolStripMenuItem = new ToolStripMenuItem();
             panel.SuspendLayout();
             tabContextMenuStrip.SuspendLayout();
             menuStrip.SuspendLayout();
@@ -667,7 +668,7 @@ namespace BioImager
             // 
             // microscopeToolStripMenuItem
             // 
-            microscopeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { lightToolToolStripMenuItem, stageToolToolStripMenuItem, imagerToolToolStripMenuItem, cellImagerToolStripMenuItem, setupToolStripMenuItem });
+            microscopeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { lightToolToolStripMenuItem, stageToolToolStripMenuItem, imagerToolToolStripMenuItem, cellImagerToolStripMenuItem, setupToolStripMenuItem, slideImagerToolStripMenuItem });
             microscopeToolStripMenuItem.Name = "microscopeToolStripMenuItem";
             microscopeToolStripMenuItem.Size = new Size(81, 20);
             microscopeToolStripMenuItem.Text = "Microscope";
@@ -675,35 +676,35 @@ namespace BioImager
             // lightToolToolStripMenuItem
             // 
             lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
-            lightToolToolStripMenuItem.Size = new Size(136, 22);
+            lightToolToolStripMenuItem.Size = new Size(180, 22);
             lightToolToolStripMenuItem.Text = "Light Path";
             lightToolToolStripMenuItem.Click += lightToolToolStripMenuItem_Click;
             // 
             // stageToolToolStripMenuItem
             // 
             stageToolToolStripMenuItem.Name = "stageToolToolStripMenuItem";
-            stageToolToolStripMenuItem.Size = new Size(136, 22);
+            stageToolToolStripMenuItem.Size = new Size(180, 22);
             stageToolToolStripMenuItem.Text = "Stage Tool";
             stageToolToolStripMenuItem.Click += stageToolToolStripMenuItem_Click;
             // 
             // imagerToolToolStripMenuItem
             // 
             imagerToolToolStripMenuItem.Name = "imagerToolToolStripMenuItem";
-            imagerToolToolStripMenuItem.Size = new Size(136, 22);
+            imagerToolToolStripMenuItem.Size = new Size(180, 22);
             imagerToolToolStripMenuItem.Text = "Imager Tool";
             imagerToolToolStripMenuItem.Click += imagerToolStripMenuItem_Click;
             // 
             // cellImagerToolStripMenuItem
             // 
             cellImagerToolStripMenuItem.Name = "cellImagerToolStripMenuItem";
-            cellImagerToolStripMenuItem.Size = new Size(136, 22);
+            cellImagerToolStripMenuItem.Size = new Size(180, 22);
             cellImagerToolStripMenuItem.Text = "Cell Imager";
             cellImagerToolStripMenuItem.Click += cellImagerToolStripMenuItem_Click_1;
             // 
             // setupToolStripMenuItem
             // 
             setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-            setupToolStripMenuItem.Size = new Size(136, 22);
+            setupToolStripMenuItem.Size = new Size(180, 22);
             setupToolStripMenuItem.Text = "Setup";
             setupToolStripMenuItem.Click += setupToolStripMenuItem_Click;
             // 
@@ -718,6 +719,12 @@ namespace BioImager
             recentToolStripMenuItem.Name = "recentToolStripMenuItem";
             recentToolStripMenuItem.Size = new Size(55, 20);
             recentToolStripMenuItem.Text = "Recent";
+            // 
+            // runToolStripMenuItem1
+            // 
+            runToolStripMenuItem1.Name = "runToolStripMenuItem1";
+            runToolStripMenuItem1.Size = new Size(40, 20);
+            runToolStripMenuItem1.Text = "Run";
             // 
             // aboutToolStripMenuItem
             // 
@@ -738,11 +745,12 @@ namespace BioImager
             saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             saveImageJROI.Title = "Save ROIs to CSV";
             // 
-            // runToolStripMenuItem1
+            // slideImagerToolStripMenuItem
             // 
-            runToolStripMenuItem1.Name = "runToolStripMenuItem1";
-            runToolStripMenuItem1.Size = new Size(40, 20);
-            runToolStripMenuItem1.Text = "Run";
+            slideImagerToolStripMenuItem.Name = "slideImagerToolStripMenuItem";
+            slideImagerToolStripMenuItem.Size = new Size(180, 22);
+            slideImagerToolStripMenuItem.Text = "Slide Imager";
+            slideImagerToolStripMenuItem.Click += slideImagerToolStripMenuItem_Click;
             // 
             // TabsView
             // 
@@ -862,5 +870,6 @@ namespace BioImager
         private ToolStripMenuItem commandToolStripMenuItem;
         private ToolStripMenuItem recentToolStripMenuItem;
         private ToolStripMenuItem runToolStripMenuItem1;
+        private ToolStripMenuItem slideImagerToolStripMenuItem;
     }
 }

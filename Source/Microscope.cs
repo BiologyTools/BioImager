@@ -861,7 +861,7 @@ namespace BioImager
                     fl.Filter = "Config Files (*.cfg)|*.cfg";
                     fl.InitialDirectory = Properties.Settings.Default.AppPath;
                     MessageBox.Show("Micro-Manager current configuration file not set please select the current configuration.");
-                    fl.Title = "Set Current Config File (Shown in MicroManager GUI))";
+                    fl.Title = "Set Current Config File (Shown in MicroManager GUI)";
                     if (fl.ShowDialog() != DialogResult.OK)
                         Application.Exit();
                     Properties.Settings.Default.MMConfig = fl.FileName;
@@ -1339,7 +1339,10 @@ namespace BioImager
                     bi.Buffers.AddRange(bm.Buffers);
                 }
                 currentImage = bm;
-                return bi;
+                if (bi == null)
+                    return bm;
+                else
+                    return bi;
             }
             else
             {
