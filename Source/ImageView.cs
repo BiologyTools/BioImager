@@ -2337,8 +2337,11 @@ namespace BioImager
             tools.ToolMove(p, e.Button);
             mouseMove = p;
             MouseMoveInt = new PointD(e.X, e.Y);
-            PointD ip = SelectedImage.ToImageSpace(p);
-            mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
+            if (SelectedImage != null)
+            {
+                PointD ip = SelectedImage.ToImageSpace(p);
+                mousePoint = "(" + (p.X) + ", " + (p.Y) + ")";
+            }
             if (e.Button == MouseButtons.XButton1 && !x1State && !Ctrl && Mode != ViewMode.RGBImage)
             {
                 if (cBar.Value < cBar.Maximum)
@@ -2441,6 +2444,7 @@ namespace BioImager
             if (Tools.currentTool != null)
                 if (Tools.currentTool.type == Tools.Tool.Type.pencil && e.Button == MouseButtons.Left)
                 {
+                    PointD ip = SelectedImage.ToImageSpace(p);
                     Tools.Tool tool = Tools.currentTool;
                     Graphics.Graphics g = Graphics.Graphics.FromImage(SelectedBuffer);
                     Graphics.Pen pen = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedImage.bitsPerPixel);
