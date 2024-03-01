@@ -315,13 +315,13 @@ namespace BioImager
                     string[] sts = s.Split();
                     foreach (Objective o in List)
                     {
-                        if(o.Name == sts[0])
-                            return o.Index; 
+                        if (o.Name == sts[0])
+                            return o.Index;
                     }
                     return 0;
                 }
                 else
-                    throw new Exception("Unable to get objective position. " + s);
+                    return 0;
             }
         }
         public static class Shutters
