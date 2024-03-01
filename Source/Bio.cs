@@ -569,7 +569,7 @@ namespace BioImager
             {
                 int ind = y * width + x;
                 if (ind > mask.Length)
-                    throw new ArgumentException("Point " + x + "," + y + " is outside the mask.");
+                    return false;
                 if (mask[ind] > min)
                 {
                     return true;
@@ -5869,8 +5869,6 @@ namespace BioImager
         /// The function "OpenOME" opens a bioimage file, with options to specify the series, whether to
         public static BioImage OpenOME(string file, int serie, bool tab, bool addToImages, bool tile, int tilex, int tiley, int tileSizeX, int tileSizeY, bool useOpenSlide = true)
         {
-            if (file == null || file == "")
-                throw new InvalidDataException("File is empty or null");
             //We wait incase OME has not initialized.
             do
             {

@@ -362,7 +362,7 @@ namespace BioImager
                         return 0;
                 }
                 else
-                    throw new Exception("Unable to get shutter position. " + s);
+                    return 0;
             }
             public static bool SetPosition(string shutterName, int state)
             {

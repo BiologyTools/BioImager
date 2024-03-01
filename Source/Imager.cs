@@ -125,8 +125,6 @@ namespace BioImager
                     {
                         Settings.Default[ss[0]] = ss[1];
                     }
-                    else
-                        throw new ArgumentException();
                 }
             }
 
