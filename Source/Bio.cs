@@ -2639,7 +2639,7 @@ namespace BioImager
                 else
                 {
                 start:
-                    byte[] bts = slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, PyramidalSize.Width, PyramidalSize.Height, resolution)).Result;
+                    byte[] bts = slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, PyramidalSize.Width, PyramidalSize.Height, resolution, App.viewer.GetCoordinate())).Result;
                     if (bts == null)
                     {
                         if (PyramidalOrigin.X == 0 && PyramidalOrigin.Y == 0)

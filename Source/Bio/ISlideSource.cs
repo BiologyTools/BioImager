@@ -10,30 +10,38 @@ using SixLabors.ImageSharp.PixelFormats;
 using AForge;
 namespace BioImager
 {
-    public class LruCache<TKey, TValue>
+    public class LruCache<TileInformation, TValue>
     {
+        public class Info
+        {
+            public ZCT Coordinate { get; set; }
+            public TileIndex Index { get; set; }
+        }
         private readonly int capacity;
-        private Dictionary<TKey, LinkedListNode<(TKey key, TValue value)>> cacheMap = new Dictionary<TKey, LinkedListNode<(TKey key, TValue value)>>();
-        private LinkedList<(TKey key, TValue value)> lruList = new LinkedList<(TKey key, TValue value)>();
+        private Dictionary<Info, LinkedListNode<(Info key, TValue value)>> cacheMap = new Dictionary<Info, LinkedListNode<(Info key, TValue value)>>();
+        private LinkedList<(Info key, TValue value)> lruList = new LinkedList<(Info key, TValue value)>();
 
         public LruCache(int capacity)
         {
             this.capacity = capacity;
         }
 
-        public TValue Get(TKey key)
+        public TValue Get(Info key)
         {
-            if (cacheMap.TryGetValue(key, out var node))
+            foreach (LinkedListNode<(Info key, TValue value)> item in cacheMap.Values)
             {
-                lruList.Remove(node);
-                lruList.AddLast(node);
-                return node.Value.value;
+                Info k = item.Value.key;
+                if(k.Coordinate == key.Coordinate && k.Index == key.Index)
+                {
+                    lruList.Remove(item);
+                    lruList.AddLast(item);
+                    return item.Value.value;
+                }
             }
-
             return default(TValue);
         }
 
-        public void Add(TKey key, TValue value)
+        public void Add(Info key, TValue value)
         {
             if (cacheMap.Count >= capacity)
             {
@@ -50,41 +58,48 @@ namespace BioImager
                 lruList.Remove(cacheMap[key]);
             }
 
-            var newNode = new LinkedListNode<(TKey key, TValue value)>((key, value));
+            var newNode = new LinkedListNode<(Info key, TValue value)>((key, value));
             lruList.AddLast(newNode);
             cacheMap[key] = newNode;
         }
     }
     public class TileCache
     {
-        private LruCache<TileIndex, byte[]> cache;
+        private LruCache<TileInformation, byte[]> cache;
         private int capacity;
-        ISlideSource source = null;
-        public TileCache(ISlideSource source, int capacity = 500)
+        SlideSourceBase source = null;
+        public TileCache(SlideSourceBase source, int capacity = 1000)
         {
             this.source = source;
             this.capacity = capacity;
-            this.cache = new LruCache<TileIndex, byte[]>(capacity);
+            this.cache = new LruCache<TileInformation, byte[]>(capacity);
         }
 
-        public async Task<byte[]> GetTile(TileInfo info)
+        public async Task<byte[]> GetTile(TileInformation info)
         {
-            byte[] data = cache.Get(info.Index);
+            LruCache<TileInformation, byte[]>.Info inf = new LruCache<TileInformation, byte[]>.Info();
+            inf.Coordinate = info.Coordinate;
+            inf.Index = info.Index;
+            byte[] data = cache.Get(inf);
             if (data != null)
             {
                 return data;
             }
             byte[] tile = await LoadTile(info);
-            AddTile(info.Index, tile);
+            if(tile!=null)
+            AddTile(info, tile);
             return tile;
         }
 
-        private void AddTile(TileIndex tileId, byte[] tile)
+        private void AddTile(TileInformation tileId, byte[] tile)
         {
-            cache.Add(tileId, tile);    
+            LruCache<TileInformation, byte[]>.Info inf = new LruCache<TileInformation, byte[]>.Info();
+            inf.Coordinate = tileId.Coordinate;
+            inf.Index = tileId.Index;
+            cache.Add(inf, tile);
         }
 
-        private async Task<byte[]> LoadTile(TileInfo tileId)
+        private async Task<byte[]> LoadTile(TileInformation tileId)
         {
             try
             {
@@ -93,8 +108,15 @@ namespace BioImager
             catch (Exception e)
             {
                 return null;
-            }          
+            }
         }
+    }
+
+    public class TileInformation
+    {
+        public TileIndex Index { get; set; }
+        public Extent Extent { get; set; }
+        public ZCT Coordinate { get; set; }
     }
 
     public abstract class SlideSourceBase : ISlideSource, IDisposable
@@ -146,18 +168,19 @@ namespace BioImager
         public TileCache cache = null;
         public async Task<byte[]> GetSlice(SliceInfo sliceInfo)
         {
-            if (sliceInfo.Extent.Width == 0 || sliceInfo.Extent.Height == 0)
-                return null;
-
             if (cache == null)
                 cache = new TileCache(this);
             var curLevel = Image.BioImage.LevelFromResolution(sliceInfo.Resolution);
             var curUnitsPerPixel = Schema.Resolutions[curLevel].UnitsPerPixel;
             var tileInfos = Schema.GetTileInfos(sliceInfo.Extent, curLevel);
             List<Tuple<Extent, byte[]>> tiles = new List<Tuple<Extent, byte[]>>();
-            foreach (TileInfo t in tileInfos)
+            foreach (BruTile.TileInfo t in tileInfos)
             {
-                byte[] c = await cache.GetTile(t);
+                TileInformation tf = new TileInformation();
+                tf.Extent = t.Extent;
+                tf.Coordinate = App.viewer.GetCoordinate();
+                tf.Index = t.Index;
+                byte[] c = await cache.GetTile(tf);
                 if(c!=null)
                 tiles.Add(Tuple.Create(t.Extent.WorldToPixelInvertedY(curUnitsPerPixel), c));
             }
@@ -185,11 +208,8 @@ namespace BioImager
             try
             {
                 Image<Rgb24> im = OpenSlideGTK.ImageUtil.Join(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
-                if (im != null)
-                {
-                    LastSlice = GetRgb24Bytes(im);
-                    im.Dispose();
-                }
+                LastSlice = GetRgb24Bytes(im);
+                im.Dispose();
             }
             catch (Exception er)
             {
@@ -259,7 +279,7 @@ namespace BioImager
             GC.SuppressFinalize(this);
         }
 
-        public async Task<byte[]> GetTileAsync(TileInfo tileInfo)
+        public async Task<byte[]> GetTileAsync(TileInformation tileInfo)
         {
             if (tileInfo == null)
                 return null;
@@ -270,9 +290,27 @@ namespace BioImager
             var curLevelOffsetYPixel = -tileInfo.Extent.MaxY / Schema.Resolutions[tileInfo.Index.Level].UnitsPerPixel;
             var curTileWidth = (int)(tileInfo.Extent.MaxX > Schema.Extent.Width ? tileWidth - (tileInfo.Extent.MaxX - Schema.Extent.Width) / r : tileWidth);
             var curTileHeight = (int)(-tileInfo.Extent.MinY > Schema.Extent.Height ? tileHeight - (-tileInfo.Extent.MinY - Schema.Extent.Height) / r : tileHeight);
-            var bgraData = await Image.ReadRegionAsync(tileInfo.Index.Level, (long)curLevelOffsetXPixel, (long)curLevelOffsetYPixel, curTileWidth, curTileHeight);
+            var bgraData = await Image.ReadRegionAsync(tileInfo.Index.Level, (long)curLevelOffsetXPixel, (long)curLevelOffsetYPixel, curTileWidth, curTileHeight,tileInfo.Coordinate);
             //We check to see if the data is valid.
-            if(bgraData == null)
+            if (bgraData.Length != curTileWidth * curTileHeight * 4)
+                return null;
+            byte[] bm = ConvertRgbaToRgb(bgraData);
+            return bm;
+        }
+        public async Task<byte[]> GetTileAsync(BruTile.TileInfo tileInfo)
+        {
+            if (tileInfo == null)
+                return null;
+            var r = Schema.Resolutions[tileInfo.Index.Level].UnitsPerPixel;
+            var tileWidth = Schema.Resolutions[tileInfo.Index.Level].TileWidth;
+            var tileHeight = Schema.Resolutions[tileInfo.Index.Level].TileHeight;
+            var curLevelOffsetXPixel = tileInfo.Extent.MinX / Schema.Resolutions[tileInfo.Index.Level].UnitsPerPixel;
+            var curLevelOffsetYPixel = -tileInfo.Extent.MaxY / Schema.Resolutions[tileInfo.Index.Level].UnitsPerPixel;
+            var curTileWidth = (int)(tileInfo.Extent.MaxX > Schema.Extent.Width ? tileWidth - (tileInfo.Extent.MaxX - Schema.Extent.Width) / r : tileWidth);
+            var curTileHeight = (int)(-tileInfo.Extent.MinY > Schema.Extent.Height ? tileHeight - (-tileInfo.Extent.MinY - Schema.Extent.Height) / r : tileHeight);
+            var bgraData = await Image.ReadRegionAsync(tileInfo.Index.Level, (long)curLevelOffsetXPixel, (long)curLevelOffsetYPixel, curTileWidth, curTileHeight, new ZCT());
+            //We check to see if the data is valid.
+            if (bgraData.Length != curTileWidth * curTileHeight * 4)
                 return null;
             byte[] bm = ConvertRgbaToRgb(bgraData);
             return bm;
@@ -356,7 +394,7 @@ namespace BioImager
         /// <param name="widthPixel">pixel width</param>
         /// <param name="heightPixel">pixel height</param>
         /// <param name="unitsPerPixel">um/pixel</param>
-        public SliceInfo(double xPixel, double yPixel, double widthPixel, double heightPixel, double unitsPerPixel)
+        public SliceInfo(double xPixel, double yPixel, double widthPixel, double heightPixel, double unitsPerPixel, ZCT coord)
         {
             Extent = new Extent(xPixel, yPixel, xPixel + widthPixel,yPixel + heightPixel).PixelToWorldInvertedY(unitsPerPixel);
             Resolution = unitsPerPixel;
@@ -370,6 +408,10 @@ namespace BioImager
             get;
             set;
         } = 1;
+        /// <summary>
+        /// ZCT Coordinate
+        /// </summary>
+        public ZCT Coordinate { get; set; }
 
         /// <summary>
         /// World extent.
@@ -421,9 +463,9 @@ namespace BioImager
         /// </summary>
         NearestUp,
         /// <summary>
-        /// Nearest dwon.
+        /// Nearest down.
         /// </summary>
-        NearestDwon,
+        NearestDown,
         /// <summary>
         /// Top.
         /// </summary>

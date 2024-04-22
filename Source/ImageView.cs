@@ -350,7 +350,7 @@ namespace BioImager
                 }
                 else
                 {
-                    bts = _slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, SelectedImage.PyramidalSize.Width, SelectedImage.PyramidalSize.Height, SelectedImage.GetUnitPerPixel(Level))).Result;
+                    bts = _slideBase.GetSlice(new SliceInfo(PyramidalOrigin.X, PyramidalOrigin.Y, SelectedImage.PyramidalSize.Width, SelectedImage.PyramidalSize.Height, SelectedImage.GetUnitPerPixel(Level),new ZCT())).Result;
                     bf = new Bitmap((int)Math.Round(SlideBase.destExtent.Width), (int)Math.Round(SlideBase.destExtent.Height), PixelFormat.Format24bppRgb, bts, new ZCT(), "");
                 }
                 bm = re.Apply((Bitmap)bf.ImageRGB);
@@ -2308,8 +2308,8 @@ namespace BioImager
         private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
             update = true;
-            Plugins.Paint(sender, e);
             DrawView(e.Graphics);
+            Plugins.Paint(sender, e);
         }
         /// GetScale() returns the scale of the image in the viewport.
         /// 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,19 +14,19 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>3.8.2</Version>
+    <Version>3.9.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Whole Slide Imaging Tool &amp; bug fixes.</PackageReleaseNotes>
+    <PackageReleaseNotes>Tile cache fix and ZCT support for OME type slides.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
   <ItemGroup>
     <Content Include="bioformats_package.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
-      <PackagePath>\lib\net6.0-windows7.0</PackagePath>
+      <PackagePath>\lib\net8.0-windows7.0</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="macro-commands.csv">

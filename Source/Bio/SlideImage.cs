@@ -1,4 +1,5 @@
-﻿using OpenSlideGTK;
+﻿using AForge;
+using OpenSlideGTK;
 using OpenSlideGTK.Interop;
 using org.checkerframework.common.returnsreceiver.qual;
 using System;
@@ -236,11 +237,11 @@ namespace BioImager
         /// <param name="height">The height of the region. Must be non-negative.</param>
         /// <param name="data">The BGRA pixel data of this region.</param>
         /// <returns></returns>
-        public unsafe bool TryReadRegion(int level, long x, long y, long width, long height, out byte[] data)
+        public unsafe bool TryReadRegion(int level, long x, long y, long width, long height, ZCT coord, out byte[] data)
         {
             try
             {
-                data = BioImage.GetTile(BioImage, App.viewer.GetCoordinate(), level, (int)x, (int)y, (int)width, (int)height).RGBBytes;
+                data = BioImage.GetTile(BioImage, coord, level, (int)x, (int)y, (int)width, (int)height).RGBBytes;
                 if (data == null)
                     return false;
                 else
@@ -302,12 +303,12 @@ namespace BioImager
             GC.SuppressFinalize(this);
         }
 
-        public async Task<byte[]> ReadRegionAsync(int level, long curLevelOffsetXPixel, long curLevelOffsetYPixel, int curTileWidth, int curTileHeight)
+        public async Task<byte[]> ReadRegionAsync(int level, long curLevelOffsetXPixel, long curLevelOffsetYPixel, int curTileWidth, int curTileHeight, ZCT coord)
         {
             try
             {
                 byte[] bts;
-                TryReadRegion(level, curLevelOffsetXPixel, curLevelOffsetYPixel, curTileWidth, curTileHeight,out bts);
+                TryReadRegion(level, curLevelOffsetXPixel, curLevelOffsetYPixel, curTileWidth, curTileHeight, coord,out bts);
                 return bts;
             }
             catch (Exception e)
