@@ -23,12 +23,6 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
   <ItemGroup>
-    <Content Include="bioformats_package.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackagePath>\lib\net8.0-windows7.0</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
     <Content Include="macro-commands.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
@@ -490,19 +484,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AForgeBio" Version="1.5.2" />
+    <PackageReference Include="AForgeBio" Version="1.6.0" />
+    <PackageReference Include="BioFormats.NET8" Version="7.3.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.14" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.1" />
-    <PackageReference Include="IKVM" Version="8.6.4" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
-    <PackageReference Include="NetVips" Version="2.4.0" />
-    <PackageReference Include="NetVips.Native.win-x64" Version="8.15.1" />
+    <PackageReference Include="NetVips" Version="2.4.1" />
+    <PackageReference Include="NetVips.Native.win-x64" Version="8.15.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenSlideGTK" Version="1.5.0" />
-    <PackageReference Include="ScottPlot" Version="5.0.21" />
+    <PackageReference Include="OpenSlideGTK" Version="1.6.0" />
+    <PackageReference Include="ScottPlot" Version="5.0.26" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
@@ -513,12 +507,6 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="bioformats_package">
-      <HintPath>bioformats_package.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">
