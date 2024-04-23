@@ -1357,20 +1357,20 @@ namespace BioImager
 
                 if (HardwareAcceleration && dx != null)
                 {
+                    if(dBitmaps.Count>bi)
                     if (dBitmaps[bi] != null)
                     {
                         dBitmaps[bi].Dispose();
                         dBitmaps[bi] = null;
                     }
                     Bitmap bf = new Bitmap("", bitmap, new ZCT(), 0);
-                    dBitmaps[bi] = DBitmap.FromImage(dx.RenderTarget2D, (bf));
+                    dBitmaps.Add(DBitmap.FromImage(dx.RenderTarget2D, (bf)));
                 }
                 else
                     Bitmaps.Add(bitmap);
                 bi++;
             }
             update = true;
-            UpdateView();
         }
         bool drawing = false;
         public void RemoveImage(int i)

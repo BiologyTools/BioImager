@@ -2623,6 +2623,8 @@ namespace BioImager
         /// </summary>
         public void UpdateBuffersPyramidal()
         {
+            if (!isPyramidal)
+                return;
             for (int i = 0; i < Buffers.Count; i++)
             {
                 Buffers[i].Dispose();
