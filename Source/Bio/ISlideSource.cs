@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using AForge;
+using Image = SixLabors.ImageSharp.Image;
 namespace BioImager
 {
     public class LruCache<TileInformation, TValue>
@@ -62,6 +63,13 @@ namespace BioImager
             lruList.AddLast(newNode);
             cacheMap[key] = newNode;
         }
+        public void Dispose()
+        {
+            foreach (LinkedListNode<(Info key, TValue value)> item in cacheMap.Values)
+            {
+                lruList.Remove(item);
+            }
+        }
     }
     public class TileCache
     {
@@ -109,6 +117,10 @@ namespace BioImager
             {
                 return null;
             }
+        }
+        public void Dispose()
+        {
+            cache.Dispose();
         }
     }
 
@@ -160,7 +172,6 @@ namespace BioImager
         }
         #endregion
         public double MinUnitsPerPixel { get; protected set; }
-        public static byte[] LastSlice;
         public static Extent destExtent;
         public static Extent sourceExtent;
         public static double curUnitsPerPixel = 1;
@@ -194,9 +205,12 @@ namespace BioImager
             {
                 try
                 {
-                    NetVips.Image im = OpenSlideGTK.ImageUtil.JoinVips(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
-                    LastSlice = im.WriteToMemory();
-                    return LastSlice;
+                    NetVips.Image im = null;
+                    if (this.Image.BioImage.Resolutions[curLevel].PixelFormat == PixelFormat.Format16bppGrayScale)
+                        im = ImageUtil.JoinVips16(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
+                    else if(this.Image.BioImage.Resolutions[curLevel].PixelFormat == PixelFormat.Format24bppRgb)
+                        im = ImageUtil.JoinVipsRGB24(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
+                    return im.WriteToMemory();
                 }
                 catch (Exception e)
                 {
@@ -207,16 +221,28 @@ namespace BioImager
             }
             try
             {
-                Image<Rgb24> im = OpenSlideGTK.ImageUtil.Join(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
-                LastSlice = GetRgb24Bytes(im);
-                im.Dispose();
+                Image im = null;
+                if (this.Image.BioImage.Resolutions[curLevel].PixelFormat == PixelFormat.Format16bppGrayScale)
+                {
+                    im = ImageUtil.Join16(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
+                    byte[] bts = Get16Bytes((Image<L16>)im);
+                    im.Dispose();
+                    return bts;
+                }
+                else if (this.Image.BioImage.Resolutions[curLevel].PixelFormat == PixelFormat.Format24bppRgb)
+                {
+                    im = ImageUtil.JoinRGB24(tiles, srcPixelExtent, new Extent(0, 0, dstPixelWidth, dstPixelHeight));
+                    byte[] bts = GetRgb24Bytes((Image<Rgb24>)im);
+                    im.Dispose();
+                    return bts;
+                }
             }
             catch (Exception er)
             {
                 Console.WriteLine(er.Message);
                 return null;
             }
-            return LastSlice;
+            return null;
         }
         public byte[] GetRgb24Bytes(Image<Rgb24> image)
         {
@@ -230,13 +256,33 @@ namespace BioImager
                 for (int x = 0; x < width; x++)
                 {
                     Rgb24 pixel = image[x, y];
-                    rgbBytes[byteIndex++] = pixel.R;
-                    rgbBytes[byteIndex++] = pixel.G;
                     rgbBytes[byteIndex++] = pixel.B;
+                    rgbBytes[byteIndex++] = pixel.G;
+                    rgbBytes[byteIndex++] = pixel.R;
                 }
             }
 
             return rgbBytes;
+        }
+        public byte[] Get16Bytes(Image<L16> image)
+        {
+            int width = image.Width;
+            int height = image.Height;
+            byte[] bytes = new byte[width * height * 2];
+
+            int byteIndex = 0;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    L16 pixel = image[x, y];
+                    byte[] bts = BitConverter.GetBytes(pixel.PackedValue);
+                    bytes[byteIndex++] = bts[0];
+                    bytes[byteIndex++] = bts[1];
+                }
+            }
+
+            return bytes;
         }
 
         public SlideImage Image { get; set; }
@@ -291,11 +337,7 @@ namespace BioImager
             var curTileWidth = (int)(tileInfo.Extent.MaxX > Schema.Extent.Width ? tileWidth - (tileInfo.Extent.MaxX - Schema.Extent.Width) / r : tileWidth);
             var curTileHeight = (int)(-tileInfo.Extent.MinY > Schema.Extent.Height ? tileHeight - (-tileInfo.Extent.MinY - Schema.Extent.Height) / r : tileHeight);
             var bgraData = await Image.ReadRegionAsync(tileInfo.Index.Level, (long)curLevelOffsetXPixel, (long)curLevelOffsetYPixel, curTileWidth, curTileHeight,tileInfo.Coordinate);
-            //We check to see if the data is valid.
-            if (bgraData.Length != curTileWidth * curTileHeight * 4)
-                return null;
-            byte[] bm = ConvertRgbaToRgb(bgraData);
-            return bm;
+            return bgraData;
         }
         public async Task<byte[]> GetTileAsync(BruTile.TileInfo tileInfo)
         {
@@ -309,11 +351,7 @@ namespace BioImager
             var curTileWidth = (int)(tileInfo.Extent.MaxX > Schema.Extent.Width ? tileWidth - (tileInfo.Extent.MaxX - Schema.Extent.Width) / r : tileWidth);
             var curTileHeight = (int)(-tileInfo.Extent.MinY > Schema.Extent.Height ? tileHeight - (-tileInfo.Extent.MinY - Schema.Extent.Height) / r : tileHeight);
             var bgraData = await Image.ReadRegionAsync(tileInfo.Index.Level, (long)curLevelOffsetXPixel, (long)curLevelOffsetYPixel, curTileWidth, curTileHeight, new ZCT());
-            //We check to see if the data is valid.
-            if (bgraData.Length != curTileWidth * curTileHeight * 4)
-                return null;
-            byte[] bm = ConvertRgbaToRgb(bgraData);
-            return bm;
+            return bgraData;
         }
         public static byte[] ConvertRgbaToRgb(byte[] rgbaArray)
         {

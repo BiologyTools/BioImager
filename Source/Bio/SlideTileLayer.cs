@@ -30,7 +30,7 @@ namespace BioImager
             int minExtraTiles = -1,
             int maxExtraTiles = -1,
             Func<TileInfo, Task<IFeature>> fetchTileAsFeature = null)
-            : base(source, minTiles, maxTiles, dataFetchStrategy, renderFetchStrategy, minExtraTiles, maxExtraTiles, fetchTileAsFeature)
+            : base(source, minTiles, maxTiles, dataFetchStrategy, renderFetchStrategy, minExtraTiles, maxExtraTiles, (Func<BruTile.TileInfo, Task<IFeature>>)fetchTileAsFeature)
         {
             Name = "TileLayer";
             _slideSource = source;

@@ -1,7 +1,6 @@
 ﻿using AForge;
 using OpenSlideGTK;
 using OpenSlideGTK.Interop;
-using org.checkerframework.common.returnsreceiver.qual;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -224,7 +223,7 @@ namespace BioImager
         /// <exception cref="OpenSlideException"/>
         public unsafe byte[] ReadRegion(int level, long x, long y, long width, long height)
         {
-            return BioImage.GetTile(BioImage, App.viewer.GetCoordinate(), level, (int)x, (int)y, (int)width, (int)height).RGBBytes;
+            return BioImage.GetTile(BioImage, App.viewer.GetCoordinate(), level, (int)x, (int)y, (int)width, (int)height).Bytes;
         }
 
         /// <summary>
@@ -237,22 +236,13 @@ namespace BioImager
         /// <param name="height">The height of the region. Must be non-negative.</param>
         /// <param name="data">The BGRA pixel data of this region.</param>
         /// <returns></returns>
-        public unsafe bool TryReadRegion(int level, long x, long y, long width, long height, ZCT coord, out byte[] data)
+        public unsafe bool TryReadRegion(int level, long x, long y, long width, long height, out byte[] data, ZCT zct)
         {
-            try
-            {
-                data = BioImage.GetTile(BioImage, coord, level, (int)x, (int)y, (int)width, (int)height).RGBBytes;
-                if (data == null)
-                    return false;
-                else
-                    return true;
-            }
-            catch (Exception e)
-            {
-                data = null;
+            data = BioImage.GetTile(BioImage, zct, level, (int)x, (int)y, (int)width, (int)height).Bytes;
+            if (data == null)
                 return false;
-            }
-            
+            else
+                return true;
         }
 
         ///<summary>
@@ -308,7 +298,7 @@ namespace BioImager
             try
             {
                 byte[] bts;
-                TryReadRegion(level, curLevelOffsetXPixel, curLevelOffsetYPixel, curTileWidth, curTileHeight, coord,out bts);
+                TryReadRegion(level, curLevelOffsetXPixel, curLevelOffsetYPixel, curTileWidth, curTileHeight,out bts,coord);
                 return bts;
             }
             catch (Exception e)
