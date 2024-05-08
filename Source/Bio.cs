@@ -4676,15 +4676,6 @@ namespace BioImager
             }
             else return false;
         }
-        /// The function `InitDirectoryResolution` initializes the resolution properties of a `BioImage`
-        /// object based on the resolution information stored in a TIFF image.
-        /// 
-        /// @param BioImage BioImage is a class representing a bioimage, which contains information
-        /// about the image resolution, size, and pixel format.
-        /// @param Tiff The "Tiff" parameter is an object of the Tiff class. It represents a TIFF image
-        /// file and provides methods and properties to access and manipulate the image data.
-        /// @param ImageJDesc ImageJDesc is a class that contains information about the image dimensions
-        /// and resolution in ImageJ format. It has the following properties:
         static void InitDirectoryResolution(BioImage b, Tiff image, ImageJDesc jdesc = null)
         {
             Resolution res = new Resolution();
@@ -4749,6 +4740,12 @@ namespace BioImager
                     res.PhysicalSizeZ = 2.54 / 96;
                 }
             }
+            if (res.PhysicalSizeX == 0 || res.PhysicalSizeY == 0)
+            {
+                res.PhysicalSizeX = 2.54 / 96;
+                res.PhysicalSizeY = 2.54 / 96;
+                res.PhysicalSizeZ = 2.54 / 96;
+            }
             res.SizeX = image.GetField(TiffTag.IMAGEWIDTH)[0].ToInt();
             res.SizeY = image.GetField(TiffTag.IMAGELENGTH)[0].ToInt();
             int bitsPerPixel = image.GetField(TiffTag.BITSPERSAMPLE)[0].ToInt();
@@ -4756,7 +4753,7 @@ namespace BioImager
             res.PixelFormat = GetPixelFormat(RGBChannelCount, bitsPerPixel);
             b.Resolutions.Add(res);
         }
-        /// The OpenFile function in C# opens a BioImage file, reads its metadata, and loads the image
+        /// The OpenFile function opens a BioImage file, reads its metadata, and loads the image
         /// data into a BioImage object.
         /// 
         /// @param file The file path of the bioimage to be opened.
@@ -4794,21 +4791,17 @@ namespace BioImager
 
             Stopwatch st = new Stopwatch();
             st.Start();
-            status = "Opening Image";
-            progFile = file;
-            progressValue = 0;
+            Progress pr = new Progress(file, "Opening Image");
             BioImage b = new BioImage(file);
             if (tiled && file.EndsWith(".tif") && !file.EndsWith(".ome.tif"))
             {
                 //To open this we need libvips
                 vips = VipsSupport(b.file);
             }
-            if(tiled)
-            {
-                b.type = ImageType.pyramidal;
-            }
             b.series = series;
             b.file = file;
+            if (tiled)
+                b.Type = ImageType.pyramidal;
             string fn = Path.GetFileNameWithoutExtension(file);
             string dir = Path.GetDirectoryName(file);
             if (File.Exists(fn + ".csv"))
@@ -4819,11 +4812,10 @@ namespace BioImager
             if (file.EndsWith("tif") || file.EndsWith("tiff") || file.EndsWith("TIF") || file.EndsWith("TIFF"))
             {
                 Tiff image = Tiff.Open(file, "r");
-                b.tifRead = image;
                 int SizeX = image.GetField(TiffTag.IMAGEWIDTH)[0].ToInt();
                 int SizeY = image.GetField(TiffTag.IMAGELENGTH)[0].ToInt();
                 b.bitsPerPixel = image.GetField(TiffTag.BITSPERSAMPLE)[0].ToInt();
-                b.littleEndian = !image.IsBigEndian();
+                b.littleEndian = image.IsBigEndian();
                 int RGBChannelCount = image.GetField(TiffTag.SAMPLESPERPIXEL)[0].ToInt();
                 string desc = "";
 
@@ -5019,11 +5011,31 @@ namespace BioImager
                         Bitmap inf = new Bitmap(file, SizeX, SizeY, b.Resolutions[series].PixelFormat, bytes, new ZCT(0, 0, 0), p, null, b.littleEndian, inter);
                         b.Buffers.Add(inf);
                         Statistics.CalcStatistics(inf);
-                        progressValue = (float)p / (float)(series + 1) * pages;
+                        pr.UpdateProgressF((float)p / (float)(series + 1) * pages);
                     }
                 }
                 image.Close();
                 b.UpdateCoords();
+            }
+            else
+            {
+                var bmp = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(file);
+                var data = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
+                int bytes = Math.Abs(data.Stride) * bmp.Height;
+                byte[] rgbValues = new byte[bytes];
+                // Copy the RGB values into the array.
+                System.Runtime.InteropServices.Marshal.Copy(data.Scan0, rgbValues, 0, bytes);
+                Bitmap pf = new Bitmap(bmp.Width,bmp.Height, (AForge.PixelFormat)data.PixelFormat, rgbValues, new ZCT(), "");
+                b.littleEndian = BitConverter.IsLittleEndian;
+                b.Resolutions.Add(new Resolution(pf.SizeX, pf.SizeY, pf.PixelFormat, 96 * (1 / 2.54) / 1000, 96 * (1 / 2.54) / 1000, 96 * (1 / 2.54) / 1000, 0, 0, 0));
+                b.bitsPerPixel = pf.BitsPerPixel;
+                b.Buffers.Add(pf);
+                Statistics.CalcStatistics(b.Buffers.Last());
+                b.Channels.Add(new Channel(0, b.bitsPerPixel, b.RGBChannelCount));
+                b.Coords = new int[1, 1, 1];
+                b.sizeC = 1;
+                b.sizeT = 1;
+                b.sizeZ = 1;
             }
             if (b.StageSizeX == -1)
             {
@@ -5035,7 +5047,7 @@ namespace BioImager
             b.Volume = new VolumeD(new Point3D(b.StageSizeX, b.StageSizeY, b.StageSizeZ), new Point3D(b.PhysicalSizeX * b.SizeX, b.PhysicalSizeY * b.SizeY, b.PhysicalSizeZ * b.SizeZ));
 
             //If file is ome and we have OME support then check for annotation in metadata.
-            if (ome && OmeSupport)
+            if (ome)
             {
                 b.Annotations.AddRange(OpenOMEROIs(file, series));
             }
@@ -5051,11 +5063,11 @@ namespace BioImager
                 b.StackThreshold(true);
             else
                 b.StackThreshold(false);
-            Recorder.AddLine("Bio.BioImage.Open(" + '"' + file + '"' + ");");
+            Recorder.AddLine("BioGTK.BioImage.OpenFile(" + '"' + file + '"' + ");");
             if (addToImages)
                 Images.AddImage(b, tab);
-            //pr.Close();
-            //pr.Dispose();
+            pr.Close();
+            pr.Dispose();
             st.Stop();
             b.loadTimeMS = st.ElapsedMilliseconds;
             Console.WriteLine("BioImage loaded " + b.ToString());

@@ -421,6 +421,17 @@ namespace BioImager
                 string st = File.ReadAllText(Path.GetDirectoryName(ImageJ.ImageJPath) + "/macros/" + ts.Text);
                 ImageJ.RunOnImage(st, BioConsole.headless, BioConsole.onTab, BioConsole.useBioformats, BioConsole.newTab);
             }
+            else if(ts.Text.EndsWith(".pt") || ts.Text.EndsWith(".onnx"))
+            {
+                try
+                {
+                    ML.ML.Run(ts.Text, ImageView.SelectedImage);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message.ToString());
+                }
+            }
             else
             {
                 Function f = (Function)ts.Tag;

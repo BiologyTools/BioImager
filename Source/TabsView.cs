@@ -151,6 +151,7 @@ namespace BioImager
                 mi.Click += Mi_Click;
                 runToolStripMenuItem.DropDownItems.Add(mi);
             }
+            ML.ML.Initialize();
             init = true;
         }
 
