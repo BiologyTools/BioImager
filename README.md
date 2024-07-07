@@ -51,7 +51,7 @@ Microscope.TakeTiles(4,4);
 
 ## Setup
 - Install dependency [OpenSlide](https://openslide.org/docs/windows/) be sure to add the /bin path of opeslide binaries to your Environmental Variable PATH. By editing your PATH variable.
-- For Micro-Manager 2.0 install the nightly build from [here](https://download.micro-manager.org/nightly/2.0/Windows/) then install [pycromanager](https://github.com/micro-manager/pycro-manager) by running ```pip install pycromanager```
+- For Micro-Manager 2.0 install the nightly build from [here.](https://download.micro-manager.org/nightly/2.0/Windows/)
 - For detailed Setup instructions see [setup.](https://github.com/BiologyTools/BioImager/wiki/Setup)
 - For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
 - For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
@@ -61,6 +61,7 @@ Microscope.TakeTiles(4,4);
 ## Dependencies
 - [OpenSlide](https://openslide.org/)
 - [BioFormats.Net](https://github.com/GDanovski/BioFormats.Net)
+- [Micro-Manager.NET](https://github.com/BiologyTools/Micro-Manager.NET)
 - [IKVM](http://www.ikvm.net/)
 - [AForge](http://www.aforgenet.com/)
 - [LibTiff.Net](https://bitmiracle.com/libtiff/)
