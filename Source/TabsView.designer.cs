@@ -114,13 +114,15 @@ namespace BioImager
             imagerToolToolStripMenuItem = new ToolStripMenuItem();
             cellImagerToolStripMenuItem = new ToolStripMenuItem();
             setupToolStripMenuItem = new ToolStripMenuItem();
+            slideImagerToolStripMenuItem = new ToolStripMenuItem();
             commandToolStripMenuItem = new ToolStripMenuItem();
             recentToolStripMenuItem = new ToolStripMenuItem();
             runToolStripMenuItem1 = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             openImageJROI = new OpenFileDialog();
             saveImageJROI = new SaveFileDialog();
-            slideImagerToolStripMenuItem = new ToolStripMenuItem();
+            importGeoJSONROIToSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem = new ToolStripMenuItem();
             panel.SuspendLayout();
             tabContextMenuStrip.SuspendLayout();
             menuStrip.SuspendLayout();
@@ -448,7 +450,7 @@ namespace BioImager
             // 
             // rOIToolStripMenuItem
             // 
-            rOIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rOIManagerToolStripMenuItem, exportCSVToolStripMenuItem, importCSVToolStripMenuItem, exportROIsOfFolderOfImagesToolStripMenuItem, importImageJROIToSelectedImageToolStripMenuItem, exportImageJROIFromSelectedImageToolStripMenuItem });
+            rOIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rOIManagerToolStripMenuItem, exportCSVToolStripMenuItem, importCSVToolStripMenuItem, exportROIsOfFolderOfImagesToolStripMenuItem, importImageJROIToSelectedImageToolStripMenuItem, exportImageJROIFromSelectedImageToolStripMenuItem, importGeoJSONROIToSelectedImageToolStripMenuItem, exportGeoJSONROIFromSelectedImageToolStripMenuItem });
             rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
             rOIToolStripMenuItem.Size = new Size(38, 20);
             rOIToolStripMenuItem.Text = "ROI";
@@ -456,42 +458,42 @@ namespace BioImager
             // rOIManagerToolStripMenuItem
             // 
             rOIManagerToolStripMenuItem.Name = "rOIManagerToolStripMenuItem";
-            rOIManagerToolStripMenuItem.Size = new Size(282, 22);
+            rOIManagerToolStripMenuItem.Size = new Size(294, 22);
             rOIManagerToolStripMenuItem.Text = "ROI Manager";
             rOIManagerToolStripMenuItem.Click += rOIManagerToolStripMenuItem_Click;
             // 
             // exportCSVToolStripMenuItem
             // 
             exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-            exportCSVToolStripMenuItem.Size = new Size(282, 22);
+            exportCSVToolStripMenuItem.Size = new Size(294, 22);
             exportCSVToolStripMenuItem.Text = "Export ROI's to CSV";
             exportCSVToolStripMenuItem.Click += exportCSVToolStripMenuItem_Click;
             // 
             // importCSVToolStripMenuItem
             // 
             importCSVToolStripMenuItem.Name = "importCSVToolStripMenuItem";
-            importCSVToolStripMenuItem.Size = new Size(282, 22);
+            importCSVToolStripMenuItem.Size = new Size(294, 22);
             importCSVToolStripMenuItem.Text = "Import ROI's from CSV";
             importCSVToolStripMenuItem.Click += importCSVToolStripMenuItem_Click;
             // 
             // exportROIsOfFolderOfImagesToolStripMenuItem
             // 
             exportROIsOfFolderOfImagesToolStripMenuItem.Name = "exportROIsOfFolderOfImagesToolStripMenuItem";
-            exportROIsOfFolderOfImagesToolStripMenuItem.Size = new Size(282, 22);
+            exportROIsOfFolderOfImagesToolStripMenuItem.Size = new Size(294, 22);
             exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI's of Folder of Images";
             exportROIsOfFolderOfImagesToolStripMenuItem.Click += exportROIsOfFolderOfImagesToolStripMenuItem_Click;
             // 
             // importImageJROIToSelectedImageToolStripMenuItem
             // 
             importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
-            importImageJROIToSelectedImageToolStripMenuItem.Size = new Size(282, 22);
+            importImageJROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
             importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
             importImageJROIToSelectedImageToolStripMenuItem.Click += importImageJROIToSelectedImageToolStripMenuItem_Click;
             // 
             // exportImageJROIFromSelectedImageToolStripMenuItem
             // 
             exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
-            exportImageJROIFromSelectedImageToolStripMenuItem.Size = new Size(282, 22);
+            exportImageJROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
             exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
             exportImageJROIFromSelectedImageToolStripMenuItem.Click += exportImageJROIFromSelectedImageToolStripMenuItem_Click;
             // 
@@ -676,37 +678,44 @@ namespace BioImager
             // lightToolToolStripMenuItem
             // 
             lightToolToolStripMenuItem.Name = "lightToolToolStripMenuItem";
-            lightToolToolStripMenuItem.Size = new Size(180, 22);
+            lightToolToolStripMenuItem.Size = new Size(139, 22);
             lightToolToolStripMenuItem.Text = "Light Path";
             lightToolToolStripMenuItem.Click += lightToolToolStripMenuItem_Click;
             // 
             // stageToolToolStripMenuItem
             // 
             stageToolToolStripMenuItem.Name = "stageToolToolStripMenuItem";
-            stageToolToolStripMenuItem.Size = new Size(180, 22);
+            stageToolToolStripMenuItem.Size = new Size(139, 22);
             stageToolToolStripMenuItem.Text = "Stage Tool";
             stageToolToolStripMenuItem.Click += stageToolToolStripMenuItem_Click;
             // 
             // imagerToolToolStripMenuItem
             // 
             imagerToolToolStripMenuItem.Name = "imagerToolToolStripMenuItem";
-            imagerToolToolStripMenuItem.Size = new Size(180, 22);
+            imagerToolToolStripMenuItem.Size = new Size(139, 22);
             imagerToolToolStripMenuItem.Text = "Imager Tool";
             imagerToolToolStripMenuItem.Click += imagerToolStripMenuItem_Click;
             // 
             // cellImagerToolStripMenuItem
             // 
             cellImagerToolStripMenuItem.Name = "cellImagerToolStripMenuItem";
-            cellImagerToolStripMenuItem.Size = new Size(180, 22);
+            cellImagerToolStripMenuItem.Size = new Size(139, 22);
             cellImagerToolStripMenuItem.Text = "Cell Imager";
             cellImagerToolStripMenuItem.Click += cellImagerToolStripMenuItem_Click_1;
             // 
             // setupToolStripMenuItem
             // 
             setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-            setupToolStripMenuItem.Size = new Size(180, 22);
+            setupToolStripMenuItem.Size = new Size(139, 22);
             setupToolStripMenuItem.Text = "Setup";
             setupToolStripMenuItem.Click += setupToolStripMenuItem_Click;
+            // 
+            // slideImagerToolStripMenuItem
+            // 
+            slideImagerToolStripMenuItem.Name = "slideImagerToolStripMenuItem";
+            slideImagerToolStripMenuItem.Size = new Size(139, 22);
+            slideImagerToolStripMenuItem.Text = "Slide Imager";
+            slideImagerToolStripMenuItem.Click += slideImagerToolStripMenuItem_Click;
             // 
             // commandToolStripMenuItem
             // 
@@ -745,12 +754,19 @@ namespace BioImager
             saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             saveImageJROI.Title = "Save ROIs to CSV";
             // 
-            // slideImagerToolStripMenuItem
+            // importGeoJSONROIToSelectedImageToolStripMenuItem
             // 
-            slideImagerToolStripMenuItem.Name = "slideImagerToolStripMenuItem";
-            slideImagerToolStripMenuItem.Size = new Size(180, 22);
-            slideImagerToolStripMenuItem.Text = "Slide Imager";
-            slideImagerToolStripMenuItem.Click += slideImagerToolStripMenuItem_Click;
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Name = "importGeoJSONROIToSelectedImageToolStripMenuItem";
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Text = "Import GeoJSON ROI to Selected Image";
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Click += importGeoJSONROIToSelectedImageToolStripMenuItem_Click;
+            // 
+            // exportGeoJSONROIFromSelectedImageToolStripMenuItem
+            // 
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Name = "exportGeoJSONROIFromSelectedImageToolStripMenuItem";
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Text = "Export GeoJSON ROI from Selected Image";
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Click += exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click;
             // 
             // TabsView
             // 
@@ -871,5 +887,7 @@ namespace BioImager
         private ToolStripMenuItem recentToolStripMenuItem;
         private ToolStripMenuItem runToolStripMenuItem1;
         private ToolStripMenuItem slideImagerToolStripMenuItem;
+        private ToolStripMenuItem importGeoJSONROIToSelectedImageToolStripMenuItem;
+        private ToolStripMenuItem exportGeoJSONROIFromSelectedImageToolStripMenuItem;
     }
 }

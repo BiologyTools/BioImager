@@ -1,5 +1,5 @@
 ﻿using AForge;
-
+using BioLib;
 namespace BioImager
 {
     public class DGraphics                  // 113 lines

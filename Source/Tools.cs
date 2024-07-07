@@ -17,7 +17,7 @@ using BioImager.Graphics;
 using BioImager;
 using Rectangle = AForge.Rectangle;
 using Bitmap = AForge.Bitmap;
-
+using BioLib;
 namespace BioImager
 {
     public partial class Tools : Form
@@ -368,8 +368,9 @@ namespace BioImager
                 TextInput ti = new TextInput("");
                 if (ti.ShowDialog() != DialogResult.OK)
                     return;
-                an.font = new Font(ti.font.FontFamily, ti.font.Size);
-                an.strokeColor = ti.color;
+                an.family = font.FontFamily.Name;
+                an.fontSize = ti.font.Size;
+                an.strokeColor = AForge.Color.FromArgb(ti.color.A, ti.color.R, ti.color.G, ti.color.B);
                 an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
@@ -450,7 +451,7 @@ namespace BioImager
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
-                        an.selected = true;
+                        an.Selected = true;
                         RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
                         for (int i = 0; i < sels.Length; i++)
                         {
@@ -461,7 +462,7 @@ namespace BioImager
                         }
                     }
                     else
-                        an.selected = false;
+                        an.Selected = false;
                 }
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(0, 0, 0, 0);
             }
@@ -618,7 +619,7 @@ namespace BioImager
                     {
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
-                        an.selected = true;
+                        an.Selected = true;
                         RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
                         for (int i = 0; i < sels.Length; i++)
                         {
@@ -629,7 +630,7 @@ namespace BioImager
                         }
                     }
                     else
-                        an.selected = false;
+                        an.Selected = false;
                 }
                 UpdateOverlay();
             }

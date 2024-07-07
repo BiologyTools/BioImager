@@ -7,7 +7,8 @@ using System.IO;
 using System.Threading;
 using AForge;
 using RotateFlipType = AForge.RotateFlipType;
-
+using BioLib;
+using BioImage = BioLib.BioImage;
 namespace BioImager
 {
     public partial class TabsView : Form
@@ -761,7 +762,7 @@ namespace BioImager
             List<string> sts = new List<string>();
             foreach (BioImage item in Images.images)
             {
-                BioImage.Save(Image.ID, Image.ID);
+                BioImage.SaveFile(Image.ID, Image.ID);
             }
         }
 
@@ -846,7 +847,7 @@ namespace BioImager
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (saveTiffFileDialog.ShowDialog() == DialogResult.OK)
-                BioImager.BioImage.Save(ImageView.SelectedImage.ID, saveTiffFileDialog.FileName);
+                BioImage.SaveFile(ImageView.SelectedImage.ID, saveTiffFileDialog.FileName);
         }
 
         /// If the user clicks the "Save OME" menu item, then show the save file dialog and if the user
@@ -857,7 +858,7 @@ namespace BioImager
         private void saveOMEToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (saveOMEFileDialog.ShowDialog() == DialogResult.OK)
-                BioImager.BioImage.Save(ImageView.SelectedImage.ID, saveOMEFileDialog.FileName);
+                BioImage.SaveOME(ImageView.SelectedImage.ID, saveOMEFileDialog.FileName);
         }
         /// It clears the dropdown menu, then adds each item in the recent list to the dropdown menu.
         /// 
@@ -1117,10 +1118,10 @@ namespace BioImager
                     return;
             }
 
-            string[] sts = new string[App.viewer.Images.Count];
+            BioImage[] sts = new BioImage[App.viewer.Images.Count];
             for (int i = 0; i < sts.Length; i++)
             {
-                sts[i] = App.viewer.Images[i].ID;
+                sts[i] = App.viewer.Images[i];
             }
             BioImage.SaveOMESeries(sts, saveOMEFileDialog.FileName, Properties.Settings.Default.Planes);
         }
@@ -1453,6 +1454,20 @@ namespace BioImager
         private void slideImagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.slideImager.Show();
+        }
+
+        private void importGeoJSONROIToSelectedImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFilesDialog.ShowDialog() != DialogResult.OK)
+                return;
+            ImageView.SelectedImage.Annotations.AddRange(QuPath.ReadROI(openFilesDialog.FileName,ImageView.SelectedImage));
+        }
+
+        private void exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+            QuPath.Save(saveOMEFileDialog.FileName, ImageView.SelectedImage);
         }
     }
 }

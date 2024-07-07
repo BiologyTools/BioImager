@@ -6,11 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RectangleD = AForge.RectangleD;
-
+using mmcorej;
+using org.micromanager.@internal;
+using BioLib;
 namespace BioImager
 {
-    public static class PycroManager
+    public static class MicroManager
     {
+        public static CMMCore core;
+        public static MMStudio studio;
         public static PointD location;
         public static double focus;
         public static Dictionary<string, List<Conf>> Config = new Dictionary<string, List<Conf>>();
@@ -48,6 +52,12 @@ namespace BioImager
         public static string TurretName = "";
         public static bool Initialize(string config)
         {
+            java.lang.System.setProperty("force.annotation.index", "true");
+            // Set the library path (adjust the path as needed)
+            java.lang.System.setProperty("org.micromanager.corej.path", "C:/Program Files/Micro-Manager-2.0");
+            MMStudio.main(new string[] { });
+            studio = MMStudio.getInstance();
+            core = studio.core();
             string[] sts = File.ReadAllLines(config);
             foreach (string s in sts)
             {
@@ -92,28 +102,7 @@ namespace BioImager
             location = new PointD(loc.X, loc.Y);
             return true;
         }
-        public static string run_cmd(string cmd, string args)
-        {
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = "python.exe";
-            start.Arguments = string.Format("{0} {1}", cmd, args);
-            start.WorkingDirectory = Application.StartupPath + "PycroManager";
-            start.UseShellExecute = false;
-            start.RedirectStandardOutput = true;
-            start.CreateNoWindow = true;
-            string res;
-            using (Process process = Process.Start(start))
-            {
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    res = reader.ReadToEnd();
-#if DEBUG
-                    Console.Write(res);
-#endif
-                }
-            }
-            return res;
-        }
+        
         public static BioImage TakeImage(string name)
         {
             int width, height, depth, bits, channels = 0;
@@ -151,112 +140,67 @@ namespace BioImager
         private static bool TakeImage(string file, out int width, out int height, out int depth, out int bits, out int channels, out AForge.Bitmap[] bm)
         {
             string fil = Path.GetFileNameWithoutExtension(file);
-            string s = run_cmd("TakeImage.py",fil);
-            if (s.Contains("OK"))
+            width = (int)core.getImageWidth();
+            height = (int)core.getImageHeight();
+            depth = (int)core.getImageBitDepth();
+            bits = (int)core.getBytesPerPixel();
+            channels = (int)core.getNumberOfCameraChannels();
+            PixelFormat format = PixelFormat.Format8bppIndexed;
+            if (depth > 8 && bits == 2)
+                format = PixelFormat.Format16bppGrayScale;
+            else if(depth > 8 && bits == 6)
+                format = PixelFormat.Format48bppRgb;
+            else if (depth == 8 && bits == 3)
+                format = PixelFormat.Format24bppRgb;
+            else if (depth == 8 && bits == 4)
+                format = PixelFormat.Format32bppArgb;
+            bm = new AForge.Bitmap[channels];
+            core.snapImage();
+            for (int i = 0; i < channels; i++)
             {
-                string[] sts = s.Split();
-                width = int.Parse(sts[0]);
-                height = int.Parse(sts[2]);
-                depth = int.Parse(sts[4]);
-                bits = int.Parse(sts[6]);
-                channels = int.Parse(sts[8]);
-                PixelFormat format = PixelFormat.Format8bppIndexed;
-                if (depth > 8 && bits == 2)
-                    format = PixelFormat.Format16bppGrayScale;
-                else if(depth > 8 && bits == 6)
-                    format = PixelFormat.Format48bppRgb;
-                else if (depth == 8 && bits == 3)
-                    format = PixelFormat.Format24bppRgb;
-                else if (depth == 8 && bits == 4)
-                    format = PixelFormat.Format32bppArgb;
-                bm = new AForge.Bitmap[channels];
-                for (int i = 0; i < channels; i++)
+                if(depth <= 8)
                 {
-                    //Each channel is saved as a seperate file
-                    bm[i] = new AForge.Bitmap(width,height,format,File.ReadAllBytes(Application.StartupPath + "PycroManager/" + fil + i),new ZCT(), "");
-                    //We delete the temporary file.
-                    File.Delete(file + i);
+                    byte[] bytes = (byte[])core.getImage(i);
+                    bm[i] = new AForge.Bitmap(width, height, format, bytes , new ZCT(), "");
                 }
-                return true;
+                else
+                {
+                    ushort[] buf = (ushort[])core.getImage(i);
+                    byte[] bts = new byte[buf.Length * 2];
+                    for (int b = 0; b < buf.Length; b++)
+                    {
+                        byte[] pl = BitConverter.GetBytes(buf[b]);
+                        bts[b] = pl[0];
+                        bts[b+1] = pl[1];
+                    }
+                    bm[i] = new AForge.Bitmap(width, height, format, bts, new ZCT(), "");
+                }
             }
-            else
-            {
-                width = 0;height = 0; depth = 0;bits = 0;channels = 0;bm = null;
-                return false;
-            }
+            return true;
         }
-        public static bool SetExposure(float f)
+        public static void SetExposure(float f)
         {
-            string s = run_cmd("SetExposure.py", f.ToString());
-            if (s.Contains("OK"))
-                return true;
-            else
-                return false;
+            core.setExposure(f);
         }
-        public static bool SetPosition(Point3D p)
+        public static void SetPosition(Point3D p)
         {
-            string s = run_cmd("SetStageXYZ.py", p.X + " " + p.Y + " " + p.Z);
-            if (s.Contains("OK"))
-            {
-                focus = p.Z;
-                location = new PointD(p.X, p.Y);
-                return true;
-            }
-            else
-                return false;
+            core.setXYPosition(p.X, p.Y);
+            core.setPosition(p.Z);
         }
-        public static bool SetPosition(PointD p)
+        public static void SetPosition(PointD p)
         {
-            string s = run_cmd("SetStageXY.py", p.X + " " + p.Y);
-            if (s.Contains("OK"))
-            {
-                location = p;
-                return true;
-            }
-            else
-                return false;
+            core.setXYPosition(p.X, p.Y);
         }
-        public static bool GetPosition3D(out Point3D p, bool update)
+        public static void GetPosition3D(out Point3D p, bool update)
         {
-            if (!update)
-            {
-                p = new Point3D(location.X, location.Y, focus);
-                return true;
-            }
-            string s = run_cmd("GetStageXYZ.py", "");
-            if (s.Contains("OK"))
-            {
-                string[] sts = s.Split();
-                p = new Point3D(double.Parse(sts[0]), double.Parse(sts[2]), double.Parse(sts[4]));
-                focus = p.Z;
-                return true;
-            }
-            else
-            {
-                p = new Point3D();
-                return false;
-            }
+            var pos = core.getXYStagePosition();
+            var f = core.getPosition();
+            p = new Point3D(pos.x, pos.y, f);
         }
-        public static bool GetPosition(out PointD p, bool update)
+        public static void GetPosition(out PointD p, bool update)
         {
-            if (!update)
-            {
-                p = location;
-                return true;
-            }
-            string s = run_cmd("GetStageXY.py", "");
-            if (s.Contains("OK"))
-            {
-                string[] sts = s.Split();
-                p = new PointD(double.Parse(sts[0]), double.Parse(sts[2]));
-                location = p;
-                return true;
-            }
-            else
-            {
-                p = new PointD();
-                return false;
-            }
+            var pos = core.getXYStagePosition();
+            p = new PointD(pos.x, pos.y);
         }
         public static class Objectives
         {
@@ -285,7 +229,6 @@ namespace BioImager
             }
             internal static void Initialize()
             {
-                int i = 0;
                 foreach (Conf obj in GetConfigs("ConfigGroup", "Objective"))
                 {
                     List.Add(new Objective(obj.Values[0], int.Parse(obj.Values[3]), int.Parse(obj.Values[0].Replace("X", ""))));
@@ -297,31 +240,20 @@ namespace BioImager
                 Conf[] cfs = GetConfigs("ConfigGroup", "Objective");
                 return cfs[index];
             }
-            public static bool SetPosition(int i)
+            public static void SetPosition(int i)
             {
-                string s = run_cmd("SetObjective.py", TurretName + " " + GetObjective(i).Values[0]);
-                if (s.Contains("OK"))
-                {
-                    return true;
-                }
-                else
-                    return false;
+                core.setConfig(TurretName, List[i].Name);
             }
             public static int GetPosition()
             {
-                string s = run_cmd("GetObjective.py", TurretName);
-                if (s.Contains("OK"))
+                string s = core.getCurrentConfig(TurretName);
+                int i = 0;
+                foreach(Objective obj in Objectives.List)
                 {
-                    string[] sts = s.Split();
-                    foreach (Objective o in List)
-                    {
-                        if (o.Name == sts[0])
-                            return o.Index;
-                    }
-                    return 0;
+                    if (obj.Name == s)
+                        return i;
                 }
-                else
-                    return 0;
+                return -1;
             }
         }
         public static class Shutters
@@ -351,32 +283,17 @@ namespace BioImager
             }
             public static int GetPosition(string shutterName)
             {
-                string s = run_cmd("GetShutter.py", shutterName);
-                if (s.Contains("OK"))
-                {
-                    string[] sts = s.Split();
-                    string st = sts[0].ToLower();
-                    if (bool.Parse(st))
-                        return 1;
-                    else
-                        return 0;
-                }
+                if (core.getShutterOpen())
+                    return 1;
                 else
                     return 0;
             }
-            public static bool SetPosition(string shutterName, int state)
+            public static void SetPosition(string shutterName, int state)
             {
-                string s;
-                if(state == 0)
-                    s = run_cmd("SetShutter.py", shutterName + " 0");
+                if(state == 1)
+                    core.setShutterOpen(shutterName, true);
                 else
-                    s = run_cmd("SetShutter.py", shutterName + " 1");
-                if (s.Contains("OK"))
-                {
-                    return true;
-                }
-                else
-                    return false;
+                    core.setShutterOpen(shutterName, false);
             }
         }
         

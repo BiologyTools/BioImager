@@ -1,7 +1,5 @@
 ﻿using AForge;
-using java.awt.geom;
 using NetVips;
-using org.checkerframework.checker.units.qual;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using BioLib;
 namespace BioImager
 {
     public partial class SlideImager : Form

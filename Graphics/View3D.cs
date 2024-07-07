@@ -4,6 +4,7 @@ using SharpDX;
 using System.Drawing;
 using Bitmap = System.Drawing.Bitmap;
 using SizeF = System.Drawing.SizeF;
+using BioLib;
 namespace BioImager
 {
     public partial class View3D : Form

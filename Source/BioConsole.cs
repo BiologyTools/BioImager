@@ -1,5 +1,4 @@
-﻿using com.sun.source.util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,9 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ucar.nc2.@internal.iosp.netcdf3;
-using static loci.poi.hssf.util.HSSFColor;
-
+using BioLib;
 namespace BioImager
 {
     public partial class BioConsole : Form

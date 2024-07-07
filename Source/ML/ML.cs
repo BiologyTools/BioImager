@@ -12,6 +12,7 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.Collections;
 using Bitmap = AForge.Bitmap;
+using BioLib;
 namespace BioImager.ML
 {
     public static class ML
@@ -536,6 +537,7 @@ namespace BioImager.ML
         public static void Initialize()
         {
             string st = System.IO.Path.GetDirectoryName(Environment.ProcessPath);
+            Directory.CreateDirectory(st + "/Models");
             foreach (string f in Directory.GetFiles(st + "/Models"))
             {
                 if (f.EndsWith(".onnx") || f.EndsWith(".pt"))

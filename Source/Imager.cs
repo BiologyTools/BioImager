@@ -18,6 +18,7 @@ using System.Configuration;
 using BioImager.Properties;
 using Settings = BioImager.Properties.Settings;
 using AForge;
+using BioLib;
 namespace BioImager
 {
     public partial class Imager : Form
@@ -147,7 +148,7 @@ namespace BioImager
             timer.Start();
             TimeSpan st1 = timer.Elapsed;
             m_ID = "";
-            if (Settings.Default.AppPath != "")
+            if (Settings.Default.AppPath != "" && !Settings.Default.AppPath.Contains("ImageJ"))
             {
                 //We start the imaging application making sure the we have the right path to the executable.
                 AppPath = Settings.Default.AppPath;
@@ -453,6 +454,7 @@ namespace BioImager
         /// @return The current state of the controller.
         private void controllerButtonUpdate_Tick(object sender, EventArgs e)
         {
+            if(AppP!=null)
             if (AppP.HasExited)
                 return;
             //AppP.WaitForInputIdle();

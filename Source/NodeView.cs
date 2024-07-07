@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using AForge;
+using BioLib;
 
 namespace BioImager
 {
@@ -219,7 +220,7 @@ namespace BioImager
                 an.Text = input.TextValue;
                 an.family = input.Font.FontFamily.ToString();
                 an.strokeWidth = input.Font.Size;
-                an.strokeColor = System.Drawing.Color.FromArgb(input.color.R, input.color.G, input.color.B);
+                an.strokeColor = AForge.Color.FromArgb(input.color.R, input.color.G, input.color.B);
             }
             UpdateNodes();
             UpdateOverlay();

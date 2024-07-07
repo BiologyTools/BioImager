@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections;
 using System.Configuration;
-
+using BioLib;
 namespace BioImager
 {
     public partial class MicroscopeSetup : Form

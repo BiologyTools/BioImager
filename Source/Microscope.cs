@@ -14,6 +14,7 @@ using AForge;
 using Point = AForge.Point;
 using RectangleD = AForge.RectangleD;
 using Bitmap = AForge.Bitmap;
+using BioLib;
 namespace BioImager
 {
     /* It's a wrapper for the stage*/
@@ -78,7 +79,7 @@ namespace BioImager
             else
             if (Properties.Settings.Default.PycroManager)
             {
-                PycroManager.SetPosition(new PointD(px, py));
+                MicroManager.SetPosition(new PointD(px, py));
             }
             else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -153,7 +154,7 @@ namespace BioImager
             if (Properties.Settings.Default.PycroManager)
             {
                 PointD pd;
-                PycroManager.GetPosition(out pd, false);
+                MicroManager.GetPosition(out pd, false);
                 return pd;
             }
             else
@@ -266,7 +267,7 @@ namespace BioImager
             if (Properties.Settings.Default.PycroManager)
             {
                 PointD p = Microscope.Stage.GetPosition(true);
-                PycroManager.SetPosition(new Point3D(p.X, p.Y, f));
+                MicroManager.SetPosition(new Point3D(p.X, p.Y, f));
             }
             else
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -311,7 +312,7 @@ namespace BioImager
             else if(Properties.Settings.Default.PycroManager)
             {
                 Point3D p;
-                PycroManager.GetPosition3D(out p, update);
+                MicroManager.GetPosition3D(out p, update);
                 return p.Z;
             }
             if (Properties.Settings.Default.LibPath.Contains("MTB"))
@@ -453,7 +454,7 @@ namespace BioImager
             }
             else if(Properties.Settings.Default.PycroManager)
             {
-                PycroManager.Objectives.SetPosition(index);
+                MicroManager.Objectives.SetPosition(index);
             }
         }
         
@@ -471,7 +472,7 @@ namespace BioImager
             }
             else if(Properties.Settings.Default.PycroManager)
             {
-                return PycroManager.Objectives.GetPosition();
+                return MicroManager.Objectives.GetPosition();
             }
             else if(!Properties.Settings.Default.PMicroscope && Automation.Properties.ContainsKey("GetO1"))
             {
@@ -866,11 +867,11 @@ namespace BioImager
                         Application.Exit();
                     Properties.Settings.Default.MMConfig = fl.FileName;
                 }
-                PycroManager.Initialize(Properties.Settings.Default.MMConfig);
+                MicroManager.Initialize(Properties.Settings.Default.MMConfig);
                 Objectives = new Objectives(7);
-                for (int i = 0; i < PycroManager.Objectives.List.Count; i++)
+                for (int i = 0; i < MicroManager.Objectives.List.Count; i++)
                 {
-                    Objectives.List[PycroManager.Objectives.List[i].Index].Name = PycroManager.Objectives.List[i].Name;
+                    Objectives.List[MicroManager.Objectives.List[i].Index].Name = MicroManager.Objectives.List[i].Name;
                 }
                 Stage = new Stage();
                 Focus = new Focus();
@@ -1097,16 +1098,16 @@ namespace BioImager
         /// <returns>Position of the named shutter</returns>
         public static int GetShutterPosition(string shutter)
         {
-            return PycroManager.Shutters.GetPosition(shutter);
+            return MicroManager.Shutters.GetPosition(shutter);
         }
         /// <summary>
         /// Sets the current position of a named shutter.
         /// </summary>
         /// <param name="shutter">Name of the shutter.</param>
         /// <returns>Position of the named shutter</returns>
-        public static bool SetShutterPosition(string shutter, int state)
+        public static void SetShutterPosition(string shutter, int state)
         {
-            return PycroManager.Shutters.SetPosition(shutter, state);
+            MicroManager.Shutters.SetPosition(shutter, state);
         }
         /// Move the stage up by a distance of d
         /// 
@@ -1325,7 +1326,7 @@ namespace BioImager
                     file = Properties.Settings.Default.ImageName + (ImageCount++).ToString();
                 else
                     file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++);
-                BioImage bm = PycroManager.TakeImage(file);
+                BioImage bm = MicroManager.TakeImage(file);
 
                 if (!imagingStack)
                 {

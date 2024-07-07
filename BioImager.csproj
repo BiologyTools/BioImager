@@ -14,12 +14,12 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.1.0</Version>
+    <Version>4.1.1</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>BioImage.IO model support both ONNX &amp; PyTorch formats.</PackageReleaseNotes>
+    <PackageReleaseNotes>GeoJSON ROI support as well as bug fixes.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
   <ItemGroup>
@@ -351,61 +351,6 @@
       <Pack>True</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="PycroManager\GetExposure.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\GetShutter.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\SetObjective.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\GetObjective.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\GetStageXY.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\GetStageXYZ.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\SetExposure.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\SetShutter.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\SetStageXY.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\SetStageXYZ.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PycroManager\TakeImage.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
     <Content Include="PythonMicroscope\microscope\config.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>True</Pack>
@@ -471,34 +416,24 @@
       <Pack>True</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="PythonMicroscope\microscope\__pycache__\config.cpython-310.pyc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="PythonMicroscope\microscope\__pycache__\prior-conf.cpython-310.pyc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AForgeBio" Version="1.6.0" />
-    <PackageReference Include="BioFormats.NET8" Version="7.3.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
-    <PackageReference Include="CS-Script" Version="4.8.14" />
+    <PackageReference Include="CS-Script" Version="4.8.16" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
-    <PackageReference Include="H.InputSimulator" Version="1.4.1" />
+    <PackageReference Include="H.InputSimulator" Version="1.4.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.17.3" />
+    <PackageReference Include="Micro-Manager.NET" Version="2.0.3.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.18.1" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NetVips" Version="2.4.1" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OpenSlideGTK" Version="1.6.0" />
-    <PackageReference Include="ScottPlot" Version="5.0.26" />
+    <PackageReference Include="ScottPlot" Version="5.0.36" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
@@ -509,8 +444,12 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.102.4" />
-    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.102.6" />
+    <PackageReference Include="YamlDotNet" Version="15.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BioLib\BioLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">

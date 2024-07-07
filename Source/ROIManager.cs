@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge;
+using BioLib;
+using Color = AForge.Color;
 namespace BioImager
 {
     public partial class ROIManager : Form
@@ -108,21 +110,21 @@ namespace BioImager
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = System.Drawing.Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
+            anno.strokeColor = Color.FromArgb((byte)rBox.Value, anno.strokeColor.G, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void gBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = System.Drawing.Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
+            anno.strokeColor = Color.FromArgb(anno.strokeColor.R, (byte)gBox.Value, anno.strokeColor.B);
             UpdateOverlay();
         }
         private void bBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.strokeColor = System.Drawing.Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
+            anno.strokeColor = Color.FromArgb(anno.strokeColor.R, anno.strokeColor.G, (byte)bBox.Value);
             UpdateOverlay();
         }
         private void typeBox_SelectedIndexChanged(object sender, EventArgs e)

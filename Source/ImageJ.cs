@@ -11,7 +11,7 @@ using Color = AForge.Color;
 using Rectangle = AForge.Rectangle;
 using PointF = AForge.PointF;
 using RectangleD = AForge.RectangleD;
-
+using BioLib;
 namespace BioImager
 {
     public class ImageJ
@@ -726,14 +726,14 @@ namespace BioImager
                 if (strokeColor != 0)
                 {
                     byte[] bts = BitConverter.GetBytes(strokeColor);
-                    System.Drawing.Color c = System.Drawing.Color.FromArgb(bts[0], bts[1], bts[2], bts[3]);
+                    Color c = Color.FromArgb(bts[0], bts[1], bts[2], bts[3]);
                     roi.strokeColor = c;
                 }
                 int fillColor = getInt(FILL_COLOR);
                 if (fillColor != 0)
                 {
                     byte[] bts = BitConverter.GetBytes(strokeColor);
-                    System.Drawing.Color c = System.Drawing.Color.FromArgb(bts[0], bts[1], bts[2], bts[3]);
+                    Color c = Color.FromArgb(bts[0], bts[1], bts[2], bts[3]);
                     roi.fillColor = c;
                 }
             }
@@ -926,12 +926,12 @@ namespace BioImager
                 return ((b0 << 24) + (b1 << 16) + (b2 << 8) + b3);
             }
 
-/// It takes a base address, reads 4 bytes from that address, converts those 4 bytes into a float, and
-/// returns the float
-/// 
-/// @param bas The base address of the value you want to read.
-/// 
-/// @return The float value of the integer at the base address.
+            /// It takes a base address, reads 4 bytes from that address, converts those 4 bytes into a float, and
+            /// returns the float
+            /// 
+            /// @param bas The base address of the value you want to read.
+            /// 
+            /// @return The float value of the integer at the base address.
             float getFloat(int bas)
             {
                 //return BitConverter.ToSingle(getInt(bas));
@@ -1143,7 +1143,7 @@ namespace BioImager
             /// @return The data is being returned as a byte array.
             void write(ROI roi, FileStream f)
             {
-                RectangleD r = roi.Rect;
+                RectangleD r = new RectangleD(roi.Rect.X, roi.Rect.Y, roi.Rect.W, roi.Rect.H);
                 //if (r.width > 60000 || r.height > 60000 || r.x > 60000 || r.y > 60000)
                 //    roi.enableSubPixelResolution();
                 //int roiType = GetImageJType(roi);
@@ -1235,6 +1235,7 @@ namespace BioImager
                 putShort(RoiDecoder.LEFT, (int)px);
                 putShort(RoiDecoder.BOTTOM, (int)(py + ph));
                 putShort(RoiDecoder.RIGHT, (int)(px + pw));
+                var PointsImage = ImageView.SelectedImage.ToImageSpace(roi.PointsD);
                 if (subres && (type == rect || type == oval))
                 {
                     //FloatPolygon p = null;
@@ -1253,15 +1254,15 @@ namespace BioImager
                         else
                             p = roi.getFloatPolygon();
                     }
-                        */
+                        */   
                     if (roi.PointsD.Count == 4)
                     {
-                        putFloat(RoiDecoder.XD, (float)roi.PointsImage[0].X);
-                        putFloat(RoiDecoder.YD, (float)roi.PointsImage[0].Y);
+                        putFloat(RoiDecoder.XD, (float)PointsImage[0].X);
+                        putFloat(RoiDecoder.YD, (float)PointsImage[0].Y);
                         //putFloat(RoiDecoder.WIDTHD, p.xpoints[1] - roi.PointsD[0]);
                         //putFloat(RoiDecoder.HEIGHTD, p.ypoints[2] - p.ypoints[1]);
-                        putFloat(RoiDecoder.WIDTHD, (float)roi.PointsImage[1].X - (float)roi.PointsImage[0].X);
-                        putFloat(RoiDecoder.HEIGHTD, (float)roi.PointsImage[2].Y - (float)roi.PointsImage[1].Y);
+                        putFloat(RoiDecoder.WIDTHD, (float)PointsImage[1].X - (float)PointsImage[0].X);
+                        putFloat(RoiDecoder.HEIGHTD, (float)PointsImage[2].Y - (float)PointsImage[1].Y);
                         options |= RoiDecoder.SUB_PIXEL_RESOLUTION;
                         putShort(RoiDecoder.OPTIONS, options);
                     }
@@ -1298,10 +1299,10 @@ namespace BioImager
                 if (type == line) //(roi instanceof Line) 
                 {
                     //Line line = (Line)roi;
-                    putFloat(RoiDecoder.X1, (float)roi.PointsImage[0].X);
-                    putFloat(RoiDecoder.Y1, (float)roi.PointsImage[0].Y);
-                    putFloat(RoiDecoder.X2, (float)roi.PointsImage[1].X);
-                    putFloat(RoiDecoder.Y2, (float)roi.PointsImage[1].Y);
+                    putFloat(RoiDecoder.X1, (float)PointsImage[0].X);
+                    putFloat(RoiDecoder.Y1, (float)PointsImage[0].Y);
+                    putFloat(RoiDecoder.X2, (float)PointsImage[1].X);
+                    putFloat(RoiDecoder.Y2, (float)PointsImage[1].Y);
                     /*
                     if (roi instanceof Arrow) {
                         putShort(RoiDecoder.SUBTYPE, RoiDecoder.ARROW);
@@ -1410,10 +1411,10 @@ namespace BioImager
                 //BasicStroke stroke = roi.getStroke();
                 //if (stroke != null)
                 putShort(RoiDecoder.STROKE_WIDTH, (int)roi.strokeWidth);
-                System.Drawing.Color strokeColor = roi.strokeColor;
+                Color strokeColor = roi.strokeColor;
                 int intColor = (strokeColor.R << 16) | (strokeColor.G << 8) | (strokeColor.B);
                 putInt(RoiDecoder.STROKE_COLOR, 0);
-                System.Drawing.Color fillColor = roi.fillColor;
+                Color fillColor = roi.fillColor;
                 int intFillColor = (fillColor.R << 16) | (fillColor.G << 8) | (fillColor.B);
                 putInt(RoiDecoder.FILL_COLOR, 0);
             }
@@ -1552,7 +1553,7 @@ namespace BioImager
                 putInt(hdr2Offset + RoiDecoder.Z_POSITION, roi.coord.Z + 1);
                 putInt(hdr2Offset + RoiDecoder.T_POSITION, roi.coord.T + 1);
                 //Overlay proto = roi.getPrototypeOverlay();
-                System.Drawing.Color overlayLabelColor = roi.strokeColor; //proto.getLabelColor();
+                Color overlayLabelColor = roi.strokeColor; //proto.getLabelColor();
                 int intColor = (overlayLabelColor.R << 16) | (overlayLabelColor.G << 8) | (overlayLabelColor.B);
                 //if (overlayLabelColor != null)
                 putInt(hdr2Offset + RoiDecoder.OVERLAY_LABEL_COLOR, 0);

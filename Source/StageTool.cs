@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using AForge;
 using Point = AForge.Point;
 using AForge.Imaging;
-
+using BioLib;
 namespace BioImager
 {
     public partial class StageTool : Form
