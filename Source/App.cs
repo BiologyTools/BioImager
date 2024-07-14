@@ -33,6 +33,22 @@ namespace BioImager
         public static Library lib = null;
         public static List<string> recent = new List<string>();
 
+
+        public static void UpdateImages()
+        {
+            do
+            {
+                Thread.Sleep(1000);
+                foreach (var item in Images.images)
+                {
+                    if (App.tabsView.HasTab(item.Filename))
+                        continue;
+                    else
+                        App.tabsView.AddTab(item);
+                }
+            } while (true);
+        }
+
         /* A property that returns the current image. */
         public static BioImage Image
         {
@@ -56,6 +72,8 @@ namespace BioImager
         public static void Initialize()
         {
             BioImage.Initialize();
+            Thread th = new Thread(UpdateImages);
+            th.Start();
             do
             {
                 Thread.Sleep(100);

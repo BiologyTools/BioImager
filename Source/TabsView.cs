@@ -114,6 +114,17 @@ namespace BioImager
             tabControl.SelectedIndex = tabControl.TabCount - 1;
             ResizeView();
         }
+        public bool HasTab(string name)
+        {
+            foreach (TabPage item in tabControl.TabPages)
+            {
+                if(item.Text == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void Init()
         {
             TabPage t = new TabPage("Viewer");

@@ -14,12 +14,12 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.2.0</Version>
+    <Version>4.3.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>GeoJSON ROI support as well as bug fixes.</PackageReleaseNotes>
+    <PackageReleaseNotes>Bug fixes and dependency updates.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
   <ItemGroup>
@@ -420,7 +420,6 @@
 
   <ItemGroup>
     <PackageReference Include="AForgeBio" Version="1.6.0" />
-    <PackageReference Include="BioLib" Version="2.4.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.16" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
