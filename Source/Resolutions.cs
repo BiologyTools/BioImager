@@ -23,7 +23,7 @@ namespace BioImager
             get{return res;}
         }
 
-        public Resolutions(List<Resolution> res)
+        public Resolutions(List<BioLib.Resolution> res)
         {
             InitializeComponent();
             foreach (var item in res)

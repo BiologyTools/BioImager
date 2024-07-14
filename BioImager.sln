@@ -49,6 +49,7 @@ Global
 		{79821A0A-EA5C-4DFE-9DAC-2FFF3FF897D1}.Release|Any CPU.ActiveCfg = Release
 		{79821A0A-EA5C-4DFE-9DAC-2FFF3FF897D1}.Release|ARM64.ActiveCfg = Release
 		{79821A0A-EA5C-4DFE-9DAC-2FFF3FF897D1}.Release|x64.ActiveCfg = Release
+		{79821A0A-EA5C-4DFE-9DAC-2FFF3FF897D1}.Release|x64.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
