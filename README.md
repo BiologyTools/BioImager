@@ -56,6 +56,7 @@ Microscope.TakeTiles(4,4);
 - For Zeiss® set the MTB® Api library path to version of MTB® you are using, found in program files.
 - For Prior® download Prior® SDK and set path to [Prior® SDK](https://www.prior.com/wp-content/themes/prior-scientific/download.php?file=13594) PriorScientificSDK.dll
 - Set Functions to controller buttons by double clicking labels. Functions include all microscope functions & ImageJ & Bio C# scripts.  
+- Optionally install [CUDA](https://developer.nvidia.com/cuda-downloads) for hardware accelerated stitching as well as tile cache in graphics card memory instead of RAM. 
 - `Star this project on Github to help spread the word about Bio!`
 
 ## Dependencies

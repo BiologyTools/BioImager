@@ -14,15 +14,19 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.3.0</Version>
+    <Version>4.4.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Bug fixes and updated BioFormats to 7.3.1.</PackageReleaseNotes>
+    <PackageReleaseNotes>CUDA accelerated stitching.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Erikr\.nuget\packages\micro-manager.net\2.0.3.3\contentFiles\any\net8.0\google-collect-1.0.jar" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Bio.ico" />
     <Content Include="macro-commands.csv">
@@ -421,22 +425,30 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AForgeBio" Version="1.6.0" />
-    <PackageReference Include="BioLib" Version="2.4.1" />
+    <None Include="C:\Users\Erikr\Documents\GitHub\Micro-Manager.NET\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="AForgeBio" Version="1.7.1.2" />
+    <PackageReference Include="BioLib" Version="2.7.2.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.17" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.2" />
+    <PackageReference Include="IKVM" Version="8.10.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="Micro-Manager.NET" Version="2.0.3.2" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.18.1" />
+    <PackageReference Include="Micro-Manager.NET" Version="2.0.3.3" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NetVips" Version="2.4.1" />
-    <PackageReference Include="NetVips.Native.win-x64" Version="8.15.2" />
+    <PackageReference Include="NetVips.Native.win-x64" Version="8.15.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenSlideGTK" Version="1.6.0" />
-    <PackageReference Include="ScottPlot" Version="5.0.36" />
+    <PackageReference Include="OpenSlideGTK" Version="1.8.0" />
+    <PackageReference Include="ScottPlot" Version="5.0.39" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
@@ -447,8 +459,8 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.102.6" />
-    <PackageReference Include="YamlDotNet" Version="15.3.0" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.103.0" />
+    <PackageReference Include="YamlDotNet" Version="16.1.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">
@@ -484,9 +496,5 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Using Include="BioLib" />
   </ItemGroup>
 </Project>

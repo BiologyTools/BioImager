@@ -490,7 +490,7 @@ namespace BioImager
                 if (magicSel.Index == 1)
                     th = new Threshold((int)st.Median);
                 else
-                    th = new Threshold(st.Min);
+                    th = new Threshold((int)st.Min);
                 th.ApplyInPlace((Bitmap)bf.Image);
                 Invert inv = new Invert();
                 Bitmap det;

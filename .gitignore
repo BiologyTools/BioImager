@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd.gitsigners
 *.png
 /Microscope/AForgeCore
+BioImager - Backup.csproj

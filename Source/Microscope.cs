@@ -530,7 +530,17 @@ namespace BioImager
         }
         public Objective GetObjective()
         {
-            return List[(short)GetPosition()];
+            int p = 0;
+            try
+            {
+                p = (short)GetPosition();
+                return List[p];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return new Objective();
         }
     }
 

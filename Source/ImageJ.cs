@@ -54,7 +54,7 @@ namespace BioImager
             public static Dictionary<string, List<Function>> Functions = new Dictionary<string, List<Function>>();
             internal static void Initialize()
             {
-                string[] sts = File.ReadAllLines("macro-functions.txt");
+                string[] sts = File.ReadAllLines(Path.GetDirectoryName(Environment.ProcessPath) + "/macro-functions.txt");
                 foreach (string s in sts)
                 {
                     string com = "";
@@ -92,7 +92,7 @@ namespace BioImager
                             Functions[com].Add(new Function(com, args, doc));
                     }
                 }
-                string[] cs = File.ReadAllLines("macro-commands.csv");
+                string[] cs = File.ReadAllLines(Path.GetDirectoryName(Environment.ProcessPath) + "/macro-commands.csv");
                 foreach (string s in cs)
                 {
                     string[] v = s.Split(',');

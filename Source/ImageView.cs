@@ -258,20 +258,28 @@ namespace BioImager
         {
             System.Threading.Tasks.Task.Run(() =>
             {
-                App.viewer.Invoke((MethodInvoker)delegate
+                try
                 {
-                    if (SelectedImage == null)
-                        return;
-                    if (z >= SelectedImage.SizeZ)
-                        zBar.Value = zBar.Maximum;
-                    if (c >= SelectedImage.SizeC)
-                        cBar.Value = cBar.Maximum;
-                    if (t >= SelectedImage.SizeT)
-                        tBar.Value = tBar.Maximum;
-                    zBar.Value = z;
-                    cBar.Value = c;
-                    tBar.Value = t;
-                });
+                    App.viewer.Invoke((MethodInvoker)delegate
+                    {
+                        if (SelectedImage == null)
+                            return;
+                        if (z >= SelectedImage.SizeZ)
+                            zBar.Value = zBar.Maximum;
+                        if (c >= SelectedImage.SizeC)
+                            cBar.Value = cBar.Maximum;
+                        if (t >= SelectedImage.SizeT)
+                            tBar.Value = tBar.Maximum;
+                        zBar.Value = z;
+                        cBar.Value = c;
+                        tBar.Value = t;
+                    });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                
             });
         }
         /// It returns the coordinate of the selected image
@@ -2667,14 +2675,14 @@ namespace BioImager
                     {
                         if (SelectedImage.isRGB)
                         {
-                            int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, e.X, e.Y, 0);
-                            int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, e.X, e.Y, 1);
-                            int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, e.X, e.Y, 2);
+                            int r = (int)SelectedImage.GetValueRGB(zc, RChannel.Index, tc, e.X, e.Y, 0);
+                            int g = (int)SelectedImage.GetValueRGB(zc, GChannel.Index, tc, e.X, e.Y, 1);
+                            int b = (int)SelectedImage.GetValueRGB(zc, BChannel.Index, tc, e.X, e.Y, 2);
                             mouseColor = ", " + r + "," + g + "," + b;
                         }
                         else
                         {
-                            int r = SelectedImage.GetValueRGB(zc, 0, tc, e.X, e.Y, 0);
+                            int r = (int)SelectedImage.GetValueRGB(zc, 0, tc, e.X, e.Y, 0);
                             mouseColor = ", " + r;
                         }
                     }
@@ -2682,14 +2690,14 @@ namespace BioImager
                     {
                         if (SelectedImage.isRGB)
                         {
-                            int r = SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)ip.X, (int)ip.Y, 0);
-                            int g = SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)ip.X, (int)ip.Y, 1);
-                            int b = SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)ip.X, (int)ip.Y, 2);
+                            int r = (int)SelectedImage.GetValueRGB(zc, RChannel.Index, tc, (int)ip.X, (int)ip.Y, 0);
+                            int g = (int)SelectedImage.GetValueRGB(zc, GChannel.Index, tc, (int)ip.X, (int)ip.Y, 1);
+                            int b = (int)SelectedImage.GetValueRGB(zc, BChannel.Index, tc, (int)ip.X, (int)ip.Y, 2);
                             mouseColor = ", " + r + "," + g + "," + b;
                         }
                         else
                         {
-                            int r = SelectedImage.GetValueRGB(zc, 0, tc, (int)ip.X, (int)ip.Y, 0);
+                            int r = (int)SelectedImage.GetValueRGB(zc, 0, tc, (int)ip.X, (int)ip.Y, 0);
                             mouseColor = ", " + r;
                         }
                     }

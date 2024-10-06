@@ -6,14 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RectangleD = AForge.RectangleD;
+using javax.swing;
+using BioLib;
+using System.Runtime.InteropServices;
 using mmcorej;
 using org.micromanager.@internal;
-using BioLib;
+
 namespace BioImager
 {
     public static class MicroManager
     {
-        public static CMMCore core;
+        public static mmcorej.CMMCore core;
         public static MMStudio studio;
         public static PointD location;
         public static double focus;
@@ -52,57 +55,28 @@ namespace BioImager
         public static string TurretName = "";
         public static bool Initialize(string config)
         {
-            java.lang.System.setProperty("force.annotation.index", "true");
-            // Set the library path (adjust the path as needed)
-            java.lang.System.setProperty("org.micromanager.corej.path", "C:/Program Files/Micro-Manager-2.0");
-            MMStudio.main(new string[] { });
-            studio = MMStudio.getInstance();
-            core = studio.core();
-            string[] sts = File.ReadAllLines(config);
-            foreach (string s in sts)
+            try
             {
-                if(!s.Replace(" ","").StartsWith("#"))
-                {
-                    string[] vals = s.Split(',');
-                    if (vals.Length == 1)
-                        continue;
-                    if (!Config.ContainsKey(vals[0]))
-                    Config.Add(vals[0],new List<Conf>());
-                    List<string> vs = new List<string>();
-                    for (int j = 2; j < vals.Length; j++)
-                    {
-                        vs.Add(vals[j]);
-                    }
-                    Config[vals[0]].Add(new Conf(vals[0], vals[1], vs.ToArray()));
-                }
+                Directory.SetCurrentDirectory("C:/Program Files/Micro-Manager-2.0/");
+                java.lang.System.setProperty("force.annotation.index", "true");
+                // Set the library path (adjust the path as needed)
+                java.lang.System.setProperty("org.micromanager.corej.path", "C:/Program Files/Micro-Manager-2.0");
+                java.lang.System.setProperty("user.dir", "C:/Program Files/Micro-Manager-2.0/");
+                MMStudio.main(new string[] { });
+                studio = MMStudio.getInstance();
+                core = (CMMCore)studio.core();
+                Objectives.Initialize();
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(Environment.ProcessPath));
+                return true;
             }
-            if(Config.ContainsKey("Device"))
+            catch (Exception e)
             {
-                //We get the name of the objective turret required for changing objectives
-                foreach (Conf item in Config["Device"])
-                {
-                    if(item.Type == "Objective")
-                    {
-                        //We set the 
-                        TurretName = "Objective";
-                        initialized = true;
-                    }
-                }
+                // Log the exception message
+                Console.WriteLine("Error during Micro-Manager initialization: " + e.Message);
+                return false; // Return false on failure
             }
-            Objectives.Initialize();
-            if(!initialized)
-            {
-                Console.WriteLine("Unable to find Objective Turret (DObjective) Label in MMConfig.");
-                return false;
-            }
-            Shutters.Initialize();
-            Point3D loc = new Point3D();
-            GetPosition3D(out loc, true);
-            focus = loc.Z;
-            location = new PointD(loc.X, loc.Y);
-            return true;
         }
-        
+
         public static BioImage TakeImage(string name)
         {
             int width, height, depth, bits, channels = 0;
