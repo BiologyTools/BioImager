@@ -1,4 +1,5 @@
-﻿using AForge;
+﻿
+using AForge;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,8 +10,8 @@ using RectangleD = AForge.RectangleD;
 using javax.swing;
 using BioLib;
 using System.Runtime.InteropServices;
-using mmcorej;
 using org.micromanager.@internal;
+using mmcorej;
 
 namespace BioImager
 {
