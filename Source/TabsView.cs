@@ -643,7 +643,7 @@ namespace BioImager
         {
             Image.To8Bit();
             Viewer.InitGUI();
-            Viewer.UpdateImages();
+            Viewer.UpdateImages(true);
         }
 
         /// It converts the image to 16 bit, then updates the GUI and the image
@@ -655,7 +655,7 @@ namespace BioImager
         {
             Image.To16Bit();
             Viewer.InitGUI();
-            Viewer.UpdateImages();
+            Viewer.UpdateImages(true);
         }
 
         /// Converts the image to 24 bit color.
@@ -667,7 +667,7 @@ namespace BioImager
             Image.To24Bit();
             //We update the viewer gui since there are less planes now.
             Viewer.InitGUI();
-            Viewer.UpdateImages();
+            Viewer.UpdateImages(true);
         }
 
         /// It converts the image to 48 bit color
@@ -679,7 +679,7 @@ namespace BioImager
             Image.To48Bit();
             //We update the viewer gui since there are less planes now.
             Viewer.InitGUI();
-            Viewer.UpdateImages();
+            Viewer.UpdateImages(true);
         }
 
         /// It converts the image to 32 bit color
@@ -690,7 +690,7 @@ namespace BioImager
         {
             Image.To32Bit();
             Viewer.InitGUI();
-            Viewer.UpdateImages();
+            Viewer.UpdateImages(true);
         }
 
         /// If the user clicks on the "To Window" menu item, then if there is a selected image, create a

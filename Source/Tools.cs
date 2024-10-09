@@ -18,6 +18,7 @@ using BioImager;
 using Rectangle = AForge.Rectangle;
 using Bitmap = AForge.Bitmap;
 using BioLib;
+using Gdk;
 namespace BioImager
 {
     public partial class Tools : Form
@@ -380,7 +381,6 @@ namespace BioImager
                 currentTool = GetTool(Tool.Type.pan);
                 UpdateSelected();
                 panPanel.BackColor = System.Drawing.Color.LightGray;
-                Cursor.Current = Cursors.Hand;
             }
 
             UpdateOverlay();
@@ -552,11 +552,21 @@ namespace BioImager
         {
             if (App.viewer == null)
                 return;
-            Scripting.UpdateState(Scripting.State.GetMove(e, buts));
-            if (Tools.currentTool.type == Tools.Tool.Type.pan && buts == MouseButtons.Left || buts == MouseButtons.Middle)
+            if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts.HasFlag(MouseButtons.Left) || buts.HasFlag(MouseButtons.Middle)))
             {
-                PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
-                App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
+                if (ImageView.SelectedImage.isPyramidal)
+                {
+                    if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
+                    {
+                        App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
+                    }
+                }
+                else
+                {
+                    PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
+                    App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
+                }
+                App.viewer.UpdateImages();
                 UpdateView();
             }
             if (ImageView.SelectedImage == null)
@@ -694,7 +704,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.move);
             UpdateSelected();
             movePanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the textPanel, the currentTool is set to the text tool, the
         /// textPanel's background color is set to light gray, and the cursor is set to an arrow
@@ -706,7 +715,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.text);
             UpdateSelected();
             textPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// This function is called when the user double clicks on the text panel. It sets the current
         /// tool to the text tool, updates the selected tool, and sets the text panel's background color
@@ -726,7 +734,6 @@ namespace BioImager
             if (fontDialog.ShowDialog() != DialogResult.OK)
                 return;
             font = fontDialog.Font;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the pointPanel, the currentTool is set to the point tool, the
         /// pointPanel's background color is set to light gray, and the cursor is set to an arrow
@@ -738,7 +745,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.point);
             UpdateSelected();
             pointPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the linePanel, the currentTool is set to the line tool, the
         /// linePanel's background color is set to light gray, and the cursor is set to an arrow
@@ -750,7 +756,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.line);
             UpdateSelected();
             linePanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the rectangle panel, the current tool is set to the rectangle tool,
         /// the selected tool is updated, the rectangle panel's background color is set to light gray,
@@ -763,7 +768,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.rect);
             UpdateSelected();
             rectPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the ellipse button is clicked, the current tool is set to the ellipse tool, the
         /// selected tool is updated, the ellipse button's background color is set to light gray, and
@@ -776,7 +780,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.ellipse);
             UpdateSelected();
             ellipsePanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the polygon button, the current tool is set to the polygon tool, the
         /// selected tool is updated, the polygon button is highlighted, and the cursor is set to an
@@ -789,7 +792,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.polygon);
             UpdateSelected();
             polyPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the delete button is clicked, the current tool is set to the delete tool, the selected
         /// tool is updated, the delete button's background color is set to light gray, and the cursor
@@ -802,7 +804,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.delete);
             UpdateSelected();
             deletePanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the freeformPanel, the currentTool is set to the freeform tool, the
         /// freeformPanel's background color is set to light gray, and the cursor is set to an arrow
@@ -814,7 +815,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.freeform);
             UpdateSelected();
             freeformPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the rectangle selection panel, the current tool is set to the
         /// rectangle selection tool, the panel's background color is set to light gray, and the cursor
@@ -827,7 +827,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.rectSel);
             UpdateSelected();
             rectSelPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the user clicks on the panPanel, the currentTool is set to the pan tool, the selected
         /// tool is updated, the panPanel's background color is set to light gray, and the cursor is set
@@ -840,7 +839,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.pan);
             UpdateSelected();
             panPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Hand;
         }
         /// When the magicPanel is clicked, the currentTool is set to the magic tool, the selected tool
         /// is updated, the magicPanel's background color is set to light gray, and the cursor is set to
@@ -853,7 +851,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.magic);
             UpdateSelected();
             magicPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the bucketPanel is clicked, the currentTool is set to the bucket tool, the selected
         /// tool is updated, the bucketPanel's background color is set to light gray, and the cursor is
@@ -866,7 +863,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.bucket);
             UpdateSelected();
             bucketPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         /// When the pencilPanel is clicked, the currentTool is set to the pencil tool, the
         /// pencilPanel's background color is set to light gray, and the cursor is set to the arrow
@@ -879,7 +875,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.pencil);
             UpdateSelected();
             pencilPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
         MagicSelect magicSel = new MagicSelect(2);
         /// If the user double clicks on the magicPanel, then the magicSel dialog box will appear
@@ -916,7 +911,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.pencil);
             UpdateSelected();
             pencilPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
             PenTool pt = new PenTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel));
             if (pt.ShowDialog() != DialogResult.OK)
                 return;
@@ -938,7 +932,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.bucket);
             UpdateSelected();
             bucketPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
             FloodTool pt = new FloodTool(new Graphics.Pen(DrawColor, (int)Tools.StrokeWidth, ImageView.SelectedBuffer.BitsPerPixel), currentTool.tolerance, ImageView.SelectedBuffer.BitsPerPixel);
             if (pt.ShowDialog() != DialogResult.OK)
                 return;
@@ -958,7 +951,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.dropper);
             UpdateSelected();
             dropperPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
 
         /// When the user clicks on the color1Box, a new ColorTool is created, and if the user clicks
@@ -1014,7 +1006,6 @@ namespace BioImager
             currentTool = GetTool(Tool.Type.eraser);
             UpdateSelected();
             eraserPanel.BackColor = System.Drawing.Color.LightGray;
-            Cursor.Current = Cursors.Arrow;
         }
 
         /// When the user clicks on the switchBox, the program swaps the DrawColor and EraseColor
