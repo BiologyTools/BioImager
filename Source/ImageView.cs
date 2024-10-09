@@ -69,6 +69,7 @@ namespace BioImager
             zBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
             tBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
             cBar.MouseWheel += (sender, e) => ((HandledMouseEventArgs)e).Handled = true;
+            this.SizeChanged += ImageView_SizeChanged;
             TimeFps = 60;
             ZFps = 60;
             CFps = 1;
@@ -686,8 +687,7 @@ namespace BioImager
                 hScrollBar.Value = (int)value.X;
                 vScrollBar.Value = (int)value.Y;
                 SelectedImage.PyramidalOrigin = value;
-                UpdateImages(true);
-                UpdateView();
+                updatePyr = true;
             }
         }
         ///A property of the class ImageViewer. It is a getter and setter for the resolution of the image.
@@ -706,8 +706,7 @@ namespace BioImager
                 SelectedImage.Resolution = value;
                 if (SelectedImage.Type == BioImage.ImageType.well)
                     SelectedImage.Level = (int)value;
-                UpdateImage();
-                UpdateView();
+                updatePyr = true;
             }
         }
         private void UpdateScrollBars()
@@ -1357,7 +1356,7 @@ namespace BioImager
             {
                 b.PyramidalOrigin = PyramidalOrigin;
                 b.PyramidalSize = new AForge.Size(dxPanel.Width, dxPanel.Height);
-                if(updatePyramidal)
+                if(updatePyramidal && drawing)
                 await b.UpdateBuffersPyramidal();
                 ZCT coords = new ZCT(zBar.Value, cBar.Value, tBar.Value);
                 Bitmap bitmap = null;
@@ -2291,6 +2290,7 @@ namespace BioImager
 
 
         AForge.SizeF dSize = new AForge.SizeF(1, 1);
+        bool updatePyr = true;
         /// <summary>
         /// Draws the viewport when Hardware Acceleration is off.
         /// </summary>
@@ -2303,6 +2303,12 @@ namespace BioImager
                 return;
             }
             drawing = true;
+            if (updatePyr)
+            {
+                UpdateImages(true);
+                updatePyr = false;
+            }
+            UpdateImages();
             g.TranslateTransform(ViewWidth / 2, ViewHeight / 2);
             if (Scale.Width == 0 || float.IsInfinity(Scale.Width))
                 Scale = new SizeF(1, 1);
@@ -2553,16 +2559,6 @@ namespace BioImager
             if (SelectedImage == null)
                 return;
             App.viewer = this;
-            if (e.Button == MouseButtons.Middle)
-            {
-                PointD pd = new PointD(p.X - mouseDown.X, p.Y - mouseDown.Y);
-                origin = new PointD(origin.X + pd.X, origin.Y + pd.Y);
-                if (SelectedImage.isPyramidal)
-                {
-                    Point pf = new Point(e.X - mouseD.X, e.Y - mouseD.Y);
-                    PyramidalOrigin = new PointD(PyramidalOrigin.X - pf.X, PyramidalOrigin.Y - pf.Y);
-                }
-            }
             tools.ToolUp(p, e.Button);
         }
         /// The function is called when the mouse is pressed down on the picturebox
