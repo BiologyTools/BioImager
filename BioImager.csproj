@@ -23,6 +23,7 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Bio.ico" />
     <Content Include="macro-commands.csv">
@@ -418,6 +419,12 @@
       <Pack>True</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
+    <Content Include="tile_copy.cu">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tile_copy.ptx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -428,7 +435,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="AForgeBio" Version="1.7.1.2" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CS-Script" Version="4.8.17" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
@@ -442,7 +448,6 @@
     <PackageReference Include="NetVips" Version="2.4.1" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenSlideGTK" Version="1.8.0" />
     <PackageReference Include="ScottPlot" Version="5.0.39" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />

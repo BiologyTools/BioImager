@@ -19,6 +19,7 @@ using Rectangle = AForge.Rectangle;
 using Bitmap = AForge.Bitmap;
 using BioLib;
 using Gdk;
+using OpenSlideGTK;
 namespace BioImager
 {
     public partial class Tools : Form
@@ -376,7 +377,7 @@ namespace BioImager
                 ImageView.SelectedImage.Annotations.Add(an);
             }
             else
-            if (buts == MouseButtons.Middle || currentTool.type == Tool.Type.pan)
+            if (buts == MouseButtons.Middle)
             {
                 currentTool = GetTool(Tool.Type.pan);
                 UpdateSelected();
@@ -552,6 +553,13 @@ namespace BioImager
         {
             if (App.viewer == null)
                 return;
+            if (ImageView.SelectedImage == null)
+                return;
+            PointD p;
+            if (App.viewer.HardwareAcceleration)
+                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
+            else
+                p = ImageView.SelectedImage.ToImageSpace(e);
             if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts.HasFlag(MouseButtons.Left) || buts.HasFlag(MouseButtons.Middle)))
             {
                 if (ImageView.SelectedImage.isPyramidal)
@@ -569,13 +577,8 @@ namespace BioImager
                 App.viewer.UpdateImages();
                 UpdateView();
             }
-            if (ImageView.SelectedImage == null)
-                return;
-            PointD p;
-            if (App.viewer.HardwareAcceleration)
-                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
-            else
-                p = ImageView.SelectedImage.ToImageSpace(e);
+            
+
             if (currentTool.type == Tool.Type.line && ImageView.down)
             {
                 anno.UpdatePoint(new PointD(e.X, e.Y), 1);
