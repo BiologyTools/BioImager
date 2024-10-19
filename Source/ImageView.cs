@@ -3734,6 +3734,12 @@ namespace BioImager
         /// @param EventArgs The event arguments.
         private void dxPanel_SizeChanged(object sender, EventArgs e)
         {
+            if (SelectedImage == null)
+                return;
+            if(SelectedImage.isPyramidal)
+            {
+                SelectedImage.PyramidalSize = new AForge.Size(dxPanel.Width, dxPanel.Height);
+            }
             if (HardwareAcceleration && dx != null)
             {
                 conf.Width = dxPanel.Width;
@@ -3793,6 +3799,7 @@ namespace BioImager
         private void vScrollBar_ValueChanged(object sender, EventArgs e)
         {
             SelectedImage.PyramidalOrigin = new PointD(vScrollBar.Value, hScrollBar.Value);
+            UpdateImages(true);
         }
     }
 }
