@@ -19,7 +19,7 @@
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Whole slide viewing improvements.</PackageReleaseNotes>
+    <PackageReleaseNotes>Whole slide viewing improvements, CUDA stitching, and bug fixes.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
@@ -445,7 +445,7 @@
     <PackageReference Include="Micro-Manager.NET" Version="2.0.3.3" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
-    <PackageReference Include="NetVips" Version="2.4.1" />
+    <PackageReference Include="NetVips" Version="2.4.2" />
     <PackageReference Include="NetVips.Native.win-x64" Version="8.15.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ScottPlot" Version="5.0.39" />
