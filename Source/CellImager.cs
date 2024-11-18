@@ -104,7 +104,7 @@ namespace BioImager
                 det = AForge.Imaging.Image.Convert16bppTo8bpp(bf);
             else
                 det = bf;
-            pictureBox.Image = new System.Drawing.Bitmap(det.Width, det.Height, det.Width * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, det.RGBData);
+            pictureBox.Image = new System.Drawing.Bitmap(det.Width, det.Height, det.Width * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, det.GetRGBData());
             BlobCounter blobCounter = new BlobCounter();
             blobCounter.ProcessImage(det);
             Blob[] bls = blobCounter.GetObjectsInformation();

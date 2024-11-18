@@ -25,12 +25,39 @@ namespace BioImager
         public string Status
         {
             get { return statusLabel.Text; }
-            set { statusLabel.Text = value; }
+            set 
+            {
+                // Use Invoke to update the label on the UI thread
+                if (statusLabel.InvokeRequired)
+                {
+                    statusLabel.Invoke(() => statusLabel.Text = value);
+                }
+                else
+                {
+                    statusLabel.Text = value;
+                }
+            }
         }
         public float ProgressValue
         {
             get { return progressBar.Value; }
-            set { progressBar.Value = (int)(value * 100); }
+            set 
+            {
+                if (progressBar.InvokeRequired)
+                {
+                    if (progressBar.Maximum < value)
+                    {
+                        progressBar.Invoke(() => progressBar.Value = (int)(value / 100));
+                    }
+                    else
+                        progressBar.Invoke(() => progressBar.Value = (int)value);
+                    return;
+                }
+                if (progressBar.Maximum < value)
+                    progressBar.Value = (int)(value * 100);
+                else
+                    progressBar.Value = (int)(value);
+            }
         }
 
         public void UpdateProgress(int p)

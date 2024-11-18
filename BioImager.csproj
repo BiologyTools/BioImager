@@ -14,12 +14,12 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.5.1</Version>
+    <Version>4.6.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>CUDA code update fixing incorect tiling during zoom.</PackageReleaseNotes>
+    <PackageReleaseNotes>Progress bar for opening &amp; saving. Updated Bio-Formats to 8.0.1. ROI support for pyramidal images.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
@@ -435,21 +435,16 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="BioLib" Version="2.8.0" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
-    <PackageReference Include="CS-Script" Version="4.8.17" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="H.InputSimulator" Version="1.4.2" />
-    <PackageReference Include="IKVM" Version="8.10.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Micro-Manager.NET" Version="2.0.3.3" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.20.0" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
-    <PackageReference Include="NetVips" Version="2.4.2" />
-    <PackageReference Include="NetVips.Native.win-x64" Version="8.15.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ScottPlot" Version="5.0.39" />
+    <PackageReference Include="ScottPlot" Version="5.0.46" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
@@ -460,8 +455,12 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.103.0" />
-    <PackageReference Include="YamlDotNet" Version="16.1.3" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.103.1" />
+    <PackageReference Include="YamlDotNet" Version="16.2.0" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\..\RepoErik\BioLib\BioLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">

@@ -16,6 +16,25 @@ namespace BioImager
         public static bool init = false;
         public Filter filters = null;
         public static System.Drawing.Graphics graphics = null;
+        public static class MainThreadInvoker
+        {
+            private static TaskScheduler _mainThreadScheduler;
+
+            public static void Initialize()
+            {
+                _mainThreadScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            }
+
+            public static void Invoke(System.Action action)
+            {
+                if (_mainThreadScheduler == null)
+                {
+                    throw new InvalidOperationException("MainThreadInvoker not initialized.");
+                }
+
+                Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _mainThreadScheduler);
+            }
+        }
         /* Returning the ImageView object that is currently selected in the tabControl. */
         public ImageView Viewer
         {
@@ -100,19 +119,17 @@ namespace BioImager
                 return;
             if (b.filename.Contains("/") || b.filename.Contains("\\"))
                 b.filename = Path.GetFileName(b.filename);
-            TabPage t = new TabPage(b.filename);
-            ImageView v = new ImageView(b);
-            v.ShowStage = false;
-            v.Dock = DockStyle.Fill;
-            t.Controls.Add(v);
-            if (Width < b.SizeX || Height < b.SizeY)
-            {
-                Width = b.SizeX;
-                Height = b.SizeY + 190;
-            }
-            tabControl.TabPages.Add(t);
-            tabControl.SelectedIndex = tabControl.TabCount - 1;
-            ResizeView();
+            if(tabControl.IsHandleCreated)
+            tabControl.Invoke((MethodInvoker)delegate {
+                TabPage t = new TabPage(b.filename);
+                ImageView v = new ImageView(b);
+                v.ShowStage = false;
+                v.Dock = DockStyle.Fill;
+                t.Controls.Add(v);
+                tabControl.TabPages.Add(t);
+                tabControl.SelectedIndex = tabControl.TabCount - 1;
+                ResizeView();
+            });
         }
         public bool HasTab(string name)
         {
@@ -127,6 +144,7 @@ namespace BioImager
         }
         private void Init()
         {
+            MainThreadInvoker.Initialize();
             TabPage t = new TabPage("Viewer");
             ImageView v = new ImageView();
             v.ShowStage = true;
@@ -269,7 +287,9 @@ namespace BioImager
                 return;
             foreach (string item in openFilesDialog.FileNames)
             {
+                StartProgress("Opening selected image.", "Opening");
                 BioImage im = BioImage.OpenFile(item, 0, false, false);
+                StopProgress();
                 if (im == null)
                     return;
                 AddTab(im);
@@ -308,6 +328,42 @@ namespace BioImager
             }
         }
 
+        private static bool done = false;
+        private static Progress progress = new Progress("", "");
+        private static string title;
+        private static void ProgressUpdate()
+        {
+            do
+            {
+                progress.Text = title;
+                progress.Status = BioImage.Status;
+                progress.ProgressValue = BioImage.Progress;
+                Thread.Sleep(250);
+            } while (!done);
+        }
+        private static void StartProgress(string titl, string status)
+        {
+            done = false;
+            title = titl;
+            BioImage.Progress = 0;
+            progress.Status = status;
+            progress.Text = title;
+            if (BioImage.Status == "" || BioImage.Status == null)
+                progress.Status = status;
+            else
+                progress.Status = BioImage.Status;
+            progress.ProgressValue = BioImage.Progress;
+            progress.Show();
+            Application.DoEvents();
+            Thread th = new Thread(ProgressUpdate);
+            th.Start();
+        }
+        private static void StopProgress()
+        {
+            done = true;
+            progress.Hide();
+        }
+
         /// This function removes the selected image from the list of images
         /// 
         /// @param sender The object that raised the event.
@@ -335,7 +391,9 @@ namespace BioImager
                 return;
             string[] sts = new string[1];
             sts[0] = ImageView.SelectedImage.ID;
+            StartProgress("Saving selected Tiff.", "Saving");
             BioImage.SaveSeries(sts, saveTiffFileDialog.FileName);
+            StopProgress();
         }
 
         /// If the user presses the "S" key while holding down the "Control" key, then the "Save" menu
@@ -576,7 +634,9 @@ namespace BioImager
                 return;
             foreach (string file in saveOMEFileDialog.FileNames)
             {
+                StartProgress("Saving selected OME.", "Saving OME");
                 BioImage.SaveOME(file, Image.ID);
+                StopProgress();
             }
         }
 
@@ -759,21 +819,19 @@ namespace BioImager
             GC.Collect();
         }
 
-        private void openOMEToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         /// It saves all the images in the list of images
         /// 
         /// @param sender The object that raised the event.
         /// @param EventArgs System.EventArgs
         private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             List<string> sts = new List<string>();
             foreach (BioImage item in Images.images)
             {
+                StartProgress("Save Selected Tiff", "Saving");
                 BioImage.SaveFile(Image.ID, Image.ID);
+                StopProgress();
             }
         }
 
@@ -817,6 +875,7 @@ namespace BioImager
                 return;
             foreach (string item in openFilesDialog.FileNames)
             {
+                StartProgress("Opening selected OME", "Opening OME");
                 BioImage im = BioImage.OpenOME(item, 0, false, false, false, 0, 0, 0, 0);
                 if (im == null)
                     return;
@@ -858,7 +917,11 @@ namespace BioImager
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (saveTiffFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                StartProgress("Saving selected Tiff", "Saving");
                 BioImage.SaveFile(ImageView.SelectedImage.ID, saveTiffFileDialog.FileName);
+                StopProgress();
+            }
         }
 
         /// If the user clicks the "Save OME" menu item, then show the save file dialog and if the user

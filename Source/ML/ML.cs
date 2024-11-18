@@ -312,7 +312,8 @@ namespace BioImager.ML
                     bb.bitsPerPixel = bb.Buffers[0].BitsPerPixel;
 
                     BioImage.AutoThreshold(bb, true);
-                    Images.AddImage(bb, true);
+                    Images.AddImage(bb);
+                    App.tabsView.AddTab(bb);
                 }
                 else
                     throw new NotImplementedException();
@@ -446,7 +447,8 @@ namespace BioImager.ML
                     bb.Volume = b.Volume;
                     bb.bitsPerPixel = bb.Buffers[0].BitsPerPixel;
                     BioImage.AutoThreshold(bb, true);
-                    Images.AddImage(bb, true);
+                    Images.AddImage(bb);
+                    App.tabsView.AddTab(bb);
                 }
                 else
                     throw new NotImplementedException();

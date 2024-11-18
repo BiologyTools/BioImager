@@ -332,7 +332,7 @@ namespace BioImager
                 for (int i = 0; i < ImageView.SelectedImage.Annotations.Count; i++)
                 {
                     ROI an = ImageView.SelectedImage.Annotations[i];
-                    if (an.BoundingBox.IntersectsWith(e.X, e.Y))
+                    if (an.BoundingBox.IntersectsWith(new RectangleD(e.X, e.Y, 1, 1)))
                     {
                         if (an.selectedPoints.Count == 0)
                         {
@@ -470,63 +470,55 @@ namespace BioImager
             else
             if (Tools.currentTool.type == Tools.Tool.Type.magic && buts == MouseButtons.Left)
             {
-                PointD pf = new PointD(ImageView.mouseUp.X - ImageView.mouseDown.X, ImageView.mouseUp.Y - ImageView.mouseDown.Y);
+                RectangleD r = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, Math.Abs(ImageView.mouseUp.X - ImageView.mouseDown.X), Math.Abs(ImageView.mouseUp.Y - ImageView.mouseDown.Y));
+                AForge.RectangleF rr = ImageView.SelectedImage.ToImageSpace(r);
                 ZCT coord = App.viewer.GetCoordinate();
-
-                Rectangle r = new Rectangle((int)ImageView.mouseDown.X, (int)ImageView.mouseDown.Y, (int)(ImageView.mouseUp.X - ImageView.mouseDown.X), (int)(ImageView.mouseUp.Y - ImageView.mouseDown.Y));
-                if (r.Width <= 2 || r.Height <= 2)
-                    return;
-                Bitmap bf = ImageView.SelectedImage.Buffers[ImageView.SelectedImage.Coords[coord.Z, coord.C, coord.T]].GetCropBuffer(r);
+                Bitmap bf;
+                if (ImageView.SelectedImage.Buffers[0].RGBChannelsCount > 1)
+                    bf = ImageView.SelectedImage.GetFiltered(coord, ImageView.SelectedBuffer.Stats[0].Range, ImageView.SelectedBuffer.Stats[1].Range, ImageView.SelectedBuffer.Stats[2].Range);
+                else
+                    bf = ImageView.SelectedImage.GetFiltered(coord, ImageView.SelectedBuffer.Stats[0].Range, ImageView.SelectedBuffer.Stats[0].Range, ImageView.SelectedBuffer.Stats[0].Range);
+                bf.Crop(rr.ToRectangleInt());
                 Statistics[] sts = Statistics.FromBytes(bf);
                 Statistics st = sts[0];
-                Threshold th;
+                int th = 0;
                 if (magicSel.Numeric)
                 {
-                    th = new Threshold((int)magicSel.Threshold);
+                    th = magicSel.Threshold;
                 }
                 else
                 if (magicSel.Index == 2)
-                    th = new Threshold((int)(st.Min + st.Mean));
+                    th = (int)(st.Min + st.Mean);
                 else
                 if (magicSel.Index == 1)
-                    th = new Threshold((int)st.Median);
+                    th = (int)st.Median;
                 else
-                    th = new Threshold((int)st.Min);
-                th.ApplyInPlace((Bitmap)bf.Image);
-                Invert inv = new Invert();
+                    th = (int)st.Min;
                 Bitmap det;
                 if (bf.BitsPerPixel > 8)
-                    det = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap)bf.Image);
+                {
+                    bf.To8Bit();
+                    det = bf;
+                    //blobCounter.BackgroundThreshold = AForge.Color.FromArgb((int)(((float)th / (float)ushort.MaxValue) * 255), (int)(((float)th / (float)ushort.MaxValue) * 255), (int)(((float)th / (float)ushort.MaxValue) * 255));
+                }
                 else
-                    det = (Bitmap)bf.Image;
-                BlobCounter blobCounter = new BlobCounter();
-                blobCounter.ProcessImage(det);
-                Blob[] blobs = blobCounter.GetObjectsInformation();
-                // create convex hull searching algorithm
-                GrahamConvexHull hullFinder = new GrahamConvexHull();
-                // lock image to draw on it
-                // process each blob
+                {
+                    //blobCounter.BackgroundThreshold = AForge.Color.FromArgb((int)th, (int)th, (int)th);
+                    det = bf;
+                }
+                BlobCounter blobCounter = new BlobCounter(det);
+                blobCounter.FilterBlobs = true;
+                blobCounter.MinWidth = 2;
+                blobCounter.MinHeight = 2;
+                blobCounter.CoupledSizeFiltering = true;
+                Blob[] blobs = blobCounter.GetObjects(det, true);
+                double px = ImageView.SelectedImage.PhysicalSizeX;
+                double py = ImageView.SelectedImage.PhysicalSizeY;
                 foreach (Blob blob in blobs)
                 {
-                    if (blob.Rectangle.Width < magicSel.Max && blob.Rectangle.Height < magicSel.Max)
-                        continue;
-                    List<IntPoint> leftPoints = new List<IntPoint>();
-                    List<IntPoint> rightPoints = new List<IntPoint>();
-                    List<IntPoint> edgePoints = new List<IntPoint>();
-                    List<IntPoint> hull = new List<IntPoint>();
-                    // get blob's edge points
-                    blobCounter.GetBlobsLeftAndRightEdges(blob,
-                        out leftPoints, out rightPoints);
-                    edgePoints.AddRange(leftPoints);
-                    edgePoints.AddRange(rightPoints);
-                    // blob's convex hull
-                    hull = hullFinder.FindHull(edgePoints);
-                    PointD[] pfs = new PointD[hull.Count];
-                    for (int i = 0; i < hull.Count; i++)
-                    {
-                        pfs[i] = new PointD(r.X + hull[i].X, r.Y + hull[i].Y);
-                    }
-                    ROI an = ROI.CreateFreeform(coord, pfs);
+                    AForge.RectangleD rd = new RectangleD(blob.Rectangle.X * px, blob.Rectangle.Y * py, blob.Rectangle.Width * px, blob.Rectangle.Height * py);
+                    PointD loc = new PointD(r.X + rd.X, r.Y + rd.Y); 
+                    ROI an = ROI.CreateRectangle(coord, loc.X, loc.Y, rd.W, rd.H);
                     ImageView.SelectedImage.Annotations.Add(an);
                 }
             }
@@ -567,6 +559,7 @@ namespace BioImager
                     if (App.viewer.MouseMoveInt.X != 0 || App.viewer.MouseMoveInt.Y != 0)
                     {
                         App.viewer.PyramidalOriginTransformed = new PointD(App.viewer.PyramidalOriginTransformed.X + (ImageView.mouseDown.X - e.X), App.viewer.PyramidalOriginTransformed.Y + (ImageView.mouseDown.Y - e.Y));
+                        App.viewer.UpdateImages();
                     }
                 }
                 else
@@ -574,7 +567,6 @@ namespace BioImager
                     PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                     App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
                 }
-                App.viewer.UpdateImages();
                 UpdateView();
             }
             
@@ -678,7 +670,7 @@ namespace BioImager
                 }
                 UpdateOverlay();
             }
-
+            /*
             if (Tools.currentTool.type == Tools.Tool.Type.magic && buts == MouseButtons.Left)
             {
                 //First we draw the selection rectangle
@@ -686,7 +678,7 @@ namespace BioImager
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, d.X, d.Y);
                 UpdateOverlay();
             }
-
+            */
             if (buts == MouseButtons.Left && currentTool.type == Tool.Type.eraser)
             {
                 Graphics.Graphics g = Graphics.Graphics.FromImage(ImageView.SelectedBuffer);

@@ -41,6 +41,7 @@ namespace BioImager
                 Thread.Sleep(1000);
                 foreach (var item in Images.images)
                 {
+                    if(App.tabsView!=null)
                     if (App.tabsView.HasTab(item.Filename))
                         continue;
                     else
@@ -71,7 +72,7 @@ namespace BioImager
         /// Initialize() is a function that initializes the BioImager UI
         public static void Initialize()
         {
-            BioImage.Initialize();
+            BioImage.Initialize(ImageJ.ImageJPath);
             Thread th = new Thread(UpdateImages);
             th.Start();
             do

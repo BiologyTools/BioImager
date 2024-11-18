@@ -1265,8 +1265,11 @@ namespace BioImager
                     file = folder + "/" + Properties.Settings.Default.ImageName + (ImageCount++) + ".ome.tif";
                 b.ID = file;
                 b.file = file;
-                if(addToImages)
-                Images.AddImage(b,newTab);
+                if (addToImages)
+                {
+                    Images.AddImage(b);
+                    App.tabsView.AddTab(b);
+                }
                 if(save)
                 BioImage.SaveOME(file, b.ID);
                 return b;
@@ -1311,10 +1314,13 @@ namespace BioImager
                 Statistics.ClearCalcBuffer();
                 BioImage.AutoThreshold(bm, false);
                 if (!imagingStack)
-                {   
-                    if(addToImages)
-                    Images.AddImage(bm,newTab);
-                    if(save)
+                {
+                    if (addToImages)
+                    {
+                        Images.AddImage(bm);
+                        App.tabsView.AddTab(bm);
+                    }
+                    if (save)
                     BioImage.SaveAsync(file + ".ome.tif", bm.ID,0,true);
                     if (bm.bitsPerPixel > 8)
                         bm.StackThreshold(true);
@@ -1341,7 +1347,10 @@ namespace BioImager
                 if (!imagingStack)
                 {
                     if (addToImages)
-                        Images.AddImage(bm, newTab);
+                    {
+                        Images.AddImage(bm);
+                        App.tabsView.AddTab(bm);
+                    }
                     if (save)
                         BioImage.SaveAsync(file + ".ome.tif", bm.ID,0,true);
                 }
@@ -1493,11 +1502,11 @@ namespace BioImager
                 bi.StackThreshold(true);
             else
                 bi.StackThreshold(false);
-            Images.AddImage(bi,false);
+            Images.AddImage(bi);
+            App.tabsView.AddTab(bi);
             imagingStack = false;
             currentImage = bi;
             images.Clear();
-            App.viewer.AddImage(currentImage);
             locked.Clear();
             ImageCount = 0;
             return bi;
