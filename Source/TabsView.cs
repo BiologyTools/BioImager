@@ -16,25 +16,6 @@ namespace BioImager
         public static bool init = false;
         public Filter filters = null;
         public static System.Drawing.Graphics graphics = null;
-        public static class MainThreadInvoker
-        {
-            private static TaskScheduler _mainThreadScheduler;
-
-            public static void Initialize()
-            {
-                _mainThreadScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-            }
-
-            public static void Invoke(System.Action action)
-            {
-                if (_mainThreadScheduler == null)
-                {
-                    throw new InvalidOperationException("MainThreadInvoker not initialized.");
-                }
-
-                Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _mainThreadScheduler);
-            }
-        }
         /* Returning the ImageView object that is currently selected in the tabControl. */
         public ImageView Viewer
         {
@@ -144,7 +125,6 @@ namespace BioImager
         }
         private void Init()
         {
-            MainThreadInvoker.Initialize();
             TabPage t = new TabPage("Viewer");
             ImageView v = new ImageView();
             v.ShowStage = true;

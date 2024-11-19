@@ -12,7 +12,6 @@ using SizeF = AForge.SizeF;
 using BioLib;
 using CSScripting;
 using OpenSlideGTK;
-using Gdk;
 
 namespace BioImager
 {
@@ -1249,6 +1248,12 @@ namespace BioImager
                     dx.RenderTarget2D.DrawRectangle(rr, red);
                 }
 
+                if(Tools.currentTool!=null)
+                if (Tools.currentTool.type == Tools.Tool.Type.rectSel)// && Modifiers == ModifierType.Button1Mask)
+                {
+                    var recd = ToScreenRectF(Tools.currentTool.Rectangle.X, Tools.currentTool.Rectangle.Y, Tools.currentTool.Rectangle.W, Tools.currentTool.Rectangle.H);
+                    dx.RenderTarget2D.DrawRectangle(ToRawRectF((float)recd.X, (float)recd.Y, (float)recd.Width, (float)recd.Height), blue);
+                }
                 pen.Dispose();
                 red.Dispose();
                 mag.Dispose();
@@ -2616,7 +2621,7 @@ namespace BioImager
                     b.selected = false;
                 ind++;
             }
-            if (!Ctrl && e.Button == MouseButtons.Left)
+            if (!Ctrl && e.Button == MouseButtons.Left && Tools.currentTool.type != Tools.Tool.Type.rectSel)
             {
                 foreach (ROI item in selectedAnnotations)
                 {

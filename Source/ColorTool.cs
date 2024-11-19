@@ -31,7 +31,7 @@ namespace BioImager
         public void UpdateGUI()
         {
             color = new ColorS((ushort)redBox.Value, (ushort)greenBox.Value, (ushort)blueBox.Value);
-            colorPanel.BackColor = System.Drawing.Color.FromArgb(color.R / ushort.MaxValue,color.G / ushort.MaxValue,color.B / ushort.MaxValue);
+            colorPanel.BackColor = System.Drawing.Color.FromArgb((int)(((float)color.R / (float)ushort.MaxValue) * 255),(int)(((float)color.G / (float)ushort.MaxValue) * 255),(int)(((float)color.B / (float)ushort.MaxValue) * 255));
             if (rBar.Value != redBox.Value)
                 redBox.Value = rBar.Value;
             if (gBar.Value != greenBox.Value)

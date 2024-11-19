@@ -57,6 +57,7 @@ namespace BioImager
                 point,
                 line,
                 rect,
+                select,
                 ellipse,
                 polyline,
                 polygon,
@@ -174,7 +175,7 @@ namespace BioImager
             ColorS col = new ColorS(ushort.MaxValue);
             //We initialize the tools
             currentTool = GetTool(Tool.Type.move);
-
+            ROI.selectBoxSize = 1;
             floodFiller = null;
             floodFiller = new QueueLinearFloodFiller(floodFiller);
         }
@@ -211,12 +212,12 @@ namespace BioImager
         {
             if (ImageView.SelectedImage != null)
             {
-                color1Box.BackColor = System.Drawing.Color.FromArgb(DrawColor.R / ushort.MaxValue, DrawColor.G / ushort.MaxValue, DrawColor.B / ushort.MaxValue);
-                color2Box.BackColor = System.Drawing.Color.FromArgb(EraseColor.R / ushort.MaxValue, EraseColor.G / ushort.MaxValue, EraseColor.B / ushort.MaxValue);
+                color1Box.BackColor = System.Drawing.Color.FromArgb((int)((float)DrawColor.R / (float)ushort.MaxValue) * 255,(int)((float)DrawColor.G / (float)ushort.MaxValue) * 255, (int)((float)DrawColor.B / (float)ushort.MaxValue) * 255);
+                color2Box.BackColor = System.Drawing.Color.FromArgb((int)((float)EraseColor.R / (float)ushort.MaxValue) * 255, (int)((float)EraseColor.G / (float)ushort.MaxValue) * 255, (int)((float)EraseColor.B / (float)ushort.MaxValue) * 255);
             }
             widthBox.Value = width;
         }
-        public static float selectBoxSize = ROI.selectBoxSize;
+        public static float selectBoxSize = 1;// ROI.selectBoxSize;
         ROI anno = new ROI();
         /// The function is called when the user clicks the mouse button. 
         /// 
@@ -376,13 +377,14 @@ namespace BioImager
                 an.Text = ti.TextValue;
                 ImageView.SelectedImage.Annotations.Add(an);
             }
-            else
+            
             if (buts == MouseButtons.Middle)
             {
                 currentTool = GetTool(Tool.Type.pan);
                 UpdateSelected();
                 panPanel.BackColor = System.Drawing.Color.LightGray;
             }
+            
 
             UpdateOverlay();
         }
@@ -444,12 +446,14 @@ namespace BioImager
             else
             if (currentTool.type == Tool.Type.rectSel && buts == MouseButtons.Left)
             {
-                ImageView.selectedAnnotations.Clear();
+                if (!Win32.GetKeyState(Keys.LControlKey))
+                    ImageView.selectedAnnotations.Clear();
                 RectangleD r = GetTool(Tool.Type.rectSel).Rectangle;
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
                     if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).ToRectangleF().IntersectsWith(r.ToRectangleF()))
                     {
+                        if(!Win32.GetKeyState(Keys.LControlKey))
                         an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.Selected = true;
@@ -622,7 +626,8 @@ namespace BioImager
                 {
                     if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).IntersectsWith(r))
                     {
-                        an.selectedPoints.Clear();
+                        if (!Win32.GetKeyState(Keys.LControlKey))
+                            an.selectedPoints.Clear();
                         ImageView.selectedAnnotations.Add(an);
                         an.Selected = true;
                         RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
@@ -634,7 +639,7 @@ namespace BioImager
                             }
                         }
                     }
-                    else
+                    else if (!Win32.GetKeyState(Keys.LControlKey))
                         an.Selected = false;
                 }
                 UpdateOverlay();
@@ -669,6 +674,31 @@ namespace BioImager
                     }
                 }
                 UpdateOverlay();
+            }
+            if (currentTool.type == Tool.Type.rectSel && buts.HasFlag(MouseButtons.Left))
+            {
+                PointD d = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
+                Tools.GetTool(Tools.Tool.Type.select).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, Math.Abs(d.X), Math.Abs(d.Y));
+                RectangleD r = Tools.GetTool(Tools.Tool.Type.select).Rectangle;
+                List<ROI> rois = ImageView.SelectedImage.Annotations;
+                foreach (ROI an in rois)
+                {
+                    if (an.GetSelectBound(ROI.selectBoxSize * ImageView.SelectedImage.PhysicalSizeX, ROI.selectBoxSize * ImageView.SelectedImage.PhysicalSizeY).IntersectsWith(r))
+                    {
+                        if(!Win32.GetKeyState(Keys.LControlKey))
+                        an.selectedPoints.Clear();
+                        an.Selected = true;
+                        RectangleD[] sels = an.GetSelectBoxes();
+                        for (int i = 0; i < sels.Length; i++)
+                        {
+                            if (sels[i].IntersectsWith(r))
+                            {
+                                an.selectedPoints.Add(i);
+                            }
+                        }
+                    }
+                }
+                App.viewer.UpdateView();
             }
             /*
             if (Tools.currentTool.type == Tools.Tool.Type.magic && buts == MouseButtons.Left)
