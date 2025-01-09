@@ -20,7 +20,23 @@ namespace BioImager
     public partial class OMERO : Form
     {
         public List<omero.gateway.model.DatasetData> datas = new List<omero.gateway.model.DatasetData>();
+        private List<ListViewItem> items = new List<ListViewItem>();
         public int selectedIndex = 0;
+        public int Progress
+        {
+            get { return progressBar.Value; }
+            set 
+            { 
+                if(value < 100)
+                progressBar.Value = value;
+
+            }
+        }
+        public string Status
+        {
+            get { return statusLabel.Text; }
+            set { statusLabel.Text = value; }
+        }
         public OMERO()
         {
             InitializeComponent();
@@ -47,36 +63,77 @@ namespace BioImager
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             listView1.Items.Clear();
+            items.Clear();
             string[] sts = comboBox1.SelectedItem.ToString().Split(" ");
+            List<ListViewItem> lss = new List<ListViewItem>();
             foreach (omero.gateway.model.DatasetData s in datas)
             {
                 if (s.getId().ToString() == sts[1].ToString())
                 {
-                    List<string> fs = BioLib.OMERO.GetDatasetFiles(s.getId());
-                    ImageList ims = new ImageList();
-                    Dictionary<long, Pixbuf> dict = BioLib.OMERO.GetThumbnails(fs.ToArray(), 32,32);
-
-                    foreach (Pixbuf img in dict.Values)
+                    Status = "Getting dataset information.";
+                    List<string> fs = new List<string>();
+                    List<long> ids = BioLib.OMERO.GetDatasetIds(s.getId());
+                    foreach (long id in ids)
                     {
-                        Bitmap bm = PixbufToBitmap(img);
-                        ims.Images.Add(bm);
+                        fs.Add(BioLib.OMERO.GetNameFromID(id));
                     }
-                    listView1.SmallImageList = ims;
-                    listView1.LargeImageList = ims;
-                    int i = 0;
-                    foreach (var item in fs)
+                    if (loadIconsBox.Checked)
                     {
-                        ListViewItem li = new ListViewItem();
-                        li.Text = item;
-                        li.ImageIndex = i;
-                        listView1.Items.Add(li);
-                        i++;
+                        Status = "Loading icons...";
+                        // Create ImageList
+                        ImageList ims = new ImageList
+                        {
+                            ImageSize = new System.Drawing.Size(64, 64), // Set icon size (width x height)
+                            ColorDepth = ColorDepth.Depth32Bit // Set color depth
+                        };
+                        Dictionary<long, Pixbuf> dict = BioLib.OMERO.GetThumbnails(fs.ToArray(), 64, 64);
+                        int i = 0;
+                        Status = "Loading files...";
+                        foreach (var item in ids)
+                        {
+                            foreach (var itm in dict)
+                            {
+                                if(item == itm.Key)
+                                {
+                                    Bitmap bm = PixbufToBitmap(itm.Value);
+                                    ims.Images.Add(bm);
+                                    ListViewItem li = new ListViewItem();
+                                    li.Text = fs[i];
+                                    li.ImageIndex = i;
+                                    items.Add(li);
+                                    Progress = (int)(((float)(i + 1) / (float)(ids.Count)) * 100);
+                                    i++;
+                                }
+                            }
+                        }
+                        listView1.SmallImageList = ims;
+                        listView1.LargeImageList = ims;
+                        listView1.View = View.LargeIcon;
+                        listView1.Items.AddRange(items.ToArray());
+                        Status = "";
+                        Progress = 0;
+                        return;
                     }
-                    listView1.View = View.LargeIcon;
-                    return;
+                    else
+                    {
+                        Status = "Loading files...";
+                        int i = 0;
+                        foreach (var item in ids)
+                        {
+                            ListViewItem li = new ListViewItem();
+                            li.Text = fs[i];
+                            items.Add(li);
+                            Progress = (int)(((float)(i + 1) / (float)(ids.Count)) * 100);
+                            i++;
+                        }
+                        listView1.View = View.List;
+                        listView1.Items.AddRange(items.ToArray());
+                        Status = "";
+                        Progress = 0;
+                        return;
+                    }
                 }
             }
-            selectedIndex = listView1.SelectedIndices[0];
         }
         public static Bitmap PixbufToBitmap(Pixbuf pixbuf)
         {
@@ -146,6 +203,18 @@ namespace BioImager
             string[] f = listView1.SelectedItems[0].Text.Split(' ');
             BioImage b = BioLib.OMERO.GetImage(f[0], datas[selectedIndex].getId());
             App.tabsView.AddTab(b);
+        }
+
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            listView1.Items.Clear();
+            List<ListViewItem> list = new List<ListViewItem>();
+            foreach (ListViewItem item in items)
+            {
+                if(item.Text.Contains(searchBox.Text))
+                    list.Add(item);
+            }
+            listView1.Items.AddRange(list.ToArray());
         }
     }
 }
