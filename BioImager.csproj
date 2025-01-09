@@ -19,7 +19,7 @@
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>BioLib update, added QuPath project support as well as NumPy format.</PackageReleaseNotes>
+    <PackageReleaseNotes>OMERO server support, added QuPath project support as well as NumPy format.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
@@ -435,6 +435,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <PackageReference Include="BioLib" Version="3.4.2" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="FlaUI.Core" Version="4.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
@@ -458,10 +459,6 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="TorchSharp-cpu" Version="0.105.0" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <ProjectReference Include="..\..\RepoErik\BioLib\BioLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpeg">
