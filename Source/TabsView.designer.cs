@@ -50,6 +50,7 @@ namespace BioImager
             openRecentToolStripMenuItem = new ToolStripMenuItem();
             openOMEToolStripMenuItem = new ToolStripMenuItem();
             openOMESeriesToolStripMenuItem = new ToolStripMenuItem();
+            openQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
             openSeriesToolStripMenuItem = new ToolStripMenuItem();
             sepToolStripMenuItem1 = new ToolStripSeparator();
             addImagesToTabToolStripMenuItem = new ToolStripMenuItem();
@@ -60,7 +61,9 @@ namespace BioImager
             saveTabToolStripMenuItem = new ToolStripMenuItem();
             saveTabTiffToolStripMenuItem = new ToolStripMenuItem();
             saveSeriesToolStripMenuItem = new ToolStripMenuItem();
+            saveQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
             savePyramidalToolStripMenuItem = new ToolStripMenuItem();
+            saveNumPyToolStripMenuItem = new ToolStripMenuItem();
             sepToolStripMenuItem3 = new ToolStripSeparator();
             imagesToStackToolStripMenuItem = new ToolStripMenuItem();
             newTabViewToolStripMenuItem = new ToolStripMenuItem();
@@ -84,6 +87,8 @@ namespace BioImager
             exportROIsOfFolderOfImagesToolStripMenuItem = new ToolStripMenuItem();
             importImageJROIToSelectedImageToolStripMenuItem = new ToolStripMenuItem();
             exportImageJROIFromSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            importGeoJSONROIToSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem = new ToolStripMenuItem();
             channelsToolToolStripMenuItem = new ToolStripMenuItem();
             autoThresholdToolStripMenuItem = new ToolStripMenuItem();
             channelsToolToolStripMenuItem1 = new ToolStripMenuItem();
@@ -121,8 +126,9 @@ namespace BioImager
             aboutToolStripMenuItem = new ToolStripMenuItem();
             openImageJROI = new OpenFileDialog();
             saveImageJROI = new SaveFileDialog();
-            importGeoJSONROIToSelectedImageToolStripMenuItem = new ToolStripMenuItem();
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem = new ToolStripMenuItem();
+            openQuPathProjDialog = new OpenFileDialog();
+            saveQuPathDialog = new SaveFileDialog();
+            oMEROToolStripMenuItem = new ToolStripMenuItem();
             panel.SuspendLayout();
             tabContextMenuStrip.SuspendLayout();
             menuStrip.SuspendLayout();
@@ -148,7 +154,7 @@ namespace BioImager
             panel.Location = new Point(0, 24);
             panel.Margin = new Padding(4, 3, 4, 3);
             panel.Name = "panel";
-            panel.Size = new Size(845, 487);
+            panel.Size = new Size(905, 487);
             panel.TabIndex = 1;
             // 
             // tabControl
@@ -159,7 +165,7 @@ namespace BioImager
             tabControl.Margin = new Padding(4, 3, 4, 3);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(845, 487);
+            tabControl.Size = new Size(905, 487);
             tabControl.TabIndex = 0;
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
             // 
@@ -225,7 +231,7 @@ namespace BioImager
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRecentToolStripMenuItem, openOMEToolStripMenuItem, openOMESeriesToolStripMenuItem, openSeriesToolStripMenuItem, sepToolStripMenuItem1, addImagesToTabToolStripMenuItem, addImagesOMEToolStripMenuItem, sepToolStripMenuItem2, saveToolStripMenuItem, saveOMEToolStripMenuItem, saveTabToolStripMenuItem, saveTabTiffToolStripMenuItem, saveSeriesToolStripMenuItem, savePyramidalToolStripMenuItem, sepToolStripMenuItem3, imagesToStackToolStripMenuItem, newTabViewToolStripMenuItem, nodeViewToolStripMenuItem, clearRecentToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRecentToolStripMenuItem, openOMEToolStripMenuItem, openOMESeriesToolStripMenuItem, openQuPathProjectToolStripMenuItem, openSeriesToolStripMenuItem, sepToolStripMenuItem1, addImagesToTabToolStripMenuItem, addImagesOMEToolStripMenuItem, sepToolStripMenuItem2, saveToolStripMenuItem, saveOMEToolStripMenuItem, saveTabToolStripMenuItem, saveTabTiffToolStripMenuItem, saveSeriesToolStripMenuItem, saveQuPathProjectToolStripMenuItem, savePyramidalToolStripMenuItem, saveNumPyToolStripMenuItem, sepToolStripMenuItem3, imagesToStackToolStripMenuItem, newTabViewToolStripMenuItem, nodeViewToolStripMenuItem, clearRecentToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -257,6 +263,13 @@ namespace BioImager
             openOMESeriesToolStripMenuItem.Size = new Size(202, 22);
             openOMESeriesToolStripMenuItem.Text = "Open OME Series";
             openOMESeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click;
+            // 
+            // openQuPathProjectToolStripMenuItem
+            // 
+            openQuPathProjectToolStripMenuItem.Name = "openQuPathProjectToolStripMenuItem";
+            openQuPathProjectToolStripMenuItem.Size = new Size(202, 22);
+            openQuPathProjectToolStripMenuItem.Text = "Open QuPath Project";
+            openQuPathProjectToolStripMenuItem.Click += openQuPathProjectToolStripMenuItem_Click;
             // 
             // openSeriesToolStripMenuItem
             // 
@@ -324,12 +337,25 @@ namespace BioImager
             saveSeriesToolStripMenuItem.Text = "Save Series";
             saveSeriesToolStripMenuItem.Click += saveSeriesToolStripMenuItem_Click;
             // 
+            // saveQuPathProjectToolStripMenuItem
+            // 
+            saveQuPathProjectToolStripMenuItem.Name = "saveQuPathProjectToolStripMenuItem";
+            saveQuPathProjectToolStripMenuItem.Size = new Size(202, 22);
+            saveQuPathProjectToolStripMenuItem.Text = "Save QuPath Project";
+            saveQuPathProjectToolStripMenuItem.Click += saveQuPathProjectToolStripMenuItem_Click;
+            // 
             // savePyramidalToolStripMenuItem
             // 
             savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
             savePyramidalToolStripMenuItem.Size = new Size(202, 22);
             savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
             savePyramidalToolStripMenuItem.Click += savePyramidalToolStripMenuItem_Click;
+            // 
+            // saveNumPyToolStripMenuItem
+            // 
+            saveNumPyToolStripMenuItem.Name = "saveNumPyToolStripMenuItem";
+            saveNumPyToolStripMenuItem.Size = new Size(202, 22);
+            saveNumPyToolStripMenuItem.Text = "Save NumPy";
             // 
             // sepToolStripMenuItem3
             // 
@@ -497,6 +523,20 @@ namespace BioImager
             exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
             exportImageJROIFromSelectedImageToolStripMenuItem.Click += exportImageJROIFromSelectedImageToolStripMenuItem_Click;
             // 
+            // importGeoJSONROIToSelectedImageToolStripMenuItem
+            // 
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Name = "importGeoJSONROIToSelectedImageToolStripMenuItem";
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Text = "Import GeoJSON ROI to Selected Image";
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Click += importGeoJSONROIToSelectedImageToolStripMenuItem_Click;
+            // 
+            // exportGeoJSONROIFromSelectedImageToolStripMenuItem
+            // 
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Name = "exportGeoJSONROIFromSelectedImageToolStripMenuItem";
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Text = "Export GeoJSON ROI from Selected Image";
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Click += exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click;
+            // 
             // channelsToolToolStripMenuItem
             // 
             channelsToolToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { autoThresholdToolStripMenuItem, channelsToolToolStripMenuItem1, switchRedBlueToolStripMenuItem });
@@ -563,11 +603,11 @@ namespace BioImager
             // 
             // menuStrip
             // 
-            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, sizeModeToolStripMenuItem, toolboxToolStripMenuItem, rOIToolStripMenuItem, channelsToolToolStripMenuItem, stackToolsToolStripMenuItem, formatToolStripMenuItem, filtersToolStripMenuItem, scriptToolStripMenuItem, automationToolStripMenuItem, microscopeToolStripMenuItem, commandToolStripMenuItem, recentToolStripMenuItem, runToolStripMenuItem1, aboutToolStripMenuItem });
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, sizeModeToolStripMenuItem, toolboxToolStripMenuItem, rOIToolStripMenuItem, channelsToolToolStripMenuItem, stackToolsToolStripMenuItem, formatToolStripMenuItem, filtersToolStripMenuItem, scriptToolStripMenuItem, automationToolStripMenuItem, microscopeToolStripMenuItem, commandToolStripMenuItem, recentToolStripMenuItem, runToolStripMenuItem1, oMEROToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Padding = new Padding(7, 2, 0, 2);
-            menuStrip.Size = new Size(845, 24);
+            menuStrip.Size = new Size(905, 24);
             menuStrip.TabIndex = 0;
             // 
             // formatToolStripMenuItem
@@ -754,26 +794,32 @@ namespace BioImager
             saveImageJROI.Filter = "ROI Files (*.roi)|*.roi|All files (*.*)|*.*";
             saveImageJROI.Title = "Save ROIs to CSV";
             // 
-            // importGeoJSONROIToSelectedImageToolStripMenuItem
+            // openQuPathProjDialog
             // 
-            importGeoJSONROIToSelectedImageToolStripMenuItem.Name = "importGeoJSONROIToSelectedImageToolStripMenuItem";
-            importGeoJSONROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
-            importGeoJSONROIToSelectedImageToolStripMenuItem.Text = "Import GeoJSON ROI to Selected Image";
-            importGeoJSONROIToSelectedImageToolStripMenuItem.Click += importGeoJSONROIToSelectedImageToolStripMenuItem_Click;
+            openQuPathProjDialog.DefaultExt = "roi";
+            openQuPathProjDialog.Filter = "QuPath Project Files (*.qpproj)|*.qpproj|All files (*.*)|*.*";
+            openQuPathProjDialog.Multiselect = true;
+            openQuPathProjDialog.Title = "Open QuPath Project.";
             // 
-            // exportGeoJSONROIFromSelectedImageToolStripMenuItem
+            // saveQuPathDialog
             // 
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Name = "exportGeoJSONROIFromSelectedImageToolStripMenuItem";
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Text = "Export GeoJSON ROI from Selected Image";
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Click += exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click;
+            saveQuPathDialog.DefaultExt = "roi";
+            saveQuPathDialog.Filter = "QuPath GeoJSON Files (*.geojson)|*.roi|All files (*.*)|*.*";
+            saveQuPathDialog.Title = "Save ROIs to CSV";
+            // 
+            // oMEROToolStripMenuItem
+            // 
+            oMEROToolStripMenuItem.Name = "oMEROToolStripMenuItem";
+            oMEROToolStripMenuItem.Size = new Size(61, 20);
+            oMEROToolStripMenuItem.Text = "OMERO";
+            oMEROToolStripMenuItem.Click += oMEROToolStripMenuItem_Click;
             // 
             // TabsView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(69, 77, 98);
-            ClientSize = new Size(845, 511);
+            ClientSize = new Size(905, 511);
             Controls.Add(panel);
             Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -889,5 +935,11 @@ namespace BioImager
         private ToolStripMenuItem slideImagerToolStripMenuItem;
         private ToolStripMenuItem importGeoJSONROIToSelectedImageToolStripMenuItem;
         private ToolStripMenuItem exportGeoJSONROIFromSelectedImageToolStripMenuItem;
+        private ToolStripMenuItem openQuPathProjectToolStripMenuItem;
+        private ToolStripMenuItem saveQuPathProjectToolStripMenuItem;
+        private ToolStripMenuItem saveNumPyToolStripMenuItem;
+        private OpenFileDialog openQuPathProjDialog;
+        private SaveFileDialog saveQuPathDialog;
+        private ToolStripMenuItem oMEROToolStripMenuItem;
     }
 }

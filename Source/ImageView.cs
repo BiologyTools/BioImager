@@ -192,6 +192,14 @@ namespace BioImager
                 else
                     return null;
             }
+            set
+            {
+                if (App.viewer != null)
+                {
+                    if (App.viewer.Images.Count > 0)
+                        App.viewer.Images[selectedIndex] = value;
+                }
+            }
         }
         public static Bitmap SelectedBuffer
         {

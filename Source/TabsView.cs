@@ -9,12 +9,14 @@ using AForge;
 using RotateFlipType = AForge.RotateFlipType;
 using BioLib;
 using BioImage = BioLib.BioImage;
+using javax.swing.text;
 namespace BioImager
 {
     public partial class TabsView : Form
     {
         public static bool init = false;
         public Filter filters = null;
+        public ImageView viewer;
         public static System.Drawing.Graphics graphics = null;
         /* Returning the ImageView object that is currently selected in the tabControl. */
         public ImageView Viewer
@@ -29,6 +31,35 @@ namespace BioImager
                     return null;
                 return (ImageView)tabControl.SelectedTab.Controls[0];
             }
+        }
+        private List<ImageView> viewers = new List<ImageView>();
+        public ImageView GetViewer(int i)
+        {
+            return viewers[i];
+        }
+        public ImageView? GetViewer(string name)
+        {
+            for (int v = 0; v < viewers.Count; v++)
+            {
+                for (int i = 0; i < viewers.Count; i++)
+                {
+                    if (viewers[v].Images[i].Filename == name)
+                        return viewers[v];
+                }
+            }
+            return null;
+        }
+        public int GetViewerCount()
+        {
+            return viewers.Count;
+        }
+        public void RemoveViewer(ImageView v)
+        {
+            viewers.Remove(v);
+        }
+        public void AddViewer(ImageView v)
+        {
+            viewers.Add(v);
         }
         public static BioImage SelectedImage
         {
@@ -100,23 +131,37 @@ namespace BioImager
                 return;
             if (b.filename.Contains("/") || b.filename.Contains("\\"))
                 b.filename = Path.GetFileName(b.filename);
-            if(tabControl.IsHandleCreated)
-            tabControl.Invoke((MethodInvoker)delegate {
-                TabPage t = new TabPage(b.filename);
-                ImageView v = new ImageView(b);
-                v.ShowStage = false;
-                v.Dock = DockStyle.Fill;
-                t.Controls.Add(v);
-                tabControl.TabPages.Add(t);
-                tabControl.SelectedIndex = tabControl.TabCount - 1;
-                ResizeView();
-            });
+            if (tabControl.IsHandleCreated)
+                tabControl.Invoke((MethodInvoker)delegate
+                {
+                    TabPage t = new TabPage(b.filename);
+                    ImageView v = new ImageView(b);
+                    v.ShowStage = false;
+                    v.Dock = DockStyle.Fill;
+                    t.Controls.Add(v);
+                    tabControl.TabPages.Add(t);
+                    tabControl.SelectedIndex = tabControl.TabCount - 1;
+                    ResizeView();
+                });
+        }
+        public void RemoveTab(BioImage b)
+        {
+            int i = 0;
+            foreach (ImageView t in tabControl.TabPages)
+            {
+                if(t.Name == b.filename)
+                {
+                    Images.RemoveImage(b);
+                    return;
+                }
+                i++;
+            }
         }
         public bool HasTab(string name)
         {
             foreach (TabPage item in tabControl.TabPages)
             {
-                if(item.Text == name)
+                if (item.Text == name)
                 {
                     return true;
                 }
@@ -805,7 +850,7 @@ namespace BioImager
         /// @param EventArgs System.EventArgs
         private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
             List<string> sts = new List<string>();
             foreach (BioImage item in Images.images)
             {
@@ -1514,14 +1559,145 @@ namespace BioImager
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
-            ImageView.SelectedImage.Annotations.AddRange(QuPath.ReadROI(openFilesDialog.FileName,ImageView.SelectedImage));
+            ImageView.SelectedImage.Annotations.AddRange(QuPath.ReadROI(openFilesDialog.FileName, ImageView.SelectedImage));
         }
 
         private void exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveOMEFileDialog.ShowDialog() != DialogResult.OK)
                 return;
-            QuPath.Save(saveOMEFileDialog.FileName, ImageView.SelectedImage);
+            QuPath.SaveROI(saveOMEFileDialog.FileName, ImageView.SelectedImage);
+        }
+
+        private void openQuPathProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openQuPathProjDialog.ShowDialog() != DialogResult.OK)
+                return;
+            QuPath.Project pr = QuPath.OpenProject(openQuPathProjDialog.FileName);
+            foreach (QuPath.Image p in pr.Images)
+            {
+                string s = p.ServerBuilder.Uri.Replace("file:/", "");
+                App.tabsView.AddTab(BioImage.OpenFile(s));
+            }
+        }
+
+        private void saveQuPathProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveQuPathDialog.ShowDialog() != DialogResult.OK)
+                return;
+            List<BioImage[]> images = new List<BioImage[]>();
+            foreach (var item in viewers)
+            {
+                List<BioImage> imageList = new List<BioImage>();
+                foreach (var image in item.Images)
+                {
+                    imageList.Add(image);
+                }
+                images.Add(imageList.ToArray());
+            }
+            QuPath.Project.SaveProject(saveQuPathDialog.FileName, images);
+        }
+        /// <summary>
+        /// Sets the current tab index.
+        /// </summary>
+        /// <param name="i"></param>
+        public void SetTab(int i)
+        {
+            tabControl.SelectTab(i);
+        }
+        private void oMEROToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OMERO om = new OMERO();
+            om.Show();
+        }
+        public static void SelectWindow(string name)
+        {
+            TabsView tbs = App.tabsView;
+
+            int c = tbs.GetViewerCount();
+            for (int v = 0; v < c; v++)
+            {
+                int cc = tbs.GetViewer(v).Images.Count;
+                for (int im = 0; im < cc; im++)
+                {
+                    if (tbs.GetViewer(v).Images[im].Filename == Path.GetFileName(name))
+                    {
+                        tbs.SetTab(v);
+                        BioLib.Recorder.Record("App.SelectWindow(\"" + name + "\")");
+                        ImageView.SelectedImage = tbs.GetViewer(v).Images[im];
+                        App.viewer = tbs.GetViewer(v);
+                        App.viewer.BringToFront();
+                        return;
+                    }
+                }
+            }
+        }
+        public static void CloseWindow(string name)
+        {
+            BioLib.Recorder.Record("App.CloseWindow(\"" + name + "\")");
+            TabsView tbs = App.tabsView;
+            int c = tbs.GetViewerCount();
+            if (name == "ROI Manager")
+                App.manager.Close();
+            else
+            if (name == "Stack Tool")
+                App.stackTools.Close();
+            else
+            if (name == "Channels Tool")
+                App.channelsTool.Close();
+            else
+            if (name == "Scripting")
+                App.runner.Close();
+            else
+            if (name == "Recorder")
+                App.recorder.Close();
+            else
+            if (name == "Tools")
+                App.tools.Close();
+            else
+                for (int v = 0; v < c; v++)
+                {
+                    int cc = tbs.GetViewer(v).Images.Count;
+                    for (int im = 0; im < cc; im++)
+                    {
+                        ImageView vi = tbs.GetViewer(v);
+                        if (vi.Images[im].Filename == Path.GetFileName(name))
+                        {
+                            tbs.RemoveTab(vi.Images[im]);
+                            return;
+                        }
+                        else if (vi.Name == name)
+                        {
+                            tbs.RemoveTab(vi.Images[im]);
+                            return;
+                        }
+                    }
+                }
+
+        }
+        public void RenameTab(string name, string newName)
+        {
+            foreach (ImageView item in tabControl.TabPages)
+            {
+                if (item.Name == name)
+                {
+                    item.Name = newName;
+                    foreach (var b in item.Images)
+                    {
+                        b.Filename = newName;
+                        b.ID = newName;
+                        return;
+                    }
+                }
+            }
+        }
+        public static void Rename(string text)
+        {
+            App.tabsView.RenameTab(ImageView.SelectedImage.Filename, text);
+            ImageView.SelectedImage.Rename(text);
+            ImageView v = App.tabsView.GetViewer(ImageView.SelectedImage.Filename);
+            v.Name = ImageView.SelectedImage.Filename;
+            BioLib.Recorder.AddLine("App.Rename(\"" + text + "\");", false);
         }
     }
 }

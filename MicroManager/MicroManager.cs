@@ -86,7 +86,7 @@ namespace BioImager
             BioImage im = new BioImage(name);
             foreach (AForge.Bitmap item in bm)
             {
-                Statistics.CalcStatistics(item);
+                item.Stats = Statistics.FromBytes(item);
             }
             im.Buffers.AddRange(bm);
             //Set the physical size based on objective view
@@ -103,12 +103,6 @@ namespace BioImager
             {
                 im.Channels.Add(new Channel(c, bm[c].BitsPerPixel, bm[c].RGBChannelsCount));
             }
-            //We wait for threshold image statistics calculation
-            do
-            {
-                Thread.Sleep(50);
-            } while (im.Buffers[im.Buffers.Count - 1].Stats == null);
-            Statistics.ClearCalcBuffer();
             BioImage.AutoThreshold(im, false);
             return im;
         }

@@ -1289,7 +1289,7 @@ namespace BioImager
                 Enum.TryParse<PixelFormat>(Properties.Settings.Default.PCameraFormat, out px);
                 pMicroscope.GetSize(out w, out h);
                 Bitmap bf = new Bitmap(file, w, h, px, bts, new ZCT(0, 0, 0), 0);
-                Statistics.CalcStatistics(bf);
+                bf.Stats = Statistics.FromBytes(bf);
                 BioImage bm = new BioImage(file + ".ome.tif");
                 bm.Buffers.Add(bf);
                 //Set the physical size based on objective view
@@ -1306,12 +1306,6 @@ namespace BioImager
                 {
                     bm.Channels.Add(new Channel(c, bf.BitsPerPixel, bf.RGBChannelsCount));
                 }
-                //We wait for threshold image statistics calculation
-                do
-                {
-                    Thread.Sleep(50);
-                } while (bm.Buffers[bm.Buffers.Count - 1].Stats == null);
-                Statistics.ClearCalcBuffer();
                 BioImage.AutoThreshold(bm, false);
                 if (!imagingStack)
                 {

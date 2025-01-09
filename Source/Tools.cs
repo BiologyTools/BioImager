@@ -213,7 +213,7 @@ namespace BioImager
             if (ImageView.SelectedImage != null)
             {
                 color1Box.BackColor = System.Drawing.Color.FromArgb((int)((float)DrawColor.R / (float)ushort.MaxValue) * 255,(int)((float)DrawColor.G / (float)ushort.MaxValue) * 255, (int)((float)DrawColor.B / (float)ushort.MaxValue) * 255);
-                color2Box.BackColor = System.Drawing.Color.FromArgb((int)((float)EraseColor.R / (float)ushort.MaxValue) * 255, (int)((float)EraseColor.G / (float)ushort.MaxValue) * 255, (int)((float)EraseColor.B / (float)ushort.MaxValue) * 255);
+                color2Box.BackColor = System.Drawing.Color.FromArgb((int)(((float)EraseColor.R / (float)ushort.MaxValue) * 255), (int)(((float)EraseColor.G / (float)ushort.MaxValue) * 255), (int)(((float)EraseColor.B / (float)ushort.MaxValue) * 255));
             }
             widthBox.Value = width;
         }
