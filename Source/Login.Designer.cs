@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
-            passBox = new MaskedTextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -39,17 +38,9 @@
             label4 = new Label();
             loginBut = new Button();
             cancelBut = new Button();
+            passBox = new MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)portBox).BeginInit();
             SuspendLayout();
-            // 
-            // passBox
-            // 
-            passBox.BackColor = Color.FromArgb(49, 91, 138);
-            passBox.ForeColor = Color.White;
-            passBox.Location = new Point(72, 99);
-            passBox.Name = "passBox";
-            passBox.Size = new Size(199, 23);
-            passBox.TabIndex = 0;
             // 
             // label1
             // 
@@ -142,6 +133,14 @@
             cancelBut.Text = "Cancel";
             cancelBut.UseVisualStyleBackColor = false;
             // 
+            // passBox
+            // 
+            passBox.BackColor = Color.FromArgb(49, 91, 138);
+            passBox.Location = new Point(72, 99);
+            passBox.Name = "passBox";
+            passBox.Size = new Size(199, 23);
+            passBox.TabIndex = 10;
+            // 
             // Login
             // 
             AcceptButton = loginBut;
@@ -150,6 +149,7 @@
             BackColor = Color.FromArgb(95, 122, 156);
             CancelButton = cancelBut;
             ClientSize = new Size(283, 168);
+            Controls.Add(passBox);
             Controls.Add(cancelBut);
             Controls.Add(loginBut);
             Controls.Add(hostBox);
@@ -159,7 +159,6 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(passBox);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Login";
             Text = "Login";
@@ -169,8 +168,6 @@
         }
 
         #endregion
-
-        private MaskedTextBox passBox;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -180,5 +177,6 @@
         private Label label4;
         private Button loginBut;
         private Button cancelBut;
+        private MaskedTextBox passBox;
     }
 }
