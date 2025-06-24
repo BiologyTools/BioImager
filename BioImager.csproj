@@ -9,17 +9,17 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>BioImager</Title>
     <Authors>Erik Repo</Authors>
-    <PackageIcon>banner.jpeg</PackageIcon>
+    <PackageIcon>banner.jpg</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.7.0</Version>
+    <Version>4.8.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>OMERO server support, added QuPath project support as well as NumPy format.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed issue with opening files with LibVips.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
@@ -435,18 +435,18 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="BioLib" Version="3.4.2" />
+    <PackageReference Include="BioLib" Version="3.6.2" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
-    <PackageReference Include="FlaUI.Core" Version="4.0.0" />
-    <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
+    <PackageReference Include="FlaUI.Core" Version="5.0.0" />
+    <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
     <PackageReference Include="GtkSharp" Version="3.24.24.95" />
     <PackageReference Include="H.InputSimulator" Version="1.5.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Micro-Manager.NET" Version="2.0.3.3" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.20.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ScottPlot" Version="5.0.51" />
+    <PackageReference Include="ScottPlot" Version="5.0.55" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
@@ -461,7 +461,7 @@
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="banner.jpeg">
+    <None Update="banner.jpg">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
