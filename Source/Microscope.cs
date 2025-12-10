@@ -1250,9 +1250,7 @@ namespace BioImager
                 folder = GetFolder();
                 BioImage b = MicroscopeSetup.simImage.Copy();
                 Point3D p = GetPosition();
-                b.StageSizeX = p.X;
-                b.StageSizeY = p.Y;
-                b.StageSizeZ = p.Z;
+                b.Volume.Location = new Point3D(p.X,p.Y,p.Z);
                 RectangleD view = Microscope.GetViewRectangle(true);
                 b.Resolutions[0] = new Resolution(b.SizeX, b.SizeY, b.Buffers[0].PixelFormat,view.W / b.SizeX, view.H / b.SizeY, b.PhysicalSizeZ,p.X,p.Y,p.Z);
                 b.Volume.Location = p;
@@ -1485,9 +1483,11 @@ namespace BioImager
             //Set the physical size based on objective view
             RectangleD rec = GetObjectiveViewRectangle();
             bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
+            /*
             bi.StageSizeX = rec.X;
             bi.StageSizeY = rec.Y;
             bi.StageSizeZ = UpperLimit;
+            */
             bi.Resolutions.Add(new Resolution(bi.SizeX, bi.SizeY, bi.Buffers[0].PixelFormat,
                 rec.W / bi.SizeX, rec.H / bi.SizeY, (UpperLimit - LowerLimit) / bi.SizeZ, rec.X,rec.Y,UpperLimit));
             bi.Volume = new VolumeD(new Point3D(bi.StageSizeX, bi.StageSizeY, bi.StageSizeZ),new Point3D(bi.SizeX * bi.PhysicalSizeX, bi.SizeY * bi.PhysicalSizeY, bi.StageSizeZ * bi.PhysicalSizeZ));

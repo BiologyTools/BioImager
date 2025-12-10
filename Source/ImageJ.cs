@@ -475,7 +475,7 @@ namespace BioImager
                 */
                 switch (type)
                 {
-                    case 1: //Rect
+                    case 1: //BoundingBox
                         if (subPixelRect)
                             roi = ROI.CreateRectangle(new ZCT(slice - 1, channel - 1, frame - 1), xd, yd, widthd, heightd);
                         else
@@ -673,10 +673,10 @@ namespace BioImager
 
                 //We convert pixel to subpixel
 
-                for (int i = 0; i < roi.PointsD.Count; i++)
+                for (int i = 0; i < roi.Points.Count; i++)
                 {
-                    PointD pd = ImageView.SelectedImage.ToStageSpace(roi.PointsD[i]);
-                    roi.PointsD[i] = pd;
+                    PointD pd = ImageView.SelectedImage.ToStageSpace(roi.Points[i]);
+                    roi.Points[i] = pd;
                     roi.UpdateBoundingBox();
                 }
 
@@ -795,7 +795,7 @@ namespace BioImager
                 /*
                 if (roi.subPixel)
                 {
-                    RectangleD fb = roi.Rect;
+                    RectangleD fb = roi.BoundingBox;
                     roi2 = new TextRoi(fb.getX(), fb.getY(), fb.getWidth(), fb.getHeight(), new string(text), font);
                 }
                 else
@@ -1001,11 +1001,11 @@ namespace BioImager
         /// @param yp y-coordinates of the points in the ROI
         static void GetPointsXY(ROI roi, out int[] xp, out int[] yp)
         {
-            int[] x = new int[roi.PointsD.Count];
-            int[] y = new int[roi.PointsD.Count];
-            for (int i = 0; i < roi.PointsD.Count; i++)
+            int[] x = new int[roi.Points.Count];
+            int[] y = new int[roi.Points.Count];
+            for (int i = 0; i < roi.Points.Count; i++)
             {
-                PointD pd = ImageView.SelectedImage.ToImageSpace(roi.PointsD[i]);
+                PointD pd = ImageView.SelectedImage.ToImageSpace(roi.Points[i]);
                 x[i] = (int)pd.X;
                 y[i] = (int)pd.Y;
             }
@@ -1143,7 +1143,7 @@ namespace BioImager
             /// @return The data is being returned as a byte array.
             void write(ROI roi, FileStream f)
             {
-                RectangleD r = new RectangleD(roi.Rect.X, roi.Rect.Y, roi.Rect.W, roi.Rect.H);
+                RectangleD r = new RectangleD(roi.BoundingBox.X, roi.BoundingBox.Y, roi.BoundingBox.W, roi.BoundingBox.H);
                 //if (r.width > 60000 || r.height > 60000 || r.x > 60000 || r.y > 60000)
                 //    roi.enableSubPixelResolution();
                 //int roiType = GetImageJType(roi);
@@ -1192,7 +1192,7 @@ namespace BioImager
                 //if (roi instanceof PolygonRoi) {
                 //PolygonRoi proi = (PolygonRoi)roi;
                 //Polygon p = proi.getNonSplineCoordinates();
-                n = roi.PointsD.Count; //p.npoints;
+                n = roi.Points.Count; //p.npoints;
                 //x = p.xpoints;
                 //y = p.ypoints;
                 GetPointsXY(roi, out x, out y);
@@ -1235,7 +1235,7 @@ namespace BioImager
                 putShort(RoiDecoder.LEFT, (int)px);
                 putShort(RoiDecoder.BOTTOM, (int)(py + ph));
                 putShort(RoiDecoder.RIGHT, (int)(px + pw));
-                var PointsImage = ImageView.SelectedImage.ToImageSpace(roi.PointsD);
+                var PointsImage = ImageView.SelectedImage.ToImageSpace(roi.Points);
                 if (subres && (type == rect || type == oval))
                 {
                     //FloatPolygon p = null;
@@ -1255,11 +1255,11 @@ namespace BioImager
                             p = roi.getFloatPolygon();
                     }
                         */   
-                    if (roi.PointsD.Count == 4)
+                    if (roi.Points.Count == 4)
                     {
                         putFloat(RoiDecoder.XD, (float)PointsImage[0].X);
                         putFloat(RoiDecoder.YD, (float)PointsImage[0].Y);
-                        //putFloat(RoiDecoder.WIDTHD, p.xpoints[1] - roi.PointsD[0]);
+                        //putFloat(RoiDecoder.WIDTHD, p.xpoints[1] - roi.Points[0]);
                         //putFloat(RoiDecoder.HEIGHTD, p.ypoints[2] - p.ypoints[1]);
                         putFloat(RoiDecoder.WIDTHD, (float)PointsImage[1].X - (float)PointsImage[0].X);
                         putFloat(RoiDecoder.HEIGHTD, (float)PointsImage[2].Y - (float)PointsImage[1].Y);

@@ -82,7 +82,7 @@ namespace BioImager
                     }
                 }
             }
-            public List<System.Drawing.Point> Points;
+            public List<AForge.Point> Points;
             public ToolType toolType;
             private RectangleD rect;
             public RectangleD Rectangle
@@ -283,7 +283,7 @@ namespace BioImager
                 {
                     //If we click on a point 1 we close this polygon
                     RectangleD d = new RectangleD(e.X, e.Y, ROI.selectBoxSize, ROI.selectBoxSize);
-                    if (d.IntersectsWith(anno.Point))
+                    if (d.IntersectsWith(anno.Points[0]))
                     {
                         anno.closed = true;
                         anno = new ROI();
@@ -315,7 +315,7 @@ namespace BioImager
             if (currentTool.type == Tool.Type.rect && buts == MouseButtons.Left)
             {
                 anno.type = ROI.Type.Rectangle;
-                anno.Rect = new RectangleD(e.X, e.Y, 1, 1);
+                anno.BoundingBox = new RectangleD(e.X, e.Y, 1, 1);
                 anno.coord = App.viewer.GetCoordinate();
                 ImageView.SelectedImage.Annotations.Add(anno);
             }
@@ -323,7 +323,7 @@ namespace BioImager
             if (currentTool.type == Tool.Type.ellipse && buts == MouseButtons.Left)
             {
                 anno.type = ROI.Type.Ellipse;
-                anno.Rect = new RectangleD(e.X, e.Y, 1, 1);
+                anno.BoundingBox = new RectangleD(e.X, e.Y, 1, 1);
                 anno.coord = App.viewer.GetCoordinate();
                 ImageView.SelectedImage.Annotations.Add(anno);
             }
@@ -603,7 +603,7 @@ namespace BioImager
             {
                 if (anno.GetPointCount() == 4)
                 {
-                    anno.Rect = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
+                    anno.BoundingBox = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
                     UpdateOverlay();
                 }
             }
@@ -612,7 +612,7 @@ namespace BioImager
             {
                 if (anno.GetPointCount() == 4)
                 {
-                    anno.Rect = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
+                    anno.BoundingBox = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
                     UpdateOverlay();
                 }
             }

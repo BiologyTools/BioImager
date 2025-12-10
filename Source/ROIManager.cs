@@ -52,14 +52,15 @@ namespace BioImager
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.X = (double)xBox.Value;
+            anno.BoundingBox = new RectangleD((double)xBox.Value, anno.BoundingBox.Y, anno.BoundingBox.W, anno.BoundingBox.H);
+           
             UpdateOverlay();
         }
         private void yBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            anno.Y = (double)yBox.Value;
+            anno.BoundingBox = new RectangleD(anno.BoundingBox.X, (double)yBox.Value, anno.BoundingBox.W, anno.BoundingBox.H);
             UpdateOverlay();
         }
         private void wBox_ValueChanged(object sender, EventArgs e)
@@ -67,24 +68,24 @@ namespace BioImager
             if (roiView.SelectedItems.Count == 0)
                 return;
             if(anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
-                anno.W = (double)wBox.Value;
+                anno.BoundingBox = new RectangleD(anno.BoundingBox.X, anno.BoundingBox.Y,(double)wBox.Value, anno.BoundingBox.H);
             UpdateOverlay();
         }
         private void hBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
-            if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
-                anno.H = (double)hBox.Value;
-            UpdateAnnotationList();
+            anno.BoundingBox = new RectangleD(anno.BoundingBox.X, anno.BoundingBox.Y, anno.BoundingBox.W, (double)hBox.Value);
             UpdateOverlay();
         }
         private void sBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
                 return;
+            //anno.serie = (int)sBox.Value;
             UpdateOverlay();
         }
+
         private void zBox_ValueChanged(object sender, EventArgs e)
         {
             if (roiView.SelectedItems.Count == 0)
