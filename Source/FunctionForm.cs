@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SharpDX.XInput;
 using WindowsInput;
 using System.IO;
 using Newtonsoft.Json;
@@ -20,6 +19,7 @@ namespace BioImager
     {
         public static InputSimulator input = new InputSimulator();
         private Function func;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Function Func
         {
             get

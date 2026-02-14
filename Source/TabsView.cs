@@ -1423,18 +1423,6 @@ namespace BioImager
             XMLView v = new XMLView(BioImage.OpenXML(ImageView.SelectedImage.file));
             v.Show();
         }
-        /// When the user clicks on the menu item, the viewer's hardware acceleration is set to the value
-        /// of the menu item's checked property, and the viewer is updated.
-        /// 
-        /// @param sender The object that raised the event.
-        /// @param EventArgs The event arguments.
-        private void dToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Viewer.HardwareAcceleration = dToolStripMenuItem.Checked;
-            Properties.Settings.Default.HardwareAcceleration = dToolStripMenuItem.Checked;
-            Properties.Settings.Default.Save();
-            Viewer.UpdateView();
-        }
 
         /// It opens a file dialog, and if the user selects a bunch of images, it creates a new BioImage
         /// object that is a stack of the images, and adds a new tab to the main form with the new
@@ -1453,17 +1441,6 @@ namespace BioImager
                 return;
             BioImage b = BioImage.ImagesToStack(fd.FileNames, false);
             AddTab(b);
-        }
-
-        /// It creates a new instance of the View3D class, and passes the selected image to the
-        /// constructor
-        /// 
-        /// @param sender The object that raised the event.
-        /// @param EventArgs The event arguments.
-        private void _3dToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            View3D d = new View3D(ImageView.SelectedImage);
-            d.Show();
         }
 
         /// It opens a dialog box to select a file, then it adds the ROI to the selected image

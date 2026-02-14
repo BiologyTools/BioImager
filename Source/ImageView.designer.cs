@@ -100,7 +100,6 @@ namespace BioImager
             hScrollBar = new HScrollBar();
             vScrollBar = new VScrollBar();
             saveCSVFileDialog = new SaveFileDialog();
-            dxPanel = new Panel();
             timePlayMenuStrip.SuspendLayout();
             contextMenuStrip.SuspendLayout();
             zPlayMenuStrip.SuspendLayout();
@@ -467,7 +466,7 @@ namespace BioImager
             tLabel.Location = new Point(5, 36);
             tLabel.Margin = new Padding(4, 0, 4, 0);
             tLabel.Name = "tLabel";
-            tLabel.Size = new Size(13, 15);
+            tLabel.Size = new Size(14, 15);
             tLabel.TabIndex = 13;
             tLabel.Text = "T";
             // 
@@ -737,23 +736,6 @@ namespace BioImager
             saveCSVFileDialog.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
             saveCSVFileDialog.Title = "Save ROIs to CSV";
             // 
-            // dxPanel
-            // 
-            dxPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dxPanel.BackColor = SystemColors.Control;
-            dxPanel.ContextMenuStrip = contextMenuStrip;
-            dxPanel.Location = new Point(0, 29);
-            dxPanel.Margin = new Padding(4, 3, 4, 3);
-            dxPanel.Name = "dxPanel";
-            dxPanel.Size = new Size(499, 310);
-            dxPanel.TabIndex = 25;
-            dxPanel.SizeChanged += dxPanel_SizeChanged;
-            dxPanel.Paint += pictureBox_Paint;
-            dxPanel.MouseDoubleClick += pictureBox_MouseDoubleClick;
-            dxPanel.MouseDown += pictureBox_MouseDown;
-            dxPanel.MouseMove += rgbPictureBox_MouseMove;
-            dxPanel.MouseUp += pictureBox_MouseUp;
-            // 
             // ImageView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -763,7 +745,6 @@ namespace BioImager
             Controls.Add(hScrollBar);
             Controls.Add(trackBarPanel);
             Controls.Add(statusPanel);
-            Controls.Add(dxPanel);
             Controls.Add(overlayPictureBox);
             Controls.Add(pictureBox);
             Margin = new Padding(0);
@@ -860,7 +841,6 @@ namespace BioImager
         private System.Windows.Forms.VScrollBar vScrollBar;
         private System.Windows.Forms.ToolStripMenuItem drawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fillToolStripMenuItem;
-        private System.Windows.Forms.Panel dxPanel;
         private ToolStripMenuItem layersToolStripMenuItem;
         private ToolStripMenuItem hideOverViewToolStripMenuItem;
         private ToolStripMenuItem removeImageToolStripMenuItem;

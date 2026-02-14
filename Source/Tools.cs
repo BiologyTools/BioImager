@@ -252,10 +252,7 @@ namespace BioImager
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
             PointD p;
             if(ImageView.SelectedImage!=null)
-            if (App.viewer.HardwareAcceleration)
-                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
-            else
-                p = ImageView.SelectedImage.ToImageSpace(e);
+            p = ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
@@ -397,11 +394,9 @@ namespace BioImager
         public void ToolUp(PointD e, MouseButtons buts)
         {
             PointD p = new PointD();
-            if(ImageView.SelectedImage != null)
-            if (App.viewer.HardwareAcceleration)
-                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
-            else
-                p = ImageView.SelectedImage.ToImageSpace(e);
+            if (ImageView.SelectedImage == null)
+                return;
+            p = ImageView.SelectedImage.ToImageSpace(e);
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
@@ -551,11 +546,7 @@ namespace BioImager
                 return;
             if (ImageView.SelectedImage == null)
                 return;
-            PointD p;
-            if (App.viewer.HardwareAcceleration)
-                p = ImageView.SelectedImage.ToImageSpace(new PointD(ImageView.SelectedImage.Volume.Width - e.X, ImageView.SelectedImage.Volume.Height - e.Y));
-            else
-                p = ImageView.SelectedImage.ToImageSpace(e);
+            PointD p = ImageView.SelectedImage.ToImageSpace(e);
             if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts.HasFlag(MouseButtons.Left) || buts.HasFlag(MouseButtons.Middle)))
             {
                 if (ImageView.SelectedImage.isPyramidal)

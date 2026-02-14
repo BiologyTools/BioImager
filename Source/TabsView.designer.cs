@@ -430,27 +430,10 @@ namespace BioImager
             emissionToolStripMenuItem.Text = "Emission";
             emissionToolStripMenuItem.Click += emissionToolStripMenuItem_Click;
             // 
-            // _3dToolStripMenuItem
-            // 
-            _3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
-            _3dToolStripMenuItem.Size = new Size(194, 22);
-            _3dToolStripMenuItem.Text = "3D";
-            _3dToolStripMenuItem.Click += _3dToolStripMenuItem_Click;
-            // 
             // sepToolStripMenuItem
             // 
             sepToolStripMenuItem.Name = "sepToolStripMenuItem";
             sepToolStripMenuItem.Size = new Size(191, 6);
-            // 
-            // dToolStripMenuItem
-            // 
-            dToolStripMenuItem.Checked = true;
-            dToolStripMenuItem.CheckOnClick = true;
-            dToolStripMenuItem.CheckState = CheckState.Checked;
-            dToolStripMenuItem.Name = "dToolStripMenuItem";
-            dToolStripMenuItem.Size = new Size(194, 22);
-            dToolStripMenuItem.Text = "Hardware Acceleration";
-            dToolStripMenuItem.Click += dToolStripMenuItem_Click;
             // 
             // xMLToolStripMenuItem
             // 
