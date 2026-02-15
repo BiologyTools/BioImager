@@ -118,14 +118,15 @@ namespace BioImager
             // 
             // timePlayMenuStrip
             // 
+            timePlayMenuStrip.ImageScalingSize = new Size(32, 32);
             timePlayMenuStrip.Items.AddRange(new ToolStripItem[] { playTimeToolStripMenu, stopTimeToolStripMenu, playSpeedToolStripMenuItem1, setValueRangeToolStripMenuItem1, loopTimeToolStripMenuItem });
             timePlayMenuStrip.Name = "zPlayMenuStrip";
-            timePlayMenuStrip.Size = new Size(158, 114);
+            timePlayMenuStrip.Size = new Size(262, 204);
             // 
             // playTimeToolStripMenu
             // 
             playTimeToolStripMenu.Name = "playTimeToolStripMenu";
-            playTimeToolStripMenu.Size = new Size(157, 22);
+            playTimeToolStripMenu.Size = new Size(261, 40);
             playTimeToolStripMenu.Text = "Play";
             playTimeToolStripMenu.Click += playTimeToolStripMenu_Click;
             // 
@@ -134,21 +135,21 @@ namespace BioImager
             stopTimeToolStripMenu.Checked = true;
             stopTimeToolStripMenu.CheckState = CheckState.Checked;
             stopTimeToolStripMenu.Name = "stopTimeToolStripMenu";
-            stopTimeToolStripMenu.Size = new Size(157, 22);
+            stopTimeToolStripMenu.Size = new Size(261, 40);
             stopTimeToolStripMenu.Text = "Stop";
             stopTimeToolStripMenu.Click += stopTimeToolStripMenu_Click;
             // 
             // playSpeedToolStripMenuItem1
             // 
             playSpeedToolStripMenuItem1.Name = "playSpeedToolStripMenuItem1";
-            playSpeedToolStripMenuItem1.Size = new Size(157, 22);
+            playSpeedToolStripMenuItem1.Size = new Size(261, 40);
             playSpeedToolStripMenuItem1.Text = "Play Speed";
             playSpeedToolStripMenuItem1.Click += playSpeedToolStripMenuItem1_Click;
             // 
             // setValueRangeToolStripMenuItem1
             // 
             setValueRangeToolStripMenuItem1.Name = "setValueRangeToolStripMenuItem1";
-            setValueRangeToolStripMenuItem1.Size = new Size(157, 22);
+            setValueRangeToolStripMenuItem1.Size = new Size(261, 40);
             setValueRangeToolStripMenuItem1.Text = "Set Value Range";
             setValueRangeToolStripMenuItem1.Click += setValueRangeToolStripMenuItem1_Click;
             // 
@@ -159,62 +160,63 @@ namespace BioImager
             loopTimeToolStripMenuItem.CheckState = CheckState.Checked;
             loopTimeToolStripMenuItem.Name = "loopTimeToolStripMenuItem";
             loopTimeToolStripMenuItem.ShowShortcutKeys = false;
-            loopTimeToolStripMenuItem.Size = new Size(157, 22);
+            loopTimeToolStripMenuItem.Size = new Size(261, 40);
             loopTimeToolStripMenuItem.Text = "Loop";
             loopTimeToolStripMenuItem.Click += loopTimeToolStripMenuItem_Click;
             // 
             // contextMenuStrip
             // 
+            contextMenuStrip.ImageScalingSize = new Size(32, 32);
             contextMenuStrip.Items.AddRange(new ToolStripItem[] { rOIToolStripMenuItem, viewToolStripMenuItem, moveStageToImageToolStripMenuItem, goToToolStripMenuItem, goToImageToolStripMenuItem, goToStageToolStripMenuItem, controlsToolStripMenuItem, copyViewToClipboardToolStripMenuItem, layersToolStripMenuItem, removeImageToolStripMenuItem, removeImagesToolStripMenuItem });
             contextMenuStrip.Name = "contextMenuStrip1";
-            contextMenuStrip.Size = new Size(200, 246);
+            contextMenuStrip.Size = new Size(341, 422);
             // 
             // rOIToolStripMenuItem
             // 
             rOIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setROITextToolStripMenuItem, copyROIToolStripMenuItem1, pasteROIToolStripMenuItem1, deleteROIToolStripMenuItem1, drawToolStripMenuItem, fillToolStripMenuItem });
             rOIToolStripMenuItem.Name = "rOIToolStripMenuItem";
-            rOIToolStripMenuItem.Size = new Size(199, 22);
+            rOIToolStripMenuItem.Size = new Size(340, 38);
             rOIToolStripMenuItem.Text = "ROI";
             // 
             // setROITextToolStripMenuItem
             // 
             setROITextToolStripMenuItem.Name = "setROITextToolStripMenuItem";
-            setROITextToolStripMenuItem.Size = new Size(114, 22);
+            setROITextToolStripMenuItem.Size = new Size(231, 44);
             setROITextToolStripMenuItem.Text = "Set Text";
             setROITextToolStripMenuItem.Click += setTextSelectionToolStripMenuItem_Click;
             // 
             // copyROIToolStripMenuItem1
             // 
             copyROIToolStripMenuItem1.Name = "copyROIToolStripMenuItem1";
-            copyROIToolStripMenuItem1.Size = new Size(114, 22);
+            copyROIToolStripMenuItem1.Size = new Size(231, 44);
             copyROIToolStripMenuItem1.Text = "Copy";
             copyROIToolStripMenuItem1.Click += copyROIToolStripMenuItem_Click;
             // 
             // pasteROIToolStripMenuItem1
             // 
             pasteROIToolStripMenuItem1.Name = "pasteROIToolStripMenuItem1";
-            pasteROIToolStripMenuItem1.Size = new Size(114, 22);
+            pasteROIToolStripMenuItem1.Size = new Size(231, 44);
             pasteROIToolStripMenuItem1.Text = "Paste";
             pasteROIToolStripMenuItem1.Click += pasteROIToolStripMenuItem_Click;
             // 
             // deleteROIToolStripMenuItem1
             // 
             deleteROIToolStripMenuItem1.Name = "deleteROIToolStripMenuItem1";
-            deleteROIToolStripMenuItem1.Size = new Size(114, 22);
+            deleteROIToolStripMenuItem1.Size = new Size(231, 44);
             deleteROIToolStripMenuItem1.Text = "Delete";
             deleteROIToolStripMenuItem1.Click += deleteROIToolStripMenuItem_Click;
             // 
             // drawToolStripMenuItem
             // 
             drawToolStripMenuItem.Name = "drawToolStripMenuItem";
-            drawToolStripMenuItem.Size = new Size(114, 22);
+            drawToolStripMenuItem.Size = new Size(231, 44);
             drawToolStripMenuItem.Text = "Draw";
             drawToolStripMenuItem.Click += drawToolStripMenuItem_Click;
             // 
             // fillToolStripMenuItem
             // 
             fillToolStripMenuItem.Name = "fillToolStripMenuItem";
-            fillToolStripMenuItem.Size = new Size(114, 22);
+            fillToolStripMenuItem.Size = new Size(231, 44);
             fillToolStripMenuItem.Text = "Fill";
             fillToolStripMenuItem.Click += fillToolStripMenuItem_Click;
             // 
@@ -222,34 +224,34 @@ namespace BioImager
             // 
             viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rGBToolStripMenuItem, filteredToolStripMenuItem, rawToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(199, 22);
+            viewToolStripMenuItem.Size = new Size(340, 38);
             viewToolStripMenuItem.Text = "View";
             // 
             // rGBToolStripMenuItem
             // 
             rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
-            rGBToolStripMenuItem.Size = new Size(113, 22);
+            rGBToolStripMenuItem.Size = new Size(227, 44);
             rGBToolStripMenuItem.Text = "RGB";
             rGBToolStripMenuItem.Click += rGBToolStripMenuItem_Click;
             // 
             // filteredToolStripMenuItem
             // 
             filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
-            filteredToolStripMenuItem.Size = new Size(113, 22);
+            filteredToolStripMenuItem.Size = new Size(227, 44);
             filteredToolStripMenuItem.Text = "Filtered";
             filteredToolStripMenuItem.Click += filteredToolStripMenuItem_Click;
             // 
             // rawToolStripMenuItem
             // 
             rawToolStripMenuItem.Name = "rawToolStripMenuItem";
-            rawToolStripMenuItem.Size = new Size(113, 22);
+            rawToolStripMenuItem.Size = new Size(227, 44);
             rawToolStripMenuItem.Text = "Raw";
             rawToolStripMenuItem.Click += rawToolStripMenuItem_Click;
             // 
             // moveStageToImageToolStripMenuItem
             // 
             moveStageToImageToolStripMenuItem.Name = "moveStageToImageToolStripMenuItem";
-            moveStageToImageToolStripMenuItem.Size = new Size(199, 22);
+            moveStageToImageToolStripMenuItem.Size = new Size(340, 38);
             moveStageToImageToolStripMenuItem.Text = "Move Stage To Image";
             moveStageToImageToolStripMenuItem.DropDownOpening += goToImageToolStripMenuItem_DropDownOpening;
             moveStageToImageToolStripMenuItem.DropDownItemClicked += moveStageToImageToolStripMenuItem_DropDownItemClicked;
@@ -258,14 +260,14 @@ namespace BioImager
             // goToToolStripMenuItem
             // 
             goToToolStripMenuItem.Name = "goToToolStripMenuItem";
-            goToToolStripMenuItem.Size = new Size(199, 22);
+            goToToolStripMenuItem.Size = new Size(340, 38);
             goToToolStripMenuItem.Text = "Go To";
             goToToolStripMenuItem.Click += goToToolStripMenuItem_Click_1;
             // 
             // goToImageToolStripMenuItem
             // 
             goToImageToolStripMenuItem.Name = "goToImageToolStripMenuItem";
-            goToImageToolStripMenuItem.Size = new Size(199, 22);
+            goToImageToolStripMenuItem.Size = new Size(340, 38);
             goToImageToolStripMenuItem.Text = "Go To Image";
             goToImageToolStripMenuItem.DropDownOpening += goToImageToolStripMenuItem_DropDownOpening;
             goToImageToolStripMenuItem.DropDownItemClicked += goToImageToolStripMenuItem_DropDownItemClicked;
@@ -274,7 +276,7 @@ namespace BioImager
             // goToStageToolStripMenuItem
             // 
             goToStageToolStripMenuItem.Name = "goToStageToolStripMenuItem";
-            goToStageToolStripMenuItem.Size = new Size(199, 22);
+            goToStageToolStripMenuItem.Size = new Size(340, 38);
             goToStageToolStripMenuItem.Text = "Go To Stage";
             goToStageToolStripMenuItem.Click += goToStageToolStripMenuItem_Click;
             // 
@@ -282,68 +284,69 @@ namespace BioImager
             // 
             controlsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hideControlsToolStripMenuItem1, hideStatusToolStripMenuItem, hideOverViewToolStripMenuItem });
             controlsToolStripMenuItem.Name = "controlsToolStripMenuItem";
-            controlsToolStripMenuItem.Size = new Size(199, 22);
+            controlsToolStripMenuItem.Size = new Size(340, 38);
             controlsToolStripMenuItem.Text = "Controls";
             // 
             // hideControlsToolStripMenuItem1
             // 
             hideControlsToolStripMenuItem1.Name = "hideControlsToolStripMenuItem1";
-            hideControlsToolStripMenuItem1.Size = new Size(152, 22);
+            hideControlsToolStripMenuItem1.Size = new Size(306, 44);
             hideControlsToolStripMenuItem1.Text = "Hide Controls";
             hideControlsToolStripMenuItem1.Click += hideControlsToolStripMenuItem_Click;
             // 
             // hideStatusToolStripMenuItem
             // 
             hideStatusToolStripMenuItem.Name = "hideStatusToolStripMenuItem";
-            hideStatusToolStripMenuItem.Size = new Size(152, 22);
+            hideStatusToolStripMenuItem.Size = new Size(306, 44);
             hideStatusToolStripMenuItem.Text = "Hide Status";
             hideStatusToolStripMenuItem.Click += HideStatusMenuItem_Click;
             // 
             // hideOverViewToolStripMenuItem
             // 
             hideOverViewToolStripMenuItem.Name = "hideOverViewToolStripMenuItem";
-            hideOverViewToolStripMenuItem.Size = new Size(152, 22);
+            hideOverViewToolStripMenuItem.Size = new Size(306, 44);
             hideOverViewToolStripMenuItem.Text = "Hide OverView";
             hideOverViewToolStripMenuItem.Click += hideOverviewToolStripMenuItem_Click;
             // 
             // copyViewToClipboardToolStripMenuItem
             // 
             copyViewToClipboardToolStripMenuItem.Name = "copyViewToClipboardToolStripMenuItem";
-            copyViewToClipboardToolStripMenuItem.Size = new Size(199, 22);
+            copyViewToClipboardToolStripMenuItem.Size = new Size(340, 38);
             copyViewToClipboardToolStripMenuItem.Text = "Copy View to Clipboard";
             copyViewToClipboardToolStripMenuItem.Click += copyViewToClipboardToolStripMenuItem_Click;
             // 
             // layersToolStripMenuItem
             // 
             layersToolStripMenuItem.Name = "layersToolStripMenuItem";
-            layersToolStripMenuItem.Size = new Size(199, 22);
+            layersToolStripMenuItem.Size = new Size(340, 38);
             layersToolStripMenuItem.Text = "Layers";
             layersToolStripMenuItem.Click += layersToolStripMenuItem_Click;
             // 
             // removeImageToolStripMenuItem
             // 
             removeImageToolStripMenuItem.Name = "removeImageToolStripMenuItem";
-            removeImageToolStripMenuItem.Size = new Size(199, 22);
+            removeImageToolStripMenuItem.Size = new Size(340, 38);
             removeImageToolStripMenuItem.Text = "Remove Image";
             removeImageToolStripMenuItem.Click += removeImageToolStripMenuItem_Click;
             // 
             // removeImagesToolStripMenuItem
             // 
             removeImagesToolStripMenuItem.Name = "removeImagesToolStripMenuItem";
-            removeImagesToolStripMenuItem.Size = new Size(199, 22);
+            removeImagesToolStripMenuItem.Size = new Size(340, 38);
             removeImagesToolStripMenuItem.Text = "Remove Images";
             removeImagesToolStripMenuItem.Click += removeImagesToolStripMenuItem_Click;
             // 
             // zPlayMenuStrip
             // 
+            zPlayMenuStrip.ImageScalingSize = new Size(32, 32);
             zPlayMenuStrip.Items.AddRange(new ToolStripItem[] { playZToolStripMenuItem, stopZToolStripMenuItem, playSpeedToolStripMenuItem, setValueRangeToolStripMenuItem, loopZToolStripMenuItem });
             zPlayMenuStrip.Name = "zPlayMenuStrip";
-            zPlayMenuStrip.Size = new Size(158, 114);
+            zPlayMenuStrip.Size = new Size(262, 204);
             // 
             // playZToolStripMenuItem
             // 
             playZToolStripMenuItem.Name = "playZToolStripMenuItem";
-            playZToolStripMenuItem.Size = new Size(157, 22);
+            playZToolStripMenuItem.Size = new Size(261, 40);
             playZToolStripMenuItem.Text = "Play";
             playZToolStripMenuItem.Click += playZToolStripMenuItem_Click;
             // 
@@ -352,21 +355,21 @@ namespace BioImager
             stopZToolStripMenuItem.Checked = true;
             stopZToolStripMenuItem.CheckState = CheckState.Checked;
             stopZToolStripMenuItem.Name = "stopZToolStripMenuItem";
-            stopZToolStripMenuItem.Size = new Size(157, 22);
+            stopZToolStripMenuItem.Size = new Size(261, 40);
             stopZToolStripMenuItem.Text = "Stop";
             stopZToolStripMenuItem.Click += stopZToolStripMenuItem_Click;
             // 
             // playSpeedToolStripMenuItem
             // 
             playSpeedToolStripMenuItem.Name = "playSpeedToolStripMenuItem";
-            playSpeedToolStripMenuItem.Size = new Size(157, 22);
+            playSpeedToolStripMenuItem.Size = new Size(261, 40);
             playSpeedToolStripMenuItem.Text = "Play Speed";
             playSpeedToolStripMenuItem.Click += playSpeedToolStripMenuItem_Click;
             // 
             // setValueRangeToolStripMenuItem
             // 
             setValueRangeToolStripMenuItem.Name = "setValueRangeToolStripMenuItem";
-            setValueRangeToolStripMenuItem.Size = new Size(157, 22);
+            setValueRangeToolStripMenuItem.Size = new Size(261, 40);
             setValueRangeToolStripMenuItem.Text = "Set Value Range";
             setValueRangeToolStripMenuItem.Click += setValueRangeToolStripMenuItem_Click;
             // 
@@ -377,7 +380,7 @@ namespace BioImager
             loopZToolStripMenuItem.CheckState = CheckState.Checked;
             loopZToolStripMenuItem.Name = "loopZToolStripMenuItem";
             loopZToolStripMenuItem.ShowShortcutKeys = false;
-            loopZToolStripMenuItem.Size = new Size(157, 22);
+            loopZToolStripMenuItem.Size = new Size(261, 40);
             loopZToolStripMenuItem.Text = "Loop";
             loopZToolStripMenuItem.Click += loopZToolStripMenuItem_Click;
             // 
@@ -387,10 +390,10 @@ namespace BioImager
             channelBoxB.DropDownWidth = 150;
             channelBoxB.ForeColor = Color.White;
             channelBoxB.FormattingEnabled = true;
-            channelBoxB.Location = new Point(341, 2);
-            channelBoxB.Margin = new Padding(4, 3, 4, 3);
+            channelBoxB.Location = new Point(633, 4);
+            channelBoxB.Margin = new Padding(7, 6, 7, 6);
             channelBoxB.Name = "channelBoxB";
-            channelBoxB.Size = new Size(139, 23);
+            channelBoxB.Size = new Size(255, 40);
             channelBoxB.TabIndex = 8;
             channelBoxB.SelectedIndexChanged += channelBoxB_SelectedIndexChanged;
             // 
@@ -400,10 +403,10 @@ namespace BioImager
             channelBoxG.DropDownWidth = 150;
             channelBoxG.ForeColor = Color.White;
             channelBoxG.FormattingEnabled = true;
-            channelBoxG.Location = new Point(194, 2);
-            channelBoxG.Margin = new Padding(4, 3, 4, 3);
+            channelBoxG.Location = new Point(360, 4);
+            channelBoxG.Margin = new Padding(7, 6, 7, 6);
             channelBoxG.Name = "channelBoxG";
-            channelBoxG.Size = new Size(139, 23);
+            channelBoxG.Size = new Size(255, 40);
             channelBoxG.TabIndex = 6;
             channelBoxG.SelectedIndexChanged += channelBoxG_SelectedIndexChanged;
             // 
@@ -412,10 +415,10 @@ namespace BioImager
             labelRGB.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelRGB.AutoSize = true;
             labelRGB.ForeColor = Color.White;
-            labelRGB.Location = new Point(5, 7);
-            labelRGB.Margin = new Padding(4, 0, 4, 0);
+            labelRGB.Location = new Point(9, -137);
+            labelRGB.Margin = new Padding(7, 0, 7, 0);
             labelRGB.Name = "labelRGB";
-            labelRGB.Size = new Size(29, 15);
+            labelRGB.Size = new Size(58, 32);
             labelRGB.TabIndex = 5;
             labelRGB.Text = "RGB";
             // 
@@ -425,10 +428,10 @@ namespace BioImager
             channelBoxR.DropDownWidth = 150;
             channelBoxR.ForeColor = Color.White;
             channelBoxR.FormattingEnabled = true;
-            channelBoxR.Location = new Point(47, 2);
-            channelBoxR.Margin = new Padding(4, 3, 4, 3);
+            channelBoxR.Location = new Point(87, 4);
+            channelBoxR.Margin = new Padding(7, 6, 7, 6);
             channelBoxR.Name = "channelBoxR";
-            channelBoxR.Size = new Size(139, 23);
+            channelBoxR.Size = new Size(255, 40);
             channelBoxR.TabIndex = 4;
             channelBoxR.SelectedIndexChanged += channelBoxR_SelectedIndexChanged;
             // 
@@ -441,20 +444,20 @@ namespace BioImager
             rgbBoxsPanel.Controls.Add(labelRGB);
             rgbBoxsPanel.Controls.Add(channelBoxG);
             rgbBoxsPanel.ForeColor = Color.White;
-            rgbBoxsPanel.Location = new Point(0, 58);
-            rgbBoxsPanel.Margin = new Padding(4, 3, 4, 3);
+            rgbBoxsPanel.Location = new Point(0, 124);
+            rgbBoxsPanel.Margin = new Padding(7, 6, 7, 6);
             rgbBoxsPanel.Name = "rgbBoxsPanel";
-            rgbBoxsPanel.Size = new Size(499, 29);
+            rgbBoxsPanel.Size = new Size(927, 62);
             rgbBoxsPanel.TabIndex = 13;
             // 
             // statusLabel
             // 
             statusLabel.AutoSize = true;
             statusLabel.ForeColor = Color.White;
-            statusLabel.Location = new Point(9, 7);
-            statusLabel.Margin = new Padding(4, 0, 4, 0);
+            statusLabel.Location = new Point(17, 15);
+            statusLabel.Margin = new Padding(7, 0, 7, 0);
             statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(0, 15);
+            statusLabel.Size = new Size(0, 32);
             statusLabel.TabIndex = 3;
             // 
             // tLabel
@@ -463,10 +466,10 @@ namespace BioImager
             tLabel.AutoSize = true;
             tLabel.BackColor = Color.FromArgb(49, 91, 138);
             tLabel.ForeColor = Color.White;
-            tLabel.Location = new Point(5, 36);
-            tLabel.Margin = new Padding(4, 0, 4, 0);
+            tLabel.Location = new Point(9, 77);
+            tLabel.Margin = new Padding(7, 0, 7, 0);
             tLabel.Name = "tLabel";
-            tLabel.Size = new Size(14, 15);
+            tLabel.Size = new Size(27, 32);
             tLabel.TabIndex = 13;
             tLabel.Text = "T";
             // 
@@ -477,36 +480,38 @@ namespace BioImager
             tBar.BackColor = Color.FromArgb(49, 91, 138);
             tBar.ContextMenuStrip = timePlayMenuStrip;
             tBar.LargeChange = 1;
-            tBar.Location = new Point(18, 29);
+            tBar.Location = new Point(33, 62);
             tBar.Margin = new Padding(0);
             tBar.Name = "tBar";
-            tBar.Size = new Size(482, 29);
+            tBar.Size = new Size(895, 62);
             tBar.TabIndex = 16;
             tBar.ValueChanged += timeBar_ValueChanged;
             // 
             // controlsMenuStrip
             // 
+            controlsMenuStrip.ImageScalingSize = new Size(32, 32);
             controlsMenuStrip.Items.AddRange(new ToolStripItem[] { hideControlsToolStripMenuItem });
             controlsMenuStrip.Name = "controlsMenuStrip";
-            controlsMenuStrip.Size = new Size(148, 26);
+            controlsMenuStrip.Size = new Size(235, 42);
             // 
             // hideControlsToolStripMenuItem
             // 
             hideControlsToolStripMenuItem.Name = "hideControlsToolStripMenuItem";
-            hideControlsToolStripMenuItem.Size = new Size(147, 22);
+            hideControlsToolStripMenuItem.Size = new Size(234, 38);
             hideControlsToolStripMenuItem.Text = "Hide Controls";
             hideControlsToolStripMenuItem.Click += hideControlsToolStripMenuItem_Click;
             // 
             // cPlayMenuStrip
             // 
+            cPlayMenuStrip.ImageScalingSize = new Size(32, 32);
             cPlayMenuStrip.Items.AddRange(new ToolStripItem[] { playCToolStripMenuItem, stopCToolStripMenuItem, CPlaySpeedToolStripMenuItem, setCValueRangeToolStripMenuItem, loopCToolStripMenuItem });
             cPlayMenuStrip.Name = "zPlayMenuStrip";
-            cPlayMenuStrip.Size = new Size(158, 114);
+            cPlayMenuStrip.Size = new Size(262, 204);
             // 
             // playCToolStripMenuItem
             // 
             playCToolStripMenuItem.Name = "playCToolStripMenuItem";
-            playCToolStripMenuItem.Size = new Size(157, 22);
+            playCToolStripMenuItem.Size = new Size(261, 40);
             playCToolStripMenuItem.Text = "Play";
             playCToolStripMenuItem.Click += playCToolStripMenuItem_Click;
             // 
@@ -515,21 +520,21 @@ namespace BioImager
             stopCToolStripMenuItem.Checked = true;
             stopCToolStripMenuItem.CheckState = CheckState.Checked;
             stopCToolStripMenuItem.Name = "stopCToolStripMenuItem";
-            stopCToolStripMenuItem.Size = new Size(157, 22);
+            stopCToolStripMenuItem.Size = new Size(261, 40);
             stopCToolStripMenuItem.Text = "Stop";
             stopCToolStripMenuItem.Click += stopCToolStripMenuItem_Click;
             // 
             // CPlaySpeedToolStripMenuItem
             // 
             CPlaySpeedToolStripMenuItem.Name = "CPlaySpeedToolStripMenuItem";
-            CPlaySpeedToolStripMenuItem.Size = new Size(157, 22);
+            CPlaySpeedToolStripMenuItem.Size = new Size(261, 40);
             CPlaySpeedToolStripMenuItem.Text = "Play Speed";
             CPlaySpeedToolStripMenuItem.Click += CPlaySpeedToolStripMenuItem_Click;
             // 
             // setCValueRangeToolStripMenuItem
             // 
             setCValueRangeToolStripMenuItem.Name = "setCValueRangeToolStripMenuItem";
-            setCValueRangeToolStripMenuItem.Size = new Size(157, 22);
+            setCValueRangeToolStripMenuItem.Size = new Size(261, 40);
             setCValueRangeToolStripMenuItem.Text = "Set Value Range";
             setCValueRangeToolStripMenuItem.Click += setCValueRangeToolStripMenuItem_Click;
             // 
@@ -540,7 +545,7 @@ namespace BioImager
             loopCToolStripMenuItem.CheckState = CheckState.Checked;
             loopCToolStripMenuItem.Name = "loopCToolStripMenuItem";
             loopCToolStripMenuItem.ShowShortcutKeys = false;
-            loopCToolStripMenuItem.Size = new Size(157, 22);
+            loopCToolStripMenuItem.Size = new Size(261, 40);
             loopCToolStripMenuItem.Text = "Loop";
             loopCToolStripMenuItem.Click += loopCToolStripMenuItem_Click;
             // 
@@ -551,10 +556,10 @@ namespace BioImager
             zBar.BackColor = Color.FromArgb(49, 91, 138);
             zBar.ContextMenuStrip = zPlayMenuStrip;
             zBar.LargeChange = 1;
-            zBar.Location = new Point(18, 1);
+            zBar.Location = new Point(33, 2);
             zBar.Margin = new Padding(0);
             zBar.Name = "zBar";
-            zBar.Size = new Size(482, 29);
+            zBar.Size = new Size(895, 62);
             zBar.TabIndex = 12;
             zBar.ValueChanged += zBar_ValueChanged;
             // 
@@ -564,10 +569,10 @@ namespace BioImager
             zLabel.AutoSize = true;
             zLabel.BackColor = Color.FromArgb(49, 91, 138);
             zLabel.ForeColor = Color.White;
-            zLabel.Location = new Point(5, 5);
-            zLabel.Margin = new Padding(4, 0, 4, 0);
+            zLabel.Location = new Point(9, 11);
+            zLabel.Margin = new Padding(7, 0, 7, 0);
             zLabel.Name = "zLabel";
-            zLabel.Size = new Size(14, 15);
+            zLabel.Size = new Size(28, 32);
             zLabel.TabIndex = 9;
             zLabel.Text = "Z";
             // 
@@ -578,10 +583,10 @@ namespace BioImager
             cBar.BackColor = Color.FromArgb(49, 91, 138);
             cBar.ContextMenuStrip = cPlayMenuStrip;
             cBar.LargeChange = 1;
-            cBar.Location = new Point(18, 58);
+            cBar.Location = new Point(33, 124);
             cBar.Margin = new Padding(0);
             cBar.Name = "cBar";
-            cBar.Size = new Size(482, 29);
+            cBar.Size = new Size(895, 62);
             cBar.TabIndex = 15;
             cBar.ValueChanged += cBar_ValueChanged;
             // 
@@ -591,10 +596,10 @@ namespace BioImager
             cLabel.AutoSize = true;
             cLabel.BackColor = Color.FromArgb(49, 91, 138);
             cLabel.ForeColor = Color.White;
-            cLabel.Location = new Point(5, 63);
-            cLabel.Margin = new Padding(4, 0, 4, 0);
+            cLabel.Location = new Point(9, 134);
+            cLabel.Margin = new Padding(7, 0, 7, 0);
             cLabel.Name = "cLabel";
-            cLabel.Size = new Size(15, 15);
+            cLabel.Size = new Size(29, 32);
             cLabel.TabIndex = 15;
             cLabel.Text = "C";
             // 
@@ -625,10 +630,10 @@ namespace BioImager
             trackBarPanel.Controls.Add(zLabel);
             trackBarPanel.Controls.Add(cLabel);
             trackBarPanel.Controls.Add(rgbBoxsPanel);
-            trackBarPanel.Location = new Point(0, 338);
-            trackBarPanel.Margin = new Padding(4, 3, 4, 3);
+            trackBarPanel.Location = new Point(0, 721);
+            trackBarPanel.Margin = new Padding(7, 6, 7, 6);
             trackBarPanel.Name = "trackBarPanel";
-            trackBarPanel.Size = new Size(499, 87);
+            trackBarPanel.Size = new Size(927, 186);
             trackBarPanel.TabIndex = 17;
             // 
             // statusPanel
@@ -639,9 +644,9 @@ namespace BioImager
             statusPanel.Controls.Add(ticksLabel);
             statusPanel.Controls.Add(statusLabel);
             statusPanel.Location = new Point(0, 0);
-            statusPanel.Margin = new Padding(4, 3, 4, 3);
+            statusPanel.Margin = new Padding(7, 6, 7, 6);
             statusPanel.Name = "statusPanel";
-            statusPanel.Size = new Size(499, 29);
+            statusPanel.Size = new Size(927, 62);
             statusPanel.TabIndex = 18;
             // 
             // ticksLabel
@@ -649,10 +654,10 @@ namespace BioImager
             ticksLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ticksLabel.AutoSize = true;
             ticksLabel.ForeColor = Color.White;
-            ticksLabel.Location = new Point(391, 7);
-            ticksLabel.Margin = new Padding(4, 0, 4, 0);
+            ticksLabel.Location = new Point(726, 15);
+            ticksLabel.Margin = new Padding(7, 0, 7, 0);
             ticksLabel.Name = "ticksLabel";
-            ticksLabel.Size = new Size(0, 15);
+            ticksLabel.Size = new Size(0, 32);
             ticksLabel.TabIndex = 4;
             // 
             // showControlsToolStripMenuItem
@@ -664,14 +669,15 @@ namespace BioImager
             // 
             // statusMenuStrip
             // 
+            statusMenuStrip.ImageScalingSize = new Size(32, 32);
             statusMenuStrip.Items.AddRange(new ToolStripItem[] { HideStatusMenuItem });
             statusMenuStrip.Name = "controlsMenuStrip";
-            statusMenuStrip.Size = new Size(135, 26);
+            statusMenuStrip.Size = new Size(210, 42);
             // 
             // HideStatusMenuItem
             // 
             HideStatusMenuItem.Name = "HideStatusMenuItem";
-            HideStatusMenuItem.Size = new Size(134, 22);
+            HideStatusMenuItem.Size = new Size(209, 38);
             HideStatusMenuItem.Text = "Hide Status";
             HideStatusMenuItem.Click += HideStatusMenuItem_Click;
             // 
@@ -680,10 +686,10 @@ namespace BioImager
             pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox.BackColor = Color.Transparent;
             pictureBox.ContextMenuStrip = contextMenuStrip;
-            pictureBox.Location = new Point(0, 29);
+            pictureBox.Location = new Point(0, 62);
             pictureBox.Margin = new Padding(0);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(481, 290);
+            pictureBox.Size = new Size(893, 619);
             pictureBox.TabIndex = 20;
             pictureBox.TabStop = false;
             pictureBox.Paint += pictureBox_Paint;
@@ -696,10 +702,10 @@ namespace BioImager
             overlayPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             overlayPictureBox.BackColor = Color.Transparent;
             overlayPictureBox.ContextMenuStrip = contextMenuStrip;
-            overlayPictureBox.Location = new Point(0, 29);
+            overlayPictureBox.Location = new Point(0, 62);
             overlayPictureBox.Margin = new Padding(0);
             overlayPictureBox.Name = "overlayPictureBox";
-            overlayPictureBox.Size = new Size(481, 290);
+            overlayPictureBox.Size = new Size(888, 619);
             overlayPictureBox.TabIndex = 19;
             overlayPictureBox.TabStop = false;
             overlayPictureBox.Paint += overlayPictureBox_Paint;
@@ -711,9 +717,9 @@ namespace BioImager
             // hScrollBar
             // 
             hScrollBar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            hScrollBar.Location = new Point(0, 318);
+            hScrollBar.Location = new Point(0, 681);
             hScrollBar.Name = "hScrollBar";
-            hScrollBar.Size = new Size(500, 18);
+            hScrollBar.Size = new Size(929, 34);
             hScrollBar.SmallChange = 10;
             hScrollBar.TabIndex = 24;
             hScrollBar.Visible = false;
@@ -722,9 +728,9 @@ namespace BioImager
             // vScrollBar
             // 
             vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            vScrollBar.Location = new Point(481, 29);
+            vScrollBar.Location = new Point(888, 62);
             vScrollBar.Name = "vScrollBar";
-            vScrollBar.Size = new Size(17, 290);
+            vScrollBar.Size = new Size(39, 619);
             vScrollBar.SmallChange = 10;
             vScrollBar.TabIndex = 23;
             vScrollBar.Visible = false;
@@ -738,7 +744,7 @@ namespace BioImager
             // 
             // ImageView
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(95, 122, 156);
             Controls.Add(vScrollBar);
@@ -748,9 +754,9 @@ namespace BioImager
             Controls.Add(overlayPictureBox);
             Controls.Add(pictureBox);
             Margin = new Padding(0);
-            MinimumSize = new Size(117, 115);
+            MinimumSize = new Size(217, 245);
             Name = "ImageView";
-            Size = new Size(499, 425);
+            Size = new Size(927, 907);
             KeyDown += ImageView_KeyDown;
             KeyPress += ImageView_KeyPress;
             KeyUp += ImageView_KeyUp;

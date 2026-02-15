@@ -103,11 +103,16 @@ namespace BioImager
                 tileInfos = schema.GetTileInfos(pixelExtent, level).ToList();
             }
 
-            if(_openSlideBase != null)
+            if (_openSlideBase != null)
+            {
+                _openSlideBase.PyramidalOrigin = pyramidalOrigin;
+                _openSlideBase.PyramidalSize = new AForge.Size(viewportWidth, viewportHeight);
                 await _openSlideBase.FetchTilesAsync(tileInfos.ToList(), level, coordinate);
+            }
             else
-                await _slideBase.FetchTilesAsync(tileInfos.ToList(), level, coordinate, pyramidalOrigin, new AForge.Size(viewportWidth,viewportHeight));
-            
+            {
+                await _slideBase.FetchTilesAsync(tileInfos.ToList(), level, coordinate, pyramidalOrigin, new AForge.Size(viewportWidth, viewportHeight));
+            }
             var renderInfos = new List<TileRenderInfo>();
             foreach (var tileInfo in tileInfos)
             {

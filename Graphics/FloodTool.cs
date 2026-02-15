@@ -1,10 +1,12 @@
 ﻿using AForge;
+using System.ComponentModel;
 namespace BioImager.Graphics
 {
     public partial class FloodTool : Form
     {
         private Pen pen = new Pen(new ColorS(ushort.MaxValue, ushort.MaxValue, ushort.MaxValue), 1, 16);
         private int bitsPerPixel = 16;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Pen Pen
         {
             get

@@ -230,7 +230,7 @@ void main()
         // Rendering
         // ============================================================================
 
-        private void OnRender(object sender, EventArgs args)
+        public void OnRender()
         {
             if (!_glInitialized) return;
             MakeCurrent();

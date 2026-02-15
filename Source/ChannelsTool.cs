@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AForge;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using AForge;
+using System.Windows.Forms;
 namespace BioImager
 {
     public partial class ChannelsTool : Form
@@ -28,6 +29,7 @@ namespace BioImager
             }
         }
         /* A property that is used to get and set the value of the sampleBox.Value. */
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SelectedSample
         {
             get

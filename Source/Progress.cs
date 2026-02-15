@@ -22,6 +22,7 @@ namespace BioImager
             fileLabel.Text = file;
             timer.Start();
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Status
         {
             get { return statusLabel.Text; }
@@ -38,6 +39,7 @@ namespace BioImager
                 }
             }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float ProgressValue
         {
             get { return progressBar.Value; }

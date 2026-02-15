@@ -14,7 +14,7 @@
     <PackageTags>Microscopy;Biology;</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Description>A .NET microscopy imaging application based on Bio library. Supports various microscopes by using imported libraries &amp; GUI automation. Supported libraries include Prior® &amp; Zeiss® &amp; all devices supported by Micromanager 2.0 and python-microscope.</Description>
-    <Version>4.8.0</Version>
+    <Version>4.9.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
@@ -435,7 +435,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="BioLib" Version="3.9.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="FlaUI.Core" Version="5.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
@@ -452,6 +451,10 @@
     <PackageReference Include="ScottPlot" Version="5.1.57" />
     <PackageReference Include="TorchSharp-cpu" Version="0.105.1" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\BioLib\BioLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpg">

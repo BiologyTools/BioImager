@@ -3,7 +3,6 @@ using AForge.Imaging.Filters;
 using BioLib;
 using CSScripting;
 using Gtk;
-using java.awt.geom;
 using OpenSlideGTK;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -185,7 +184,7 @@ namespace BioImager
 
         private void Gl_Paint(object? sender, PaintEventArgs e)
         {
-            gl.Invalidate();
+            gl.OnRender();
         }
 
         ~ImageView()
@@ -1366,7 +1365,7 @@ namespace BioImager
                 }
                 else if (Mode == ViewMode.Raw)
                 {
-                    bitmap = (Bitmap)b.Buffers[index].GetImageRGB();
+                    bitmap = (Bitmap)b.Buffers[index].GetImageRGBA();
                 }
                 else
                 {

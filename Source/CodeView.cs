@@ -43,6 +43,7 @@ namespace BioImager
         }
 
         /* A property of the textbox. */
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool WordWrap
         {
             get

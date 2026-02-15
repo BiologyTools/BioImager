@@ -40,6 +40,7 @@ namespace BioImager
         }
         private Channel channel = null;
         private float bin = 10;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float Bin
         {
             get
@@ -52,6 +53,7 @@ namespace BioImager
             }
         }
         private int min = 0;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float Min
         {
             get { return min; }
@@ -63,6 +65,7 @@ namespace BioImager
             }
         }
         private int max = 0;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float Max
         {
             get { return max; }
@@ -74,18 +77,21 @@ namespace BioImager
             }
         }
         private int graphMax = ushort.MaxValue;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int GraphMax
         {
             get { return graphMax; }
             set { graphMax = value; }
         }
         private int graphMin = 0;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int GraphMin
         {
             get { return graphMin; }
             set { graphMin = value; }
         }
         private bool stackHistogram = true;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool StackHistogram
         {
             get
@@ -131,6 +137,7 @@ namespace BioImager
         }
 
         private bool axisNumbers = true;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AxisNumbers
         {
             get { return axisNumbers;}
@@ -138,6 +145,7 @@ namespace BioImager
         }
 
         private bool axisTicks = true;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AxisTicks
         {
             get { return axisTicks; }

@@ -36,6 +36,7 @@ namespace BioImager
             Scatter
         }
         PlotType type;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public PlotType Type
         {
             get { return type; }
@@ -45,16 +46,19 @@ namespace BioImager
         {
             get { return plots; }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<double[]> Data
         {
             get { return data; }
             set { data = value; UpdateImage(); }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Bitmap Image
         {
             get { return bitmap; }
             set { bitmap = value; }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ScottPlot.Plot Model
         {
             get { return model; }

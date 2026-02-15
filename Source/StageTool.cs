@@ -33,6 +33,7 @@ namespace BioImager
 
             timer.Start();
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ImagingFolder
         {
             get
@@ -45,6 +46,7 @@ namespace BioImager
                 Properties.Settings.Default.Save();
             }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ImageName
         {
             get

@@ -15,6 +15,7 @@ namespace BioImager
         private ColorS color = new ColorS(65535, 65535, 65535);
         private int bitsPerPixel = 16;
         /* A property. */
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ColorS Color
         {
             get
