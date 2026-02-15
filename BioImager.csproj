@@ -449,6 +449,7 @@
     <PackageReference Include="OpenTK.GLControl" Version="4.0.2" />
     <PackageReference Include="OpenTK.Input" Version="4.9.4" />
     <PackageReference Include="ScottPlot" Version="5.1.57" />
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     <PackageReference Include="TorchSharp-cpu" Version="0.105.1" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>

@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using OpenTK.Windowing.GraphicsLibraryFramework;
+using SharpDX.XInput;
 using WindowsInput;
 using System.Configuration;
 using BioImager.Properties;
@@ -28,15 +28,12 @@ namespace BioImager
         private System.Drawing.Point mainWinDefLocation = new System.Drawing.Point(1473, 509);
         public static string AppPath = "";
         public static List<BioImage> StoredImages = new List<BioImage>();
-        public int controllerIndex = -1;
-        public PadState padState, previousPadState;
+        public Controller controller;
+        public Gamepad gamepad, previousGamepadState;
         public bool prevState = false;
         public bool connected = false;
         public float leftTrigger, rightTrigger;
         public int deadzone = 5;
-        // Deadzone normalized from the original raw short range (0-32767) to
-        // GLFW's 0.0-1.0 float range. Kept in sync via deadzoneBox_ValueChanged.
-        private float normalizedDeadzone = 5.0f / 32767.0f;
 
         public string m_ID;
         public string ID => this.m_ID;
@@ -141,98 +138,6 @@ namespace BioImager
             }
 
         }
-
-        /// Managed snapshot of GLFW GamepadState. The raw GLFW struct uses fixed
-        /// buffers that require unsafe access, so we read it once in FromGlfw and
-        /// expose clean managed fields for the rest of the codebase.
-        ///
-        /// Axis conventions vs. the old SharpDX/XInput API:
-        ///   Thumbstick X:  identical  (positive = right)
-        ///   Thumbstick Y:  INVERTED   (GLFW positive = down; XInput positive = up)
-        ///   Triggers:      GLFW -1..1 -> normalised here to 0..1
-        public struct PadState
-        {
-            // Face buttons
-            public bool Y, B, A, X;
-            // Menu buttons
-            public bool Start, Back;
-            // Bumpers / shoulders
-            public bool LeftBumper, RightBumper;
-            // Thumb stick clicks
-            public bool LeftThumb, RightThumb;
-            // DPad
-            public bool DPadUp, DPadRight, DPadDown, DPadLeft;
-
-            // Thumbstick axes (-1..1). Note: Y positive = DOWN (GLFW convention).
-            public float LeftX, LeftY, RightX, RightY;
-            // Trigger axes normalised to 0..1 (0 = released, 1 = fully pressed).
-            public float LeftTrigger, RightTrigger;
-
-            // GLFW standard gamepad button indices (glfw3.h).
-            // OpenTK 4.x does not expose these as a managed enum.
-            private const int BtnA = 0, BtnB = 1, BtnX = 2, BtnY = 3;
-            private const int BtnLeftBumper = 4, BtnRightBumper = 5;
-            private const int BtnBack = 6, BtnStart = 7;
-            private const int BtnLeftThumb = 9, BtnRightThumb = 10;
-            private const int BtnDPadUp = 11, BtnDPadRight = 12, BtnDPadDown = 13, BtnDPadLeft = 14;
-
-            // GLFW standard gamepad axis indices (glfw3.h).
-            private const int AxisLeftX = 0, AxisLeftY = 1, AxisRightX = 2, AxisRightY = 3;
-            private const int AxisLeftTrigger = 4, AxisRightTrigger = 5;
-
-            /// Reads the raw GLFW GamepadState (fixed-buffer struct) into a clean
-            /// managed PadState. This is the only unsafe code in the controller path.
-            public static unsafe PadState FromGlfw(GamepadState raw)
-            {
-                PadState s;
-
-                s.A = raw.Buttons[BtnA] != 0;
-                s.B = raw.Buttons[BtnB] != 0;
-                s.X = raw.Buttons[BtnX] != 0;
-                s.Y = raw.Buttons[BtnY] != 0;
-
-                s.Start = raw.Buttons[BtnStart] != 0;
-                s.Back = raw.Buttons[BtnBack] != 0;
-
-                s.LeftBumper = raw.Buttons[BtnLeftBumper] != 0;
-                s.RightBumper = raw.Buttons[BtnRightBumper] != 0;
-
-                s.LeftThumb = raw.Buttons[BtnLeftThumb] != 0;
-                s.RightThumb = raw.Buttons[BtnRightThumb] != 0;
-
-                s.DPadUp = raw.Buttons[BtnDPadUp] != 0;
-                s.DPadRight = raw.Buttons[BtnDPadRight] != 0;
-                s.DPadDown = raw.Buttons[BtnDPadDown] != 0;
-                s.DPadLeft = raw.Buttons[BtnDPadLeft] != 0;
-
-                s.LeftX = raw.Axes[AxisLeftX];
-                s.LeftY = raw.Axes[AxisLeftY];
-                s.RightX = raw.Axes[AxisRightX];
-                s.RightY = raw.Axes[AxisRightY];
-
-                // GLFW triggers range -1 (released) to +1 (pressed).
-                // Normalise to 0..1 for parity with the old XInput 0-255 byte range.
-                s.LeftTrigger = (raw.Axes[AxisLeftTrigger] + 1f) / 2f;
-                s.RightTrigger = (raw.Axes[AxisRightTrigger] + 1f) / 2f;
-
-                return s;
-            }
-        }
-
-        /// Attempts to read the current GLFW gamepad state for the connected
-        /// controller index. Returns false if the read fails or no controller
-        /// is connected, in which case the out parameter is default-initialised.
-        private bool TryGetPadState(out PadState state)
-        {
-            state = default;
-            if (controllerIndex < 0)
-                return false;
-            if (!GLFW.GetGamepadState(controllerIndex, out GamepadState raw))
-                return false;
-            state = PadState.FromGlfw(raw);
-            return true;
-        }
-
         /* Starting the imaging application and then waiting for it to be idle. */
         public Imager()
         {
@@ -278,17 +183,15 @@ namespace BioImager
             }
             statusTimer.Start();
 
-            // GLFW must already be initialised (via the offscreen GameWindow) before
-            // calling any joystick/gamepad functions.  We check indices 0-3 for parity
-            // with the old XInput 4-controller limit.
-            for (int i = 0; i < 4; i++)
+            for (UserIndex i = UserIndex.One; i <= UserIndex.Four; i++)
             {
-                if (GLFW.JoystickPresent(i) && GLFW.JoystickIsGamepad(i))
+                controller = new Controller(i);
+                if (controller.IsConnected)
                 {
-                    controllerIndex = i;
                     connected = true;
                     break;
                 }
+                else controller = null;
             }
 
             ControllerFuncs.LoadSettings();
@@ -383,7 +286,6 @@ namespace BioImager
         private void deadzoneBox_ValueChanged(object sender, EventArgs e)
         {
             deadzone = (int)deadzoneBox.Value;
-            normalizedDeadzone = deadzone / 32767.0f;
         }
 
         private void storedCoordsBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -451,15 +353,7 @@ namespace BioImager
             storedCoordsBox.SelectedIndex = storedCoordsBox.Items.Count - 1;
         }
 
-        /// We check the state of the controller and update the UI accordingly.
-        ///
-        /// GLFW axis conventions vs. old SharpDX/XInput:
-        ///   - Triggers are normalised to 0-1 by PadState.FromGlfw (GLFW raw is -1..1).
-        ///   - Thumbstick X: same (positive = right).
-        ///   - Thumbstick Y: INVERTED (GLFW positive = down; XInput positive = up).
-        ///     The move calls below account for this inversion so that stage movement
-        ///     direction and sign of value passed to the Microscope methods are identical
-        ///     to the original XInput behaviour.
+        /// We check the state of the controller and update the UI accordingly
         /// 
         /// @param sender The object that raised the event.
         /// @param EventArgs 
@@ -467,20 +361,20 @@ namespace BioImager
         /// @return The gamepad state.
         private void controllerJoystickUpdate_Tick(object sender, EventArgs e)
         {
-            if (AppP != null)
-                if (AppP.HasExited)
-                {
-                    return;
-                }
+            if(AppP!=null)
+            if (AppP.HasExited)
+            {
+                return;
+            }
             //Here we check the joysticks etc. which should have a high refresh rate to ensure smoothness.
             if (!connected)
                 return;
-            if (!TryGetPadState(out padState))
-                return;
 
-            //PadState triggers are already 0.0-1.0; scale to percent for display/logic parity.
-            leftTrigger = padState.LeftTrigger * 100;
-            rightTrigger = padState.RightTrigger * 100;
+            gamepad = controller.GetState().Gamepad;
+
+            //we set the triggers to be percent
+            leftTrigger = ((float)(gamepad.LeftTrigger) / 255) * 100;
+            rightTrigger = ((float)(gamepad.RightTrigger) / 255) * 100;
 
             #region//TRIGGERS
             if (rightTrigger > 0)
@@ -498,43 +392,31 @@ namespace BioImager
             #endregion
 
             #region//JOYSTICKS
-            // Stage the stick values and move amounts for readability.
-            // GLFW Y axis is inverted from XInput: positive = down, negative = up.
-            // The move calls below preserve the original sign convention by negating
-            // where needed so that Microscope.Move* receives the same value it did
-            // under XInput for the same physical stick deflection.
-            float lx = padState.LeftX;
-            float ly = padState.LeftY;
-            float rx = padState.RightX;
-            float ry = padState.RightY;
-            float moveL = (float)LJoystickStageMoveAmountBox.Value;
-            float moveR = (float)RJoystickStageMoveAmountBox.Value;
-
-            //LEFT JOYSTICK
-            if (lx > normalizedDeadzone)
-                Microscope.MoveRight(lx * moveL);
-            if (lx < -normalizedDeadzone)
-                Microscope.MoveLeft((-lx) * moveL);
-            // GLFW ly > 0 = stick down → MoveUp (inverted from XInput ly < 0)
-            if (ly > normalizedDeadzone)
-                Microscope.MoveUp((-ly) * moveL);
-            // GLFW ly < 0 = stick up → MoveDown (inverted from XInput ly > 0)
-            if (ly < -normalizedDeadzone)
-                Microscope.MoveDown(ly * moveL);
+            //LEFT JOYSTICKS
+            double maxVal = ushort.MaxValue / 2;
+            double minVal = maxVal * -1;
+            if (gamepad.LeftThumbX > deadzone)
+                Microscope.MoveRight((((float)gamepad.LeftThumbX) / maxVal) * (float)LJoystickStageMoveAmountBox.Value);
+            if (gamepad.LeftThumbX < -deadzone)
+                Microscope.MoveLeft((((float)gamepad.LeftThumbX) / minVal) * (float)LJoystickStageMoveAmountBox.Value);
+            if (gamepad.LeftThumbY < -deadzone)
+                Microscope.MoveUp((((float)gamepad.LeftThumbY) / maxVal) * (float)LJoystickStageMoveAmountBox.Value);
+            if (gamepad.LeftThumbY > deadzone)
+                Microscope.MoveDown((((float)gamepad.LeftThumbY) / minVal) * (float)LJoystickStageMoveAmountBox.Value);
 
             //RIGHT JOYSTICK
-            if (rx > normalizedDeadzone)
-                Microscope.MoveRight(rx * moveR);
-            if (rx < -normalizedDeadzone)
-                Microscope.MoveLeft((-rx) * moveR);
-            if (ry > normalizedDeadzone)
-                Microscope.MoveUp((-ry) * moveR);
-            if (ry < -normalizedDeadzone)
-                Microscope.MoveDown(ry * moveR);
+            if (gamepad.RightThumbX > deadzone)
+                Microscope.MoveRight(((float)gamepad.RightThumbX / maxVal) * (float)RJoystickStageMoveAmountBox.Value);
+            if (gamepad.RightThumbX < -deadzone)
+                Microscope.MoveLeft((((float)gamepad.RightThumbX) / minVal) * (float)RJoystickStageMoveAmountBox.Value);
+            if (gamepad.RightThumbY < -deadzone)
+                Microscope.MoveUp((((float)gamepad.RightThumbY) / maxVal) * (float)RJoystickStageMoveAmountBox.Value);
+            if (gamepad.RightThumbY > deadzone)
+                Microscope.MoveDown((((float)gamepad.RightThumbY) / minVal) * (float)RJoystickStageMoveAmountBox.Value);
             #endregion
 
-            LJoystickLabel.Text = "X: " + lx.ToString("0.000") + " Y:" + ly.ToString("0.000");
-            RJoystickLabel.Text = "X: " + rx.ToString("0.000") + " Y:" + ry.ToString("0.000");
+            LJoystickLabel.Text = "X: " + gamepad.LeftThumbX.ToString("0.000") + " Y:" + gamepad.LeftThumbY.ToString("0.000");
+            RJoystickLabel.Text = "X: " + gamepad.RightThumbX.ToString("0.000") + " Y:" + gamepad.RightThumbY.ToString("0.000");
 
             leftTriggerLabel.Text = leftTrigger.ToString();
             rightTriggerLabel.Text = rightTrigger.ToString();
@@ -575,20 +457,20 @@ namespace BioImager
         /// @return The current state of the controller.
         private void controllerButtonUpdate_Tick(object sender, EventArgs e)
         {
-            if (AppP != null)
-                if (AppP.HasExited)
-                    return;
+            if(AppP!=null)
+            if (AppP.HasExited)
+                return;
             //AppP.WaitForInputIdle();
             //Here we check buttons etc. which will have a lower refresh rate to ensure that we do not repeat commands
             if (!connected)
                 return;
-            if (!TryGetPadState(out padState))
-                return;
+
+            gamepad = controller.GetState().Gamepad;
 
             if (prevState)
-                CheckGamepadButtons(padState, previousPadState);
+                CheckGamepadButtons(gamepad, previousGamepadState);
 
-            previousPadState = padState;
+            previousGamepadState = gamepad;
             prevState = true;
         }
 
@@ -623,11 +505,11 @@ namespace BioImager
                 Win32.Rect r = new Win32.Rect();
                 Win32.GetWindowRect(apph, ref r);
                 System.Drawing.Point pp = new System.Drawing.Point((r.Right) - this.Width, (r.Bottom) - this.Height - 30);
-                this.Location = new System.Drawing.Point((int)pp.X, (int)pp.Y);
+                this.Location = new System.Drawing.Point((int)pp.X,(int)pp.Y);
             }
             string s = Win32.GetActiveWindowTitle();
-            if (Microscope.initialized)
-                statusLabel.Text = Microscope.GetPosition().ToString();
+            if(Microscope.initialized)
+            statusLabel.Text = Microscope.GetPosition().ToString();
             if (s != null)
                 if (s.Contains(Settings.Default.AppName))
                 {
@@ -752,7 +634,7 @@ namespace BioImager
             ControllerFuncs.LoadSettings();
         }
 
-        /// When the user double clicks on the DPadUpLabel, a new FunctionForm is created and shown. If the
+        /// When the user double clicks the DPadUpLabel, a new FunctionForm is created and shown. If the
         /// user clicks OK, the DPadUp function is set to the function the user selected
         /// 
         /// @param sender The object that raised the event.
@@ -1064,7 +946,7 @@ namespace BioImager
         /// @return The image is being saved to the file name specified in the saveImageDialog.
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == System.Windows.Forms.Keys.S && e.Control)
+            if (e.KeyCode == Keys.S && e.Control)
             {
                 if (saveImageDialog.ShowDialog() != DialogResult.OK)
                     return;
@@ -1110,112 +992,343 @@ namespace BioImager
             this.TopMost = topMostCheckBox.Checked;
         }
 
-        /// Checks a single gamepad button against its configured function and updates the associated label.
-        /// PadState exposes each button as an individual bool rather than SharpDX's aggregate flags enum,
-        /// so we check pressed/released per-button directly - no "consumed" flag clearing needed.
+        /// If the button is set to be pressed, then check if the button is pressed. If it is, then
+        /// perform the function. If it's not, then do nothing. If the button is set to be released,
+        /// then check if the button is released. If it is, then perform the function. If it's not, then
+        /// do nothing
         /// 
-        /// @param func         The Function bound to this button
-        /// @param isPressed    Whether the button is currently pressed
-        /// @param wasPressed   Whether the button was pressed on the previous tick
-        /// @param label        The UI label to update with status text
-        /// @param buttonName   Display name for the label (e.g. "Y", "Start", "Up")
-        private void CheckButton(Function func, bool isPressed, bool wasPressed, Label label, string buttonName)
+        /// @param Gamepad The current state of the controller
+        /// @param Gamepad The previous state of the controller
+        public void CheckGamepadButtons(Gamepad state, Gamepad prevState)
         {
-            if (func.State == Function.ButtonState.Released)
+            #region YBAX Keys
+            if (ControllerFuncs.Y.State == Function.ButtonState.Released)
             {
-                if (wasPressed && !isPressed)
+                if (prevState.Buttons == GamepadButtonFlags.Y && state.Buttons != GamepadButtonFlags.Y)
                 {
-                    PerformFunction(func);
-                    label.Text = buttonName + ": released";
+                    PerformFunction(ControllerFuncs.Y);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    YPressedLabel.Text = "Y: released";
                 }
                 else
-                    label.Text = buttonName + ": not pressed";
+                    YPressedLabel.Text = "Y: not pressed";
             }
             else
             {
-                if (isPressed)
+                if (state.Buttons == GamepadButtonFlags.Y)
                 {
-                    PerformFunction(func);
-                    label.Text = buttonName + ": pressed";
+                    PerformFunction(ControllerFuncs.Y);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    YPressedLabel.Text = "Y: pressed";
                 }
                 else
-                    label.Text = buttonName + ": not pressed";
+                    YPressedLabel.Text = "Y: not pressed";
             }
-        }
-
-        /// Checks all gamepad buttons by comparing current and previous state, firing the
-        /// bound function for each button whose trigger condition is met.
-        /// 
-        /// @param state     The current PadState
-        /// @param prevState The previous tick's PadState
-        public void CheckGamepadButtons(PadState state, PadState prevState)
-        {
-            #region YBAX Keys
-            CheckButton(ControllerFuncs.Y,
-                state.Y, prevState.Y,
-                YPressedLabel, "Y");
-
-            CheckButton(ControllerFuncs.B,
-                state.B, prevState.B,
-                BPressedLabel, "B");
-
-            CheckButton(ControllerFuncs.A,
-                state.A, prevState.A,
-                APressedLabel, "A");
-
-            CheckButton(ControllerFuncs.X,
-                state.X, prevState.X,
-                XPressedLabel, "X");
+            if (ControllerFuncs.B.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.B && state.Buttons != GamepadButtonFlags.B)
+                {
+                    PerformFunction(ControllerFuncs.B);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    state.Buttons = GamepadButtonFlags.None;
+                    BPressedLabel.Text = "B: released";
+                }
+                else
+                    BPressedLabel.Text = "B: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.B)
+                {
+                    PerformFunction(ControllerFuncs.B);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    BPressedLabel.Text = "B: pressed";
+                }
+                else
+                    BPressedLabel.Text = "B: not pressed";
+            }
+            if (ControllerFuncs.A.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.A && state.Buttons != GamepadButtonFlags.A)
+                {
+                    PerformFunction(ControllerFuncs.A);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    APressedLabel.Text = "A: released";
+                }
+                else
+                    APressedLabel.Text = "A: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.A)
+                {
+                    PerformFunction(ControllerFuncs.A);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    APressedLabel.Text = "A: pressed";
+                }
+                else
+                    APressedLabel.Text = "A: not pressed";
+            }
+            if (ControllerFuncs.X.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.X && state.Buttons != GamepadButtonFlags.X)
+                {
+                    PerformFunction(ControllerFuncs.X);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    XPressedLabel.Text = "X: released";
+                }
+                else
+                    XPressedLabel.Text = "X: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.X)
+                {
+                    PerformFunction(ControllerFuncs.X);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    XPressedLabel.Text = "X: pressed";
+                }
+                else
+                    XPressedLabel.Text = "X: not pressed";
+            }
             #endregion
 
             #region Back & Start Keys
-            CheckButton(ControllerFuncs.Start,
-                state.Start, prevState.Start,
-                StartPressedLabel, "Start");
-
-            CheckButton(ControllerFuncs.Back,
-                state.Back, prevState.Back,
-                BackPressedLabel, "Back");
+            if (ControllerFuncs.Start.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.Start && state.Buttons != GamepadButtonFlags.Start)
+                {
+                    PerformFunction(ControllerFuncs.Start);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    StartPressedLabel.Text = "Start: released";
+                }
+                else
+                    StartPressedLabel.Text = "Start: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.Start)
+                {
+                    PerformFunction(ControllerFuncs.Start);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    StartPressedLabel.Text = "Start: pressed";
+                }
+                else
+                    StartPressedLabel.Text = "Start: not pressed";
+            }
+            if (ControllerFuncs.Back.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.Back && state.Buttons != GamepadButtonFlags.Back)
+                {
+                    PerformFunction(ControllerFuncs.Back);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    BackPressedLabel.Text = "Back: released";
+                }
+                else
+                    BackPressedLabel.Text = "Back: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.Back)
+                {
+                    PerformFunction(ControllerFuncs.Back);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    BackPressedLabel.Text = "Back: pressed";
+                }
+                else
+                    BackPressedLabel.Text = "Back: not pressed";
+            }
             #endregion
 
             #region Shoulders
-            CheckButton(ControllerFuncs.RShoulder,
-                state.RightBumper, prevState.RightBumper,
-                shoulderRightLabel, "Right");
+            if (ControllerFuncs.RShoulder.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.RightShoulder && state.Buttons != GamepadButtonFlags.RightShoulder)
+                {
+                    PerformFunction(ControllerFuncs.RShoulder);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    shoulderRightLabel.Text = "Right: released";
+                }
+                else
+                    shoulderRightLabel.Text = "Right: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.RightShoulder)
+                {
+                    PerformFunction(ControllerFuncs.RShoulder);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    shoulderRightLabel.Text = "Right: pressed";
+                }
+                else
+                    shoulderRightLabel.Text = "Right: not pressed";
+            }
+            if (ControllerFuncs.LShoulder.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.LeftShoulder && state.Buttons != GamepadButtonFlags.LeftShoulder)
+                {
+                    PerformFunction(ControllerFuncs.RShoulder);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    shoulderLeftLabel.Text = "Left: released";
+                }
+                else
+                    shoulderLeftLabel.Text = "Left: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.LeftShoulder)
+                {
+                    PerformFunction(ControllerFuncs.LShoulder);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    shoulderLeftLabel.Text = "Left: pressed";
+                }
+                else
+                    shoulderLeftLabel.Text = "Left: not pressed";
+            }
 
-            // BUG FIX: Original code called PerformFunction(ControllerFuncs.RShoulder) here
-            // instead of LShoulder in the Released branch. Fixed to use the correct function.
-            CheckButton(ControllerFuncs.LShoulder,
-                state.LeftBumper, prevState.LeftBumper,
-                shoulderLeftLabel, "Left");
             #endregion
 
             #region L3 & R3
-            CheckButton(ControllerFuncs.R3,
-                state.RightThumb, prevState.RightThumb,
-                r3PressedLabel, "R3");
+            if (ControllerFuncs.R3.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.RightThumb && state.Buttons != GamepadButtonFlags.RightThumb)
+                {
+                    PerformFunction(ControllerFuncs.R3);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    r3PressedLabel.Text = "R3: released";
+                }
+                else
+                    r3PressedLabel.Text = "R3: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.RightThumb)
+                {
+                    PerformFunction(ControllerFuncs.R3);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    r3PressedLabel.Text = "R3: pressed";
+                }
+                else
+                    r3PressedLabel.Text = "R3: not pressed";
+            }
 
-            CheckButton(ControllerFuncs.L3,
-                state.LeftThumb, prevState.LeftThumb,
-                l3PressedLabel, "L3");
+            if (ControllerFuncs.L3.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.LeftThumb && state.Buttons != GamepadButtonFlags.LeftThumb)
+                {
+                    PerformFunction(ControllerFuncs.L3);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    l3PressedLabel.Text = "L3: released";
+                }
+                else
+                    l3PressedLabel.Text = "L3: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.LeftThumb)
+                {
+                    PerformFunction(ControllerFuncs.L3);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    l3PressedLabel.Text = "L3: pressed";
+                }
+                else
+                    l3PressedLabel.Text = "L3: not pressed";
+            }
             #endregion
 
             #region DPAD BUTTONS
-            CheckButton(ControllerFuncs.DPadUp,
-                state.DPadUp, prevState.DPadUp,
-                DPadUpLabel, "Up");
+            if (ControllerFuncs.DPadUp.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.DPadUp && state.Buttons != GamepadButtonFlags.DPadUp)
+                {
+                    PerformFunction(ControllerFuncs.DPadUp);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadUpLabel.Text = "Up: released";
+                }
+                else
+                    DPadUpLabel.Text = "Up: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.DPadUp)
+                {
+                    PerformFunction(ControllerFuncs.DPadUp);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadUpLabel.Text = "Up: pressed";
+                }
+                else
+                    DPadUpLabel.Text = "Up: not pressed";
+            }
 
-            CheckButton(ControllerFuncs.DPadRight,
-                state.DPadRight, prevState.DPadRight,
-                DPadRightLabel, "Right");
+            if (ControllerFuncs.DPadRight.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.DPadRight && state.Buttons != GamepadButtonFlags.DPadRight)
+                {
+                    PerformFunction(ControllerFuncs.DPadRight);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadRightLabel.Text = "Right: released";
+                }
+                else
+                    DPadRightLabel.Text = "Right: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.DPadRight)
+                {
+                    PerformFunction(ControllerFuncs.DPadRight);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadRightLabel.Text = "Right: pressed";
+                }
+                else
+                    DPadRightLabel.Text = "Right: not pressed";
+            }
 
-            CheckButton(ControllerFuncs.DPadDown,
-                state.DPadDown, prevState.DPadDown,
-                DPadDownLabel, "Down");
+            if (ControllerFuncs.DPadDown.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.DPadDown && state.Buttons != GamepadButtonFlags.DPadDown)
+                {
+                    PerformFunction(ControllerFuncs.DPadDown);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadDownLabel.Text = "Down: released";
+                }
+                else
+                    DPadDownLabel.Text = "Down: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.DPadDown)
+                {
+                    PerformFunction(ControllerFuncs.DPadDown);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadDownLabel.Text = "Down: pressed";
+                }
+                else
+                    DPadDownLabel.Text = "Down: not pressed";
+            }
 
-            CheckButton(ControllerFuncs.DPadLeft,
-                state.DPadLeft, prevState.DPadLeft,
-                DPadLeftLabel, "Left");
+            if (ControllerFuncs.DPadLeft.State == Function.ButtonState.Released)
+            {
+                if (prevState.Buttons == GamepadButtonFlags.DPadLeft && state.Buttons != GamepadButtonFlags.DPadLeft)
+                {
+                    PerformFunction(ControllerFuncs.DPadLeft);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadLeftLabel.Text = "Left: released";
+                }
+                else
+                    DPadLeftLabel.Text = "Left: not pressed";
+            }
+            else
+            {
+                if (state.Buttons == GamepadButtonFlags.DPadLeft)
+                {
+                    PerformFunction(ControllerFuncs.DPadLeft);
+                    prevState.Buttons = GamepadButtonFlags.None;
+                    DPadLeftLabel.Text = "Left: pressed";
+                }
+                else
+                    DPadLeftLabel.Text = "Left: not pressed";
+            }
+
             #endregion
 
         }
@@ -1411,22 +1524,22 @@ namespace BioImager
             if (f.FuncType.ToString() == "TakeImage")
             {
                 Microscope.TakeImage();
-            }
-            else
+                }
+                else
                 if (f.FuncType.ToString() == "TakeImageStack")
-            {
-                Microscope.TakeImageStack();
-            }
-            else
+                {
+                    Microscope.TakeImageStack();
+                }
+                else
                 if (f.FuncType.ToString() == "RL")
-            {
-                Microscope.RLShutter.SetPosition((int)f.Value);
-            }
-            else
+                {
+                    Microscope.RLShutter.SetPosition((int)f.Value);
+                }
+                else
                 if (f.FuncType.ToString() == "TL")
-            {
-                Microscope.TLShutter.SetPosition((int)f.Value);
-            }
+                {
+                    Microscope.TLShutter.SetPosition((int)f.Value);
+                }
             if (f.FuncType == Function.FunctionType.Property)
             {
                 if (f.Name.StartsWith("Get"))
