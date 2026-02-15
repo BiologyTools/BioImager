@@ -177,7 +177,7 @@ namespace BioImager
             statusStrip.Location = new Point(0, 1217);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(2, 0, 30, 0);
-            statusStrip.Size = new Size(622, 22);
+            statusStrip.Size = new Size(659, 22);
             statusStrip.TabIndex = 7;
             statusStrip.Text = "statusStrip1";
             statusStrip.Click += ImagingTab_Click;
@@ -236,7 +236,7 @@ namespace BioImager
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(199, 1050);
+            label15.Location = new Point(199, 1043);
             label15.Margin = new Padding(7, 0, 7, 0);
             label15.Name = "label15";
             label15.Size = new Size(49, 32);
@@ -272,7 +272,7 @@ namespace BioImager
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(199, 954);
+            label11.Location = new Point(199, 947);
             label11.Margin = new Padding(7, 0, 7, 0);
             label11.Name = "label11";
             label11.Size = new Size(49, 32);
@@ -610,7 +610,7 @@ namespace BioImager
             storedCoordsBox.Location = new Point(0, 0);
             storedCoordsBox.Margin = new Padding(7, 6, 7, 6);
             storedCoordsBox.Name = "storedCoordsBox";
-            storedCoordsBox.Size = new Size(280, 580);
+            storedCoordsBox.Size = new Size(297, 580);
             storedCoordsBox.TabIndex = 33;
             storedCoordsBox.SelectedIndexChanged += storedCoordsBox_SelectedIndexChanged;
             // 
@@ -864,7 +864,7 @@ namespace BioImager
             storedImageBox.Location = new Point(0, 0);
             storedImageBox.Margin = new Padding(7, 6, 7, 6);
             storedImageBox.Name = "storedImageBox";
-            storedImageBox.Size = new Size(298, 580);
+            storedImageBox.Size = new Size(318, 580);
             storedImageBox.TabIndex = 45;
             storedImageBox.SelectedIndexChanged += storedSnapBox_SelectedIndexChanged;
             // 
@@ -898,7 +898,7 @@ namespace BioImager
             mainTabControl.Margin = new Padding(7, 6, 7, 6);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
-            mainTabControl.Size = new Size(615, 1173);
+            mainTabControl.Size = new Size(652, 1173);
             mainTabControl.TabIndex = 62;
             // 
             // ImagingTab
@@ -931,7 +931,7 @@ namespace BioImager
             ImagingTab.Margin = new Padding(7, 6, 7, 6);
             ImagingTab.Name = "ImagingTab";
             ImagingTab.Padding = new Padding(7, 6, 7, 6);
-            ImagingTab.Size = new Size(599, 1119);
+            ImagingTab.Size = new Size(636, 1119);
             ImagingTab.TabIndex = 0;
             ImagingTab.Text = "Imaging";
             ImagingTab.Click += ImagingTab_Click;
@@ -966,7 +966,7 @@ namespace BioImager
             goToLocBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             goToLocBox.BackColor = Color.FromArgb(49, 91, 138);
             goToLocBox.ForeColor = Color.White;
-            goToLocBox.Location = new Point(527, 1052);
+            goToLocBox.Location = new Point(539, 1045);
             goToLocBox.Margin = new Padding(7, 6, 7, 6);
             goToLocBox.Name = "goToLocBox";
             goToLocBox.Size = new Size(71, 58);
@@ -980,7 +980,7 @@ namespace BioImager
             label35.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label35.AutoSize = true;
             label35.ForeColor = Color.White;
-            label35.Location = new Point(355, 1065);
+            label35.Location = new Point(353, 1058);
             label35.Margin = new Padding(7, 0, 7, 0);
             label35.Name = "label35";
             label35.Size = new Size(28, 32);
@@ -1070,8 +1070,8 @@ namespace BioImager
             // splitContainer.Panel2
             // 
             splitContainer.Panel2.Controls.Add(storedImageBox);
-            splitContainer.Size = new Size(587, 580);
-            splitContainer.SplitterDistance = 280;
+            splitContainer.Size = new Size(624, 580);
+            splitContainer.SplitterDistance = 297;
             splitContainer.SplitterWidth = 9;
             splitContainer.TabIndex = 63;
             // 
@@ -1080,7 +1080,7 @@ namespace BioImager
             clearImagesBut.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             clearImagesBut.BackColor = Color.FromArgb(49, 91, 138);
             clearImagesBut.ForeColor = Color.White;
-            clearImagesBut.Location = new Point(297, 388);
+            clearImagesBut.Location = new Point(334, 388);
             clearImagesBut.Margin = new Padding(7, 6, 7, 6);
             clearImagesBut.Name = "clearImagesBut";
             clearImagesBut.Size = new Size(113, 58);
@@ -1145,7 +1145,7 @@ namespace BioImager
             SettingsTab.Margin = new Padding(7, 6, 7, 6);
             SettingsTab.Name = "SettingsTab";
             SettingsTab.Padding = new Padding(7, 6, 7, 6);
-            SettingsTab.Size = new Size(599, 1119);
+            SettingsTab.Size = new Size(636, 1119);
             SettingsTab.TabIndex = 1;
             SettingsTab.Text = "Controller Settings";
             toolTip.SetToolTip(SettingsTab, "Double click to change button function.");
@@ -1175,7 +1175,7 @@ namespace BioImager
             slicesPerSlideBox.BackColor = Color.FromArgb(49, 91, 138);
             slicesPerSlideBox.ForeColor = Color.White;
             slicesPerSlideBox.InterceptArrowKeys = false;
-            slicesPerSlideBox.Location = new Point(191, 836);
+            slicesPerSlideBox.Location = new Point(196, 845);
             slicesPerSlideBox.Margin = new Padding(7, 6, 7, 6);
             slicesPerSlideBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             slicesPerSlideBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1187,7 +1187,7 @@ namespace BioImager
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(308, 783);
+            label30.Location = new Point(317, 783);
             label30.Margin = new Padding(7, 0, 7, 0);
             label30.Name = "label30";
             label30.Size = new Size(178, 32);
@@ -1199,7 +1199,7 @@ namespace BioImager
             sliceIncrementBox.BackColor = Color.FromArgb(49, 91, 138);
             sliceIncrementBox.ForeColor = Color.White;
             sliceIncrementBox.InterceptArrowKeys = false;
-            sliceIncrementBox.Location = new Point(314, 836);
+            sliceIncrementBox.Location = new Point(319, 843);
             sliceIncrementBox.Margin = new Padding(7, 6, 7, 6);
             sliceIncrementBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             sliceIncrementBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1223,7 +1223,7 @@ namespace BioImager
             imagesPerSliceBox.BackColor = Color.FromArgb(49, 91, 138);
             imagesPerSliceBox.ForeColor = Color.White;
             imagesPerSliceBox.InterceptArrowKeys = false;
-            imagesPerSliceBox.Location = new Point(191, 779);
+            imagesPerSliceBox.Location = new Point(199, 781);
             imagesPerSliceBox.Margin = new Padding(7, 6, 7, 6);
             imagesPerSliceBox.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             imagesPerSliceBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1356,7 +1356,7 @@ namespace BioImager
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(49, 91, 138);
-            ClientSize = new Size(622, 1239);
+            ClientSize = new Size(659, 1239);
             ContextMenuStrip = mainWinContextMenuStrip;
             Controls.Add(mainTabControl);
             Controls.Add(statusStrip);

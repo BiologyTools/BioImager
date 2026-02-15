@@ -1344,10 +1344,13 @@ namespace BioImager
         {
             if (f.FuncType == Function.FunctionType.Key)
             {
+                if(AppP!=null)
                 if (AppP.HasExited)
                     return null;
-                AppP.WaitForInputIdle();
-                Win32.SetForegroundWindow(apph);
+                if (AppP != null)
+                    AppP.WaitForInputIdle();
+                if (AppP != null)
+                    Win32.SetForegroundWindow(apph);
                 if (f.Modifier != VirtualKeyCode.NONAME)
                 {
                     input.Keyboard.ModifiedKeyStroke(f.Modifier, f.Key);
