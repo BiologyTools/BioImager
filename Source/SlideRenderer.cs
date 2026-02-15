@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AForge;
+﻿using AForge;
+using BioImager;
 using BioLib;
 using BruTile;
 using OpenSlideGTK;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BioImager
 {
@@ -20,25 +21,13 @@ namespace BioImager
         private HashSet<TileIndex> _uploadedTiles = new();
         private int _currentLevel = -1;
 
-        public SlideRenderer(SlideGLArea glArea, OpenSlideBase openSlideBase)
+        public SlideRenderer(SlideGLArea glArea)
         {
-            if (glArea == null || openSlideBase == null)
-                throw new InvalidDataException();
             _glArea = glArea;
-            SetSource(openSlideBase);
-        }
-        public SlideRenderer(SlideGLArea glArea, SlideBase slideBase)
-        {
-            if (glArea == null || slideBase == null)
-                throw new InvalidDataException();
-            _glArea = glArea;
-            SetSource(slideBase);
         }
 
         public void SetSource(OpenSlideBase source)
         {
-            if (source == null)
-                throw new InvalidDataException();
             _openSlideBase = source;
             _slideBase = null;
             _useOpenSlide = true;
@@ -48,8 +37,6 @@ namespace BioImager
 
         public void SetSource(SlideBase source)
         {
-            if (source == null)
-                throw new InvalidDataException();
             _slideBase = source;
             _openSlideBase = null;
             _useOpenSlide = false;
@@ -96,7 +83,7 @@ namespace BioImager
 
             // Get tiles that intersect the viewport
             var tileInfos = schema.GetTileInfos(worldExtent, level).ToList();
-            
+
             if (tileInfos.Count == 0)
             {
                 var pixelExtent = OpenSlideGTK.ExtentEx.WorldToPixelInvertedY(worldExtent, resolution);
@@ -104,15 +91,10 @@ namespace BioImager
             }
 
             if (_openSlideBase != null)
-            {
-                _openSlideBase.PyramidalOrigin = pyramidalOrigin;
-                _openSlideBase.PyramidalSize = new AForge.Size(viewportWidth, viewportHeight);
                 await _openSlideBase.FetchTilesAsync(tileInfos.ToList(), level, coordinate);
-            }
             else
-            {
                 await _slideBase.FetchTilesAsync(tileInfos.ToList(), level, coordinate, pyramidalOrigin, new AForge.Size(viewportWidth, viewportHeight));
-            }
+
             var renderInfos = new List<TileRenderInfo>();
             foreach (var tileInfo in tileInfos)
             {
@@ -122,7 +104,7 @@ namespace BioImager
                     if (_useOpenSlide)
                         tileData = await _openSlideBase.GetTileAsync(tileInfo);
                     else
-                        tileData = await _slideBase.GetTileAsync(tileInfo,coordinate);
+                        tileData = await _slideBase.GetTileAsync(tileInfo, coordinate);
                     if (tileData != null)
                     {
                         // Fix: Calculate actual tile dimensions from extent, do not hardcode 256.

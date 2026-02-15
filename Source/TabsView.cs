@@ -96,6 +96,7 @@ namespace BioImager
             InitializeComponent();
             LoadProperties();
             Init();
+            KeyPreview = true;
             if (arg.Length == 0)
                 return;
             else
