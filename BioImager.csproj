@@ -19,7 +19,7 @@
     <RepositoryUrl>https://github.com/BiologyTools/BioImager</RepositoryUrl>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Fixed issue with opening files with LibVips.</PackageReleaseNotes>
+    <PackageReleaseNotes>OpenGL hardware accelerated stitching.</PackageReleaseNotes>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ApplicationIcon>Bio.ico</ApplicationIcon>
     </PropertyGroup>
