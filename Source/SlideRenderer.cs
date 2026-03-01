@@ -58,6 +58,8 @@ namespace BioImager
             double resolution,
             ZCT coordinate)
         {
+            //if (pyramidalOrigin.Y > 0)
+            //    pyramidalOrigin = new PointD(pyramidalOrigin.X, -pyramidalOrigin.Y);
             if (_openSlideBase == null && _slideBase == null)
                 return;
             if (viewportWidth <= 1 && viewportHeight <= 1)
@@ -130,7 +132,7 @@ namespace BioImager
             }
 
             _glArea.SetTilesToRender(renderInfos);
-            _glArea.RequestRedraw();
+            //_glArea.RequestRedraw();
         }
 
         private async Task<byte[]> FetchTileAsync(TileInfo tileInfo, int level, ZCT coordinate)

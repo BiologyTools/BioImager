@@ -262,6 +262,8 @@ namespace BioImager
                 {
                     if (App.viewer.Images.Count > 0)
                         App.viewer.Images[selectedIndex] = value;
+                    else
+                        App.viewer.AddImage(value);
                 }
             }
         }
@@ -419,7 +421,10 @@ namespace BioImager
         /// @return The Coordinate property of the SelectedImage object.
         public ZCT GetCoordinate()
         {
-            return SelectedImage.Coordinate;
+            if (SelectedImage != null)
+                return SelectedImage.Coordinate;
+            else
+                return new ZCT();
         }
         /// This function adds an image to the list of images, and then updates the GUI to reflect the
         /// new image
@@ -739,7 +744,10 @@ namespace BioImager
         {
             get
             {
-                return SelectedImage.PyramidalOrigin;
+                if (SelectedImage != null)
+                    return SelectedImage.PyramidalOrigin;
+                else
+                    return new PointD(0, 0);
             }
             set
             {
@@ -911,7 +919,10 @@ namespace BioImager
         {
             if (SelectedImage == null)
                 return;
+            if (SelectedImage.Buffers.Count == 0)
+                return;
             zBar.Maximum = SelectedImage.SizeZ - 1;
+
             if (SelectedImage.Buffers[0].RGBChannelsCount == 3)
                 cBar.Maximum = 0;
             else
@@ -982,7 +993,7 @@ namespace BioImager
             string res = "";
             if (SelectedImage.Type == BioImage.ImageType.well)
                 res = "Well:" + SelectedImage.Level;
-            else if (SelectedImage.Type == BioImage.ImageType.pyramidal)
+            else if (SelectedImage.isPyramidal)
             {
                 res = "Res.:" + Resolution + " Level:" + Level;
             }
@@ -1002,15 +1013,15 @@ namespace BioImager
             }
             else
             {
-                if (timeEnabled)
+                if (SelectedImage.isPyramidal)
                 {
-                    statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (cBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + (tBar.Value + 1) + "/" + (tBar.Maximum + 1) + ", " +
-                        mousePoint + mouseColor + ", " + SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
+                    statusLabel.Text = (zBar.Value + 1).ToString() + "/" + (zBar.Maximum + 1).ToString() + ", " + (cBar.Value + 1).ToString() + "/" + (cBar.Maximum + 1).ToString() + ", " + (tBar.Value + 1) + "/" + (tBar.Maximum + 1) + ", " + mousePoint + mouseColor + ", " +
+                        SelectedImage.Resolutions[Level].PixelFormat.ToString() + ", Origin: (" + PyramidalOrigin.X + ", " + PyramidalOrigin.Y + "), " + res;
                 }
                 else
                 {
-                    statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (cBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + mousePoint + mouseColor + ", " +
-                        SelectedImage.Buffers[0].PixelFormat.ToString() + ", (" + -Origin.X + ", " + -Origin.Y + "), (" + SelectedImage.Volume.Location.X + ", " + SelectedImage.Volume.Location.Y + ") " + res;
+                    statusLabel.Text = (zBar.Value + 1) + "/" + (zBar.Maximum + 1) + ", " + (cBar.Value + 1) + "/" + (cBar.Maximum + 1) + ", " + (tBar.Value + 1) + "/" + (tBar.Maximum + 1) + ", " + mousePoint + mouseColor + ", " +
+                       SelectedImage.Resolutions[Level].PixelFormat.ToString() + ", Origin: (" + -Origin.X + ", " + -Origin.Y + "), " + res;
                 }
             }
         }
@@ -1296,7 +1307,7 @@ namespace BioImager
             {
                 gl.Dock = DockStyle.Fill;
                 viewpanel.Controls.Add(gl);
-                
+
             }
             if (SelectedImage.isPyramidal && gl.Width > 1 && gl.Height > 1)
             {
@@ -1304,10 +1315,10 @@ namespace BioImager
                     updatePyr = true;
                 SelectedImage.PyramidalOrigin = PyramidalOrigin;
                 SelectedImage.PyramidalSize = new AForge.Size(gl.Width, gl.Height);
-                if(slideRenderer == null)
+                if (slideRenderer == null)
                 {
                     slideRenderer = new SlideRenderer(gl);
-                    if(SelectedImage.SlideBase != null)
+                    if (SelectedImage.SlideBase != null)
                         slideRenderer.SetSource(SelectedImage.SlideBase);
                     else
                         slideRenderer.SetSource(SelectedImage.OpenSlideBase);
@@ -1320,6 +1331,8 @@ namespace BioImager
                     Resolution,
                     GetCoordinate()
                 );
+                Bitmaps.Clear();
+                SelectedImage.Buffers.Clear();
                 return;
             }
             for (int i = 0; i < Bitmaps.Count; i++)
@@ -1328,11 +1341,12 @@ namespace BioImager
                 Bitmaps[i] = null;
             }
             Bitmaps.Clear();
+            /*
             if (zBar.Maximum != SelectedImage.SizeZ - 1 || tBar.Maximum != SelectedImage.SizeT - 1)
             {
                 InitGUI();
             }
-
+            */
             int bi = 0;
             foreach (BioImage b in Images)
             {
@@ -3662,7 +3676,8 @@ namespace BioImager
         private void vScrollBar_ValueChanged(object sender, EventArgs e)
         {
             SelectedImage.PyramidalOrigin = new PointD(hScrollBar.Value, vScrollBar.Value);
-            UpdateImages(true);
+            UpdateImages();
+            UpdateStatus();
         }
     }
 }
