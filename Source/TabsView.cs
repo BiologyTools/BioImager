@@ -307,14 +307,14 @@ namespace BioImager
         /// 
         /// @return The return value is the result of the ShowDialog method of the openFilesDialog
         /// object.
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
             foreach (string item in openFilesDialog.FileNames)
             {
                 StartProgress("Opening selected image.", "Opening");
-                BioImage im = BioImage.OpenFile(item, 0, false, false);
+                BioImage im = await BioImage.OpenFile(item);
                 StopProgress();
                 if (im == null)
                     return;
@@ -1112,7 +1112,7 @@ namespace BioImager
         /// @param EventArgs e
         /// 
         /// @return The return value is a BioImage array.
-        private void addImagesToTabToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void addImagesToTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFilesDialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -1120,11 +1120,11 @@ namespace BioImager
             {
                 if (i == 0 && tabControl.TabPages.Count == 0)
                 {
-                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i], 0, true, true);
+                    BioImage b = await BioImage.OpenFile(openFilesDialog.FileNames[i]);
                 }
                 else
                 {
-                    BioImage b = BioImage.OpenFile(openFilesDialog.FileNames[i], 0, true, false);
+                    BioImage b = await BioImage.OpenFile(openFilesDialog.FileNames[i]);
                     Viewer.AddImage(b);
                 }
             }
@@ -1547,7 +1547,7 @@ namespace BioImager
             QuPath.SaveROI(saveOMEFileDialog.FileName, ImageView.SelectedImage);
         }
 
-        private void openQuPathProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void openQuPathProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openQuPathProjDialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -1555,7 +1555,7 @@ namespace BioImager
             foreach (QuPath.Image p in pr.Images)
             {
                 string s = p.ServerBuilder.Uri.Replace("file:/", "");
-                App.tabsView.AddTab(BioImage.OpenFile(s));
+                App.tabsView.AddTab(await BioImage.OpenFile(s));
             }
         }
 

@@ -186,7 +186,7 @@ namespace BioImager
         /// @param newTab Whether or not the result should open in a new tab.
         /// 
         /// @return The return value is the result of the last statement in the script.
-        public static void RunOnImage(string con, bool headless, bool onTab, bool bioformats, bool newTab)
+        public static async void RunOnImage(string con, bool headless, bool onTab, bool bioformats, bool newTab)
         {
             if (!Initialized)
             {
@@ -234,7 +234,7 @@ namespace BioImager
             }
             else
             {
-                App.viewer.Images[App.viewer.SelectedIndex] = BioImage.OpenFile(ffile, 0, false, false);
+                App.viewer.Images[App.viewer.SelectedIndex] = await BioImage.OpenFile(ffile);
             }
             App.viewer.UpdateImage();
             App.viewer.UpdateView();

@@ -481,7 +481,7 @@ namespace BioImager
                     return;
                 }
                 ZCT coord = GetCoordinate();
-                Bitmap bm = SelectedImage.GetTile(SelectedImage, SelectedImage.GetFrameIndex(coord.Z, coord.C, coord.T), MacroResolution.Value - 2, 0, 0, SelectedImage.Resolutions[MacroResolution.Value - 2].SizeX, SelectedImage.Resolutions[MacroResolution.Value - 2].SizeY);
+                Bitmap bm = await SelectedImage.GetTile(SelectedImage.GetFrameIndex(coord.Z, coord.C, coord.T), MacroResolution.Value - 2, 0, 0, SelectedImage.Resolutions[MacroResolution.Value - 2].SizeX, SelectedImage.Resolutions[MacroResolution.Value - 2].SizeY);
                 ResizeNearestNeighbor re = new ResizeNearestNeighbor(overview.Width, overview.Height);
                 Bitmap bmp = re.Apply(bm);
                 overviewBitmap = bmp;
@@ -493,7 +493,7 @@ namespace BioImager
                 double aspx = (double)SelectedImage.Resolutions[lev].SizeX / (double)SelectedImage.Resolutions[lev].SizeY;
                 double aspy = (double)SelectedImage.Resolutions[lev].SizeY / (double)SelectedImage.Resolutions[lev].SizeX;
                 overview = new Rectangle(0, 0, (int)(aspx * 120), (int)(aspy * 120));
-                Bitmap bm = SelectedImage.GetTile(SelectedImage, SelectedImage.GetFrameIndex(coord.Z, coord.C, coord.T), lev, 0, 0, SelectedImage.Resolutions[lev].SizeX, SelectedImage.Resolutions[lev].SizeY);
+                Bitmap bm = await SelectedImage.GetTile(SelectedImage.GetFrameIndex(coord.Z, coord.C, coord.T), lev, 0, 0, SelectedImage.Resolutions[lev].SizeX, SelectedImage.Resolutions[lev].SizeY);
                 ResizeNearestNeighbor re = new ResizeNearestNeighbor(overview.Width, overview.Height);
                 Bitmap bmp = re.Apply(bm);
                 overviewBitmap = bmp;
@@ -1292,12 +1292,26 @@ namespace BioImager
         {
             if (SelectedImage == null)
                 return;
+            if (gl.Width == 0 || gl.Height == 0)
+            {
+                gl.Dock = DockStyle.Fill;
+                viewpanel.Controls.Add(gl);
+                
+            }
             if (SelectedImage.isPyramidal && gl.Width > 1 && gl.Height > 1)
             {
                 if (SelectedImage.isPyramidal)
                     updatePyr = true;
                 SelectedImage.PyramidalOrigin = PyramidalOrigin;
                 SelectedImage.PyramidalSize = new AForge.Size(gl.Width, gl.Height);
+                if(slideRenderer == null)
+                {
+                    slideRenderer = new SlideRenderer(gl);
+                    if(SelectedImage.SlideBase != null)
+                        slideRenderer.SetSource(SelectedImage.SlideBase);
+                    else
+                        slideRenderer.SetSource(SelectedImage.OpenSlideBase);
+                }
                 // Use the new renderer - no more ReadPixels!
                 _ = slideRenderer.UpdateViewAsync(
                     PyramidalOrigin,

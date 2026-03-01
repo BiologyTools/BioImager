@@ -31,7 +31,7 @@ namespace BioImager
             {
                 imageLabel.Text = Properties.Settings.Default.SimulatedImage;
                 if(File.Exists(Properties.Settings.Default.SimulatedImage))
-                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage);
+                simImage = BioImage.OpenFile(Properties.Settings.Default.SimulatedImage).Result;
             }
         }
         private void Objectives_Load()
@@ -426,13 +426,13 @@ namespace BioImager
             UpdateObjectives();
         }
 
-        private void setImageBut_Click(object sender, EventArgs e)
+        private async void setImageBut_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             Properties.Settings.Default.SimulatedImage = openFileDialog.FileName;
             Properties.Settings.Default.Save();
-            simImage = BioImage.OpenFile(openFileDialog.FileName);
+            simImage = await BioImage.OpenFile(openFileDialog.FileName);
         }
 
         private void simCameraBox_CheckedChanged(object sender, EventArgs e)
