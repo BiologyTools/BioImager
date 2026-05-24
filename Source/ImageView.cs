@@ -8,7 +8,6 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using org.checkerframework.checker.units.qual;
 using SkiaSharp;
 using SkiaSharp.Views.Gtk;
 using System.ComponentModel;

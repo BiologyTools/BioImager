@@ -309,8 +309,6 @@ namespace BioImager.ML
                     bb.UpdateCoords(b.SizeZ, b.SizeC * OutputValueTypes[0].Dimensions[1], b.SizeT);
                     bb.Resolutions.Add(new Resolution(bb.SizeX, bb.SizeY, bb.Buffers[0].PixelFormat, b.PhysicalSizeX, b.PhysicalSizeY, b.PhysicalSizeZ, b.StageSizeX, b.StageSizeY, b.StageSizeZ));
                     bb.Volume = b.Volume;
-                    bb.bitsPerPixel = bb.Buffers[0].BitsPerPixel;
-
                     BioImage.AutoThreshold(bb, true);
                     Images.AddImage(bb);
                     App.tabsView.AddTab(bb);
@@ -445,7 +443,6 @@ namespace BioImager.ML
                     bb.UpdateCoords(b.SizeZ, b.SizeC * resDepth, b.SizeT);
                     bb.Resolutions.Add(new Resolution(bb.SizeX, bb.SizeY, bb.Buffers[0].PixelFormat, b.PhysicalSizeX, b.PhysicalSizeY, b.PhysicalSizeZ, b.StageSizeX, b.StageSizeY, b.StageSizeZ));
                     bb.Volume = b.Volume;
-                    bb.bitsPerPixel = bb.Buffers[0].BitsPerPixel;
                     BioImage.AutoThreshold(bb, true);
                     Images.AddImage(bb);
                     App.tabsView.AddTab(bb);

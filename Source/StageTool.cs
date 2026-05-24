@@ -365,8 +365,8 @@ namespace BioImager
                 g = System.Drawing.Graphics.FromImage(b);
                 g.CopyFromScreen(new System.Drawing.Point((int)re.X, (int)re.Y), new System.Drawing.Point(0, 0), new System.Drawing.Size(re.Width, re.Height));
                 Clipboard.SetImage(b);
-                System.Drawing.Imaging.BitmapData d = b.LockBits(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite,System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                AForge.Bitmap bf = new AForge.Bitmap("",new UnmanagedImage(d.Scan0,b.Width,b.Height,b.Width*4,PixelFormat.Format32bppArgb), new ZCT(), 0);
+                System.Drawing.Imaging.BitmapData d = b.LockBits(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                AForge.Bitmap bf = new AForge.Bitmap("", new UnmanagedImage(d.Scan0, b.Width, b.Height, b.Width * 4, PixelFormat.Format32bppArgb), new ZCT(), 0);
                 long dd = BioImage.CalculateFocusQuality(bf);
                 if (max < dd)
                 {
@@ -378,12 +378,6 @@ namespace BioImager
                 b.Dispose();
             }
             Microscope.SetFocus(ud);
-        }
-
-        private void StageTool_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
         }
     }
 }

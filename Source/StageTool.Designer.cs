@@ -95,15 +95,15 @@ namespace BioImager
             menuStrip.Items.AddRange(new ToolStripItem[] { objToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
-            menuStrip.Padding = new Padding(13, 4, 0, 4);
-            menuStrip.Size = new Size(623, 44);
+            menuStrip.Padding = new Padding(7, 2, 0, 2);
+            menuStrip.Size = new Size(335, 24);
             menuStrip.TabIndex = 0;
             menuStrip.Text = "menuStrip1";
             // 
             // objToolStripMenuItem
             // 
             objToolStripMenuItem.Name = "objToolStripMenuItem";
-            objToolStripMenuItem.Size = new Size(226, 36);
+            objToolStripMenuItem.Size = new Size(114, 20);
             objToolStripMenuItem.Text = "Microscope Setup";
             objToolStripMenuItem.Click += objToolStripMenuItem_Click;
             // 
@@ -112,12 +112,12 @@ namespace BioImager
             contextMenuStrip2.ImageScalingSize = new Size(32, 32);
             contextMenuStrip2.Items.AddRange(new ToolStripItem[] { showControlsMenuItem });
             contextMenuStrip2.Name = "contextMenuStrip";
-            contextMenuStrip2.Size = new Size(243, 42);
+            contextMenuStrip2.Size = new Size(152, 26);
             // 
             // showControlsMenuItem
             // 
             showControlsMenuItem.Name = "showControlsMenuItem";
-            showControlsMenuItem.Size = new Size(242, 38);
+            showControlsMenuItem.Size = new Size(151, 22);
             showControlsMenuItem.Text = "Show Controls";
             showControlsMenuItem.Click += showToolStripMenuItem_Click;
             // 
@@ -126,12 +126,12 @@ namespace BioImager
             contextMenuStrip.ImageScalingSize = new Size(32, 32);
             contextMenuStrip.Items.AddRange(new ToolStripItem[] { hideToolStripMenuItem });
             contextMenuStrip.Name = "contextMenuStrip";
-            contextMenuStrip.Size = new Size(139, 42);
+            contextMenuStrip.Size = new Size(100, 26);
             // 
             // hideToolStripMenuItem
             // 
             hideToolStripMenuItem.Name = "hideToolStripMenuItem";
-            hideToolStripMenuItem.Size = new Size(138, 38);
+            hideToolStripMenuItem.Size = new Size(99, 22);
             hideToolStripMenuItem.Text = "Hide";
             hideToolStripMenuItem.Click += hideToolStripMenuItem_Click;
             // 
@@ -140,11 +140,11 @@ namespace BioImager
             moveYBox.BackColor = Color.FromArgb(49, 91, 138);
             moveYBox.DecimalPlaces = 4;
             moveYBox.ForeColor = Color.White;
-            moveYBox.Location = new Point(444, 218);
-            moveYBox.Margin = new Padding(7, 6, 7, 6);
+            moveYBox.Location = new Point(239, 102);
+            moveYBox.Margin = new Padding(4, 3, 4, 3);
             moveYBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             moveYBox.Name = "moveYBox";
-            moveYBox.Size = new Size(165, 39);
+            moveYBox.Size = new Size(89, 23);
             moveYBox.TabIndex = 7;
             moveYBox.Value = new decimal(new int[] { 1002000, 0, 0, 262144 });
             moveYBox.ValueChanged += moveYBox_ValueChanged;
@@ -153,10 +153,10 @@ namespace BioImager
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.White;
-            label1.Location = new Point(370, 158);
-            label1.Margin = new Padding(7, 0, 7, 0);
+            label1.Location = new Point(199, 74);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(71, 32);
+            label1.Size = new Size(34, 15);
             label1.TabIndex = 6;
             label1.Text = "SizeX";
             // 
@@ -165,11 +165,11 @@ namespace BioImager
             moveXBox.BackColor = Color.FromArgb(49, 91, 138);
             moveXBox.DecimalPlaces = 4;
             moveXBox.ForeColor = Color.White;
-            moveXBox.Location = new Point(444, 154);
-            moveXBox.Margin = new Padding(7, 6, 7, 6);
+            moveXBox.Location = new Point(239, 72);
+            moveXBox.Margin = new Padding(4, 3, 4, 3);
             moveXBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             moveXBox.Name = "moveXBox";
-            moveXBox.Size = new Size(165, 39);
+            moveXBox.Size = new Size(89, 23);
             moveXBox.TabIndex = 5;
             moveXBox.Value = new decimal(new int[] { 1249000, 0, 0, 262144 });
             moveXBox.ValueChanged += moveXBox_ValueChanged;
@@ -179,10 +179,10 @@ namespace BioImager
             objBox.BackColor = Color.FromArgb(49, 91, 138);
             objBox.ForeColor = Color.White;
             objBox.FormattingEnabled = true;
-            objBox.Location = new Point(381, 13);
-            objBox.Margin = new Padding(7, 6, 7, 6);
+            objBox.Location = new Point(205, 6);
+            objBox.Margin = new Padding(4, 3, 4, 3);
             objBox.Name = "objBox";
-            objBox.Size = new Size(223, 40);
+            objBox.Size = new Size(122, 23);
             objBox.TabIndex = 4;
             objBox.SelectedIndexChanged += objBox_SelectedIndexChanged;
             // 
@@ -190,10 +190,10 @@ namespace BioImager
             // 
             rightBut.BackColor = Color.FromArgb(49, 91, 138);
             rightBut.ForeColor = Color.White;
-            rightBut.Location = new Point(193, 113);
-            rightBut.Margin = new Padding(7, 6, 7, 6);
+            rightBut.Location = new Point(104, 53);
+            rightBut.Margin = new Padding(4, 3, 4, 3);
             rightBut.Name = "rightBut";
-            rightBut.Size = new Size(97, 111);
+            rightBut.Size = new Size(52, 52);
             rightBut.TabIndex = 3;
             rightBut.Text = "Right";
             rightBut.UseVisualStyleBackColor = false;
@@ -203,10 +203,10 @@ namespace BioImager
             // 
             downBut.BackColor = Color.FromArgb(49, 91, 138);
             downBut.ForeColor = Color.White;
-            downBut.Location = new Point(100, 220);
-            downBut.Margin = new Padding(7, 6, 7, 6);
+            downBut.Location = new Point(54, 103);
+            downBut.Margin = new Padding(4, 3, 4, 3);
             downBut.Name = "downBut";
-            downBut.Size = new Size(97, 111);
+            downBut.Size = new Size(52, 52);
             downBut.TabIndex = 2;
             downBut.Text = "Down";
             downBut.UseVisualStyleBackColor = false;
@@ -216,10 +216,10 @@ namespace BioImager
             // 
             leftBut.BackColor = Color.FromArgb(49, 91, 138);
             leftBut.ForeColor = Color.White;
-            leftBut.Location = new Point(7, 113);
-            leftBut.Margin = new Padding(7, 6, 7, 6);
+            leftBut.Location = new Point(4, 53);
+            leftBut.Margin = new Padding(4, 3, 4, 3);
             leftBut.Name = "leftBut";
-            leftBut.Size = new Size(97, 111);
+            leftBut.Size = new Size(52, 52);
             leftBut.TabIndex = 1;
             leftBut.Text = "Left";
             leftBut.UseVisualStyleBackColor = false;
@@ -229,10 +229,10 @@ namespace BioImager
             // 
             upBut.BackColor = Color.FromArgb(49, 91, 138);
             upBut.ForeColor = Color.White;
-            upBut.Location = new Point(100, 6);
-            upBut.Margin = new Padding(7, 6, 7, 6);
+            upBut.Location = new Point(54, 3);
+            upBut.Margin = new Padding(4, 3, 4, 3);
             upBut.Name = "upBut";
-            upBut.Size = new Size(97, 111);
+            upBut.Size = new Size(52, 52);
             upBut.TabIndex = 0;
             upBut.Text = "Up";
             upBut.UseVisualStyleBackColor = false;
@@ -280,19 +280,19 @@ namespace BioImager
             panel2.Controls.Add(objBox);
             panel2.Controls.Add(downBut);
             panel2.Controls.Add(label1);
-            panel2.Location = new Point(0, 60);
-            panel2.Margin = new Padding(7, 6, 7, 6);
+            panel2.Location = new Point(0, 28);
+            panel2.Margin = new Padding(4, 3, 4, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(642, 763);
+            panel2.Size = new Size(346, 358);
             panel2.TabIndex = 8;
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(420, 710);
-            label10.Margin = new Padding(7, 0, 7, 0);
+            label10.Location = new Point(226, 333);
+            label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
-            label10.Size = new Size(49, 32);
+            label10.Size = new Size(25, 15);
             label10.TabIndex = 179;
             label10.Text = "μm";
             // 
@@ -301,11 +301,11 @@ namespace BioImager
             focusInterval.BackColor = Color.FromArgb(49, 91, 138);
             focusInterval.DecimalPlaces = 2;
             focusInterval.ForeColor = Color.White;
-            focusInterval.Location = new Point(302, 708);
-            focusInterval.Margin = new Padding(7, 6, 7, 6);
+            focusInterval.Location = new Point(163, 332);
+            focusInterval.Margin = new Padding(4, 3, 4, 3);
             focusInterval.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             focusInterval.Name = "focusInterval";
-            focusInterval.Size = new Size(104, 39);
+            focusInterval.Size = new Size(56, 23);
             focusInterval.TabIndex = 178;
             focusInterval.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
@@ -313,10 +313,10 @@ namespace BioImager
             // 
             viewBut.BackColor = Color.FromArgb(49, 91, 138);
             viewBut.ForeColor = Color.White;
-            viewBut.Location = new Point(193, 702);
-            viewBut.Margin = new Padding(7, 6, 7, 6);
+            viewBut.Location = new Point(104, 329);
+            viewBut.Margin = new Padding(4, 3, 4, 3);
             viewBut.Name = "viewBut";
-            viewBut.Size = new Size(102, 49);
+            viewBut.Size = new Size(55, 23);
             viewBut.TabIndex = 175;
             viewBut.Text = "Focus";
             viewBut.UseVisualStyleBackColor = false;
@@ -326,10 +326,10 @@ namespace BioImager
             // 
             label9.AutoSize = true;
             label9.ForeColor = Color.White;
-            label9.Location = new Point(19, 710);
-            label9.Margin = new Padding(7, 0, 7, 0);
+            label9.Location = new Point(10, 333);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(133, 32);
+            label9.Size = new Size(67, 15);
             label9.TabIndex = 174;
             label9.Text = "Auto Focus";
             // 
@@ -337,10 +337,10 @@ namespace BioImager
             // 
             goLowerBut.BackColor = Color.FromArgb(49, 91, 138);
             goLowerBut.ForeColor = Color.White;
-            goLowerBut.Location = new Point(321, 403);
-            goLowerBut.Margin = new Padding(7, 6, 7, 6);
+            goLowerBut.Location = new Point(173, 189);
+            goLowerBut.Margin = new Padding(4, 3, 4, 3);
             goLowerBut.Name = "goLowerBut";
-            goLowerBut.Size = new Size(59, 49);
+            goLowerBut.Size = new Size(32, 23);
             goLowerBut.TabIndex = 173;
             goLowerBut.Text = "Go";
             goLowerBut.UseVisualStyleBackColor = false;
@@ -350,10 +350,10 @@ namespace BioImager
             // 
             goUpperBut.BackColor = Color.FromArgb(49, 91, 138);
             goUpperBut.ForeColor = Color.White;
-            goUpperBut.Location = new Point(321, 339);
-            goUpperBut.Margin = new Padding(7, 6, 7, 6);
+            goUpperBut.Location = new Point(173, 159);
+            goUpperBut.Margin = new Padding(4, 3, 4, 3);
             goUpperBut.Name = "goUpperBut";
-            goUpperBut.Size = new Size(59, 49);
+            goUpperBut.Size = new Size(32, 23);
             goUpperBut.TabIndex = 172;
             goUpperBut.Text = "Go";
             goUpperBut.UseVisualStyleBackColor = false;
@@ -363,10 +363,10 @@ namespace BioImager
             // 
             setFolderBut.BackColor = Color.FromArgb(49, 91, 138);
             setFolderBut.ForeColor = Color.White;
-            setFolderBut.Location = new Point(511, 644);
-            setFolderBut.Margin = new Padding(7, 6, 7, 6);
+            setFolderBut.Location = new Point(275, 302);
+            setFolderBut.Margin = new Padding(4, 3, 4, 3);
             setFolderBut.Name = "setFolderBut";
-            setFolderBut.Size = new Size(97, 49);
+            setFolderBut.Size = new Size(52, 23);
             setFolderBut.TabIndex = 171;
             setFolderBut.Text = "Set";
             setFolderBut.UseVisualStyleBackColor = false;
@@ -377,20 +377,20 @@ namespace BioImager
             folderBox.BackColor = Color.FromArgb(49, 91, 138);
             folderBox.Enabled = false;
             folderBox.ForeColor = Color.White;
-            folderBox.Location = new Point(193, 646);
-            folderBox.Margin = new Padding(7, 6, 7, 6);
+            folderBox.Location = new Point(104, 303);
+            folderBox.Margin = new Padding(4, 3, 4, 3);
             folderBox.Name = "folderBox";
-            folderBox.Size = new Size(310, 39);
+            folderBox.Size = new Size(169, 23);
             folderBox.TabIndex = 170;
             // 
             // label8
             // 
             label8.AutoSize = true;
             label8.ForeColor = Color.White;
-            label8.Location = new Point(19, 653);
-            label8.Margin = new Padding(7, 0, 7, 0);
+            label8.Location = new Point(10, 306);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new Size(175, 32);
+            label8.Size = new Size(87, 15);
             label8.TabIndex = 169;
             label8.Text = "Imaging Folder";
             // 
@@ -398,10 +398,10 @@ namespace BioImager
             // 
             tilesBut.BackColor = Color.FromArgb(49, 91, 138);
             tilesBut.ForeColor = Color.White;
-            tilesBut.Location = new Point(381, 412);
-            tilesBut.Margin = new Padding(7, 6, 7, 6);
+            tilesBut.Location = new Point(205, 193);
+            tilesBut.Margin = new Padding(4, 3, 4, 3);
             tilesBut.Name = "tilesBut";
-            tilesBut.Size = new Size(227, 62);
+            tilesBut.Size = new Size(122, 29);
             tilesBut.TabIndex = 167;
             tilesBut.Text = "Take Image Tiles";
             tilesBut.UseVisualStyleBackColor = false;
@@ -411,10 +411,10 @@ namespace BioImager
             // 
             label6.AutoSize = true;
             label6.ForeColor = Color.White;
-            label6.Location = new Point(19, 595);
-            label6.Margin = new Padding(7, 0, 7, 0);
+            label6.Location = new Point(10, 279);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(151, 32);
+            label6.Size = new Size(75, 15);
             label6.TabIndex = 166;
             label6.Text = "Image Name";
             // 
@@ -422,10 +422,10 @@ namespace BioImager
             // 
             nameBox.BackColor = Color.FromArgb(49, 91, 138);
             nameBox.ForeColor = Color.White;
-            nameBox.Location = new Point(193, 589);
-            nameBox.Margin = new Padding(7, 6, 7, 6);
+            nameBox.Location = new Point(104, 276);
+            nameBox.Margin = new Padding(4, 3, 4, 3);
             nameBox.Name = "nameBox";
-            nameBox.Size = new Size(411, 39);
+            nameBox.Size = new Size(223, 23);
             nameBox.TabIndex = 165;
             nameBox.Text = "Image";
             nameBox.TextChanged += nameBox_TextChanged;
@@ -434,10 +434,10 @@ namespace BioImager
             // 
             label7.AutoSize = true;
             label7.ForeColor = Color.White;
-            label7.Location = new Point(204, 529);
-            label7.Margin = new Padding(7, 0, 7, 0);
+            label7.Location = new Point(110, 248);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(93, 32);
+            label7.Size = new Size(46, 15);
             label7.TabIndex = 29;
             label7.Text = "Interval";
             // 
@@ -447,12 +447,12 @@ namespace BioImager
             fIntervalBox.DecimalPlaces = 6;
             fIntervalBox.ForeColor = Color.White;
             fIntervalBox.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            fIntervalBox.Location = new Point(26, 525);
-            fIntervalBox.Margin = new Padding(7, 6, 7, 6);
+            fIntervalBox.Location = new Point(14, 246);
+            fIntervalBox.Margin = new Padding(4, 3, 4, 3);
             fIntervalBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             fIntervalBox.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
             fIntervalBox.Name = "fIntervalBox";
-            fIntervalBox.Size = new Size(171, 39);
+            fIntervalBox.Size = new Size(92, 23);
             fIntervalBox.TabIndex = 27;
             fIntervalBox.Value = new decimal(new int[] { 5, 0, 0, 0 });
             fIntervalBox.ValueChanged += fIntervalBox_ValueChanged;
@@ -461,10 +461,10 @@ namespace BioImager
             // 
             setLowerBut.BackColor = Color.FromArgb(49, 91, 138);
             setLowerBut.ForeColor = Color.White;
-            setLowerBut.Location = new Point(240, 403);
-            setLowerBut.Margin = new Padding(7, 6, 7, 6);
+            setLowerBut.Location = new Point(129, 189);
+            setLowerBut.Margin = new Padding(4, 3, 4, 3);
             setLowerBut.Name = "setLowerBut";
-            setLowerBut.Size = new Size(80, 49);
+            setLowerBut.Size = new Size(43, 23);
             setLowerBut.TabIndex = 26;
             setLowerBut.Text = "Set";
             setLowerBut.UseVisualStyleBackColor = false;
@@ -474,10 +474,10 @@ namespace BioImager
             // 
             setUpperBut.BackColor = Color.FromArgb(49, 91, 138);
             setUpperBut.ForeColor = Color.White;
-            setUpperBut.Location = new Point(240, 339);
-            setUpperBut.Margin = new Padding(7, 6, 7, 6);
+            setUpperBut.Location = new Point(129, 159);
+            setUpperBut.Margin = new Padding(4, 3, 4, 3);
             setUpperBut.Name = "setUpperBut";
-            setUpperBut.Size = new Size(80, 49);
+            setUpperBut.Size = new Size(43, 23);
             setUpperBut.TabIndex = 25;
             setUpperBut.Text = "Set";
             setUpperBut.UseVisualStyleBackColor = false;
@@ -486,10 +486,10 @@ namespace BioImager
             // dockBox
             // 
             dockBox.AutoSize = true;
-            dockBox.Location = new Point(498, 538);
-            dockBox.Margin = new Padding(7, 6, 7, 6);
+            dockBox.Location = new Point(268, 252);
+            dockBox.Margin = new Padding(4, 3, 4, 3);
             dockBox.Name = "dockBox";
-            dockBox.Size = new Size(100, 36);
+            dockBox.Size = new Size(53, 19);
             dockBox.TabIndex = 24;
             dockBox.Text = "Dock";
             dockBox.UseVisualStyleBackColor = true;
@@ -499,10 +499,10 @@ namespace BioImager
             // 
             label5.AutoSize = true;
             label5.ForeColor = Color.White;
-            label5.Location = new Point(251, 19);
-            label5.Margin = new Padding(7, 0, 7, 0);
+            label5.Location = new Point(135, 9);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(125, 32);
+            label5.Size = new Size(62, 15);
             label5.TabIndex = 23;
             label5.Text = "Objectives";
             // 
@@ -510,10 +510,10 @@ namespace BioImager
             // 
             label4.AutoSize = true;
             label4.ForeColor = Color.White;
-            label4.Location = new Point(204, 474);
-            label4.Margin = new Padding(7, 0, 7, 0);
+            label4.Location = new Point(110, 222);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(73, 32);
+            label4.Size = new Size(36, 15);
             label4.TabIndex = 22;
             label4.Text = "Slices";
             // 
@@ -521,12 +521,12 @@ namespace BioImager
             // 
             sliceBox.BackColor = Color.FromArgb(49, 91, 138);
             sliceBox.ForeColor = Color.White;
-            sliceBox.Location = new Point(26, 465);
-            sliceBox.Margin = new Padding(7, 6, 7, 6);
+            sliceBox.Location = new Point(14, 218);
+            sliceBox.Margin = new Padding(4, 3, 4, 3);
             sliceBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             sliceBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             sliceBox.Name = "sliceBox";
-            sliceBox.Size = new Size(171, 39);
+            sliceBox.Size = new Size(92, 23);
             sliceBox.TabIndex = 21;
             sliceBox.Value = new decimal(new int[] { 5, 0, 0, 0 });
             sliceBox.ValueChanged += sliceBox_ValueChanged;
@@ -534,20 +534,20 @@ namespace BioImager
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(199, 412);
-            label3.Margin = new Padding(7, 0, 7, 0);
+            label3.Location = new Point(107, 193);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(49, 32);
+            label3.Size = new Size(25, 15);
             label3.TabIndex = 20;
             label3.Text = "μm";
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(197, 348);
-            label11.Margin = new Padding(7, 0, 7, 0);
+            label11.Location = new Point(106, 163);
+            label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
-            label11.Size = new Size(49, 32);
+            label11.Size = new Size(25, 15);
             label11.TabIndex = 19;
             label11.Text = "μm";
             // 
@@ -555,10 +555,10 @@ namespace BioImager
             // 
             stackBut.BackColor = Color.FromArgb(49, 91, 138);
             stackBut.ForeColor = Color.White;
-            stackBut.Location = new Point(381, 348);
-            stackBut.Margin = new Padding(7, 6, 7, 6);
+            stackBut.Location = new Point(205, 163);
+            stackBut.Margin = new Padding(4, 3, 4, 3);
             stackBut.Name = "stackBut";
-            stackBut.Size = new Size(227, 62);
+            stackBut.Size = new Size(122, 29);
             stackBut.TabIndex = 16;
             stackBut.Text = "Take Image Stack";
             stackBut.UseVisualStyleBackColor = false;
@@ -569,11 +569,11 @@ namespace BioImager
             upperLimBox.BackColor = Color.FromArgb(49, 91, 138);
             upperLimBox.DecimalPlaces = 4;
             upperLimBox.ForeColor = Color.White;
-            upperLimBox.Location = new Point(26, 339);
-            upperLimBox.Margin = new Padding(7, 6, 7, 6);
+            upperLimBox.Location = new Point(14, 159);
+            upperLimBox.Margin = new Padding(4, 3, 4, 3);
             upperLimBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             upperLimBox.Name = "upperLimBox";
-            upperLimBox.Size = new Size(171, 39);
+            upperLimBox.Size = new Size(92, 23);
             upperLimBox.TabIndex = 12;
             upperLimBox.Value = new decimal(new int[] { 125, 0, 0, 0 });
             upperLimBox.ValueChanged += upperLimBox_ValueChanged;
@@ -583,11 +583,11 @@ namespace BioImager
             lowerLimBox.BackColor = Color.FromArgb(49, 91, 138);
             lowerLimBox.DecimalPlaces = 4;
             lowerLimBox.ForeColor = Color.White;
-            lowerLimBox.Location = new Point(26, 403);
-            lowerLimBox.Margin = new Padding(7, 6, 7, 6);
+            lowerLimBox.Location = new Point(14, 189);
+            lowerLimBox.Margin = new Padding(4, 3, 4, 3);
             lowerLimBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             lowerLimBox.Name = "lowerLimBox";
-            lowerLimBox.Size = new Size(171, 39);
+            lowerLimBox.Size = new Size(92, 23);
             lowerLimBox.TabIndex = 14;
             lowerLimBox.Value = new decimal(new int[] { 100, 0, 0, 0 });
             lowerLimBox.ValueChanged += lowerLimBox_ValueChanged;
@@ -596,10 +596,10 @@ namespace BioImager
             // 
             takeImageBut.BackColor = Color.FromArgb(49, 91, 138);
             takeImageBut.ForeColor = Color.White;
-            takeImageBut.Location = new Point(381, 282);
-            takeImageBut.Margin = new Padding(7, 6, 7, 6);
+            takeImageBut.Location = new Point(205, 132);
+            takeImageBut.Margin = new Padding(4, 3, 4, 3);
             takeImageBut.Name = "takeImageBut";
-            takeImageBut.Size = new Size(227, 62);
+            takeImageBut.Size = new Size(122, 29);
             takeImageBut.TabIndex = 11;
             takeImageBut.Text = "Take Image";
             takeImageBut.UseVisualStyleBackColor = false;
@@ -608,10 +608,10 @@ namespace BioImager
             // topMostBox
             // 
             topMostBox.AutoSize = true;
-            topMostBox.Location = new Point(353, 538);
-            topMostBox.Margin = new Padding(7, 6, 7, 6);
+            topMostBox.Location = new Point(190, 252);
+            topMostBox.Margin = new Padding(4, 3, 4, 3);
             topMostBox.Name = "topMostBox";
-            topMostBox.Size = new Size(146, 36);
+            topMostBox.Size = new Size(76, 19);
             topMostBox.TabIndex = 10;
             topMostBox.Text = "Top Most";
             topMostBox.UseVisualStyleBackColor = true;
@@ -621,10 +621,10 @@ namespace BioImager
             // 
             setObjBut.BackColor = Color.FromArgb(49, 91, 138);
             setObjBut.ForeColor = Color.White;
-            setObjBut.Location = new Point(381, 75);
-            setObjBut.Margin = new Padding(7, 6, 7, 6);
+            setObjBut.Location = new Point(205, 35);
+            setObjBut.Margin = new Padding(4, 3, 4, 3);
             setObjBut.Name = "setObjBut";
-            setObjBut.Size = new Size(227, 62);
+            setObjBut.Size = new Size(122, 29);
             setObjBut.TabIndex = 9;
             setObjBut.Text = "Set Objective";
             setObjBut.UseVisualStyleBackColor = false;
@@ -634,10 +634,10 @@ namespace BioImager
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.White;
-            label2.Location = new Point(370, 222);
-            label2.Margin = new Padding(7, 0, 7, 0);
+            label2.Location = new Point(199, 104);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(70, 32);
+            label2.Size = new Size(34, 15);
             label2.TabIndex = 8;
             label2.Text = "SizeY";
             // 
@@ -648,17 +648,17 @@ namespace BioImager
             // 
             // StageTool
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(95, 122, 156);
-            ClientSize = new Size(623, 825);
+            ClientSize = new Size(335, 387);
             Controls.Add(panel2);
             Controls.Add(menuStrip);
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
-            Margin = new Padding(7, 6, 7, 6);
+            Margin = new Padding(4, 3, 4, 3);
             Name = "StageTool";
             SizeGripStyle = SizeGripStyle.Hide;
             Text = "Stage Tool";

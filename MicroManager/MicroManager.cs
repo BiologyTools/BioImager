@@ -96,7 +96,6 @@ namespace BioImager
             im.Volume.Location = p;
             im.Volume.Width = rec.W;
             im.Volume.Height = rec.H;
-            im.bitsPerPixel = im.Buffers[0].BitsPerPixel;
             im.UpdateCoords(1, 1, 1);
             im.Resolutions.Add(res);
             for (int c = 0; c < bm.Length; c++)

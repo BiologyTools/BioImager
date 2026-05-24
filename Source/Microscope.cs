@@ -1198,7 +1198,7 @@ namespace BioImager
             string s = null;
             if (o != null)
                 s = o.ToString();
-            if (s == null && folder == "" && Properties.Settings.Default.ImagingPath == "")
+            if (s == null && folder == "")
             {
                 FolderBrowserDialog fs = new FolderBrowserDialog();
                 fs.Description = "Select Imaging Folder";
@@ -1297,7 +1297,6 @@ namespace BioImager
                 bm.Volume.Location = p;
                 bm.Volume.Width = rec.W;
                 bm.Volume.Height = rec.H;
-                bm.bitsPerPixel = bf.BitsPerPixel;
                 bm.UpdateCoords(1, 1, 1);
                 bm.Resolutions.Add(res);
                 for (int c = 0; c < bf.RGBChannelsCount; c++)
@@ -1482,7 +1481,6 @@ namespace BioImager
             }
             //Set the physical size based on objective view
             RectangleD rec = GetObjectiveViewRectangle();
-            bi.bitsPerPixel = bi.Buffers[0].BitsPerPixel;
             /*
             bi.StageSizeX = rec.X;
             bi.StageSizeY = rec.Y;
