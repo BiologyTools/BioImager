@@ -400,8 +400,10 @@ void main()
             GL.BindTexture(TextureTarget.Texture2D, tex);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
 
+            // OpenSlide-style tile buffers arrive as BGRA on little-endian systems.
+            // Using the matching OpenGL pixel format avoids channel/alpha mismatches.
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-                          tileWidth, tileHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixelData);
+                          tileWidth, tileHeight, 0, PixelFormat.Bgra, PixelType.UnsignedByte, pixelData);
 
             var glErr = GL.GetError();
             if (glErr != ErrorCode.NoError)
@@ -506,6 +508,8 @@ void main()
             TilesToRender.Clear();
             TilesToRender.AddRange(tiles);
         }
+
+        public int CachedTextureCount => _textureCache.Count;
 
         /// <summary>
         /// Read pixels from the current framebuffer (for export/save operations).

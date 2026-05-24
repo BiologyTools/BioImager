@@ -435,7 +435,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="BioLib" Version="4.0.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="FlaUI.Core" Version="5.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
@@ -453,6 +452,10 @@
     <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     <PackageReference Include="TorchSharp-cpu" Version="0.105.1" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\BioLib\BioLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="banner.jpg">

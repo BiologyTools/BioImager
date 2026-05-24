@@ -39,13 +39,17 @@ namespace BioImager
             do
             {
                 Thread.Sleep(1000);
-                foreach (var item in Images.images)
+                var images = Images.images.ToList();
+                var tabs = App.tabsView;
+                if (tabs == null)
+                    continue;
+
+                foreach (var item in images)
                 {
-                    if(App.tabsView!=null)
-                    if (App.tabsView.HasTab(item.Filename))
+                    if (tabs.HasTab(item.Filename))
                         continue;
                     else
-                        App.tabsView.AddTab(item);
+                        tabs.AddTab(item);
                 }
             } while (true);
         }

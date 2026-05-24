@@ -38,6 +38,8 @@ namespace BioImager
         {
             string file = im.ID.Replace("\\", "/");
             InitializeComponent();
+            viewpanel.Paint += Viewpanel_Paint;
+            AttachViewerInput(viewpanel);
 
             if (im.isPyramidal)
             {
@@ -68,8 +70,10 @@ namespace BioImager
             serie = im.series;
             gl.Dock = DockStyle.Fill;
             viewpanel.Controls.Add(gl);
+            AttachViewerInput(gl);
             Dock = DockStyle.Fill;
             AddImage(im);
+            UpdateRenderSurfaceMode();
             App.viewer = this;
             if (file == "" || file == null)
                 return;
@@ -117,12 +121,15 @@ namespace BioImager
         public ImageView()
         {
             InitializeComponent();
+            viewpanel.Paint += Viewpanel_Paint;
+            AttachViewerInput(viewpanel);
             InitGL();
+            AttachViewerInput(gl);
+            gl.Paint += Gl_Paint;
             Dock = DockStyle.Fill;
             App.viewer = this;
             SetCoordinate(0, 0, 0);
             InitGUI();
-            gl.Paint += Gl_Paint;
             //Buf = image.GetBufByCoord(GetCoordinate());
             MouseWheel += new System.Windows.Forms.MouseEventHandler(ImageView_MouseWheel);
             zBar.MouseWheel += new System.Windows.Forms.MouseEventHandler(ZTrackBar_MouseWheel);
@@ -200,7 +207,27 @@ namespace BioImager
 
         private void Gl_Paint(object? sender, PaintEventArgs e)
         {
+            if (SelectedImage == null)
+                return;
             Render(e.Graphics);
+            if (SelectedImage.isPyramidal && slideRenderer != null && !string.IsNullOrWhiteSpace(slideRenderer.DebugSummary))
+            {
+                using var brush = new SolidBrush(System.Drawing.Color.White);
+                using var shadow = new SolidBrush(System.Drawing.Color.Black);
+                var text = slideRenderer.DebugSummary;
+                e.Graphics.DrawString(text, System.Drawing.SystemFonts.DefaultFont, shadow, 11, 11);
+                e.Graphics.DrawString(text, System.Drawing.SystemFonts.DefaultFont, brush, 10, 10);
+            }
+        }
+
+        private void AttachViewerInput(Control surface)
+        {
+            surface.MouseDown += pictureBox_MouseDown;
+            surface.MouseMove += rgbPictureBox_MouseMove;
+            surface.MouseUp += pictureBox_MouseUp;
+            surface.MouseDoubleClick += pictureBox_MouseDoubleClick;
+            surface.MouseWheel += ImageView_MouseWheel;
+            surface.MouseEnter += (sender, e) => surface.Focus();
         }
 
         ~ImageView()
@@ -979,8 +1006,11 @@ namespace BioImager
         /// @return The return value is the value of the last expression evaluated in the method.
         public void UpdateOverlay()
         {
-            gl.Invalidate();
             updateOverlay = true;
+            if (SelectedImage != null && SelectedImage.isPyramidal)
+                gl.Invalidate();
+            else
+                viewpanel.Invalidate();
         }
         /// It updates the status bar of the image viewer
         /// 
@@ -1033,7 +1063,11 @@ namespace BioImager
             UpdateStatus();
             update = true;
             UpdateImages();
-            gl.Invalidate();
+            UpdateRenderSurfaceMode();
+            if (SelectedImage != null && SelectedImage.isPyramidal)
+                gl.Invalidate();
+            else
+                viewpanel.Invalidate();
         }
         /// It draws the images and annotations to the screen
         /// 
@@ -1302,16 +1336,10 @@ namespace BioImager
         {
             if (SelectedImage == null)
                 return;
-            if (gl.Width == 0 || gl.Height == 0)
-            {
-                gl.Dock = DockStyle.Fill;
-                viewpanel.Controls.Add(gl);
-
-            }
+            updateOverlay = true;
             if (SelectedImage.isPyramidal && gl.Width > 1 && gl.Height > 1)
             {
-                if (SelectedImage.isPyramidal)
-                    updatePyr = true;
+                updatePyr = true;
                 SelectedImage.PyramidalOrigin = PyramidalOrigin;
                 SelectedImage.PyramidalSize = new AForge.Size(gl.Width, gl.Height);
                 if (slideRenderer == null)
@@ -1322,7 +1350,6 @@ namespace BioImager
                     else
                         slideRenderer.SetSource(SelectedImage.OpenSlideBase);
                 }
-                // Use the new renderer - no more ReadPixels!
                 _ = slideRenderer.UpdateViewAsync(
                     PyramidalOrigin,
                     gl.Width,
@@ -1332,6 +1359,7 @@ namespace BioImager
                 );
                 Bitmaps.Clear();
                 SelectedImage.Buffers.Clear();
+                UpdateRenderSurfaceMode();
                 return;
             }
             for (int i = 0; i < Bitmaps.Count; i++)
@@ -1377,6 +1405,30 @@ namespace BioImager
                 bi++;
             }
             update = true;
+            UpdateRenderSurfaceMode();
+            viewpanel.Invalidate();
+        }
+
+        private void UpdateRenderSurfaceMode()
+        {
+            if (SelectedImage == null)
+                return;
+
+            if (SelectedImage.isPyramidal)
+            {
+                if (gl.Parent != viewpanel)
+                    viewpanel.Controls.Add(gl);
+                if (!gl.Visible)
+                    gl.Visible = true;
+                gl.BringToFront();
+            }
+            else
+            {
+                if (gl.Visible)
+                    gl.Visible = false;
+                if (gl.Parent == viewpanel)
+                    viewpanel.Controls.Remove(gl);
+            }
         }
         bool drawing = false;
         public void RemoveImage(int i)
@@ -2346,6 +2398,19 @@ namespace BioImager
             DrawView(gl.CreateGraphics());
             Plugins.Paint(sender, e);
         }
+
+        private void Viewpanel_Paint(object sender, PaintEventArgs e)
+        {
+            if (SelectedImage == null)
+                return;
+            if (SelectedImage.isPyramidal)
+            {
+                return;
+            }
+            DrawView(e.Graphics);
+            DrawOverlay(e.Graphics);
+            Render(e.Graphics);
+        }
         /// GetScale() returns the scale of the image in the viewport.
         /// 
         /// @return The scale of the image.
@@ -2355,8 +2420,29 @@ namespace BioImager
         }
         private System.Drawing.Bitmap ToSysBitmap(Bitmap bm)
         {
-            return new System.Drawing.Bitmap(bm.Width, bm.Height, bm.Width * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, bm.GetImageRGBA().Data);
+            var rgba = bm.GetImageRGBA();
+            var result = new System.Drawing.Bitmap(
+                bm.Width,
+                bm.Height,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            var rect = new System.Drawing.Rectangle(0, 0, bm.Width, bm.Height);
+            var data = result.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            try
+            {
+                int bytes = bm.Width * bm.Height * 4;
+                byte[] buffer = new byte[bytes];
+                Marshal.Copy(rgba.Data, buffer, 0, bytes);
+                Marshal.Copy(buffer, 0, data.Scan0, bytes);
+            }
+            finally
+            {
+                result.UnlockBits(data);
+            }
+
+            return result;
         }
+
         PointD mouseD = new PointD(0, 0);
         PointD prevMove = new PointD();
         /// The function is called when the mouse is moved over the image. It updates the mouse

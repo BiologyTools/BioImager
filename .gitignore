@@ -364,3 +364,4 @@ FodyWeavers.xsd.gitsigners
 *.png
 /Microscope/AForgeCore
 BioImager - Backup.csproj
+/Source/.dotnet_home
