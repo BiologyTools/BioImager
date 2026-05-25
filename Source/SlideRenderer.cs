@@ -33,7 +33,6 @@ namespace BioImager
         private readonly HashSet<TileIndex> _pendingTileFetches = new();
         private readonly object _pendingTileFetchLock = new();
         private int _redrawQueued = 0;
-        public string DebugSummary { get; private set; } = string.Empty;
 
         public SlideRenderer(SlideGLArea glArea)
         {
@@ -134,9 +133,6 @@ namespace BioImager
                     }
                 }
 
-                DebugSummary = $"WSI level={level} res={resolution:F2} tiles={tileInfos.Count}";
-                Console.WriteLine($"[SlideRenderer] level={level} res={resolution:F4} viewport={viewportWidth}x{viewportHeight} origin=({pyramidalOrigin.X:F1},{pyramidalOrigin.Y:F1}) tiles={tileInfos.Count}");
-
                 var renderInfos = new List<TileRenderInfo>();
                 var pendingFetches = new List<(TileInfo Tile, Task<byte[]> FetchTask)>();
                 foreach (var tileInfo in tileInfos)
@@ -181,8 +177,6 @@ namespace BioImager
                         schema);
                 }
 
-                DebugSummary = $"{DebugSummary} cached={_glArea.CachedTextureCount} renderInfos={renderInfos.Count}";
-                Console.WriteLine($"[SlideRenderer] textures={_glArea.CachedTextureCount} renderInfos={renderInfos.Count}");
                 _glArea.SetTilesToRender(renderInfos);
                 _glArea.RequestRedraw();
             }
@@ -208,10 +202,7 @@ namespace BioImager
                         _pendingResolution,
                         _pendingCoordinate);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[SlideRenderer] GLReady refresh failed: {ex.Message}");
-                }
+                catch { }
             }));
         }
 
@@ -237,9 +228,8 @@ namespace BioImager
                     _fetchSemaphore.Release();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error fetching tile {tileInfo.Index}: {ex.Message}");
                 return null;
             }
         }
@@ -256,10 +246,7 @@ namespace BioImager
             {
                 byte[] tileData = await fetchTask.ConfigureAwait(false);
                 if (tileData == null)
-                {
-                    Console.WriteLine($"[SlideRenderer] fetch returned null for {tile.Index}");
                     return;
-                }
 
                 int tW = schema.Resolutions[level].TileWidth;
                 int tH = schema.Resolutions[level].TileHeight;
@@ -273,9 +260,8 @@ namespace BioImager
                     }
                 });
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"[SlideRenderer] pending fetch failed tile={tile.Index} err={ex.Message}");
             }
             finally
             {

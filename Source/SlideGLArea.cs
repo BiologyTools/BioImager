@@ -329,12 +329,6 @@ void main()
                 rendered++;
             }
 
-            // Diagnostic: log once when tiles first appear (or fail to appear)
-            if (rendered == 0 && skipped > 0)
-                Console.WriteLine($"[SlideGLArea] RenderFrame: {TilesToRender.Count} tiles to render, but ALL {skipped} skipped (no texture in cache).");
-            else if (rendered > 0)
-                Console.WriteLine($"[SlideGLArea] RenderFrame: rendered {rendered} tiles, skipped {skipped}.");
-
             GL.BindVertexArray(0);
             GL.UseProgram(0);
             GL.Disable(EnableCap.Blend);
@@ -356,7 +350,6 @@ void main()
             // Guard: don't attempt GL operations if the context isn't ready
             if (!IsHandleCreated)
             {
-                Console.WriteLine($"[SlideGLArea] UploadTileTexture skipped — control handle not created yet.");
                 return false;
             }
 
@@ -364,9 +357,8 @@ void main()
             {
                 MakeCurrent();
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"[SlideGLArea] MakeCurrent failed in UploadTileTexture: {ex.Message}");
                 return false;
             }
 
@@ -375,7 +367,6 @@ void main()
 
             if (!_glInitialized)
             {
-                Console.WriteLine($"[SlideGLArea] UploadTileTexture skipped — GL init failed.");
                 return false;
             }
 
@@ -391,7 +382,6 @@ void main()
             int expectedBytes = tileWidth * tileHeight * 4;
             if (pixelData.Length < expectedBytes)
             {
-                Console.WriteLine($"[SlideGLArea] UploadTileTexture: pixel data too small. Expected {expectedBytes} bytes for {tileWidth}x{tileHeight}, got {pixelData.Length}.");
                 return false;
             }
 
@@ -408,7 +398,6 @@ void main()
             var glErr = GL.GetError();
             if (glErr != ErrorCode.NoError)
             {
-                Console.WriteLine($"[SlideGLArea] GL error after TexImage2D ({tileWidth}x{tileHeight}): {glErr}");
                 GL.DeleteTexture(tex);
                 return false;
             }
