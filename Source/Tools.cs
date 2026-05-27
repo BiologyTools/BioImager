@@ -219,6 +219,12 @@ namespace BioImager
         }
         public static float selectBoxSize = 1;// ROI.selectBoxSize;
         ROI anno = new ROI();
+        PointD rectStart = new PointD();
+
+        private static PointD GetAnnotationPoint(PointD p)
+        {
+            return p;
+        }
         /// The function is called when the user clicks the mouse button. 
         /// 
         /// The function checks if the user is using the line, polygon, freeform, rectangle, ellipse,
@@ -250,9 +256,7 @@ namespace BioImager
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetDown(e, buts));
-            PointD p;
-            if(ImageView.SelectedImage!=null)
-            p = ImageView.SelectedImage.ToImageSpace(e);
+            PointD p = ImageView.SelectedImage.isPyramidal ? e : ImageView.SelectedImage.ToImageSpace(e);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
                 if (anno.GetPointCount() == 0)
@@ -311,18 +315,42 @@ namespace BioImager
             else
             if (currentTool.type == Tool.Type.rect && buts == MouseButtons.Left)
             {
+                anno = new ROI();
                 anno.type = ROI.Type.Rectangle;
-                anno.BoundingBox = new RectangleD(e.X, e.Y, 1, 1);
+                if (ImageView.SelectedImage.isPyramidal)
+                {
+                    rectStart = p;
+                    anno.BoundingBox = new RectangleD(p.X, p.Y, 0, 0);
+                }
+                else
+                {
+                    rectStart = ImageView.SelectedImage.ToStageSpace(p);
+                    anno.BoundingBox = new RectangleD(rectStart.X, rectStart.Y, 0, 0);
+                }
+                anno.Points.Clear();
                 anno.coord = App.viewer.GetCoordinate();
                 ImageView.SelectedImage.Annotations.Add(anno);
+                currentTool.Rectangle = anno.BoundingBox;
             }
             else
             if (currentTool.type == Tool.Type.ellipse && buts == MouseButtons.Left)
             {
+                anno = new ROI();
                 anno.type = ROI.Type.Ellipse;
-                anno.BoundingBox = new RectangleD(e.X, e.Y, 1, 1);
+                if (ImageView.SelectedImage.isPyramidal)
+                {
+                    rectStart = p;
+                    anno.BoundingBox = new RectangleD(p.X, p.Y, 0, 0);
+                }
+                else
+                {
+                    rectStart = ImageView.SelectedImage.ToStageSpace(p);
+                    anno.BoundingBox = new RectangleD(rectStart.X, rectStart.Y, 0, 0);
+                }
+                anno.Points.Clear();
                 anno.coord = App.viewer.GetCoordinate();
                 ImageView.SelectedImage.Annotations.Add(anno);
+                currentTool.Rectangle = anno.BoundingBox;
             }
             else
             if (currentTool.type == Tool.Type.delete && buts == MouseButtons.Left)
@@ -396,7 +424,7 @@ namespace BioImager
             PointD p = new PointD();
             if (ImageView.SelectedImage == null)
                 return;
-            p = ImageView.SelectedImage.ToImageSpace(e);
+            p = ImageView.SelectedImage.isPyramidal ? e : ImageView.SelectedImage.ToImageSpace(e);
             if (App.viewer == null || currentTool == null || ImageView.SelectedImage == null || anno == null)
                 return;
             Scripting.UpdateState(Scripting.State.GetUp(e, buts));
@@ -420,18 +448,16 @@ namespace BioImager
             else
             if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle && buts == MouseButtons.Left)
             {
-                if (anno.GetPointCount() == 4)
-                {
-                    anno = new ROI();
-                }
+                currentTool.Rectangle = new RectangleD(0, 0, 0, 0);
+                anno = new ROI();
+                rectStart = new PointD();
             }
             else
             if (currentTool.type == Tool.Type.ellipse && anno.type == ROI.Type.Ellipse && buts == MouseButtons.Left)
             {
-                if (anno.GetPointCount() == 4)
-                {
-                    anno = new ROI();
-                }
+                currentTool.Rectangle = new RectangleD(0, 0, 0, 0);
+                anno = new ROI();
+                rectStart = new PointD();
             }
             else
             if (currentTool.type == Tool.Type.freeform && anno.type == ROI.Type.Freeform && buts == MouseButtons.Left)
@@ -444,9 +470,10 @@ namespace BioImager
                 if (!Win32.GetKeyState(Keys.LControlKey))
                     ImageView.selectedAnnotations.Clear();
                 RectangleD r = GetTool(Tool.Type.rectSel).Rectangle;
+                double hitSize = App.viewer.GetSelectionBoxHitSize();
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).ToRectangleF().IntersectsWith(r.ToRectangleF()))
+                    if (an.GetSelectBound(hitSize, hitSize).ToRectangleF().IntersectsWith(r.ToRectangleF()))
                     {
                         if(!Win32.GetKeyState(Keys.LControlKey))
                         an.selectedPoints.Clear();
@@ -546,7 +573,7 @@ namespace BioImager
                 return;
             if (ImageView.SelectedImage == null)
                 return;
-            PointD p = ImageView.SelectedImage.ToImageSpace(e);
+            PointD p = ImageView.SelectedImage.isPyramidal ? e : ImageView.SelectedImage.ToImageSpace(e);
             if (Tools.currentTool.type == Tools.Tool.Type.pan && (buts.HasFlag(MouseButtons.Left) || buts.HasFlag(MouseButtons.Middle)))
             {
                 if (ImageView.SelectedImage.isPyramidal)
@@ -561,8 +588,10 @@ namespace BioImager
                 {
                     PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                     App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
+                    UpdateView();
                 }
-                UpdateView();
+                App.viewer.UpdateStatus();
+                return;
             }
             
 
@@ -592,20 +621,54 @@ namespace BioImager
 
             if (currentTool.type == Tool.Type.rect && anno.type == ROI.Type.Rectangle)
             {
-                if (anno.GetPointCount() == 4)
+                RectangleD rect;
+                if (ImageView.SelectedImage.isPyramidal)
                 {
-                    anno.BoundingBox = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
-                    UpdateOverlay();
+                    double x = Math.Min(rectStart.X, p.X);
+                    double y = Math.Min(rectStart.Y, p.Y);
+                    double w = Math.Abs(p.X - rectStart.X);
+                    double h = Math.Abs(p.Y - rectStart.Y);
+                    rect = new RectangleD(x, y, w, h);
                 }
+                else
+                {
+                    PointD stagePt = ImageView.SelectedImage.ToStageSpace(p);
+                    double x = Math.Min(rectStart.X, stagePt.X);
+                    double y = Math.Min(rectStart.Y, stagePt.Y);
+                    double w = Math.Abs(stagePt.X - rectStart.X);
+                    double h = Math.Abs(stagePt.Y - rectStart.Y);
+                    rect = new RectangleD(x, y, w, h);
+                }
+                anno.BoundingBox = rect;
+                anno.Points.Clear();
+                currentTool.Rectangle = rect;
+                UpdateOverlay();
             }
             else
             if (currentTool.type == Tool.Type.ellipse && anno.type == ROI.Type.Ellipse)
             {
-                if (anno.GetPointCount() == 4)
+                RectangleD rect;
+                if (ImageView.SelectedImage.isPyramidal)
                 {
-                    anno.BoundingBox = new RectangleD(anno.X, anno.Y, e.X - anno.X, e.Y - anno.Y);
-                    UpdateOverlay();
+                    double x = Math.Min(rectStart.X, p.X);
+                    double y = Math.Min(rectStart.Y, p.Y);
+                    double w = Math.Abs(p.X - rectStart.X);
+                    double h = Math.Abs(p.Y - rectStart.Y);
+                    rect = new RectangleD(x, y, w, h);
                 }
+                else
+                {
+                    PointD stagePt = ImageView.SelectedImage.ToStageSpace(p);
+                    double x = Math.Min(rectStart.X, stagePt.X);
+                    double y = Math.Min(rectStart.Y, stagePt.Y);
+                    double w = Math.Abs(stagePt.X - rectStart.X);
+                    double h = Math.Abs(stagePt.Y - rectStart.Y);
+                    rect = new RectangleD(x, y, w, h);
+                }
+                anno.BoundingBox = rect;
+                anno.Points.Clear();
+                currentTool.Rectangle = rect;
+                UpdateOverlay();
             }
             else
             if (currentTool.type == Tool.Type.rectSel && buts == MouseButtons.Left && ImageView.down)
@@ -613,9 +676,10 @@ namespace BioImager
                 PointD d = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(ImageView.mouseDown.X, ImageView.mouseDown.Y, d.X, d.Y);
                 RectangleD r = Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle;
+                double hitSize = App.viewer.GetSelectionBoxHitSize();
                 foreach (ROI an in App.viewer.AnnotationsRGB)
                 {
-                    if (an.GetSelectBound(App.viewer.GetScale(), App.viewer.GetScale()).IntersectsWith(r))
+                    if (an.GetSelectBound(hitSize, hitSize).IntersectsWith(r))
                     {
                         if (!Win32.GetKeyState(Keys.LControlKey))
                             an.selectedPoints.Clear();

@@ -35,6 +35,12 @@ namespace BioImager
         private Dictionary<TileIndex, int> _textureCache = new();
         private const int MAX_CACHED_TEXTURES = 500;
 
+        private int _overlayTexture;
+        private int _overlayWidth;
+        private int _overlayHeight;
+        private byte[] _overlayPixels;
+        private bool _overlayDirty;
+
         // ============================================================================
         // Rendering State
         // ============================================================================
@@ -277,6 +283,12 @@ void main()
                 _vao = 0;
             }
 
+            if (_overlayTexture != 0)
+            {
+                GL.DeleteTexture(_overlayTexture);
+                _overlayTexture = 0;
+            }
+
             ClearTextureCache();
             _glInitialized = false;
         }
@@ -297,9 +309,6 @@ void main()
             GL.ClearColor(0.2f, 0.2f, 0.2f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            if (TilesToRender.Count == 0)
-                return;
-
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
@@ -311,27 +320,91 @@ void main()
             GL.Uniform1(_locTex, 0);
             GL.ActiveTexture(TextureUnit.Texture0);
 
-            int rendered = 0;
-            int skipped = 0;
-            foreach (var tile in TilesToRender)
+            if (TilesToRender.Count > 0)
             {
-                if (!_textureCache.TryGetValue(tile.Index, out int texId))
+                int rendered = 0;
+                int skipped = 0;
+                foreach (var tile in TilesToRender)
                 {
-                    skipped++;
-                    continue;
+                    if (!_textureCache.TryGetValue(tile.Index, out int texId))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    GL.Uniform2(_locPos, tile.ScreenX, tile.ScreenY);
+                    GL.Uniform2(_locSize, tile.ScreenWidth, tile.ScreenHeight);
+
+                    GL.BindTexture(TextureTarget.Texture2D, texId);
+                    GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+                    rendered++;
                 }
+            }
 
-                GL.Uniform2(_locPos, tile.ScreenX, tile.ScreenY);
-                GL.Uniform2(_locSize, tile.ScreenWidth, tile.ScreenHeight);
-
-                GL.BindTexture(TextureTarget.Texture2D, texId);
+            UploadOverlayTextureIfNeeded();
+            if (_overlayTexture != 0)
+            {
+                GL.Uniform2(_locPos, 0f, 0f);
+                GL.Uniform2(_locSize, (float)width, (float)height);
+                GL.BindTexture(TextureTarget.Texture2D, _overlayTexture);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-                rendered++;
             }
 
             GL.BindVertexArray(0);
             GL.UseProgram(0);
             GL.Disable(EnableCap.Blend);
+        }
+
+        private void UploadOverlayTextureIfNeeded()
+        {
+            if (!_overlayDirty)
+                return;
+
+            _overlayDirty = false;
+
+            try
+            {
+                MakeCurrent();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (!_glInitialized)
+                InitializeGL();
+
+            if (!_glInitialized)
+                return;
+
+            if (_overlayTexture != 0)
+            {
+                GL.DeleteTexture(_overlayTexture);
+                _overlayTexture = 0;
+            }
+
+            if (_overlayPixels == null || _overlayPixels.Length == 0 || _overlayWidth <= 0 || _overlayHeight <= 0)
+                return;
+
+            _overlayTexture = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, _overlayTexture);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+                          _overlayWidth, _overlayHeight, 0, PixelFormat.Bgra, PixelType.UnsignedByte, _overlayPixels);
+
+            var glErr = GL.GetError();
+            if (glErr != ErrorCode.NoError)
+            {
+                GL.DeleteTexture(_overlayTexture);
+                _overlayTexture = 0;
+                return;
+            }
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         // ============================================================================
@@ -487,6 +560,57 @@ void main()
         {
             NeedsRedraw = true;
             Invalidate();
+        }
+
+        public void SetOverlayBitmap(System.Drawing.Bitmap bitmap)
+        {
+            if (bitmap == null)
+            {
+                _overlayPixels = null;
+                _overlayWidth = 0;
+                _overlayHeight = 0;
+                _overlayDirty = true;
+                RequestRedraw();
+                return;
+            }
+
+            var rect = new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            var data = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int rowBytes = bitmap.Width * 4;
+                byte[] buffer = new byte[rowBytes * bitmap.Height];
+                int stride = data.Stride;
+                int absStride = Math.Abs(stride);
+
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    IntPtr srcRow = stride >= 0
+                        ? IntPtr.Add(data.Scan0, y * stride)
+                        : IntPtr.Add(data.Scan0, (bitmap.Height - 1 - y) * absStride);
+                    Marshal.Copy(srcRow, buffer, y * rowBytes, rowBytes);
+                }
+
+                _overlayPixels = buffer;
+                _overlayWidth = bitmap.Width;
+                _overlayHeight = bitmap.Height;
+                _overlayDirty = true;
+                RequestRedraw();
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+        }
+
+        public void ClearOverlayBitmap()
+        {
+            _overlayPixels = null;
+            _overlayWidth = 0;
+            _overlayHeight = 0;
+            _overlayDirty = true;
+            RequestRedraw();
         }
 
         /// <summary>
