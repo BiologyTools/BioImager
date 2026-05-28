@@ -1053,7 +1053,12 @@ namespace BioImager
                 return (float)(logicalSize * Resolution);
             }
 
-            return ROI.selectBoxSize;
+            float zoom = Math.Abs(Scale.Width);
+            if (zoom <= 0 || float.IsNaN(zoom) || float.IsInfinity(zoom))
+                zoom = 1f;
+
+            float screenSize = Math.Max(ROI.selectBoxSize, MinPyramidalSelectBoxSize);
+            return screenSize / zoom;
         }
         /// If hardware acceleration is enabled, render the frame. Otherwise, set a flag to update the
         /// overlay and invalidate the overlay picture box
@@ -1882,10 +1887,10 @@ namespace BioImager
             if (newResolution <= 0 || Math.Abs(newResolution - oldResolution) < double.Epsilon)
                 return;
 
-            // PyramidalOrigin is stored in view-space units, so convert the current
-            // mouse anchor into base-pixel space before changing resolution.
-            double worldX = (oldOriginX + mouseLocation.X) * oldResolution;
-            double worldY = (oldOriginY + mouseLocation.Y) * oldResolution;
+            // PyramidalOrigin is stored in world units. Convert the cursor anchor
+            // into the same space before changing resolution.
+            double worldX = oldOriginX + (mouseLocation.X * oldResolution);
+            double worldY = oldOriginY + (mouseLocation.Y * oldResolution);
 
             SelectedImage.Resolution = newResolution;
 
@@ -1893,8 +1898,8 @@ namespace BioImager
                 ? (BruTile.ITileSchema)SelectedImage.OpenSlideBase.Schema
                 : SelectedImage.SlideBase.Schema;
 
-            double newOriginX = (worldX / Resolution) - mouseLocation.X;
-            double newOriginY = (worldY / Resolution) - mouseLocation.Y;
+            double newOriginX = worldX - (mouseLocation.X * Resolution);
+            double newOriginY = worldY - (mouseLocation.Y * Resolution);
 
             double maxX = schema != null ? schema.Extent.MaxX : newOriginX;
             double maxY = schema != null ? -schema.Extent.MinY : newOriginY;
@@ -2914,6 +2919,7 @@ namespace BioImager
                                 d.H = p.Y - an.Y;
                             }
                             an.BoundingBox = d;
+                            an.Validate();
                         }
                         else
                         {
@@ -2923,6 +2929,7 @@ namespace BioImager
                                 PointD poid = an.GetPoint(an.selectedPoints[i]);
                                 an.UpdatePoint(new PointD(poid.X + pod.X, poid.Y + pod.Y), an.selectedPoints[i]);
                             }
+                            an.UpdateBoundingBox();
                         }
                     }
                     else
@@ -2933,6 +2940,7 @@ namespace BioImager
                             PointD poid = an.Points[i];
                             an.UpdatePoint(new PointD(poid.X + pod.X, poid.Y + pod.Y), i);
                         }
+                        an.UpdateBoundingBox();
                     }
                 }
                 UpdateOverlay();
@@ -3266,7 +3274,7 @@ namespace BioImager
                 return ToViewSpace(x, y);
             if (SelectedImage.isPyramidal)
             {
-                return new PointD((PyramidalOrigin.X + x) * Resolution, (PyramidalOrigin.Y + y) * Resolution);
+                return new PointD(PyramidalOrigin.X + (x * Resolution), PyramidalOrigin.Y + (y * Resolution));
             }
             else
                 return ToViewSpace(x, y);
@@ -3301,9 +3309,7 @@ namespace BioImager
             if (SelectedImage != null)
                 if (SelectedImage.isPyramidal)
                 {
-                    double ddx = x / Resolution;
-                    double ddy = y / Resolution;
-                    return new PointD(ddx, ddy);
+                    return new PointD((x - PyramidalOrigin.X) / Resolution, (y - PyramidalOrigin.Y) / Resolution);
                 }
             double dx, dy;
             dx = (ToViewSizeW(x - (ViewWidth / 2)) / Scale.Width) - Origin.X;
@@ -3370,9 +3376,7 @@ namespace BioImager
         {
             if (SelectedImage != null && SelectedImage.isPyramidal)
             {
-                double ox = PyramidalOrigin.X / Resolution;
-                double oy = PyramidalOrigin.Y / Resolution;
-                return new PointD((x / Resolution) - ox, (y / Resolution) - oy);
+                return new PointD((x - PyramidalOrigin.X) / Resolution, (y - PyramidalOrigin.Y) / Resolution);
             }
             double fx = ToScreenScaleW(Origin.X + x);
             double fy = ToScreenScaleH(Origin.Y + y);

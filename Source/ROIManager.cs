@@ -53,6 +53,8 @@ namespace BioImager
             if (roiView.SelectedItems.Count == 0)
                 return;
             anno.BoundingBox = new RectangleD((double)xBox.Value, anno.BoundingBox.Y, anno.BoundingBox.W, anno.BoundingBox.H);
+            if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
+                anno.Validate();
            
             UpdateOverlay();
         }
@@ -61,6 +63,8 @@ namespace BioImager
             if (roiView.SelectedItems.Count == 0)
                 return;
             anno.BoundingBox = new RectangleD(anno.BoundingBox.X, (double)yBox.Value, anno.BoundingBox.W, anno.BoundingBox.H);
+            if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
+                anno.Validate();
             UpdateOverlay();
         }
         private void wBox_ValueChanged(object sender, EventArgs e)
@@ -68,7 +72,10 @@ namespace BioImager
             if (roiView.SelectedItems.Count == 0)
                 return;
             if(anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
+            {
                 anno.BoundingBox = new RectangleD(anno.BoundingBox.X, anno.BoundingBox.Y,(double)wBox.Value, anno.BoundingBox.H);
+                anno.Validate();
+            }
             UpdateOverlay();
         }
         private void hBox_ValueChanged(object sender, EventArgs e)
@@ -76,6 +83,8 @@ namespace BioImager
             if (roiView.SelectedItems.Count == 0)
                 return;
             anno.BoundingBox = new RectangleD(anno.BoundingBox.X, anno.BoundingBox.Y, anno.BoundingBox.W, (double)hBox.Value);
+            if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
+                anno.Validate();
             UpdateOverlay();
         }
         private void sBox_ValueChanged(object sender, EventArgs e)
@@ -241,6 +250,7 @@ namespace BioImager
             if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
                 return;
             anno.UpdatePoint(new PointD((double)pointXBox.Value, (double)pointYBox.Value),(int)pointIndexBox.Value);
+            anno.UpdateBoundingBox();
             UpdateOverlay();
         }
         private void pointYBox_ValueChanged(object sender, EventArgs e)
@@ -250,6 +260,7 @@ namespace BioImager
             if (anno.type == ROI.Type.Rectangle || anno.type == ROI.Type.Ellipse)
                 return;
             anno.UpdatePoint(new PointD((double)pointXBox.Value, (double)pointYBox.Value), (int)pointIndexBox.Value);
+            anno.UpdateBoundingBox();
             UpdateOverlay();
         }
         public bool autoUpdate = true;
