@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using AForge;
+using OpenSlideGTK;
 using RotateFlipType = AForge.RotateFlipType;
 using BioLib;
 using BioImage = BioLib.BioImage;
@@ -130,19 +131,15 @@ namespace BioImager
         {
             if (b == null)
                 return;
-            if (b.filename.Contains("/") || b.filename.Contains("\\"))
-                b.filename = Path.GetFileName(b.filename);
+            if (HasTab(b))
+                return;
             if (tabControl.IsHandleCreated)
                 tabControl.Invoke((MethodInvoker)delegate
                 {
-                    TabPage t = new TabPage(b.filename);
-                    ImageView v = new ImageView(b);
-                    v.ShowStage = false;
-                    v.Dock = DockStyle.Fill;
-                    t.Controls.Add(v);
-                    tabControl.TabPages.Add(t);
-                    tabControl.SelectedIndex = tabControl.TabCount - 1;
-                    ResizeView();
+                    if (HasTab(b))
+                        return;
+                    AddTabCore(b);
+                    AddAssociatedImageTabs(b);
                 });
         }
         public void RemoveTab(BioImage b)
@@ -168,6 +165,109 @@ namespace BioImager
                 }
             }
             return false;
+        }
+        public bool HasTab(BioImage image)
+        {
+            if (image == null)
+                return false;
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                if (tabPage.Controls.Count == 0 || tabPage.Controls[0] is not ImageView view)
+                    continue;
+                foreach (BioImage tabImage in view.Images)
+                {
+                    if (tabImage == null)
+                        continue;
+                    if (ReferenceEquals(tabImage, image))
+                        return true;
+                    if (!string.IsNullOrEmpty(tabImage.ID) && !string.IsNullOrEmpty(image.ID) && tabImage.ID == image.ID)
+                        return true;
+                    if (!string.IsNullOrEmpty(tabImage.Filename) && !string.IsNullOrEmpty(image.Filename) && tabImage.Filename == image.Filename)
+                        return true;
+                }
+            }
+            return false;
+        }
+        private void AddTabCore(BioImage b)
+        {
+            if (b == null)
+                return;
+            if (b.filename.Contains("/") || b.filename.Contains("\\"))
+                b.filename = Path.GetFileName(b.filename);
+            TabPage t = new TabPage(b.filename);
+            ImageView v = new ImageView(b);
+            v.ShowStage = false;
+            v.Dock = DockStyle.Fill;
+            t.Controls.Add(v);
+            tabControl.TabPages.Add(t);
+            tabControl.SelectedIndex = tabControl.TabCount - 1;
+            ResizeView();
+        }
+        private static BioImage CreateAssociatedImageTab(BioImage source, string name, AssociatedImage image)
+        {
+            if (source == null || image == null)
+                return null;
+
+            string baseName = Path.GetFileNameWithoutExtension(source.Filename);
+            if (string.IsNullOrEmpty(baseName))
+                baseName = Path.GetFileNameWithoutExtension(source.ID);
+            if (string.IsNullOrEmpty(baseName))
+                baseName = "associated";
+
+            string suffix = name.Trim();
+            if (string.IsNullOrEmpty(suffix))
+                suffix = "associated";
+
+            BioImage bi = new BioImage($"{source.ID}::{suffix}");
+            bi.Filename = $"{baseName}-{suffix}.png";
+            bi.file = source.file;
+            bi.Resolutions.Add(new Resolution(
+                (int)image.Dimensions.Width,
+                (int)image.Dimensions.Height,
+                AForge.PixelFormat.Format32bppArgb,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0));
+            bi.Buffers.Add(new AForge.Bitmap(
+                "",
+                (int)image.Dimensions.Width,
+                (int)image.Dimensions.Height,
+                AForge.PixelFormat.Format32bppArgb,
+                image.Data,
+                new ZCT(),
+                0,
+                null,
+                littleEndian: true,
+                interleaved: true));
+            bi.UpdateCoords(1, 1, 1);
+            bi.Volume = new VolumeD(new Point3D(0, 0, 0), new Point3D(
+                bi.PhysicalSizeX * bi.SizeX,
+                bi.PhysicalSizeY * bi.SizeY,
+                bi.PhysicalSizeZ * bi.SizeZ));
+            bi.Coordinate = new ZCT(0, 0, 0);
+            return bi;
+        }
+        private void AddAssociatedImageTabs(BioImage source)
+        {
+            if (source?.OpenSlideBase?.SlideImage == null)
+                return;
+
+            foreach (var entry in source.OpenSlideBase.SlideImage.GetAssociatedImages())
+            {
+                string name = entry.Key ?? string.Empty;
+                if (!name.Contains("label", StringComparison.OrdinalIgnoreCase) &&
+                    !name.Contains("macro", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                BioImage associated = CreateAssociatedImageTab(source, name, entry.Value);
+                if (associated != null && !HasTab(associated))
+                    AddTabCore(associated);
+            }
         }
         private void Init()
         {
@@ -319,7 +419,8 @@ namespace BioImager
                 if (im == null)
                     return;
                 AddTab(im);
-                Images.images.Add(im);
+                if (!Images.images.Contains(im))
+                    Images.images.Add(im);
                 if (!App.recent.Contains(im.ID))
                     App.recent.Add(im.ID);
             }
@@ -906,7 +1007,8 @@ namespace BioImager
                 if (im == null)
                     return;
                 AddTab(im);
-                Images.images.Add(im);
+                if (!Images.images.Contains(im))
+                    Images.images.Add(im);
                 if (!App.recent.Contains(im.ID))
                     App.recent.Add(im.ID);
             }

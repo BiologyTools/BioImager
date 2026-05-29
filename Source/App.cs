@@ -46,7 +46,7 @@ namespace BioImager
 
                 foreach (var item in images)
                 {
-                    if (tabs.HasTab(item.Filename))
+                    if (tabs.HasTab(item))
                         continue;
                     else
                         tabs.AddTab(item);

@@ -1194,8 +1194,9 @@ namespace BioImager
                         sk.RenderTarget2D.StrokeWidth = width;
                         if (an.type == ROI.Type.Point)
                         {
-                            PointF pf = ToScreenSpace(new PointF((float)an.Points[0].X + 1, (float)an.Points[0].Y + 1));
-                            sk.RenderTarget2D.DrawLine(new RawVector2((float)an.Points[0].X, (float)an.Points[0].Y), new RawVector2(pf.X, pf.Y), b);
+                            PointD pf = ToScreenSpace(an.Points[0]);
+                            SharpDX.Direct2D1.Ellipse dot = new SharpDX.Direct2D1.Ellipse(new RawVector2((float)pf.X, (float)pf.Y), 2f, 2f);
+                            sk.RenderTarget2D.FillEllipse(dot, b);
                             RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize));
                             for (int i = 0; i < rfs.Length; i++)
                             {
@@ -1297,20 +1298,20 @@ namespace BioImager
                         }
                         if (an.type == ROI.Type.Label)
                         {
-                            RectangleF rec = ToScreenSpace(an.BoundingBox);
-                            RawRectangleF r = ToSKRect(rec.X, rec.Y, rec.Width, rec.Height);
+                            using Font labelFont = GetScaledLabelFont(an, (float)w);
+                            System.Drawing.Size textSize = System.Windows.Forms.TextRenderer.MeasureText(an.Text ?? string.Empty, labelFont);
+                            System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                            float tx = rec.X + ((rec.Width - textSize.Width) / 2f);
+                            float ty = rec.Y + ((rec.Height - textSize.Height) / 2f);
+                            RawRectangleF r = ToSKRect(tx, ty, textSize.Width, textSize.Height);
                             SharpDX.DirectWrite.TextFormat tex = new SharpDX.DirectWrite.TextFormat(sk.FactoryDWrite, an.family.ToString(), an.fontSize);
-                            sk.RenderTarget2D.DrawText(an.Text, tex, r, b);
+                            sk.RenderTarget2D.DrawText(an.Text ?? string.Empty, tex, r, b);
                             tex.Dispose();
-                            RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize));
-                            for (int i = 0; i < rfs.Length; i++)
-                            {
-                                sk.RenderTarget2D.DrawRectangle(ToSKRect(rfs[i].X, rfs[i].Y, rfs[i].Width, rfs[i].Height), red);
-                            }
+                            sk.RenderTarget2D.DrawRectangle(ToSKRect(rec.X, rec.Y, rec.Width, rec.Height), red);
                         }
                         if (labels)
                         {
-                            if (an.Text != null)
+                            if (an.Text != null && an.type != ROI.Type.Label)
                             {
                                 System.Drawing.Size s = TextRenderer.MeasureText(an.Text, new Font(an.family, an.fontSize));
                                 //Lets draw the text of this ROI in the middle of the ROI.
@@ -1324,11 +1325,39 @@ namespace BioImager
                         }
                         if (bounds)
                         {
-                            RectangleF r = ToScreenSpace(an.BoundingBox);
-                            sk.RenderTarget2D.DrawRectangle(ToSKRect(r.X, r.Y, r.Width, r.Height), green);
+                            if (an.type == ROI.Type.Point)
+                            {
+                                PointD pt = ToScreenSpace(an.Points[0]);
+                                SharpDX.Direct2D1.Ellipse dot = new SharpDX.Direct2D1.Ellipse(new RawVector2((float)pt.X, (float)pt.Y), 2f, 2f);
+                                sk.RenderTarget2D.FillEllipse(dot, green);
+                            }
+                            else if (an.type == ROI.Type.Label)
+                            {
+                                System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                                sk.RenderTarget2D.DrawRectangle(ToSKRect(rec.X, rec.Y, rec.Width, rec.Height), green);
+                            }
+                            else
+                            {
+                                RectangleF r = ToScreenSpace(an.BoundingBox);
+                                sk.RenderTarget2D.DrawRectangle(ToSKRect(r.X, r.Y, r.Width, r.Height), green);
+                            }
                         }
                         if (an.Selected)
                         {
+                            if (an.type == ROI.Type.Point)
+                            {
+                                PointD pt = ToScreenSpace(an.Points[0]);
+                                SharpDX.Direct2D1.Ellipse dot = new SharpDX.Direct2D1.Ellipse(new RawVector2((float)pt.X, (float)pt.Y), 2f, 2f);
+                                sk.RenderTarget2D.FillEllipse(dot, mag);
+                                continue;
+                            }
+                            else if (an.type == ROI.Type.Label)
+                            {
+                                System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                                sk.RenderTarget2D.DrawRectangle(ToSKRect(rec.X, rec.Y, rec.Width, rec.Height), mag);
+                                continue;
+                            }
+
                             //Lets draw the selected bounding box.
                             RectangleF r = ToScreenSpace(an.BoundingBox);
                             sk.RenderTarget2D.DrawRectangle(ToSKRect(r.X, r.Y, r.Width, r.Height), mag);
@@ -2206,7 +2235,8 @@ namespace BioImager
                     }
                     if (an.type == ROI.Type.Point)
                     {
-                        g.DrawLine(pen, ToPointF(ToScreenSpace(an.Points[0])), ToPointF(ToScreenSpace(an.Points[0].X + 1, an.Points[0].Y + 1)));
+                        PointD pt = ToScreenSpace(an.Points[0]);
+                        g.FillEllipse(b, (float)pt.X - 2f, (float)pt.Y - 2f, 4f, 4f);
                         foreach (var item in ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize)))
                         {
                             g.DrawRectangle(red, new System.Drawing.RectangleF((float)item.X, (float)item.Y, (float)item.W, (float)item.H));
@@ -2253,6 +2283,7 @@ namespace BioImager
                                 pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
                             }
                             g.DrawLines(pen, pts);
+                            g.DrawLine(pen, pts[pts.Length - 1], pts[0]);
                         }
                         foreach (var item in ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize)))
                         {
@@ -2264,8 +2295,8 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count - 1];
-                            for (int i = 0; i < an.Points.Count - 1; i++)
+                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
                                 pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
@@ -2282,8 +2313,8 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count - 1];
-                            for (int i = 0; i < an.Points.Count - 1; i++)
+                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
                                 pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
@@ -2308,6 +2339,7 @@ namespace BioImager
                                 pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
                             }
                             g.DrawLines(pen, pts);
+                            g.DrawLine(pen, pts[pts.Length - 1], pts[0]);
                         }
                     }
                     else
@@ -2315,8 +2347,8 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count - 1];
-                            for (int i = 0; i < an.Points.Count - 1; i++)
+                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
                                 pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
@@ -2326,15 +2358,18 @@ namespace BioImager
                     }
                     if (an.type == ROI.Type.Label)
                     {
-                        var v = ToScreenSpace(an.Points[0]);
-                        g.DrawString(an.Text, fo, b, (float)v.X, (float)v.Y);
-                        foreach (var item in ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize)))
-                        {
-                            g.DrawRectangle(red, new System.Drawing.RectangleF((float)item.X, (float)item.Y, (float)item.W, (float)item.H));
-                        }
+                        System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                        using Font labelFont = GetScaledLabelFont(an, w);
+                        System.Drawing.Size textSize = System.Windows.Forms.TextRenderer.MeasureText(an.Text ?? string.Empty, labelFont);
+                        float tx = rec.X + ((rec.Width - textSize.Width) / 2f);
+                        float ty = rec.Y + ((rec.Height - textSize.Height) / 2f);
+                        g.DrawString(an.Text ?? string.Empty, labelFont, b, tx, ty);
+                        g.DrawRectangle(red, rec.X, rec.Y, rec.Width, rec.Height);
                     }
                     if (labels)
                     {
+                        if (an.type == ROI.Type.Label)
+                            continue;
                         System.Drawing.SizeF s = System.Windows.Forms.TextRenderer.MeasureText(an.Text, new Font(an.family, an.fontSize));
                         //Lets draw the text of this ROI in the middle of the RO
                         float fw = ((float)an.BoundingBox.X + ((float)an.BoundingBox.W / 2)) - ((float)s.Width / 2);
@@ -2344,14 +2379,40 @@ namespace BioImager
                     }
                     if (bounds)
                     {
-                        var v = ToScreenSpace(an.BoundingBox);
-                        g.DrawRectangles(green, new System.Drawing.RectangleF[1] { new System.Drawing.RectangleF((float)v.X, (float)v.Y, (float)v.W, (float)v.H) });
+                        if (an.type == ROI.Type.Point)
+                        {
+                            var pv = ToScreenSpace(an.Points[0]);
+                            g.FillEllipse(Brushes.Green, (float)pv.X - 2f, (float)pv.Y - 2f, 4f, 4f);
+                        }
+                        else if (an.type == ROI.Type.Label)
+                        {
+                            System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                            g.DrawRectangle(green, rec.X, rec.Y, rec.Width, rec.Height);
+                        }
+                        else
+                        {
+                            var rb = ToScreenSpace(an.BoundingBox);
+                            g.DrawRectangles(green, new System.Drawing.RectangleF[1] { new System.Drawing.RectangleF((float)rb.X, (float)rb.Y, (float)rb.W, (float)rb.H) });
+                        }
                     }
                     if (an.Selected)
                     {
+                        if (an.type == ROI.Type.Point)
+                        {
+                            var pv = ToScreenSpace(an.Points[0]);
+                            g.FillEllipse(Brushes.Magenta, (float)pv.X - 2f, (float)pv.Y - 2f, 4f, 4f);
+                            continue;
+                        }
+                        else if (an.type == ROI.Type.Label)
+                        {
+                            System.Drawing.RectangleF rec = GetLabelScreenRect(an);
+                            g.DrawRectangle(mag, rec.X, rec.Y, rec.Width, rec.Height);
+                            continue;
+                        }
+
                         //Lets draw the bounding box.
-                        var v = ToScreenSpace(an.BoundingBox);
-                        g.DrawRectangles(mag, new System.Drawing.RectangleF[1] { new System.Drawing.RectangleF((float)v.X, (float)v.Y, (float)v.W, (float)v.H) });
+                        var rb = ToScreenSpace(an.BoundingBox);
+                        g.DrawRectangles(mag, new System.Drawing.RectangleF[1] { new System.Drawing.RectangleF((float)rb.X, (float)rb.Y, (float)rb.W, (float)rb.H) });
                         //Lets draw the selectBoxes.
                         List<RectangleD> rects = new List<RectangleD>();
                         RectangleD[] sels = an.GetSelectBoxes(Tools.selectBoxSize);
@@ -2370,12 +2431,28 @@ namespace BioImager
 
                         rects.Clear();
                         //Lets draw the text of this ROI in the middle of the ROI
-                        System.Drawing.Size s = System.Windows.Forms.TextRenderer.MeasureText(an.Text, new Font(an.family, an.fontSize));
-                        float fw = ((float)an.BoundingBox.X + ((float)an.BoundingBox.W / 2)) - ((float)s.Width / 2);
-                        float fh = ((float)an.BoundingBox.Y + ((float)an.BoundingBox.H / 2)) - ((float)s.Height / 2);
-                        var vv = ToScreenSpace(new PointF(fw, fh));
-                        g.DrawString(an.Text, fo, b, vv.X, vv.Y);
+                    if (an.type == ROI.Type.Label)
+                        continue;
+                    System.Drawing.Size s = System.Windows.Forms.TextRenderer.MeasureText(an.Text, new Font(an.family, an.fontSize));
+                    float fw = ((float)an.BoundingBox.X + ((float)an.BoundingBox.W / 2)) - ((float)s.Width / 2);
+                    float fh = ((float)an.BoundingBox.Y + ((float)an.BoundingBox.H / 2)) - ((float)s.Height / 2);
+                    var vv = ToScreenSpace(new PointF(fw, fh));
+                    g.DrawString(an.Text, fo, b, vv.X, vv.Y);
+                }
+                if (Tools.currentTool != null && Tools.currentTool.type == Tools.Tool.Type.rectSel)
+                {
+                    RectangleD sel = Tools.currentTool.Rectangle;
+                    if (sel.W != 0 || sel.H != 0)
+                    {
+                        double x = Math.Min(sel.X, sel.X + sel.W);
+                        double y = Math.Min(sel.Y, sel.Y + sel.H);
+                        double selW = Math.Abs(sel.W);
+                        double selH = Math.Abs(sel.H);
+                        RectangleD normalized = new RectangleD(x, y, selW, selH);
+                        RectangleD rec = ToScreenSpace(normalized);
+                        g.DrawRectangle(blue, new System.Drawing.RectangleF((float)rec.X, (float)rec.Y, (float)rec.W, (float)rec.H));
                     }
+                }
                     pen.Dispose();
                     red.Dispose();
                     mag.Dispose();
@@ -3415,6 +3492,40 @@ namespace BioImager
             }
             return pf;
         }
+        private Font GetLabelFont(ROI an)
+        {
+            string family = string.IsNullOrWhiteSpace(an?.family) ? SystemFonts.DefaultFont.FontFamily.Name : an.family;
+            float size = an != null && an.fontSize > 0 ? an.fontSize : SystemFonts.DefaultFont.Size;
+            try
+            {
+                return new Font(family, size);
+            }
+            catch
+            {
+                return new Font(SystemFonts.DefaultFont.FontFamily, SystemFonts.DefaultFont.Size);
+            }
+        }
+        private Font GetScaledLabelFont(ROI an, float zoomScale)
+        {
+            string family = string.IsNullOrWhiteSpace(an?.family) ? SystemFonts.DefaultFont.FontFamily.Name : an.family;
+            float baseSize = an != null && an.fontSize > 0 ? an.fontSize : SystemFonts.DefaultFont.Size;
+            float scale = Math.Max(0.0001f, zoomScale);
+            try
+            {
+                return new Font(family, baseSize / scale);
+            }
+            catch
+            {
+                return new Font(SystemFonts.DefaultFont.FontFamily, SystemFonts.DefaultFont.Size / scale);
+            }
+        }
+        private System.Drawing.RectangleF GetLabelScreenRect(ROI an)
+        {
+            if (an == null)
+                return System.Drawing.RectangleF.Empty;
+            AForge.RectangleD rect = ToScreenSpace(an.BoundingBox);
+            return new System.Drawing.RectangleF((float)rect.X, (float)rect.Y, (float)rect.W, (float)rect.H);
+        }
         /// > It converts a 3D point to a 2D point
         /// 
         /// @param Point3D 
@@ -3601,18 +3712,20 @@ namespace BioImager
             if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.NumPad7)
             {
                 if (SelectedImage.isPyramidal)
-                    Resolution *= 0.9f;
+                    ZoomPyramidalAt(new System.Drawing.Point(ViewWidth / 2, ViewHeight / 2), 0.9);
                 else
                     Scale = new SizeF(Scale.Width - 0.1f, Scale.Height - 0.1f);
-                UpdateView();
+                if (!SelectedImage.isPyramidal)
+                    UpdateView();
             }
             if (e.KeyCode == Keys.Add || e.KeyCode == Keys.NumPad9)
             {
                 if (SelectedImage.isPyramidal)
-                    Resolution *= 1.1f;
+                    ZoomPyramidalAt(new System.Drawing.Point(ViewWidth / 2, ViewHeight / 2), 1.1);
                 else
                     Scale = new SizeF(Scale.Width + 0.1f, Scale.Height + 0.1f);
-                UpdateView();
+                if (!SelectedImage.isPyramidal)
+                    UpdateView();
             }
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.NumPad8)
             {
@@ -3834,6 +3947,12 @@ namespace BioImager
                 g.pen = p;
                 if (item.Selected)
                 {
+                    if (item.type == ROI.Type.Point)
+                    {
+                        PointD pt = SelectedImage.ToImageSpace(item.Points[0]);
+                        g.FillEllipse(new RectangleF((float)pt.X - 2f, (float)pt.Y - 2f, 4f, 4f), p.color);
+                    }
+                    else
                     if (item.type == ROI.Type.Line)
                     {
                         g.DrawLine(new PointF((float)SelectedImage.ToImageSpace(item.GetPoint(0)).X, (float)SelectedImage.ToImageSpace(item.GetPoint(0)).Y), new PointF((float)SelectedImage.ToImageSpace(item.GetPoint(1)).X, (float)SelectedImage.ToImageSpace(item.GetPoint(1)).Y));
@@ -3886,6 +4005,12 @@ namespace BioImager
                 Graphics.Pen p = new Graphics.Pen(Tools.DrawColor, (int)Tools.StrokeWidth, SelectedBuffer.BitsPerPixel);
                 if (item.Selected)
                 {
+                    if (item.type == ROI.Type.Point)
+                    {
+                        PointD pt = SelectedImage.ToImageSpace(item.Points[0]);
+                        g.FillEllipse(new RectangleF((float)pt.X - 2f, (float)pt.Y - 2f, 4f, 4f), p.color);
+                    }
+                    else
                     if (item.type == ROI.Type.Line)
                     {
                         g.DrawLine(new PointF((float)SelectedImage.ToImageSpace(item.GetPoint(0)).X, (float)SelectedImage.ToImageSpace(item.GetPoint(0)).Y), new PointF((float)SelectedImage.ToImageSpace(item.GetPoint(1)).X, (float)SelectedImage.ToImageSpace(item.GetPoint(1)).Y));

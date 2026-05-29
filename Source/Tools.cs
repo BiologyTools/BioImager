@@ -221,6 +221,11 @@ namespace BioImager
         ROI anno = new ROI();
         PointD rectStart = new PointD();
 
+        private void RefreshRoiManager()
+        {
+            App.manager?.UpdateAnnotationList();
+        }
+
         private static PointD GetAnnotationPoint(PointD p)
         {
             return p;
@@ -260,7 +265,7 @@ namespace BioImager
             PointD roiPoint = GetAnnotationPoint(e);
             if (currentTool.type == Tool.Type.line && buts == MouseButtons.Left)
             {
-                if (anno.GetPointCount() == 0)
+                if (anno.type != ROI.Type.Line)
                 {
                     anno = new ROI();
                     anno.type = ROI.Type.Line;
@@ -268,50 +273,60 @@ namespace BioImager
                     anno.AddPoint(roiPoint);
                     anno.coord = App.viewer.GetCoordinate();
                     ImageView.SelectedImage.Annotations.Add(anno);
+                    RefreshRoiManager();
                 }
             }
             else
             if (currentTool.type == Tool.Type.polygon && buts == MouseButtons.Left)
             {
-                if (anno.GetPointCount() == 0)
+                if (anno.type != ROI.Type.Polygon)
                 {
                     anno = new ROI();
                     anno.type = ROI.Type.Polygon;
+                    anno.closed = false;
                     anno.AddPoint(roiPoint);
                     anno.coord = App.viewer.GetCoordinate();
                     ImageView.SelectedImage.Annotations.Add(anno);
+                    RefreshRoiManager();
                 }
                 else
                 {
                     //If we click on a point 1 we close this polygon
                     double hitSize = App.viewer.GetSelectionBoxHitSize();
-                    RectangleD d = new RectangleD(roiPoint.X, roiPoint.Y, hitSize, hitSize);
-                    if (d.IntersectsWith(anno.Points[0]))
+                    PointD firstPoint = anno.Points[0];
+                    double dx = roiPoint.X - firstPoint.X;
+                    double dy = roiPoint.Y - firstPoint.Y;
+                    if ((dx * dx) + (dy * dy) <= (hitSize * hitSize))
                     {
                         anno.closed = true;
+                        anno.UpdateBoundingBox();
+                        RefreshRoiManager();
                         anno = new ROI();
                     }
                     else
                     {
                         anno.AddPoint(roiPoint);
+                        RefreshRoiManager();
                     }
                 }
             }
             else
             if (currentTool.type == Tool.Type.freeform && buts == MouseButtons.Left)
             {
-                if (anno.GetPointCount() == 0)
+                if (anno.type != ROI.Type.Freeform)
                 {
                     anno = new ROI();
                     anno.type = ROI.Type.Freeform;
+                    anno.closed = false;
                     anno.AddPoint(roiPoint);
                     anno.coord = App.viewer.GetCoordinate();
-                    anno.closed = true;
                     ImageView.SelectedImage.Annotations.Add(anno);
+                    RefreshRoiManager();
                 }
                 else
                 {
                     anno.AddPoint(roiPoint);
+                    RefreshRoiManager();
                 }
             }
             else
@@ -349,12 +364,14 @@ namespace BioImager
                         if (an.selectedPoints.Count == 0)
                         {
                             ImageView.SelectedImage.Annotations.Remove(an);
+                            RefreshRoiManager();
                             break;
                         }
                         else
                         if (an.selectedPoints.Count == 1 && !(an.type == ROI.Type.Polygon || an.type == ROI.Type.Polyline || an.type == ROI.Type.Freeform))
                         {
                             ImageView.SelectedImage.Annotations.Remove(an);
+                            RefreshRoiManager();
                             break;
                         }
                         else
@@ -382,11 +399,17 @@ namespace BioImager
                 TextInput ti = new TextInput("");
                 if (ti.ShowDialog() != DialogResult.OK)
                     return;
-                an.family = font.FontFamily.Name;
-                an.fontSize = ti.font.Size;
+                Font labelFont = ti.font ?? SystemFonts.DefaultFont;
+                string labelText = ti.TextValue ?? string.Empty;
+                System.Drawing.Size labelSize = TextRenderer.MeasureText(labelText, labelFont);
+                AForge.RectangleF labelBox = ImageView.SelectedImage.ToImageSpace(new RectangleD(0, 0, labelSize.Width, labelSize.Height));
+                an.family = labelFont.FontFamily.Name;
+                an.fontSize = labelFont.Size;
                 an.strokeColor = AForge.Color.FromArgb(ti.color.A, ti.color.R, ti.color.G, ti.color.B);
-                an.Text = ti.TextValue;
+                an.Text = labelText;
+                an.BoundingBox = new RectangleD(roiPoint.X, roiPoint.Y, labelBox.Width, labelBox.Height);
                 ImageView.SelectedImage.Annotations.Add(an);
+                RefreshRoiManager();
             }
             
             if (buts == MouseButtons.Middle)
@@ -429,6 +452,8 @@ namespace BioImager
                 if (anno.GetPointCount() > 0)
                 {
                     anno.UpdatePoint(roiPoint, 1);
+                    anno.UpdateBoundingBox();
+                    RefreshRoiManager();
                     anno = new ROI();
                 }
             }
@@ -449,6 +474,9 @@ namespace BioImager
             else
             if (currentTool.type == Tool.Type.freeform && anno.type == ROI.Type.Freeform && buts == MouseButtons.Left)
             {
+                anno.closed = true;
+                anno.UpdateBoundingBox();
+                RefreshRoiManager();
                 anno = new ROI();
             }
             else
@@ -590,19 +618,22 @@ namespace BioImager
                 UpdateOverlay();
             }
             else
-            if (currentTool.type == Tool.Type.freeform && buts == MouseButtons.Left && ImageView.down)
+            if (currentTool.type == Tool.Type.freeform && ImageView.down)
             {
-                if (anno.GetPointCount() == 0)
+                if (anno.type != ROI.Type.Freeform)
                 {
+                    anno = new ROI();
                     anno.type = ROI.Type.Freeform;
+                    anno.closed = false;
                     anno.AddPoint(roiPoint);
                     anno.coord = App.viewer.GetCoordinate();
-                    anno.closed = true;
                     ImageView.SelectedImage.Annotations.Add(anno);
+                    RefreshRoiManager();
                 }
                 else
                 {
                     anno.AddPoint(roiPoint);
+                    RefreshRoiManager();
                 }
                 UpdateOverlay();
             }
@@ -641,28 +672,6 @@ namespace BioImager
                 PointD roiDown = GetAnnotationPoint(ImageView.mouseDown);
                 PointD d = new PointD(roiPoint.X - roiDown.X, roiPoint.Y - roiDown.Y);
                 Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle = new RectangleD(roiDown.X, roiDown.Y, d.X, d.Y);
-                RectangleD r = Tools.GetTool(Tools.Tool.Type.rectSel).Rectangle;
-                double hitSize = App.viewer.GetSelectionBoxHitSize();
-                foreach (ROI an in App.viewer.AnnotationsRGB)
-                {
-                    if (an.GetSelectBound(hitSize, hitSize).IntersectsWith(r))
-                    {
-                        if (!Win32.GetKeyState(Keys.LControlKey))
-                            an.selectedPoints.Clear();
-                        ImageView.selectedAnnotations.Add(an);
-                        an.Selected = true;
-                        RectangleD[] sels = an.GetSelectBoxes(selectBoxSize);
-                        for (int i = 0; i < sels.Length; i++)
-                        {
-                            if (sels[i].IntersectsWith(r))
-                            {
-                                an.selectedPoints.Add(i);
-                            }
-                        }
-                    }
-                    else if (!Win32.GetKeyState(Keys.LControlKey))
-                        an.Selected = false;
-                }
                 UpdateOverlay();
             }
             else
@@ -695,32 +704,6 @@ namespace BioImager
                     }
                 }
                 UpdateOverlay();
-            }
-            if (currentTool.type == Tool.Type.rectSel && buts.HasFlag(MouseButtons.Left))
-            {
-                PointD roiDown = GetAnnotationPoint(ImageView.mouseDown);
-                PointD d = new PointD(roiPoint.X - roiDown.X, roiPoint.Y - roiDown.Y);
-                Tools.GetTool(Tools.Tool.Type.select).Rectangle = new RectangleD(roiDown.X, roiDown.Y, Math.Abs(d.X), Math.Abs(d.Y));
-                RectangleD r = Tools.GetTool(Tools.Tool.Type.select).Rectangle;
-                List<ROI> rois = ImageView.SelectedImage.Annotations;
-                foreach (ROI an in rois)
-                {
-                    if (an.GetSelectBound(App.viewer.GetSelectionBoxHitSize(), App.viewer.GetSelectionBoxHitSize()).IntersectsWith(r))
-                    {
-                        if(!Win32.GetKeyState(Keys.LControlKey))
-                        an.selectedPoints.Clear();
-                        an.Selected = true;
-                        RectangleD[] sels = an.GetSelectBoxes();
-                        for (int i = 0; i < sels.Length; i++)
-                        {
-                            if (sels[i].IntersectsWith(r))
-                            {
-                                an.selectedPoints.Add(i);
-                            }
-                        }
-                    }
-                }
-                App.viewer.UpdateView();
             }
             /*
             if (Tools.currentTool.type == Tools.Tool.Type.magic && buts == MouseButtons.Left)
