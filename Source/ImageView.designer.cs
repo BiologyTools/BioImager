@@ -98,7 +98,7 @@ namespace BioImager
             hScrollBar = new HScrollBar();
             vScrollBar = new VScrollBar();
             saveCSVFileDialog = new SaveFileDialog();
-            viewpanel = new Panel();
+            viewpanel = new BufferedViewPanel();
             timePlayMenuStrip.SuspendLayout();
             contextMenuStrip.SuspendLayout();
             zPlayMenuStrip.SuspendLayout();

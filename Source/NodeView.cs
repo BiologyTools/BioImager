@@ -58,7 +58,7 @@ namespace BioImager
             sts.AddRange(args);
             for (int i = 0; i < args.Length; i++)
             {
-                if (args[i].Contains("-setup"))
+                if (args[i].Contains("--setup"))
                 {
                     setup = true;
                     sts.RemoveAt(i);

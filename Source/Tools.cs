@@ -606,7 +606,7 @@ namespace BioImager
                 {
                     PointD pf = new PointD(e.X - ImageView.mouseDown.X, e.Y - ImageView.mouseDown.Y);
                     App.viewer.Origin = new PointD(App.viewer.Origin.X + pf.X, App.viewer.Origin.Y + pf.Y);
-                    UpdateView();
+                    App.viewer.UpdateView(false);
                 }
                 App.viewer.UpdateStatus();
                 return;

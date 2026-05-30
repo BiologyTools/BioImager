@@ -179,6 +179,11 @@ namespace BioImager
             if (SelectedImage != null)
                 if (SelectedImage.isPyramidal)
                     SelectedImage.PyramidalSize = new AForge.Size(gl.Width, gl.Height);
+            if (centerOnNextResize && SelectedImage != null && ViewWidth > 1 && ViewHeight > 1)
+            {
+                centerOnNextResize = false;
+                GoToImage(SelectedIndex);
+            }
             UpdateOverviewOverlay();
         }
 
@@ -339,6 +344,7 @@ namespace BioImager
         private bool update = false;
         public List<BioImage> Images = new List<BioImage>();
         private System.Drawing.Bitmap overviewPreviewBitmap;
+        private bool centerOnNextResize;
         /// <summary>
         /// Called by SlideGLArea during the Skia rendering phase.
         /// Draws annotations on top of the GL-rendered tiles.
@@ -463,6 +469,7 @@ namespace BioImager
         {
             Images.Add(im);
             SelectedIndex = Images.Count - 1;
+            centerOnNextResize = true;
             bool c = false;
             foreach (var item in Layers)
             {
@@ -490,6 +497,20 @@ namespace BioImager
             UpdateImages();
 
             GoToImage(Images.Count - 1);
+            QueueInitialCenterAfterLayout(Images.Count - 1);
+        }
+
+        private void QueueInitialCenterAfterLayout(int imageIndex)
+        {
+            if (!IsHandleCreated)
+                return;
+            BeginInvoke(new System.Action(() =>
+            {
+                if (IsDisposed || !centerOnNextResize || imageIndex >= Images.Count)
+                    return;
+                centerOnNextResize = false;
+                GoToImage(imageIndex);
+            }));
         }
         /// <summary>
         /// It takes a large image, resizes it to a small image, and then displays it.
@@ -790,6 +811,8 @@ namespace BioImager
         {
             get
             {
+                if (SelectedImage != null && !SelectedImage.isPyramidal && viewpanel != null && viewpanel.ClientSize.Width > 1)
+                    return viewpanel.ClientSize.Width;
                 return gl.Width;
             }
         }
@@ -797,6 +820,8 @@ namespace BioImager
         {
             get
             {
+                if (SelectedImage != null && !SelectedImage.isPyramidal && viewpanel != null && viewpanel.ClientSize.Height > 1)
+                    return viewpanel.ClientSize.Height;
                 return gl.Height;
             }
         }
@@ -1040,25 +1065,43 @@ namespace BioImager
         public void UpdateSelectBoxSize(float size)
         {
             ROI.selectBoxSize = size;
-            Tools.selectBoxSize = GetSelectBoxSize();
+            UpdateToolSelectBoxSize();
         }
 
-        private const float MinPyramidalSelectBoxSize = 8f;
+        private const float MinSelectBoxScreenSize = 8f;
+        private const float MinSelectionHitScreenSize = 8f;
 
         private float GetSelectBoxSize()
         {
+            return GetSelectBoxSizeForScreenPixels(MinSelectBoxScreenSize);
+        }
+
+        private float GetSelectBoxSizeForScreenPixels(float minScreenSize)
+        {
             if (SelectedImage != null && SelectedImage.isPyramidal)
             {
-                float logicalSize = Math.Max(ROI.selectBoxSize, MinPyramidalSelectBoxSize);
-                return (float)(logicalSize * Resolution);
+                float logicalSize = Math.Max(ROI.selectBoxSize, minScreenSize);
+                double resolution = Resolution;
+                if (resolution <= 0 || double.IsNaN(resolution) || double.IsInfinity(resolution))
+                    resolution = 1;
+                return (float)(logicalSize * resolution);
             }
 
             float zoom = Math.Abs(Scale.Width);
             if (zoom <= 0 || float.IsNaN(zoom) || float.IsInfinity(zoom))
                 zoom = 1f;
 
-            float screenSize = Math.Max(ROI.selectBoxSize, MinPyramidalSelectBoxSize);
-            return screenSize / zoom;
+            double pixelSize = Math.Min(PxWmicron, PxHmicron);
+            if (pixelSize <= 0 || double.IsNaN(pixelSize) || double.IsInfinity(pixelSize))
+                pixelSize = 1;
+
+            float screenSize = Math.Max(ROI.selectBoxSize, minScreenSize);
+            return (float)(screenSize / (zoom * pixelSize));
+        }
+
+        private void UpdateToolSelectBoxSize()
+        {
+            Tools.selectBoxSize = GetSelectBoxSize();
         }
         /// If hardware acceleration is enabled, render the frame. Otherwise, set a flag to update the
         /// overlay and invalidate the overlay picture box
@@ -1066,6 +1109,7 @@ namespace BioImager
         /// @return The return value is the value of the last expression evaluated in the method.
         public void UpdateOverlay()
         {
+            UpdateToolSelectBoxSize();
             if (SelectedImage != null && SelectedImage.isPyramidal)
             {
                 RefreshPyramidalOverlayTexture();
@@ -1121,11 +1165,13 @@ namespace BioImager
         /// box.
         /// 
         /// @return The method is returning void.
-        public void UpdateView()
+        public void UpdateView(bool refreshImages = true)
         {
             UpdateStatus();
             update = true;
-            UpdateImages();
+            UpdateToolSelectBoxSize();
+            if (refreshImages)
+                UpdateImages();
             UpdateRenderSurfaceMode();
             if (SelectedImage != null && SelectedImage.isPyramidal)
             {
@@ -1185,13 +1231,24 @@ namespace BioImager
                         continue;
                     foreach (ROI an in bi.Annotations)
                     {
-                        if (zBar.Value != an.coord.Z || cBar.Value != an.coord.C || tBar.Value != an.coord.T)
+                        if (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline)
+                        {
+                            if (zBar.Value != an.coord.Z || tBar.Value != an.coord.T)
+                                continue;
+                        }
+                        else if (zBar.Value != an.coord.Z || cBar.Value != an.coord.C || tBar.Value != an.coord.T)
                             continue;
                         float w = Math.Abs(Scale.Width);
                         Font fo = new Font(new FontFamily(an.family), (float)((an.strokeWidth / w) * an.fontSize));
                         PointF pc = new PointF((float)(an.BoundingBox.X + (an.BoundingBox.W / 2)), (float)(an.BoundingBox.Y + (an.BoundingBox.H / 2)));
-                        float width = 1;
+                        float width = (float)an.strokeWidth / w;
+                        if (width <= 0)
+                            width = 1;
                         sk.RenderTarget2D.StrokeWidth = width;
+                        if (an.Selected)
+                            b.Color = new RawColor4(1.0f, 0.0f, 1.0f, 1.0f);
+                        else
+                            b.Color = new RawColor4((float)an.strokeColor.R / 255f, (float)an.strokeColor.G / 255f, (float)an.strokeColor.B / 255f, 1.0f);
                         if (an.type == ROI.Type.Point)
                         {
                             PointD pf = ToScreenSpace(an.Points[0]);
@@ -1261,7 +1318,7 @@ namespace BioImager
                             }
                         }
                         else
-                        if (an.type == ROI.Type.Polygon && !an.closed || an.type == ROI.Type.Polyline)
+                        if ((an.type == ROI.Type.Polygon && !an.closed) || an.type == ROI.Type.Polyline)
                         {
                             RawVector2 pf;
                             RawVector2 pf2;
@@ -1295,6 +1352,34 @@ namespace BioImager
                             pf = new RawVector2((float)ToScreenSpace(an.GetPoint(0)).X, (float)ToScreenSpace(an.GetPoint(0)).Y);
                             pf2 = new RawVector2((float)ToScreenSpace(an.GetPoint(an.Points.Count - 1)).X, (float)ToScreenSpace(an.GetPoint(an.Points.Count - 1)).Y);
                             sk.RenderTarget2D.DrawLine(pf, pf2, b);
+                            if (an.Selected)
+                            {
+                                RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize));
+                                for (int i = 0; i < rfs.Length; i++)
+                                {
+                                    sk.RenderTarget2D.DrawRectangle(ToSKRect(rfs[i].X, rfs[i].Y, rfs[i].Width, rfs[i].Height), red);
+                                }
+                            }
+                        }
+                        else
+                        if (an.type == ROI.Type.Freeform && !an.closed)
+                        {
+                            RawVector2 pf;
+                            RawVector2 pf2;
+                            for (int i = 0; i < an.Points.Count - 1; i++)
+                            {
+                                pf = new RawVector2((float)ToScreenSpace(an.GetPoint(i).X, an.GetPoint(i).Y).X, (float)ToScreenSpace(an.GetPoint(i).X, an.GetPoint(i).Y).Y);
+                                pf2 = new RawVector2((float)ToScreenSpace(an.GetPoint(i + 1).X, an.GetPoint(i + 1).Y).X, (float)ToScreenSpace(an.GetPoint(i + 1).X, an.GetPoint(i + 1).Y).Y);
+                                sk.RenderTarget2D.DrawLine(pf, pf2, b);
+                            }
+                            if (an.Selected)
+                            {
+                                RectangleF[] rfs = ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize));
+                                for (int i = 0; i < rfs.Length; i++)
+                                {
+                                    sk.RenderTarget2D.DrawRectangle(ToSKRect(rfs[i].X, rfs[i].Y, rfs[i].Width, rfs[i].Height), red);
+                                }
+                            }
                         }
                         if (an.type == ROI.Type.Label)
                         {
@@ -1414,7 +1499,7 @@ namespace BioImager
         /// > Update the status of the application and then render the frame
         /// 
         /// @param refresh boolean
-        public void UpdateView(bool refresh)
+        public void UpdateViewLegacy(bool refresh)
         {
             UpdateStatus();
             update = refresh;
@@ -2128,7 +2213,13 @@ namespace BioImager
         {
             get
             {
-                return SelectedImage.GetAnnotations(SelectedImage.Coordinate.Z, SelectedImage.RChannel.Index, SelectedImage.Coordinate.T);
+                if (SelectedImage == null)
+                    return new List<ROI>();
+                return SelectedImage.Annotations.Where(an =>
+                    an != null &&
+                    an.coord.Z == SelectedImage.Coordinate.Z &&
+                    an.coord.T == SelectedImage.Coordinate.T &&
+                    (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline || an.coord.C == RChannel.Index)).ToList();
             }
         }
         private List<ROI> annotationsG = new List<ROI>();
@@ -2136,7 +2227,13 @@ namespace BioImager
         {
             get
             {
-                return SelectedImage.GetAnnotations(SelectedImage.Coordinate.Z, SelectedImage.GChannel.Index, SelectedImage.Coordinate.T);
+                if (SelectedImage == null)
+                    return new List<ROI>();
+                return SelectedImage.Annotations.Where(an =>
+                    an != null &&
+                    an.coord.Z == SelectedImage.Coordinate.Z &&
+                    an.coord.T == SelectedImage.Coordinate.T &&
+                    (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline || an.coord.C == GChannel.Index)).ToList();
             }
         }
         private List<ROI> annotationsB = new List<ROI>();
@@ -2144,7 +2241,13 @@ namespace BioImager
         {
             get
             {
-                return SelectedImage.GetAnnotations(SelectedImage.Coordinate.Z, SelectedImage.BChannel.Index, SelectedImage.Coordinate.T);
+                if (SelectedImage == null)
+                    return new List<ROI>();
+                return SelectedImage.Annotations.Where(an =>
+                    an != null &&
+                    an.coord.Z == SelectedImage.Coordinate.Z &&
+                    an.coord.T == SelectedImage.Coordinate.T &&
+                    (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline || an.coord.C == BChannel.Index)).ToList();
             }
         }
         public List<ROI> AnnotationsRGB
@@ -2165,7 +2268,11 @@ namespace BioImager
                 }
                 else
                 {
-                    ans.AddRange(SelectedImage.GetAnnotations(SelectedImage.Coordinate));
+                    ans.AddRange(SelectedImage.Annotations.Where(an =>
+                        an != null &&
+                        an.coord.Z == SelectedImage.Coordinate.Z &&
+                        an.coord.T == SelectedImage.Coordinate.T &&
+                        (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline || an.coord.C == SelectedImage.Coordinate.C)));
                 }
                 return ans;
             }
@@ -2203,7 +2310,12 @@ namespace BioImager
                     continue;
                 foreach (ROI an in bi.Annotations)
                 {
-                    if (Mode == ViewMode.RGBImage)
+                    if (an.type == ROI.Type.Polygon || an.type == ROI.Type.Freeform || an.type == ROI.Type.Polyline)
+                    {
+                        if (zBar.Value != an.coord.Z || tBar.Value != an.coord.T)
+                            continue;
+                    }
+                    else if (Mode == ViewMode.RGBImage)
                     {
                         if (!showRROIs && an.coord.C == 0)
                             continue;
@@ -2276,11 +2388,11 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            System.Drawing.PointF[] pts = new System.Drawing.PointF[an.Points.Count];
                             for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
-                                pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
+                                pts[i] = new System.Drawing.PointF((float)p.X, (float)p.Y);
                             }
                             g.DrawLines(pen, pts);
                             g.DrawLine(pen, pts[pts.Length - 1], pts[0]);
@@ -2295,11 +2407,11 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            System.Drawing.PointF[] pts = new System.Drawing.PointF[an.Points.Count];
                             for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
-                                pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
+                                pts[i] = new System.Drawing.PointF((float)p.X, (float)p.Y);
                             }
                             g.DrawLines(pen, pts);
                         }
@@ -2313,11 +2425,11 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            System.Drawing.PointF[] pts = new System.Drawing.PointF[an.Points.Count];
                             for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
-                                pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
+                                pts[i] = new System.Drawing.PointF((float)p.X, (float)p.Y);
                             }
                             g.DrawLines(pen, pts);
                         }
@@ -2332,14 +2444,21 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            System.Drawing.PointF[] pts = new System.Drawing.PointF[an.Points.Count];
                             for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
-                                pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
+                                pts[i] = new System.Drawing.PointF((float)p.X, (float)p.Y);
                             }
                             g.DrawLines(pen, pts);
                             g.DrawLine(pen, pts[pts.Length - 1], pts[0]);
+                        }
+                        if (an.Selected)
+                        {
+                            foreach (var item in ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize)))
+                            {
+                                g.DrawRectangle(red, new System.Drawing.RectangleF((float)item.X, (float)item.Y, (float)item.W, (float)item.H));
+                            }
                         }
                     }
                     else
@@ -2347,13 +2466,20 @@ namespace BioImager
                     {
                         if (an.Points.Count > 1)
                         {
-                            System.Drawing.Point[] pts = new System.Drawing.Point[an.Points.Count];
+                            System.Drawing.PointF[] pts = new System.Drawing.PointF[an.Points.Count];
                             for (int i = 0; i < an.Points.Count; i++)
                             {
                                 var p = ToScreenSpace(an.Points[i].X, an.Points[i].Y);
-                                pts[i] = new System.Drawing.Point((int)p.X, (int)p.Y);
+                                pts[i] = new System.Drawing.PointF((float)p.X, (float)p.Y);
                             }
                             g.DrawLines(pen, pts);
+                        }
+                        if (an.Selected)
+                        {
+                            foreach (var item in ToScreenSpace(an.GetSelectBoxes(Tools.selectBoxSize)))
+                            {
+                                g.DrawRectangle(red, new System.Drawing.RectangleF((float)item.X, (float)item.Y, (float)item.W, (float)item.H));
+                            }
                         }
                     }
                     if (an.type == ROI.Type.Label)
@@ -2757,7 +2883,7 @@ namespace BioImager
 
         public double GetSelectionBoxHitSize()
         {
-            return Tools.selectBoxSize;
+            return GetSelectBoxSizeForScreenPixels(MinSelectionHitScreenSize);
         }
         private System.Drawing.Bitmap ToSysBitmap(Bitmap bm)
         {
@@ -3119,7 +3245,8 @@ namespace BioImager
                             selectedAnnotations.Add(an);
                             an.Selected = true;
                             RectangleD[] sels = an.GetSelectBoxes(Tools.selectBoxSize);
-                            RectangleD r = new RectangleD(p.X, p.Y, sels[0].W, sels[0].H);
+                            double hitSize = GetSelectionBoxHitSize();
+                            RectangleD r = new RectangleD(p.X - hitSize / 2, p.Y - hitSize / 2, hitSize, hitSize);
                             for (int i = 0; i < sels.Length; i++)
                             {
                                 if (sels[i].IntersectsWith(r))
@@ -3818,43 +3945,107 @@ namespace BioImager
         {
             if (Images.Count <= i)
                 return;
-            if (SelectedImage.Type == BioImage.ImageType.pyramidal)
+            SelectedIndex = i;
+            BioImage image = Images[i];
+            int viewportWidth = GetEffectiveViewWidth();
+            int viewportHeight = GetEffectiveViewHeight();
+            if (image.Type == BioImage.ImageType.pyramidal || image.isPyramidal)
             {
-                if (SelectedImage.OpenSlideBase != null)
-                {
-                    if (MacroResolution.HasValue)
-                    {
-                        int lev = MacroResolution.Value - 2;
-                        Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                    }
-                    else
-                    {
-                        int lev = 0;
-                        Resolution = _openSlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                    }
-                }
-                else
-                {
-                    if (MacroResolution.HasValue)
-                    {
-                        int lev = MacroResolution.Value - 1;
-                        Resolution = SelectedImage.SlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                        PyramidalOrigin = new PointD(0, 0);
-                    }
-                    else
-                    {
-                        Resolution = SelectedImage.GetUnitPerPixel(SelectedImage.Resolutions.Count - 1) * 0.98;
-                    }
-                }
+                CenterPyramidalImage(image, viewportWidth, viewportHeight);
+                UpdateView();
+                return;
             }
-            double dx = Images[i].Volume.Width / 2;
-            double dy = Images[i].Volume.Height / 2;
-            Origin = new PointD(-(Images[i].Volume.Location.X + dx), -(Images[i].Volume.Location.Y + dy));
-            double wx, wy;
-            wx = ViewWidth / ToScreenScaleW(SelectedImage.Volume.Width);
-            wy = ViewHeight / ToScreenScaleH(SelectedImage.Volume.Height);
-            Scale = new SizeF((float)wy, (float)wy);
+
+            double dx = image.Volume.Width / 2;
+            double dy = image.Volume.Height / 2;
+            origin = new PointD(-(image.Volume.Location.X + dx), -(image.Volume.Location.Y + dy));
+            double screenWidth = Math.Abs(ToScreenScaleW(image.Volume.Width));
+            double screenHeight = Math.Abs(ToScreenScaleH(image.Volume.Height));
+            double wx = screenWidth > 0 ? viewportWidth / screenWidth : 1;
+            double wy = screenHeight > 0 ? viewportHeight / screenHeight : 1;
+            double fitScale = Math.Min(wx, wy);
+            if (fitScale <= 0 || double.IsNaN(fitScale) || double.IsInfinity(fitScale))
+                fitScale = 1;
+            scale = new SizeF((float)fitScale, (float)fitScale);
+            update = true;
             UpdateView();
+        }
+
+        private int GetEffectiveViewWidth()
+        {
+            int width = ViewWidth;
+            if (width <= 1)
+                width = viewpanel?.ClientSize.Width ?? Width;
+            if (width <= 1)
+                width = Width;
+            return Math.Max(1, width);
+        }
+
+        private int GetEffectiveViewHeight()
+        {
+            int height = ViewHeight;
+            if (height <= 1)
+                height = viewpanel?.ClientSize.Height ?? Height;
+            if (height <= 1)
+                height = Height;
+            return Math.Max(1, height);
+        }
+
+        private void CenterPyramidalImage(BioImage image, int viewportWidth, int viewportHeight)
+        {
+            if (!TryGetPyramidalWorldBounds(image, out double minX, out double minY, out double maxX, out double maxY))
+                return;
+
+            double worldWidth = maxX - minX;
+            double worldHeight = maxY - minY;
+            if (worldWidth <= 0 || worldHeight <= 0)
+                return;
+
+            double fitResolution = Math.Max(worldWidth / viewportWidth, worldHeight / viewportHeight) * 1.02;
+            if (fitResolution <= 0 || double.IsNaN(fitResolution) || double.IsInfinity(fitResolution))
+                fitResolution = image.Resolution > 0 ? image.Resolution : 1;
+
+            image.Resolution = fitResolution;
+            double viewportWorldWidth = viewportWidth * fitResolution;
+            double viewportWorldHeight = viewportHeight * fitResolution;
+            double centerX = minX + (worldWidth / 2);
+            double centerY = minY + (worldHeight / 2);
+
+            image.PyramidalOrigin = new PointD(
+                centerX - (viewportWorldWidth / 2),
+                -(centerY + (viewportWorldHeight / 2)));
+        }
+
+        private bool TryGetPyramidalWorldBounds(BioImage image, out double minX, out double minY, out double maxX, out double maxY)
+        {
+            minX = minY = maxX = maxY = 0;
+            BruTile.ITileSchema schema = null;
+            if (image.OpenSlideBase != null)
+                schema = image.OpenSlideBase.Schema;
+            else if (image.SlideBase != null)
+                schema = image.SlideBase.Schema;
+
+            if (schema != null)
+            {
+                minX = schema.Extent.MinX;
+                minY = schema.Extent.MinY;
+                maxX = schema.Extent.MaxX;
+                maxY = schema.Extent.MaxY;
+                return maxX > minX && maxY > minY;
+            }
+
+            if (image.Resolutions.Count == 0)
+                return false;
+
+            double unitsPerPixel = image.GetUnitPerPixel(0);
+            if (unitsPerPixel <= 0 || double.IsNaN(unitsPerPixel) || double.IsInfinity(unitsPerPixel))
+                unitsPerPixel = 1;
+
+            minX = 0;
+            maxX = image.Resolutions[0].SizeX * unitsPerPixel;
+            maxY = 0;
+            minY = -(image.Resolutions[0].SizeY * unitsPerPixel);
+            return maxX > minX && maxY > minY;
         }
 
         /// It opens a new form, and then it opens a new image in that form.
@@ -4201,6 +4392,17 @@ namespace BioImager
             protected override void OnPaintBackground(PaintEventArgs e)
             {
                 // Paint only the overview content to avoid flicker over the GL surface.
+            }
+        }
+
+        private sealed class BufferedViewPanel : Panel
+        {
+            public BufferedViewPanel()
+            {
+                SetStyle(ControlStyles.UserPaint |
+                         ControlStyles.AllPaintingInWmPaint |
+                         ControlStyles.OptimizedDoubleBuffer |
+                         ControlStyles.ResizeRedraw, true);
             }
         }
 

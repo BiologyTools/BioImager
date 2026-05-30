@@ -111,6 +111,8 @@ namespace BioImager
         {
             Properties.Settings.Default.PycroManager = micromanRadioBut.Checked;
             Properties.Settings.Default.PMicroscope = false;
+            if (micromanRadioBut.Checked)
+                imgPathBox.Text = "C:/Program Files/Micro-Manager-2.0/ImageJ.exe";
         }
     }
 }

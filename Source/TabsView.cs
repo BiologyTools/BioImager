@@ -242,6 +242,7 @@ namespace BioImager
                 null,
                 littleEndian: true,
                 interleaved: true));
+            bi.Channels.Add(new Channel(0, 8, 4));
             bi.UpdateCoords(1, 1, 1);
             bi.Volume = new VolumeD(new Point3D(0, 0, 0), new Point3D(
                 bi.PhysicalSizeX * bi.SizeX,
