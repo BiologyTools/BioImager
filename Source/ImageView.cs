@@ -597,6 +597,12 @@ namespace BioImager
             if (bytes == null)
                 return;
             overviewPreviewBitmap = CreateOverviewPreview(bytes, overviewWidth, overviewHeight);
+            if (overviewPreviewBitmap == null)
+            {
+                ShowOverview = false;
+                UpdateOverviewOverlay();
+                return;
+            }
             ShowOverview = true;
             UpdateOverviewOverlay();
             if (SelectedImage.isPyramidal)
@@ -2800,24 +2806,145 @@ namespace BioImager
             g.ResetTransform();
         }
 
-        private System.Drawing.Bitmap CreateOverviewPreview(byte[] rgbBytes, int width, int height)
+        private System.Drawing.Bitmap CreateOverviewPreview(byte[] bytes, int width, int height)
+        {
+            if (bytes == null || width <= 0 || height <= 0)
+                return null;
+
+            int pixelCount = width * height;
+            if (pixelCount <= 0)
+                return null;
+
+            if (bytes.Length == pixelCount * 4)
+                return CreateOverviewPreview32(bytes, width, height);
+
+            if (bytes.Length == pixelCount * 3)
+            {
+                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                var rect = new System.Drawing.Rectangle(0, 0, width, height);
+                var data = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, bitmap.PixelFormat);
+                try
+                {
+                    int srcStride = width * 3;
+                    int dstStride = Math.Abs(data.Stride);
+                    unsafe
+                    {
+                        fixed (byte* srcPtr = bytes)
+                        {
+                            for (int y = 0; y < height; y++)
+                            {
+                                byte* srcRow = srcPtr + (y * srcStride);
+                                byte* dstRow = (byte*)data.Scan0 + (y * dstStride);
+                                Buffer.MemoryCopy(srcRow, dstRow, dstStride, srcStride);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    bitmap.UnlockBits(data);
+                }
+
+                return bitmap;
+            }
+
+            if (bytes.Length == pixelCount * 2)
+                return CreateOverviewPreview16Gray(bytes, width, height);
+
+            if (bytes.Length == pixelCount)
+                return CreateOverviewPreview8Gray(bytes, width, height);
+
+            return null;
+        }
+
+        private System.Drawing.Bitmap CreateOverviewPreview8Gray(byte[] grayBytes, int width, int height)
         {
             var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             var rect = new System.Drawing.Rectangle(0, 0, width, height);
             var data = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, bitmap.PixelFormat);
             try
             {
-                int srcStride = width * 3;
                 int dstStride = Math.Abs(data.Stride);
                 unsafe
                 {
-                    fixed (byte* srcPtr = rgbBytes)
+                    fixed (byte* srcPtr = grayBytes)
                     {
                         for (int y = 0; y < height; y++)
                         {
-                            byte* srcRow = srcPtr + (y * srcStride);
+                            byte* srcRow = srcPtr + (y * width);
                             byte* dstRow = (byte*)data.Scan0 + (y * dstStride);
-                            Buffer.MemoryCopy(srcRow, dstRow, dstStride, srcStride);
+                            for (int x = 0; x < width; x++)
+                            {
+                                byte value = srcRow[x];
+                                int offset = x * 3;
+                                dstRow[offset] = value;
+                                dstRow[offset + 1] = value;
+                                dstRow[offset + 2] = value;
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+
+            return bitmap;
+        }
+
+        private System.Drawing.Bitmap CreateOverviewPreview16Gray(byte[] grayBytes, int width, int height)
+        {
+            int pixelCount = width * height;
+            ushort min = ushort.MaxValue;
+            ushort max = ushort.MinValue;
+
+            // Scale the preview from the actual data range so low-contrast 16-bit
+            // slices still show useful structure in the overview.
+            unsafe
+            {
+                fixed (byte* srcPtr = grayBytes)
+                {
+                    ushort* ushortPtr = (ushort*)srcPtr;
+                    for (int i = 0; i < pixelCount; i++)
+                    {
+                        ushort value = ushortPtr[i];
+                        if (value < min)
+                            min = value;
+                        if (value > max)
+                            max = value;
+                    }
+                }
+            }
+
+            int range = max - min;
+            if (range <= 0)
+                range = 1;
+
+            var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var rect = new System.Drawing.Rectangle(0, 0, width, height);
+            var data = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, bitmap.PixelFormat);
+            try
+            {
+                int dstStride = Math.Abs(data.Stride);
+                unsafe
+                {
+                    fixed (byte* srcPtr = grayBytes)
+                    {
+                        ushort* ushortPtr = (ushort*)srcPtr;
+                        for (int y = 0; y < height; y++)
+                        {
+                            byte* dstRow = (byte*)data.Scan0 + (y * dstStride);
+                            int rowOffset = y * width;
+                            for (int x = 0; x < width; x++)
+                            {
+                                ushort value = ushortPtr[rowOffset + x];
+                                byte scaled = (byte)(((value - min) * 255) / range);
+                                int offset = x * 3;
+                                dstRow[offset] = scaled;
+                                dstRow[offset + 1] = scaled;
+                                dstRow[offset + 2] = scaled;
+                            }
                         }
                     }
                 }
@@ -2887,6 +3014,57 @@ namespace BioImager
         }
         private System.Drawing.Bitmap ToSysBitmap(Bitmap bm)
         {
+            if (bm.PixelFormat == AForge.PixelFormat.Format16bppGrayScale)
+            {
+                var grayResult = new System.Drawing.Bitmap(
+                    bm.Width,
+                    bm.Height,
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                int min = int.MaxValue;
+                int max = int.MinValue;
+                for (int y = 0; y < bm.Height; y++)
+                {
+                    for (int x = 0; x < bm.Width; x++)
+                    {
+                        int value = (int)bm.GetValue(x, y, 0);
+                        if (value < min)
+                            min = value;
+                        if (value > max)
+                            max = value;
+                    }
+                }
+                if (max <= min)
+                    max = min + 1;
+
+                var grayRect = new System.Drawing.Rectangle(0, 0, bm.Width, bm.Height);
+                var grayData = grayResult.LockBits(grayRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                try
+                {
+                    int dstStride = Math.Abs(grayData.Stride);
+                    unsafe
+                    {
+                        for (int y = 0; y < bm.Height; y++)
+                        {
+                            byte* dstRow = (byte*)grayData.Scan0 + (y * dstStride);
+                            for (int x = 0; x < bm.Width; x++)
+                            {
+                                byte value = (byte)(((int)bm.GetValue(x, y, 0) - min) * 255 / (max - min));
+                                int offset = x * 3;
+                                dstRow[offset] = value;
+                                dstRow[offset + 1] = value;
+                                dstRow[offset + 2] = value;
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    grayResult.UnlockBits(grayData);
+                }
+
+                return grayResult;
+            }
+
             var rgba = bm.GetImageRGBA();
             var result = new System.Drawing.Bitmap(
                 bm.Width,
