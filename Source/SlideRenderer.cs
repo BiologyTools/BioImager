@@ -58,6 +58,16 @@ namespace BioImager
             ClearCache();
         }
 
+        public bool IsSource(OpenSlideBase source)
+        {
+            return _useOpenSlide && ReferenceEquals(_openSlideBase, source);
+        }
+
+        public bool IsSource(SlideBase source)
+        {
+            return !_useOpenSlide && ReferenceEquals(_slideBase, source);
+        }
+
         public void ClearCache()
         {
             _glArea.ClearTextureCache();

@@ -99,14 +99,20 @@ namespace BioImager
             resolutions = im.Resolutions;
             if (im.isPyramidal)
             {
-                // Set the source based on image type
+                // Keep the renderer bound to the currently selected pyramidal source.
                 if (im.OpenSlideBase != null)
                 {
-                    slideRenderer.SetSource(im.OpenSlideBase);
+                    if (slideRenderer == null)
+                        slideRenderer = new SlideRenderer(gl);
+                    if (!slideRenderer.IsSource(im.OpenSlideBase))
+                        slideRenderer.SetSource(im.OpenSlideBase);
                 }
                 else if (im.SlideBase != null)
                 {
-                    slideRenderer.SetSource(im.SlideBase);
+                    if (slideRenderer == null)
+                        slideRenderer = new SlideRenderer(gl);
+                    if (!slideRenderer.IsSource(im.SlideBase))
+                        slideRenderer.SetSource(im.SlideBase);
                 }
             }
             InitGL();
@@ -563,10 +569,16 @@ namespace BioImager
 
             if (_openSlideBase != null)
             {
-                int sourceLevel = _openSlideBase.Schema.Resolutions.Keys.Max();
+                int levelCount = _openSlideBase.SlideImage.LevelCount;
+                if (levelCount <= 0)
+                    return;
+
+                int sourceLevel = levelCount - 1;
                 var sourceDim = _openSlideBase.SlideImage.GetLevelDimension(sourceLevel);
                 int sourceWidth = (int)sourceDim.Width;
                 int sourceHeight = (int)sourceDim.Height;
+                if (sourceWidth <= 0 || sourceHeight <= 0)
+                    return;
                 bytes = await Task.Run(() => _openSlideBase.SlideImage.ReadRegion(sourceLevel, 0, 0, sourceWidth, sourceHeight));
                 if (bytes == null)
                     return;
@@ -1529,11 +1541,15 @@ namespace BioImager
                 SelectedImage.PyramidalOrigin = PyramidalOrigin;
                 SelectedImage.PyramidalSize = new AForge.Size(gl.Width, gl.Height);
                 if (slideRenderer == null)
-                {
                     slideRenderer = new SlideRenderer(gl);
-                    if (SelectedImage.SlideBase != null)
+                if (SelectedImage.SlideBase != null)
+                {
+                    if (!slideRenderer.IsSource(SelectedImage.SlideBase))
                         slideRenderer.SetSource(SelectedImage.SlideBase);
-                    else
+                }
+                else if (SelectedImage.OpenSlideBase != null)
+                {
+                    if (!slideRenderer.IsSource(SelectedImage.OpenSlideBase))
                         slideRenderer.SetSource(SelectedImage.OpenSlideBase);
                 }
                 _ = slideRenderer.UpdateViewAsync(
