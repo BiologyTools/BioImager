@@ -350,6 +350,7 @@ namespace BioImager
         private bool update = false;
         public List<BioImage> Images = new List<BioImage>();
         private System.Drawing.Bitmap overviewPreviewBitmap;
+        private BruTile.Extent? pyramidalViewportExtent;
         private bool centerOnNextResize;
         /// <summary>
         /// Called by SlideGLArea during the Skia rendering phase.
@@ -2838,13 +2839,15 @@ namespace BioImager
                 double worldWidth = Math.Max(1, schema.Extent.Width);
                 double worldHeight = Math.Max(1, schema.Extent.Height);
                 double centerX = schema.Extent.MinX + ((double)location.X / previewWidth) * worldWidth;
-                double centerY = schema.Extent.MinY + (((double)location.Y / previewHeight) * worldHeight);
-                double visibleWidth = Math.Max(1, gl.Width) * Resolution;
-                double visibleHeight = Math.Max(1, gl.Height) * Resolution;
+                double centerY = schema.Extent.MaxY - (((double)location.Y / previewHeight) * worldHeight);
+                // The pyramidal viewport spans both sides of the origin in the
+                // overview frame, so use the full visible span here.
+                double visibleWidth = Math.Max(1, GetEffectiveViewWidth()) * Resolution * 2.0;
+                double visibleHeight = Math.Max(1, GetEffectiveViewHeight()) * Resolution * 2.0;
 
-                PyramidalOrigin = new PointD(
+                PyramidalOriginTransformed = new PointD(
                     centerX - (visibleWidth / 2.0),
-                    centerY - (visibleHeight / 2.0));
+                    -(centerY + (visibleHeight / 2.0)));
             }
             else
             {
@@ -2875,12 +2878,17 @@ namespace BioImager
                 {
                     double worldWidth = Math.Max(1, schema.Extent.Width);
                     double worldHeight = Math.Max(1, schema.Extent.Height);
-                    double visibleWidth = Math.Max(1, gl.Width) * Resolution;
-                    double visibleHeight = Math.Max(1, gl.Height) * Resolution;
-                    double dx = ((PyramidalOrigin.X - schema.Extent.MinX) / worldWidth) * overview.Width;
-                    double dy = ((PyramidalOrigin.Y - schema.Extent.MinY) / worldHeight) * overview.Height;
-                    double dw = (visibleWidth / worldWidth) * overview.Width;
-                    double dh = (visibleHeight / worldHeight) * overview.Height;
+                    double visibleWidth = Math.Max(1, GetEffectiveViewWidth()) * Resolution * 2.0;
+                    double visibleHeight = Math.Max(1, GetEffectiveViewHeight()) * Resolution * 2.0;
+                    var extent = new BruTile.Extent(
+                        PyramidalOrigin.X,
+                        -PyramidalOrigin.Y - visibleHeight,
+                        PyramidalOrigin.X + visibleWidth,
+                        -PyramidalOrigin.Y);
+                    double dx = ((extent.MinX - schema.Extent.MinX) / worldWidth) * overview.Width;
+                    double dy = ((schema.Extent.MaxY - extent.MaxY) / worldHeight) * overview.Height;
+                    double dw = (extent.Width / worldWidth) * overview.Width;
+                    double dh = (extent.Height / worldHeight) * overview.Height;
                     g.DrawRectangle(Pens.Red, (int)dx, (int)dy, (int)dw, (int)dh);
                 }
             }
