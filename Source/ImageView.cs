@@ -350,7 +350,9 @@ namespace BioImager
         private bool update = false;
         public List<BioImage> Images = new List<BioImage>();
         private System.Drawing.Bitmap overviewPreviewBitmap;
-        private BruTile.Extent? pyramidalViewportExtent;
+        private int overviewSourceWidth;
+        private int overviewSourceHeight;
+        private double overviewSourceResolution = 1.0;
         private bool centerOnNextResize;
         /// <summary>
         /// Called by SlideGLArea during the Skia rendering phase.
@@ -632,6 +634,9 @@ namespace BioImager
                     : CreateOpenSlideOverviewPreview(bytes, sourceWidth, sourceHeight);
                 if (sourceBitmap == null)
                     return;
+                overviewSourceWidth = sourceWidth;
+                overviewSourceHeight = sourceHeight;
+                overviewSourceResolution = Math.Max(1e-9, SelectedImage.GetUnitPerPixel(sourceLevel));
                 overviewPreviewBitmap = CreateScaledOverviewPreview(sourceBitmap, overviewWidth, overviewHeight);
                 ShowOverview = true;
                 UpdateOverviewOverlay();
@@ -655,6 +660,9 @@ namespace BioImager
                     using var sourceBitmap = CreateOverviewPreview(bytes, sourceWidth, sourceHeight);
                     if (sourceBitmap != null)
                     {
+                        overviewSourceWidth = sourceWidth;
+                        overviewSourceHeight = sourceHeight;
+                        overviewSourceResolution = Math.Max(1e-9, SelectedImage.GetUnitPerPixel(lev));
                         overviewPreviewBitmap = CreateScaledOverviewPreview(sourceBitmap, overviewWidth, overviewHeight);
                         ShowOverview = true;
                         UpdateOverviewOverlay();
@@ -682,6 +690,9 @@ namespace BioImager
                 return;
             if (bytes == null)
                 return;
+            overviewSourceWidth = overviewWidth;
+            overviewSourceHeight = overviewHeight;
+            overviewSourceResolution = Math.Max(1e-9, SelectedImage.GetUnitPerPixel(lev));
             overviewPreviewBitmap = CreateOverviewPreview(bytes, overviewWidth, overviewHeight);
             if (overviewPreviewBitmap == null)
             {
@@ -968,8 +979,6 @@ namespace BioImager
             }
             set
             {
-                double dp = Resolution / value;
-                SelectedImage.PyramidalOrigin = new PointD((dp * PyramidalOrigin.X), (dp * PyramidalOrigin.Y));
                 SelectedImage.Resolution = value;
                 if (SelectedImage.Type == BioImage.ImageType.well)
                     SelectedImage.Level = (int)value;
@@ -2832,22 +2841,22 @@ namespace BioImager
             int previewHeight = Math.Max(1, overviewOverlay.ClientSize.Height);
             if (SelectedImage.isPyramidal)
             {
-                var schema = GetSelectedPyramidalSchema();
-                if (schema == null)
+                if (SelectedImage.Resolutions.Count == 0)
                     return false;
 
-                double worldWidth = Math.Max(1, schema.Extent.Width);
-                double worldHeight = Math.Max(1, schema.Extent.Height);
-                double centerX = schema.Extent.MinX + ((double)location.X / previewWidth) * worldWidth;
-                double centerY = schema.Extent.MaxY - (((double)location.Y / previewHeight) * worldHeight);
-                // The pyramidal viewport spans both sides of the origin in the
-                // overview frame, so use the full visible span here.
-                double visibleWidth = Math.Max(1, GetEffectiveViewWidth()) * Resolution * 2.0;
-                double visibleHeight = Math.Max(1, GetEffectiveViewHeight()) * Resolution * 2.0;
+                double imageWorldWidth = GetOverviewSourceWorldWidth();
+                double imageWorldHeight = GetOverviewSourceWorldHeight();
+                if (imageWorldWidth <= 0 || imageWorldHeight <= 0)
+                    return false;
 
-                PyramidalOriginTransformed = new PointD(
+                double centerX = ((double)location.X / previewWidth) * imageWorldWidth;
+                double centerY = ((double)location.Y / previewHeight) * imageWorldHeight;
+                double visibleWidth = Math.Max(1, GetEffectiveViewWidth()) * Resolution;
+                double visibleHeight = Math.Max(1, GetEffectiveViewHeight()) * Resolution;
+
+                PyramidalOrigin = new PointD(
                     centerX - (visibleWidth / 2.0),
-                    -(centerY + (visibleHeight / 2.0)));
+                    centerY - (visibleHeight / 2.0));
             }
             else
             {
@@ -2873,23 +2882,33 @@ namespace BioImager
             g.DrawRectangle(Pens.Gray, overview.X, overview.Y, overview.Width, overview.Height);
             if (SelectedImage.isPyramidal)
             {
-                var schema = GetSelectedPyramidalSchema();
-                if (schema != null)
+                if (SelectedImage.Resolutions.Count > 0)
                 {
-                    double worldWidth = Math.Max(1, schema.Extent.Width);
-                    double worldHeight = Math.Max(1, schema.Extent.Height);
-                    double visibleWidth = Math.Max(1, GetEffectiveViewWidth()) * Resolution * 2.0;
-                    double visibleHeight = Math.Max(1, GetEffectiveViewHeight()) * Resolution * 2.0;
-                    var extent = new BruTile.Extent(
-                        PyramidalOrigin.X,
-                        -PyramidalOrigin.Y - visibleHeight,
-                        PyramidalOrigin.X + visibleWidth,
-                        -PyramidalOrigin.Y);
-                    double dx = ((extent.MinX - schema.Extent.MinX) / worldWidth) * overview.Width;
-                    double dy = ((schema.Extent.MaxY - extent.MaxY) / worldHeight) * overview.Height;
-                    double dw = (extent.Width / worldWidth) * overview.Width;
-                    double dh = (extent.Height / worldHeight) * overview.Height;
-                    g.DrawRectangle(Pens.Red, (int)dx, (int)dy, (int)dw, (int)dh);
+                    double imageWorldWidth = GetOverviewSourceWorldWidth();
+                    double imageWorldHeight = GetOverviewSourceWorldHeight();
+                    if (imageWorldWidth > 0 && imageWorldHeight > 0)
+                    {
+                        double visibleLeft = PyramidalOrigin.X;
+                        double visibleTop = PyramidalOrigin.Y;
+                        double visibleRight = visibleLeft + (GetEffectiveViewWidth() * Resolution);
+                        double visibleBottom = visibleTop + (GetEffectiveViewHeight() * Resolution);
+
+                        float ovScaleX = (float)overview.Width / (float)imageWorldWidth;
+                        float ovScaleY = (float)overview.Height / (float)imageWorldHeight;
+
+                        float ovX = (float)(visibleLeft * ovScaleX);
+                        float ovY = (float)(visibleTop * ovScaleY);
+                        float ovW = (float)((visibleRight - visibleLeft) * ovScaleX);
+                        float ovH = (float)((visibleBottom - visibleTop) * ovScaleY);
+
+                        float rectLeft = Math.Max(0, ovX);
+                        float rectTop = Math.Max(0, ovY);
+                        float rectRight = Math.Min((float)overview.Width, ovX + ovW);
+                        float rectBottom = Math.Min((float)overview.Height, ovY + ovH);
+
+                        if (rectRight > rectLeft && rectBottom > rectTop)
+                            g.DrawRectangle(Pens.Red, rectLeft, rectTop, rectRight - rectLeft, rectBottom - rectTop);
+                    }
                 }
             }
             else
@@ -2903,25 +2922,32 @@ namespace BioImager
                     double top = (-Origin.Y) - (visibleHeight / 2.0);
                     double scaleX = overview.Width / volume.Width;
                     double scaleY = overview.Height / volume.Height;
-                    double dx = (left - volume.Location.X) * scaleX;
-                    double dy = (top - volume.Location.Y) * scaleY;
-                    double dw = visibleWidth * scaleX;
-                    double dh = visibleHeight * scaleY;
-                    g.DrawRectangle(Pens.Red, (int)dx, (int)dy, (int)dw, (int)dh);
+                    float dx = (float)((left - volume.Location.X) * scaleX);
+                    float dy = (float)((top - volume.Location.Y) * scaleY);
+                    float dw = Math.Max(1f, (float)(visibleWidth * scaleX));
+                    float dh = Math.Max(1f, (float)(visibleHeight * scaleY));
+                    g.DrawRectangle(Pens.Red, dx, dy, dw, dh);
                 }
             }
             g.ResetTransform();
         }
 
-        private BruTile.ITileSchema GetSelectedPyramidalSchema()
+        private double GetOverviewSourceWorldWidth()
         {
-            if (SelectedImage?.OpenSlideBase != null)
-                return SelectedImage.OpenSlideBase.Schema;
-            if (SelectedImage?.SlideBase != null)
-                return SelectedImage.SlideBase.Schema;
-            if (_openSlideBase != null)
-                return _openSlideBase.Schema;
-            return _slideBase?.Schema;
+            if (overviewSourceWidth > 0 && overviewSourceResolution > 0)
+                return overviewSourceWidth * overviewSourceResolution;
+            if (SelectedImage?.Resolutions.Count > 0)
+                return SelectedImage.Resolutions[0].SizeX * Math.Max(1e-9, SelectedImage.Resolutions[0].PhysicalSizeX);
+            return 0;
+        }
+
+        private double GetOverviewSourceWorldHeight()
+        {
+            if (overviewSourceHeight > 0 && overviewSourceResolution > 0)
+                return overviewSourceHeight * overviewSourceResolution;
+            if (SelectedImage?.Resolutions.Count > 0)
+                return SelectedImage.Resolutions[0].SizeY * Math.Max(1e-9, SelectedImage.Resolutions[0].PhysicalSizeY);
+            return 0;
         }
 
         private System.Drawing.Bitmap CreateOpenSlideOverviewPreview(byte[] bgraBytes, int width, int height)
