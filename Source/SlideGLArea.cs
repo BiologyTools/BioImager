@@ -451,9 +451,31 @@ void main()
             if (_textureCache.Count >= MAX_CACHED_TEXTURES)
                 EvictOldestTextures(MAX_CACHED_TEXTURES / 4);
 
-            // Validate pixel data size
-            int expectedBytes = tileWidth * tileHeight * 4;
-            if (pixelData.Length < expectedBytes)
+            int expectedPixels = tileWidth * tileHeight;
+            if (expectedPixels <= 0)
+                return false;
+
+            byte[] uploadData = pixelData;
+            PixelFormat uploadFormat = PixelFormat.Bgra;
+            int expectedBytes = expectedPixels * 4;
+
+            if (pixelData.Length == expectedBytes)
+            {
+                // Already BGRA.
+            }
+            else if (pixelData.Length == expectedPixels * 3)
+            {
+                uploadData = Convert24BitRgbToBgra(pixelData, expectedPixels);
+            }
+            else if (pixelData.Length >= expectedPixels * 2)
+            {
+                uploadData = Convert16BitGrayToBgra(pixelData, expectedPixels);
+            }
+            else if (pixelData.Length >= expectedPixels)
+            {
+                uploadData = Convert8BitGrayToBgra(pixelData, expectedPixels);
+            }
+            else
             {
                 return false;
             }
@@ -466,7 +488,7 @@ void main()
             // OpenSlide-style tile buffers arrive as BGRA on little-endian systems.
             // Using the matching OpenGL pixel format avoids channel/alpha mismatches.
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-                          tileWidth, tileHeight, 0, PixelFormat.Bgra, PixelType.UnsignedByte, pixelData);
+                          tileWidth, tileHeight, 0, uploadFormat, PixelType.UnsignedByte, uploadData);
 
             var glErr = GL.GetError();
             if (glErr != ErrorCode.NoError)
@@ -483,6 +505,73 @@ void main()
             GL.BindTexture(TextureTarget.Texture2D, 0);
             _textureCache[index] = tex;
             return true;
+        }
+
+        private static byte[] Convert8BitGrayToBgra(byte[] grayBytes, int pixelCount)
+        {
+            byte[] rgba = new byte[pixelCount * 4];
+            int availablePixels = Math.Min(pixelCount, grayBytes.Length);
+            for (int i = 0, src = 0, dst = 0; i < availablePixels; i++, src++, dst += 4)
+            {
+                byte value = grayBytes[src];
+                rgba[dst] = value;
+                rgba[dst + 1] = value;
+                rgba[dst + 2] = value;
+                rgba[dst + 3] = 255;
+            }
+            return rgba;
+        }
+
+        private static byte[] Convert16BitGrayToBgra(byte[] grayBytes, int pixelCount)
+        {
+            byte[] rgba = new byte[pixelCount * 4];
+            int availablePixels = Math.Min(pixelCount, grayBytes.Length / 2);
+
+            if (availablePixels <= 0)
+                return rgba;
+
+            ushort min = ushort.MaxValue;
+            ushort max = ushort.MinValue;
+            for (int i = 0, src = 0; i < availablePixels; i++, src += 2)
+            {
+                ushort value = (ushort)(grayBytes[src] | (grayBytes[src + 1] << 8));
+                if (value < min)
+                    min = value;
+                if (value > max)
+                    max = value;
+            }
+
+            int range = max - min;
+            if (range <= 0)
+                range = 1;
+
+            for (int i = 0, src = 0, dst = 0; i < availablePixels; i++, src += 2, dst += 4)
+            {
+                ushort value = (ushort)(grayBytes[src] | (grayBytes[src + 1] << 8));
+                byte scaled = (byte)(((value - min) * 255) / range);
+                rgba[dst] = scaled;
+                rgba[dst + 1] = scaled;
+                rgba[dst + 2] = scaled;
+                rgba[dst + 3] = 255;
+            }
+            return rgba;
+        }
+
+        private static byte[] Convert24BitRgbToBgra(byte[] rgbBytes, int pixelCount)
+        {
+            byte[] rgba = new byte[pixelCount * 4];
+            int availablePixels = Math.Min(pixelCount, rgbBytes.Length / 3);
+            for (int i = 0, src = 0, dst = 0; i < availablePixels; i++, src += 3, dst += 4)
+            {
+                byte blue = rgbBytes[src];
+                byte green = rgbBytes[src + 1];
+                byte red = rgbBytes[src + 2];
+                rgba[dst] = blue;
+                rgba[dst + 1] = green;
+                rgba[dst + 2] = red;
+                rgba[dst + 3] = 255;
+            }
+            return rgba;
         }
 
         /// <summary>

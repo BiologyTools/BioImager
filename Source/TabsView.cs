@@ -1,16 +1,20 @@
-﻿using System;
+﻿using AForge;
+using BioImager.Source;
+using BioLib;
+using javax.swing.text;
+using OpenSlideGTK;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Threading;
-using AForge;
-using OpenSlideGTK;
-using RotateFlipType = AForge.RotateFlipType;
-using BioLib;
+using System.Windows.Forms;
+using ZarrNET.Core;
+using ZarrNET.Core.Helpers;
 using BioImage = BioLib.BioImage;
-using javax.swing.text;
+using RotateFlipType = AForge.RotateFlipType;
+using ZCT = AForge.ZCT;
 namespace BioImager
 {
     public partial class TabsView : Form
@@ -147,7 +151,7 @@ namespace BioImager
             int i = 0;
             foreach (ImageView t in tabControl.TabPages)
             {
-                if(t.Name == b.filename)
+                if (t.Name == b.filename)
                 {
                     Images.RemoveImage(b);
                     return;
@@ -536,10 +540,10 @@ namespace BioImager
                 saveToolStripMenuItem.PerformClick();
             }
             else
-            if (e.KeyCode == Keys.O && e.Control)
-            {
-                openToolStripMenuItem.PerformClick();
-            }
+                if (e.KeyCode == Keys.O && e.Control)
+                {
+                    openToolStripMenuItem.PerformClick();
+                }
         }
 
         /// It shows the toolbox when the user clicks on the toolbox menu item
@@ -1721,39 +1725,39 @@ namespace BioImager
             if (name == "ROI Manager")
                 App.manager.Close();
             else
-            if (name == "Stack Tool")
-                App.stackTools.Close();
-            else
-            if (name == "Channels Tool")
-                App.channelsTool.Close();
-            else
-            if (name == "Scripting")
-                App.runner.Close();
-            else
-            if (name == "Recorder")
-                App.recorder.Close();
-            else
-            if (name == "Tools")
-                App.tools.Close();
-            else
-                for (int v = 0; v < c; v++)
-                {
-                    int cc = tbs.GetViewer(v).Images.Count;
-                    for (int im = 0; im < cc; im++)
-                    {
-                        ImageView vi = tbs.GetViewer(v);
-                        if (vi.Images[im].Filename == Path.GetFileName(name))
-                        {
-                            tbs.RemoveTab(vi.Images[im]);
-                            return;
-                        }
-                        else if (vi.Name == name)
-                        {
-                            tbs.RemoveTab(vi.Images[im]);
-                            return;
-                        }
-                    }
-                }
+                if (name == "Stack Tool")
+                    App.stackTools.Close();
+                else
+                    if (name == "Channels Tool")
+                        App.channelsTool.Close();
+                    else
+                        if (name == "Scripting")
+                            App.runner.Close();
+                        else
+                            if (name == "Recorder")
+                                App.recorder.Close();
+                            else
+                                if (name == "Tools")
+                                    App.tools.Close();
+                                else
+                                    for (int v = 0; v < c; v++)
+                                    {
+                                        int cc = tbs.GetViewer(v).Images.Count;
+                                        for (int im = 0; im < cc; im++)
+                                        {
+                                            ImageView vi = tbs.GetViewer(v);
+                                            if (vi.Images[im].Filename == Path.GetFileName(name))
+                                            {
+                                                tbs.RemoveTab(vi.Images[im]);
+                                                return;
+                                            }
+                                            else if (vi.Name == name)
+                                            {
+                                                tbs.RemoveTab(vi.Images[im]);
+                                                return;
+                                            }
+                                        }
+                                    }
 
         }
         public void RenameTab(string name, string newName)
@@ -1779,6 +1783,23 @@ namespace BioImager
             ImageView v = App.tabsView.GetViewer(ImageView.SelectedImage.Filename);
             v.Name = ImageView.SelectedImage.Filename;
             BioLib.Recorder.AddLine("App.Rename(\"" + text + "\");", false);
+        }
+
+        private async void zarrMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+                return;
+            var bio = await BioImage.OpenURL(folderBrowserDialog.SelectedPath, new ZCT(0, 0, 0), 0, 0, 256, 256);
+            App.tabsView.AddTab(bio);
+        }
+
+        private async void uriMenuItem_Click(object sender, EventArgs e)
+        {
+            UrlDialog dialog = new UrlDialog();
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
+            var bio = await BioImage.OpenURL(dialog.Url, new ZCT(0, 0, 0), 0, 0, 256, 256);
+            App.tabsView.AddTab(bio);
         }
     }
 }

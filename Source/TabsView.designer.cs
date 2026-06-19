@@ -45,30 +45,6 @@ namespace BioImager
             saveCSVFileDialog = new SaveFileDialog();
             openCSVFileDialog = new OpenFileDialog();
             saveTiffFileDialog = new SaveFileDialog();
-            fileToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem = new ToolStripMenuItem();
-            openRecentToolStripMenuItem = new ToolStripMenuItem();
-            openOMEToolStripMenuItem = new ToolStripMenuItem();
-            openOMESeriesToolStripMenuItem = new ToolStripMenuItem();
-            openQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
-            openSeriesToolStripMenuItem = new ToolStripMenuItem();
-            sepToolStripMenuItem1 = new ToolStripSeparator();
-            addImagesToTabToolStripMenuItem = new ToolStripMenuItem();
-            addImagesOMEToolStripMenuItem = new ToolStripMenuItem();
-            sepToolStripMenuItem2 = new ToolStripSeparator();
-            saveToolStripMenuItem = new ToolStripMenuItem();
-            saveOMEToolStripMenuItem = new ToolStripMenuItem();
-            saveTabToolStripMenuItem = new ToolStripMenuItem();
-            saveTabTiffToolStripMenuItem = new ToolStripMenuItem();
-            saveSeriesToolStripMenuItem = new ToolStripMenuItem();
-            saveQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
-            savePyramidalToolStripMenuItem = new ToolStripMenuItem();
-            saveNumPyToolStripMenuItem = new ToolStripMenuItem();
-            sepToolStripMenuItem3 = new ToolStripSeparator();
-            imagesToStackToolStripMenuItem = new ToolStripMenuItem();
-            newTabViewToolStripMenuItem = new ToolStripMenuItem();
-            nodeViewToolStripMenuItem = new ToolStripMenuItem();
-            clearRecentToolStripMenuItem = new ToolStripMenuItem();
             sizeModeToolStripMenuItem = new ToolStripMenuItem();
             rGBToolStripMenuItem = new ToolStripMenuItem();
             filteredToolStripMenuItem = new ToolStripMenuItem();
@@ -99,6 +75,32 @@ namespace BioImager
             rotateToolStripMenuItem = new ToolStripMenuItem();
             findFocusToolStripMenuItem = new ToolStripMenuItem();
             menuStrip = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            uriMenuItem = new ToolStripMenuItem();
+            openRecentToolStripMenuItem = new ToolStripMenuItem();
+            openOMEToolStripMenuItem = new ToolStripMenuItem();
+            openOMESeriesToolStripMenuItem = new ToolStripMenuItem();
+            openQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
+            zarrMenuItem = new ToolStripMenuItem();
+            openSeriesToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem1 = new ToolStripSeparator();
+            addImagesToTabToolStripMenuItem = new ToolStripMenuItem();
+            addImagesOMEToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem2 = new ToolStripSeparator();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            saveOMEToolStripMenuItem = new ToolStripMenuItem();
+            saveTabToolStripMenuItem = new ToolStripMenuItem();
+            saveTabTiffToolStripMenuItem = new ToolStripMenuItem();
+            saveSeriesToolStripMenuItem = new ToolStripMenuItem();
+            saveQuPathProjectToolStripMenuItem = new ToolStripMenuItem();
+            savePyramidalToolStripMenuItem = new ToolStripMenuItem();
+            saveNumPyToolStripMenuItem = new ToolStripMenuItem();
+            sepToolStripMenuItem3 = new ToolStripSeparator();
+            imagesToStackToolStripMenuItem = new ToolStripMenuItem();
+            newTabViewToolStripMenuItem = new ToolStripMenuItem();
+            nodeViewToolStripMenuItem = new ToolStripMenuItem();
+            clearRecentToolStripMenuItem = new ToolStripMenuItem();
             formatToolStripMenuItem = new ToolStripMenuItem();
             bit8ToolStripMenuItem = new ToolStripMenuItem();
             bit16ToolStripMenuItem = new ToolStripMenuItem();
@@ -123,12 +125,15 @@ namespace BioImager
             commandToolStripMenuItem = new ToolStripMenuItem();
             recentToolStripMenuItem = new ToolStripMenuItem();
             runToolStripMenuItem1 = new ToolStripMenuItem();
+            oMEROToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             openImageJROI = new OpenFileDialog();
             saveImageJROI = new SaveFileDialog();
             openQuPathProjDialog = new OpenFileDialog();
             saveQuPathDialog = new SaveFileDialog();
-            oMEROToolStripMenuItem = new ToolStripMenuItem();
+            saveFileDialog1 = new SaveFileDialog();
+            openFileDialog1 = new OpenFileDialog();
+            saveFileDialog2 = new SaveFileDialog();
             panel.SuspendLayout();
             tabContextMenuStrip.SuspendLayout();
             menuStrip.SuspendLayout();
@@ -229,167 +234,6 @@ namespace BioImager
             saveTiffFileDialog.SupportMultiDottedExtensions = true;
             saveTiffFileDialog.Title = "Save Image";
             // 
-            // fileToolStripMenuItem
-            // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRecentToolStripMenuItem, openOMEToolStripMenuItem, openOMESeriesToolStripMenuItem, openQuPathProjectToolStripMenuItem, openSeriesToolStripMenuItem, sepToolStripMenuItem1, addImagesToTabToolStripMenuItem, addImagesOMEToolStripMenuItem, sepToolStripMenuItem2, saveToolStripMenuItem, saveOMEToolStripMenuItem, saveTabToolStripMenuItem, saveTabTiffToolStripMenuItem, saveSeriesToolStripMenuItem, saveQuPathProjectToolStripMenuItem, savePyramidalToolStripMenuItem, saveNumPyToolStripMenuItem, sepToolStripMenuItem3, imagesToStackToolStripMenuItem, newTabViewToolStripMenuItem, nodeViewToolStripMenuItem, clearRecentToolStripMenuItem });
-            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(37, 20);
-            fileToolStripMenuItem.Text = "File";
-            // 
-            // openToolStripMenuItem
-            // 
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(202, 22);
-            openToolStripMenuItem.Text = "Open Images";
-            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
-            // 
-            // openRecentToolStripMenuItem
-            // 
-            openRecentToolStripMenuItem.Name = "openRecentToolStripMenuItem";
-            openRecentToolStripMenuItem.Size = new Size(202, 22);
-            openRecentToolStripMenuItem.Text = "Open Recent";
-            openRecentToolStripMenuItem.DropDownOpening += openRecentToolStripMenuItem_DropDownOpening;
-            // 
-            // openOMEToolStripMenuItem
-            // 
-            openOMEToolStripMenuItem.Name = "openOMEToolStripMenuItem";
-            openOMEToolStripMenuItem.Size = new Size(202, 22);
-            openOMEToolStripMenuItem.Text = "Open OME Images";
-            openOMEToolStripMenuItem.Click += openOMEToolStripMenuItem_Click_1;
-            // 
-            // openOMESeriesToolStripMenuItem
-            // 
-            openOMESeriesToolStripMenuItem.Name = "openOMESeriesToolStripMenuItem";
-            openOMESeriesToolStripMenuItem.Size = new Size(202, 22);
-            openOMESeriesToolStripMenuItem.Text = "Open OME Series";
-            openOMESeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click;
-            // 
-            // openQuPathProjectToolStripMenuItem
-            // 
-            openQuPathProjectToolStripMenuItem.Name = "openQuPathProjectToolStripMenuItem";
-            openQuPathProjectToolStripMenuItem.Size = new Size(202, 22);
-            openQuPathProjectToolStripMenuItem.Text = "Open QuPath Project";
-            openQuPathProjectToolStripMenuItem.Click += openQuPathProjectToolStripMenuItem_Click;
-            // 
-            // openSeriesToolStripMenuItem
-            // 
-            openSeriesToolStripMenuItem.Name = "openSeriesToolStripMenuItem";
-            openSeriesToolStripMenuItem.Size = new Size(202, 22);
-            openSeriesToolStripMenuItem.Text = "Open Series";
-            openSeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click_1;
-            // 
-            // sepToolStripMenuItem1
-            // 
-            sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
-            sepToolStripMenuItem1.Size = new Size(199, 6);
-            // 
-            // addImagesToTabToolStripMenuItem
-            // 
-            addImagesToTabToolStripMenuItem.Name = "addImagesToTabToolStripMenuItem";
-            addImagesToTabToolStripMenuItem.Size = new Size(202, 22);
-            addImagesToTabToolStripMenuItem.Text = "Add Images To Tab";
-            addImagesToTabToolStripMenuItem.Click += addImagesToTabToolStripMenuItem_Click;
-            // 
-            // addImagesOMEToolStripMenuItem
-            // 
-            addImagesOMEToolStripMenuItem.Name = "addImagesOMEToolStripMenuItem";
-            addImagesOMEToolStripMenuItem.Size = new Size(202, 22);
-            addImagesOMEToolStripMenuItem.Text = "Add OME Images To Tab";
-            addImagesOMEToolStripMenuItem.Click += addImagesOMEToolStripMenuItem_Click;
-            // 
-            // sepToolStripMenuItem2
-            // 
-            sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
-            sepToolStripMenuItem2.Size = new Size(199, 6);
-            // 
-            // saveToolStripMenuItem
-            // 
-            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(202, 22);
-            saveToolStripMenuItem.Text = "Save Selected Tiff";
-            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
-            // 
-            // saveOMEToolStripMenuItem
-            // 
-            saveOMEToolStripMenuItem.Name = "saveOMEToolStripMenuItem";
-            saveOMEToolStripMenuItem.Size = new Size(202, 22);
-            saveOMEToolStripMenuItem.Text = "Save Selected OME";
-            saveOMEToolStripMenuItem.Click += saveOMEToolStripMenuItem_Click;
-            // 
-            // saveTabToolStripMenuItem
-            // 
-            saveTabToolStripMenuItem.Name = "saveTabToolStripMenuItem";
-            saveTabToolStripMenuItem.Size = new Size(202, 22);
-            saveTabToolStripMenuItem.Text = "Save Tab OME";
-            saveTabToolStripMenuItem.Click += saveTabToolStripMenuItem_Click;
-            // 
-            // saveTabTiffToolStripMenuItem
-            // 
-            saveTabTiffToolStripMenuItem.Name = "saveTabTiffToolStripMenuItem";
-            saveTabTiffToolStripMenuItem.Size = new Size(202, 22);
-            saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
-            saveTabTiffToolStripMenuItem.Click += saveTabTiffToolStripMenuItem_Click;
-            // 
-            // saveSeriesToolStripMenuItem
-            // 
-            saveSeriesToolStripMenuItem.Name = "saveSeriesToolStripMenuItem";
-            saveSeriesToolStripMenuItem.Size = new Size(202, 22);
-            saveSeriesToolStripMenuItem.Text = "Save Series";
-            saveSeriesToolStripMenuItem.Click += saveSeriesToolStripMenuItem_Click;
-            // 
-            // saveQuPathProjectToolStripMenuItem
-            // 
-            saveQuPathProjectToolStripMenuItem.Name = "saveQuPathProjectToolStripMenuItem";
-            saveQuPathProjectToolStripMenuItem.Size = new Size(202, 22);
-            saveQuPathProjectToolStripMenuItem.Text = "Save QuPath Project";
-            saveQuPathProjectToolStripMenuItem.Click += saveQuPathProjectToolStripMenuItem_Click;
-            // 
-            // savePyramidalToolStripMenuItem
-            // 
-            savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
-            savePyramidalToolStripMenuItem.Size = new Size(202, 22);
-            savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
-            savePyramidalToolStripMenuItem.Click += savePyramidalToolStripMenuItem_Click;
-            // 
-            // saveNumPyToolStripMenuItem
-            // 
-            saveNumPyToolStripMenuItem.Name = "saveNumPyToolStripMenuItem";
-            saveNumPyToolStripMenuItem.Size = new Size(202, 22);
-            saveNumPyToolStripMenuItem.Text = "Save NumPy";
-            // 
-            // sepToolStripMenuItem3
-            // 
-            sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
-            sepToolStripMenuItem3.Size = new Size(199, 6);
-            // 
-            // imagesToStackToolStripMenuItem
-            // 
-            imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
-            imagesToStackToolStripMenuItem.Size = new Size(202, 22);
-            imagesToStackToolStripMenuItem.Text = "Images To Stack";
-            imagesToStackToolStripMenuItem.Click += imagesToStackToolStripMenuItem_Click;
-            // 
-            // newTabViewToolStripMenuItem
-            // 
-            newTabViewToolStripMenuItem.Name = "newTabViewToolStripMenuItem";
-            newTabViewToolStripMenuItem.Size = new Size(202, 22);
-            newTabViewToolStripMenuItem.Text = "New Process";
-            newTabViewToolStripMenuItem.Click += newTabViewToolStripMenuItem_Click;
-            // 
-            // nodeViewToolStripMenuItem
-            // 
-            nodeViewToolStripMenuItem.Name = "nodeViewToolStripMenuItem";
-            nodeViewToolStripMenuItem.Size = new Size(202, 22);
-            nodeViewToolStripMenuItem.Text = "Node View";
-            nodeViewToolStripMenuItem.Click += nodeViewToolStripMenuItem_Click;
-            // 
-            // clearRecentToolStripMenuItem
-            // 
-            clearRecentToolStripMenuItem.Name = "clearRecentToolStripMenuItem";
-            clearRecentToolStripMenuItem.Size = new Size(202, 22);
-            clearRecentToolStripMenuItem.Text = "Clear Recent";
-            clearRecentToolStripMenuItem.Click += clearRecentToolStripMenuItem_Click;
-            // 
             // sizeModeToolStripMenuItem
             // 
             sizeModeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rGBToolStripMenuItem, filteredToolStripMenuItem, rawToolStripMenuItem, emissionToolStripMenuItem, _3dToolStripMenuItem, sepToolStripMenuItem, dToolStripMenuItem, xMLToolStripMenuItem });
@@ -401,7 +245,7 @@ namespace BioImager
             // 
             rGBToolStripMenuItem.CheckOnClick = true;
             rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
-            rGBToolStripMenuItem.Size = new Size(194, 22);
+            rGBToolStripMenuItem.Size = new Size(121, 22);
             rGBToolStripMenuItem.Text = "RGB";
             rGBToolStripMenuItem.Click += rGBToolStripMenuItem_Click;
             // 
@@ -411,7 +255,7 @@ namespace BioImager
             filteredToolStripMenuItem.CheckOnClick = true;
             filteredToolStripMenuItem.CheckState = CheckState.Checked;
             filteredToolStripMenuItem.Name = "filteredToolStripMenuItem";
-            filteredToolStripMenuItem.Size = new Size(194, 22);
+            filteredToolStripMenuItem.Size = new Size(121, 22);
             filteredToolStripMenuItem.Text = "Filtered";
             filteredToolStripMenuItem.Click += filteredToolStripMenuItem_Click;
             // 
@@ -419,26 +263,36 @@ namespace BioImager
             // 
             rawToolStripMenuItem.CheckOnClick = true;
             rawToolStripMenuItem.Name = "rawToolStripMenuItem";
-            rawToolStripMenuItem.Size = new Size(194, 22);
+            rawToolStripMenuItem.Size = new Size(121, 22);
             rawToolStripMenuItem.Text = "Raw";
             rawToolStripMenuItem.Click += rawToolStripMenuItem_Click;
             // 
             // emissionToolStripMenuItem
             // 
             emissionToolStripMenuItem.Name = "emissionToolStripMenuItem";
-            emissionToolStripMenuItem.Size = new Size(194, 22);
+            emissionToolStripMenuItem.Size = new Size(121, 22);
             emissionToolStripMenuItem.Text = "Emission";
             emissionToolStripMenuItem.Click += emissionToolStripMenuItem_Click;
+            // 
+            // _3dToolStripMenuItem
+            // 
+            _3dToolStripMenuItem.Name = "_3dToolStripMenuItem";
+            _3dToolStripMenuItem.Size = new Size(121, 22);
             // 
             // sepToolStripMenuItem
             // 
             sepToolStripMenuItem.Name = "sepToolStripMenuItem";
-            sepToolStripMenuItem.Size = new Size(191, 6);
+            sepToolStripMenuItem.Size = new Size(118, 6);
+            // 
+            // dToolStripMenuItem
+            // 
+            dToolStripMenuItem.Name = "dToolStripMenuItem";
+            dToolStripMenuItem.Size = new Size(121, 22);
             // 
             // xMLToolStripMenuItem
             // 
             xMLToolStripMenuItem.Name = "xMLToolStripMenuItem";
-            xMLToolStripMenuItem.Size = new Size(194, 22);
+            xMLToolStripMenuItem.Size = new Size(121, 22);
             xMLToolStripMenuItem.Text = "XML";
             xMLToolStripMenuItem.Click += xMLToolStripMenuItem_Click;
             // 
@@ -446,14 +300,14 @@ namespace BioImager
             // 
             toolboxToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setToolToolStripMenuItem });
             toolboxToolStripMenuItem.Name = "toolboxToolStripMenuItem";
-            toolboxToolStripMenuItem.Size = new Size(46, 20);
+            toolboxToolStripMenuItem.Size = new Size(47, 20);
             toolboxToolStripMenuItem.Text = "Tools";
             toolboxToolStripMenuItem.Click += toolboxToolStripMenuItem_Click;
             // 
             // setToolToolStripMenuItem
             // 
             setToolToolStripMenuItem.Name = "setToolToolStripMenuItem";
-            setToolToolStripMenuItem.Size = new Size(115, 22);
+            setToolToolStripMenuItem.Size = new Size(116, 22);
             setToolToolStripMenuItem.Text = "Set Tool";
             setToolToolStripMenuItem.Click += setToolToolStripMenuItem_Click;
             // 
@@ -467,56 +321,56 @@ namespace BioImager
             // rOIManagerToolStripMenuItem
             // 
             rOIManagerToolStripMenuItem.Name = "rOIManagerToolStripMenuItem";
-            rOIManagerToolStripMenuItem.Size = new Size(294, 22);
+            rOIManagerToolStripMenuItem.Size = new Size(293, 22);
             rOIManagerToolStripMenuItem.Text = "ROI Manager";
             rOIManagerToolStripMenuItem.Click += rOIManagerToolStripMenuItem_Click;
             // 
             // exportCSVToolStripMenuItem
             // 
             exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-            exportCSVToolStripMenuItem.Size = new Size(294, 22);
+            exportCSVToolStripMenuItem.Size = new Size(293, 22);
             exportCSVToolStripMenuItem.Text = "Export ROI's to CSV";
             exportCSVToolStripMenuItem.Click += exportCSVToolStripMenuItem_Click;
             // 
             // importCSVToolStripMenuItem
             // 
             importCSVToolStripMenuItem.Name = "importCSVToolStripMenuItem";
-            importCSVToolStripMenuItem.Size = new Size(294, 22);
+            importCSVToolStripMenuItem.Size = new Size(293, 22);
             importCSVToolStripMenuItem.Text = "Import ROI's from CSV";
             importCSVToolStripMenuItem.Click += importCSVToolStripMenuItem_Click;
             // 
             // exportROIsOfFolderOfImagesToolStripMenuItem
             // 
             exportROIsOfFolderOfImagesToolStripMenuItem.Name = "exportROIsOfFolderOfImagesToolStripMenuItem";
-            exportROIsOfFolderOfImagesToolStripMenuItem.Size = new Size(294, 22);
+            exportROIsOfFolderOfImagesToolStripMenuItem.Size = new Size(293, 22);
             exportROIsOfFolderOfImagesToolStripMenuItem.Text = "Export ROI's of Folder of Images";
             exportROIsOfFolderOfImagesToolStripMenuItem.Click += exportROIsOfFolderOfImagesToolStripMenuItem_Click;
             // 
             // importImageJROIToSelectedImageToolStripMenuItem
             // 
             importImageJROIToSelectedImageToolStripMenuItem.Name = "importImageJROIToSelectedImageToolStripMenuItem";
-            importImageJROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            importImageJROIToSelectedImageToolStripMenuItem.Size = new Size(293, 22);
             importImageJROIToSelectedImageToolStripMenuItem.Text = "Import ImageJ ROI to Selected Image";
             importImageJROIToSelectedImageToolStripMenuItem.Click += importImageJROIToSelectedImageToolStripMenuItem_Click;
             // 
             // exportImageJROIFromSelectedImageToolStripMenuItem
             // 
             exportImageJROIFromSelectedImageToolStripMenuItem.Name = "exportImageJROIFromSelectedImageToolStripMenuItem";
-            exportImageJROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            exportImageJROIFromSelectedImageToolStripMenuItem.Size = new Size(293, 22);
             exportImageJROIFromSelectedImageToolStripMenuItem.Text = "Export ImageJ ROI from Selected Image";
             exportImageJROIFromSelectedImageToolStripMenuItem.Click += exportImageJROIFromSelectedImageToolStripMenuItem_Click;
             // 
             // importGeoJSONROIToSelectedImageToolStripMenuItem
             // 
             importGeoJSONROIToSelectedImageToolStripMenuItem.Name = "importGeoJSONROIToSelectedImageToolStripMenuItem";
-            importGeoJSONROIToSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            importGeoJSONROIToSelectedImageToolStripMenuItem.Size = new Size(293, 22);
             importGeoJSONROIToSelectedImageToolStripMenuItem.Text = "Import GeoJSON ROI to Selected Image";
             importGeoJSONROIToSelectedImageToolStripMenuItem.Click += importGeoJSONROIToSelectedImageToolStripMenuItem_Click;
             // 
             // exportGeoJSONROIFromSelectedImageToolStripMenuItem
             // 
             exportGeoJSONROIFromSelectedImageToolStripMenuItem.Name = "exportGeoJSONROIFromSelectedImageToolStripMenuItem";
-            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Size = new Size(294, 22);
+            exportGeoJSONROIFromSelectedImageToolStripMenuItem.Size = new Size(293, 22);
             exportGeoJSONROIFromSelectedImageToolStripMenuItem.Text = "Export GeoJSON ROI from Selected Image";
             exportGeoJSONROIFromSelectedImageToolStripMenuItem.Click += exportGeoJSONROIFromSelectedImageToolStripMenuItem_Click;
             // 
@@ -530,21 +384,21 @@ namespace BioImager
             // autoThresholdToolStripMenuItem
             // 
             autoThresholdToolStripMenuItem.Name = "autoThresholdToolStripMenuItem";
-            autoThresholdToolStripMenuItem.Size = new Size(172, 22);
+            autoThresholdToolStripMenuItem.Size = new Size(173, 22);
             autoThresholdToolStripMenuItem.Text = "Auto Threshold All";
             autoThresholdToolStripMenuItem.Click += autoThresholdToolStripMenuItem_Click;
             // 
             // channelsToolToolStripMenuItem1
             // 
             channelsToolToolStripMenuItem1.Name = "channelsToolToolStripMenuItem1";
-            channelsToolToolStripMenuItem1.Size = new Size(172, 22);
+            channelsToolToolStripMenuItem1.Size = new Size(173, 22);
             channelsToolToolStripMenuItem1.Text = "Channels Tool";
             channelsToolToolStripMenuItem1.Click += channelsToolToolStripMenuItem_Click;
             // 
             // switchRedBlueToolStripMenuItem
             // 
             switchRedBlueToolStripMenuItem.Name = "switchRedBlueToolStripMenuItem";
-            switchRedBlueToolStripMenuItem.Size = new Size(172, 22);
+            switchRedBlueToolStripMenuItem.Size = new Size(173, 22);
             switchRedBlueToolStripMenuItem.Text = "Switch Red Blue";
             switchRedBlueToolStripMenuItem.Click += switchRedBlueToolStripMenuItem_Click;
             // 
@@ -593,6 +447,181 @@ namespace BioImager
             menuStrip.Size = new Size(905, 24);
             menuStrip.TabIndex = 0;
             // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, uriMenuItem, openRecentToolStripMenuItem, openOMEToolStripMenuItem, openOMESeriesToolStripMenuItem, openQuPathProjectToolStripMenuItem, zarrMenuItem, openSeriesToolStripMenuItem, sepToolStripMenuItem1, addImagesToTabToolStripMenuItem, addImagesOMEToolStripMenuItem, sepToolStripMenuItem2, saveToolStripMenuItem, saveOMEToolStripMenuItem, saveTabToolStripMenuItem, saveTabTiffToolStripMenuItem, saveSeriesToolStripMenuItem, saveQuPathProjectToolStripMenuItem, savePyramidalToolStripMenuItem, saveNumPyToolStripMenuItem, sepToolStripMenuItem3, imagesToStackToolStripMenuItem, newTabViewToolStripMenuItem, nodeViewToolStripMenuItem, clearRecentToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(204, 22);
+            openToolStripMenuItem.Text = "Open Images";
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
+            // 
+            // uriMenuItem
+            // 
+            uriMenuItem.Name = "uriMenuItem";
+            uriMenuItem.Size = new Size(204, 22);
+            uriMenuItem.Text = "Open URL";
+            uriMenuItem.Click += uriMenuItem_Click;
+            // 
+            // openRecentToolStripMenuItem
+            // 
+            openRecentToolStripMenuItem.Name = "openRecentToolStripMenuItem";
+            openRecentToolStripMenuItem.Size = new Size(204, 22);
+            openRecentToolStripMenuItem.Text = "Open Recent";
+            openRecentToolStripMenuItem.DropDownOpening += openRecentToolStripMenuItem_DropDownOpening;
+            // 
+            // openOMEToolStripMenuItem
+            // 
+            openOMEToolStripMenuItem.Name = "openOMEToolStripMenuItem";
+            openOMEToolStripMenuItem.Size = new Size(204, 22);
+            openOMEToolStripMenuItem.Text = "Open OME Images";
+            openOMEToolStripMenuItem.Click += openOMEToolStripMenuItem_Click_1;
+            // 
+            // openOMESeriesToolStripMenuItem
+            // 
+            openOMESeriesToolStripMenuItem.Name = "openOMESeriesToolStripMenuItem";
+            openOMESeriesToolStripMenuItem.Size = new Size(204, 22);
+            openOMESeriesToolStripMenuItem.Text = "Open OME Series";
+            openOMESeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click;
+            // 
+            // openQuPathProjectToolStripMenuItem
+            // 
+            openQuPathProjectToolStripMenuItem.Name = "openQuPathProjectToolStripMenuItem";
+            openQuPathProjectToolStripMenuItem.Size = new Size(204, 22);
+            openQuPathProjectToolStripMenuItem.Text = "Open QuPath Project";
+            openQuPathProjectToolStripMenuItem.Click += openQuPathProjectToolStripMenuItem_Click;
+            // 
+            // zarrMenuItem
+            // 
+            zarrMenuItem.Name = "zarrMenuItem";
+            zarrMenuItem.Size = new Size(204, 22);
+            zarrMenuItem.Text = "Open Zarr";
+            zarrMenuItem.Click += zarrMenuItem_Click;
+            // 
+            // openSeriesToolStripMenuItem
+            // 
+            openSeriesToolStripMenuItem.Name = "openSeriesToolStripMenuItem";
+            openSeriesToolStripMenuItem.Size = new Size(204, 22);
+            openSeriesToolStripMenuItem.Text = "Open Series";
+            openSeriesToolStripMenuItem.Click += openSeriesToolStripMenuItem_Click_1;
+            // 
+            // sepToolStripMenuItem1
+            // 
+            sepToolStripMenuItem1.Name = "sepToolStripMenuItem1";
+            sepToolStripMenuItem1.Size = new Size(201, 6);
+            // 
+            // addImagesToTabToolStripMenuItem
+            // 
+            addImagesToTabToolStripMenuItem.Name = "addImagesToTabToolStripMenuItem";
+            addImagesToTabToolStripMenuItem.Size = new Size(204, 22);
+            addImagesToTabToolStripMenuItem.Text = "Add Images To Tab";
+            addImagesToTabToolStripMenuItem.Click += addImagesToTabToolStripMenuItem_Click;
+            // 
+            // addImagesOMEToolStripMenuItem
+            // 
+            addImagesOMEToolStripMenuItem.Name = "addImagesOMEToolStripMenuItem";
+            addImagesOMEToolStripMenuItem.Size = new Size(204, 22);
+            addImagesOMEToolStripMenuItem.Text = "Add OME Images To Tab";
+            addImagesOMEToolStripMenuItem.Click += addImagesOMEToolStripMenuItem_Click;
+            // 
+            // sepToolStripMenuItem2
+            // 
+            sepToolStripMenuItem2.Name = "sepToolStripMenuItem2";
+            sepToolStripMenuItem2.Size = new Size(201, 6);
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(204, 22);
+            saveToolStripMenuItem.Text = "Save Selected Tiff";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+            // 
+            // saveOMEToolStripMenuItem
+            // 
+            saveOMEToolStripMenuItem.Name = "saveOMEToolStripMenuItem";
+            saveOMEToolStripMenuItem.Size = new Size(204, 22);
+            saveOMEToolStripMenuItem.Text = "Save Selected OME";
+            saveOMEToolStripMenuItem.Click += saveOMEToolStripMenuItem_Click;
+            // 
+            // saveTabToolStripMenuItem
+            // 
+            saveTabToolStripMenuItem.Name = "saveTabToolStripMenuItem";
+            saveTabToolStripMenuItem.Size = new Size(204, 22);
+            saveTabToolStripMenuItem.Text = "Save Tab OME";
+            saveTabToolStripMenuItem.Click += saveTabToolStripMenuItem_Click;
+            // 
+            // saveTabTiffToolStripMenuItem
+            // 
+            saveTabTiffToolStripMenuItem.Name = "saveTabTiffToolStripMenuItem";
+            saveTabTiffToolStripMenuItem.Size = new Size(204, 22);
+            saveTabTiffToolStripMenuItem.Text = "Save Tab Tiff";
+            saveTabTiffToolStripMenuItem.Click += saveTabTiffToolStripMenuItem_Click;
+            // 
+            // saveSeriesToolStripMenuItem
+            // 
+            saveSeriesToolStripMenuItem.Name = "saveSeriesToolStripMenuItem";
+            saveSeriesToolStripMenuItem.Size = new Size(204, 22);
+            saveSeriesToolStripMenuItem.Text = "Save Series";
+            saveSeriesToolStripMenuItem.Click += saveSeriesToolStripMenuItem_Click;
+            // 
+            // saveQuPathProjectToolStripMenuItem
+            // 
+            saveQuPathProjectToolStripMenuItem.Name = "saveQuPathProjectToolStripMenuItem";
+            saveQuPathProjectToolStripMenuItem.Size = new Size(204, 22);
+            saveQuPathProjectToolStripMenuItem.Text = "Save QuPath Project";
+            saveQuPathProjectToolStripMenuItem.Click += saveQuPathProjectToolStripMenuItem_Click;
+            // 
+            // savePyramidalToolStripMenuItem
+            // 
+            savePyramidalToolStripMenuItem.Name = "savePyramidalToolStripMenuItem";
+            savePyramidalToolStripMenuItem.Size = new Size(204, 22);
+            savePyramidalToolStripMenuItem.Text = "Save Pyramidal";
+            savePyramidalToolStripMenuItem.Click += savePyramidalToolStripMenuItem_Click;
+            // 
+            // saveNumPyToolStripMenuItem
+            // 
+            saveNumPyToolStripMenuItem.Name = "saveNumPyToolStripMenuItem";
+            saveNumPyToolStripMenuItem.Size = new Size(204, 22);
+            saveNumPyToolStripMenuItem.Text = "Save NumPy";
+            // 
+            // sepToolStripMenuItem3
+            // 
+            sepToolStripMenuItem3.Name = "sepToolStripMenuItem3";
+            sepToolStripMenuItem3.Size = new Size(201, 6);
+            // 
+            // imagesToStackToolStripMenuItem
+            // 
+            imagesToStackToolStripMenuItem.Name = "imagesToStackToolStripMenuItem";
+            imagesToStackToolStripMenuItem.Size = new Size(204, 22);
+            imagesToStackToolStripMenuItem.Text = "Images To Stack";
+            imagesToStackToolStripMenuItem.Click += imagesToStackToolStripMenuItem_Click;
+            // 
+            // newTabViewToolStripMenuItem
+            // 
+            newTabViewToolStripMenuItem.Name = "newTabViewToolStripMenuItem";
+            newTabViewToolStripMenuItem.Size = new Size(204, 22);
+            newTabViewToolStripMenuItem.Text = "New Process";
+            newTabViewToolStripMenuItem.Click += newTabViewToolStripMenuItem_Click;
+            // 
+            // nodeViewToolStripMenuItem
+            // 
+            nodeViewToolStripMenuItem.Name = "nodeViewToolStripMenuItem";
+            nodeViewToolStripMenuItem.Size = new Size(204, 22);
+            nodeViewToolStripMenuItem.Text = "Node View";
+            nodeViewToolStripMenuItem.Click += nodeViewToolStripMenuItem_Click;
+            // 
+            // clearRecentToolStripMenuItem
+            // 
+            clearRecentToolStripMenuItem.Name = "clearRecentToolStripMenuItem";
+            clearRecentToolStripMenuItem.Size = new Size(204, 22);
+            clearRecentToolStripMenuItem.Text = "Clear Recent";
+            clearRecentToolStripMenuItem.Click += clearRecentToolStripMenuItem_Click;
+            // 
             // formatToolStripMenuItem
             // 
             formatToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { bit8ToolStripMenuItem, bit16ToolStripMenuItem, to24BitToolStripMenuItem, to36BitToolStripMenuItem, to48BitToolStripMenuItem });
@@ -603,35 +632,35 @@ namespace BioImager
             // bit8ToolStripMenuItem
             // 
             bit8ToolStripMenuItem.Name = "bit8ToolStripMenuItem";
-            bit8ToolStripMenuItem.Size = new Size(118, 22);
+            bit8ToolStripMenuItem.Size = new Size(119, 22);
             bit8ToolStripMenuItem.Text = "To 8 Bit";
             bit8ToolStripMenuItem.Click += bit8ToolStripMenuItem_Click;
             // 
             // bit16ToolStripMenuItem
             // 
             bit16ToolStripMenuItem.Name = "bit16ToolStripMenuItem";
-            bit16ToolStripMenuItem.Size = new Size(118, 22);
+            bit16ToolStripMenuItem.Size = new Size(119, 22);
             bit16ToolStripMenuItem.Text = "To 16 Bit";
             bit16ToolStripMenuItem.Click += bit16ToolStripMenuItem_Click;
             // 
             // to24BitToolStripMenuItem
             // 
             to24BitToolStripMenuItem.Name = "to24BitToolStripMenuItem";
-            to24BitToolStripMenuItem.Size = new Size(118, 22);
+            to24BitToolStripMenuItem.Size = new Size(119, 22);
             to24BitToolStripMenuItem.Text = "To 24 Bit";
             to24BitToolStripMenuItem.Click += to24BitToolStripMenuItem_Click;
             // 
             // to36BitToolStripMenuItem
             // 
             to36BitToolStripMenuItem.Name = "to36BitToolStripMenuItem";
-            to36BitToolStripMenuItem.Size = new Size(118, 22);
+            to36BitToolStripMenuItem.Size = new Size(119, 22);
             to36BitToolStripMenuItem.Text = "To 32 Bit";
             to36BitToolStripMenuItem.Click += to32BitToolStripMenuItem_Click;
             // 
             // to48BitToolStripMenuItem
             // 
             to48BitToolStripMenuItem.Name = "to48BitToolStripMenuItem";
-            to48BitToolStripMenuItem.Size = new Size(118, 22);
+            to48BitToolStripMenuItem.Size = new Size(119, 22);
             to48BitToolStripMenuItem.Text = "To 48 Bit";
             to48BitToolStripMenuItem.Click += to48BitToolStripMenuItem_Click;
             // 
@@ -758,6 +787,13 @@ namespace BioImager
             runToolStripMenuItem1.Size = new Size(40, 20);
             runToolStripMenuItem1.Text = "Run";
             // 
+            // oMEROToolStripMenuItem
+            // 
+            oMEROToolStripMenuItem.Name = "oMEROToolStripMenuItem";
+            oMEROToolStripMenuItem.Size = new Size(61, 20);
+            oMEROToolStripMenuItem.Text = "OMERO";
+            oMEROToolStripMenuItem.Click += oMEROToolStripMenuItem_Click;
+            // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -790,12 +826,24 @@ namespace BioImager
             saveQuPathDialog.Filter = "QuPath GeoJSON Files (*.geojson)|*.roi|All files (*.*)|*.*";
             saveQuPathDialog.Title = "Save ROIs to CSV";
             // 
-            // oMEROToolStripMenuItem
+            // saveFileDialog1
             // 
-            oMEROToolStripMenuItem.Name = "oMEROToolStripMenuItem";
-            oMEROToolStripMenuItem.Size = new Size(61, 20);
-            oMEROToolStripMenuItem.Text = "OMERO";
-            oMEROToolStripMenuItem.Click += oMEROToolStripMenuItem_Click;
+            saveFileDialog1.DefaultExt = "roi";
+            saveFileDialog1.Filter = "QuPath GeoJSON Files (*.geojson)|*.roi|All files (*.*)|*.*";
+            saveFileDialog1.Title = "Save ROIs to CSV";
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.DefaultExt = "roi";
+            openFileDialog1.Filter = "QuPath Project Files (*.qpproj)|*.qpproj|All files (*.*)|*.*";
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.Title = "Open QuPath Project.";
+            // 
+            // saveFileDialog2
+            // 
+            saveFileDialog2.DefaultExt = "roi";
+            saveFileDialog2.Filter = "QuPath GeoJSON Files (*.geojson)|*.roi|All files (*.*)|*.*";
+            saveFileDialog2.Title = "Save ROIs to CSV";
             // 
             // TabsView
             // 
@@ -833,10 +881,6 @@ namespace BioImager
         private System.Windows.Forms.SaveFileDialog saveCSVFileDialog;
         private System.Windows.Forms.OpenFileDialog openCSVFileDialog;
         private System.Windows.Forms.SaveFileDialog saveTiffFileDialog;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveOMEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sizeModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rGBToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem filteredToolStripMenuItem;
@@ -868,22 +912,10 @@ namespace BioImager
         private System.Windows.Forms.ToolStripMenuItem scriptRunnerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scriptRecorderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newTabViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nodeViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem saveOMEToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem openRecentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem duplicateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveSeriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem automationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addImagesToTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addImagesOMEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openOMESeriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveTabTiffToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openSeriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearRecentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rotateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stackToolsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem emissionToolStripMenuItem;
@@ -894,11 +926,7 @@ namespace BioImager
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xMLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem imagesToStackToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripSeparator sepToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem _3dToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importImageJROIToSelectedImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportImageJROIFromSelectedImageToolStripMenuItem;
@@ -906,7 +934,6 @@ namespace BioImager
         private System.Windows.Forms.SaveFileDialog saveImageJROI;
         private System.Windows.Forms.ToolStripMenuItem microscopeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lightToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem savePyramidalToolStripMenuItem;
         private ToolStripMenuItem findFocusToolStripMenuItem;
         private ToolStripMenuItem stageToolToolStripMenuItem;
         private ToolStripMenuItem imagerToolToolStripMenuItem;
@@ -918,11 +945,37 @@ namespace BioImager
         private ToolStripMenuItem slideImagerToolStripMenuItem;
         private ToolStripMenuItem importGeoJSONROIToSelectedImageToolStripMenuItem;
         private ToolStripMenuItem exportGeoJSONROIFromSelectedImageToolStripMenuItem;
-        private ToolStripMenuItem openQuPathProjectToolStripMenuItem;
-        private ToolStripMenuItem saveQuPathProjectToolStripMenuItem;
-        private ToolStripMenuItem saveNumPyToolStripMenuItem;
         private OpenFileDialog openQuPathProjDialog;
         private SaveFileDialog saveQuPathDialog;
         private ToolStripMenuItem oMEROToolStripMenuItem;
+        private SaveFileDialog saveFileDialog1;
+        private OpenFileDialog openFileDialog1;
+        private SaveFileDialog saveFileDialog2;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem openRecentToolStripMenuItem;
+        private ToolStripMenuItem openOMEToolStripMenuItem;
+        private ToolStripMenuItem openOMESeriesToolStripMenuItem;
+        private ToolStripMenuItem openQuPathProjectToolStripMenuItem;
+        private ToolStripMenuItem zarrMenuItem;
+        private ToolStripMenuItem openSeriesToolStripMenuItem;
+        private ToolStripSeparator sepToolStripMenuItem1;
+        private ToolStripMenuItem addImagesToTabToolStripMenuItem;
+        private ToolStripMenuItem addImagesOMEToolStripMenuItem;
+        private ToolStripSeparator sepToolStripMenuItem2;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem saveOMEToolStripMenuItem;
+        private ToolStripMenuItem saveTabToolStripMenuItem;
+        private ToolStripMenuItem saveTabTiffToolStripMenuItem;
+        private ToolStripMenuItem saveSeriesToolStripMenuItem;
+        private ToolStripMenuItem saveQuPathProjectToolStripMenuItem;
+        private ToolStripMenuItem savePyramidalToolStripMenuItem;
+        private ToolStripMenuItem saveNumPyToolStripMenuItem;
+        private ToolStripSeparator sepToolStripMenuItem3;
+        private ToolStripMenuItem imagesToStackToolStripMenuItem;
+        private ToolStripMenuItem newTabViewToolStripMenuItem;
+        private ToolStripMenuItem nodeViewToolStripMenuItem;
+        private ToolStripMenuItem clearRecentToolStripMenuItem;
+        private ToolStripMenuItem uriMenuItem;
     }
 }

@@ -460,31 +460,28 @@ namespace BioImager
         /// @return The method is returning the value of the zBar.Value, cBar.Value, and tBar.Value.
         public void SetCoordinate(int z, int c, int t)
         {
-            System.Threading.Tasks.Task.Run(() =>
-            {
-                try
-                {
-                    App.viewer.Invoke((MethodInvoker)delegate
-                    {
-                        if (SelectedImage == null)
-                            return;
-                        if (z >= SelectedImage.SizeZ)
-                            zBar.Value = zBar.Maximum;
-                        if (c >= SelectedImage.SizeC)
-                            cBar.Value = cBar.Maximum;
-                        if (t >= SelectedImage.SizeT)
-                            tBar.Value = tBar.Maximum;
-                        zBar.Value = z;
-                        cBar.Value = c;
-                        tBar.Value = t;
-                    });
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+            if (IsDisposed)
+                return;
 
-            });
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(() => SetCoordinate(z, c, t)));
+                return;
+            }
+
+            if (SelectedImage == null)
+                return;
+
+            int targetZ = Math.Clamp(z, zBar.Minimum, zBar.Maximum);
+            int targetC = Math.Clamp(c, cBar.Minimum, cBar.Maximum);
+            int targetT = Math.Clamp(t, tBar.Minimum, tBar.Maximum);
+
+            if (zBar.Value != targetZ)
+                zBar.Value = targetZ;
+            if (cBar.Value != targetC)
+                cBar.Value = targetC;
+            if (tBar.Value != targetT)
+                tBar.Value = targetT;
         }
         /// It returns the coordinate of the selected image
         /// 
@@ -2412,7 +2409,6 @@ namespace BioImager
         {
             if (SelectedImage == null)
                 return;
-            SetCoordinate(zBar.Value, cBar.Value, tBar.Value);
             System.Drawing.Pen pen = null;
             System.Drawing.Pen red = null;
             System.Drawing.Pen green = null;
@@ -3061,10 +3057,10 @@ namespace BioImager
                 return bitmap;
             }
 
-            if (bytes.Length == pixelCount * 2)
+            if (bytes.Length >= pixelCount * 2)
                 return CreateOverviewPreview16Gray(bytes, width, height);
 
-            if (bytes.Length == pixelCount)
+            if (bytes.Length >= pixelCount)
                 return CreateOverviewPreview8Gray(bytes, width, height);
 
             return null;
@@ -4345,32 +4341,7 @@ namespace BioImager
             int viewportHeight = GetEffectiveViewHeight();
             if (UsesSlideRenderer(image))
             {
-                if (image.OpenSlideBase != null)
-                {
-                    if (MacroResolution.HasValue)
-                    {
-                        int lev = MacroResolution.Value - 2;
-                        Resolution = image.OpenSlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                    }
-                    else
-                    {
-                        int lev = 0;
-                        Resolution = image.OpenSlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                    }
-                }
-                else
-                {
-                    if (MacroResolution.HasValue)
-                    {
-                        int lev = MacroResolution.Value - 1;
-                        Resolution = image.SlideBase.Schema.Resolutions[lev].UnitsPerPixel * 0.98;
-                        PyramidalOrigin = new PointD(0, 0);
-                    }
-                    else
-                    {
-                        Resolution = image.GetUnitPerPixel(image.Resolutions.Count - 1) * 0.98;
-                    }
-                }
+                CenterPyramidalImage(image, viewportWidth, viewportHeight);
                 UpdateView();
                 return;
             }
@@ -4432,7 +4403,29 @@ namespace BioImager
 
             image.PyramidalOrigin = new PointD(
                 centerX - (viewportWorldWidth / 2),
-                centerY - (viewportWorldHeight / 2));
+                -(centerY + (viewportWorldHeight / 2)));
+        }
+
+        private void CenterPyramidalOrigin(BioImage image, int viewportWidth, int viewportHeight)
+        {
+            if (viewportWidth <= 1 || viewportHeight <= 1)
+                return;
+            if (!TryGetPyramidalWorldBounds(image, out double minX, out double minY, out double maxX, out double maxY))
+                return;
+
+            double worldWidth = maxX - minX;
+            double worldHeight = maxY - minY;
+            if (worldWidth <= 0 || worldHeight <= 0)
+                return;
+
+            double visibleWidth = viewportWidth * Math.Max(image.Resolution, 1e-9);
+            double visibleHeight = viewportHeight * Math.Max(image.Resolution, 1e-9);
+            double centerX = minX + (worldWidth / 2.0);
+            double centerY = minY + (worldHeight / 2.0);
+
+            image.PyramidalOrigin = new PointD(
+                centerX - (visibleWidth / 2.0),
+                -(centerY + (visibleHeight / 2.0)));
         }
 
         private bool TryGetPyramidalWorldBounds(BioImage image, out double minX, out double minY, out double maxX, out double maxY)
